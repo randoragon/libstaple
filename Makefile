@@ -1,6 +1,6 @@
 CC = cc
 LINKER = cc
-CFLAGS = -fpic -std=c99 -Wall -Wextra -pedantic -Werror -Werror=vla
+CFLAGS = -fpic -std=c89 -Wall -Wextra -pedantic -Werror -Werror=vla
 LDFLAGS = -shared
 
 # All SRCDIR subdirectories that contain source files
