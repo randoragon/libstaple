@@ -11,11 +11,11 @@ void stderr_printf(const char *fmt, ...)
 	va_end(ap);
 }
 
-int rnd_buffit(void **buf, size_t size, size_t *capacity)
+int rnd_buffit(void **buf, size_t elem_size, size_t size, size_t *capacity)
 {
 	if (size == *capacity) {
 		*capacity *= 2;
-		*buf = realloc(*buf, *capacity);
+		*buf = realloc(*buf, *capacity * elem_size);
 		if (*buf == NULL) {
 			error(("realloc"));
 			return 1;
