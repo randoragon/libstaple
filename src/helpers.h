@@ -42,7 +42,7 @@
 	#define error(x) ;
 #endif
 
-void debug_printf(const char *fmt, ...);
+void stderr_printf(const char *fmt, ...);
 int rnd_buffit(void **buf, size_t size, size_t *capacity);
 int rnd_foomap(void *buf, size_t size, size_t elem_size, int (*foo)(void*));
 

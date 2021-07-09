@@ -105,7 +105,7 @@ int rnd_stack_copy(struct rnd_stack *dest, const struct rnd_stack *src, void *(*
 		while (s != src_end) {
 			const void *const new = cpy(s);
 			if (new == NULL) {
-				error("external cpy function returned NULL");
+				error(("external cpy function returned NULL"));
 				return RND_EHANDLER;
 			}
 			memcpy(d, new, src->elem_size);
@@ -821,7 +821,7 @@ void *rnd_stack_removep(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return NULL;
 	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
@@ -838,7 +838,7 @@ char rnd_stack_removec(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
@@ -855,7 +855,7 @@ short rnd_stack_removes(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
@@ -872,7 +872,7 @@ int rnd_stack_removei(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
@@ -889,7 +889,7 @@ long rnd_stack_removel(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
@@ -906,7 +906,7 @@ unsigned char rnd_stack_removeuc(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
@@ -923,7 +923,7 @@ unsigned short rnd_stack_removeus(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
@@ -940,7 +940,7 @@ unsigned int rnd_stack_removeui(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
@@ -957,7 +957,7 @@ unsigned long rnd_stack_removeul(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
@@ -974,7 +974,7 @@ float rnd_stack_removef(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
@@ -991,7 +991,7 @@ double rnd_stack_removed(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
@@ -1008,7 +1008,7 @@ long double rnd_stack_removeld(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
