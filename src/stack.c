@@ -187,6 +187,20 @@ int rnd_stack_pushl(struct rnd_stack *stack, long elem)
 	return 0;
 }
 
+int rnd_stack_pushsc(struct rnd_stack *stack, signed char elem)
+{
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	if (rnd_buffit(&stack->data, stack->size * stack->elem_size, &stack->capacity))
+		return RND_ENOMEM;
+	((signed char*)stack->data)[stack->size++] = elem;
+	return 0;
+}
+
 int rnd_stack_pushuc(struct rnd_stack *stack, unsigned char elem)
 {
 #ifdef RND_DEBUG
@@ -337,7 +351,7 @@ int rnd_stack_inserts(struct rnd_stack *stack, size_t idx, short elem)
 		return RND_ENOMEM;
 	p = (char*)stack->data + stack->elem_size * (stack->size - idx);
 	memmove(p + stack->elem_size, p, stack->elem_size * idx);
-	*(char*)p = elem;
+	*(short*)p = elem;
 	return 0;
 }
 
@@ -354,7 +368,7 @@ int rnd_stack_inserti(struct rnd_stack *stack, size_t idx, int elem)
 		return RND_ENOMEM;
 	p = (char*)stack->data + stack->elem_size * (stack->size - idx);
 	memmove(p + stack->elem_size, p, stack->elem_size * idx);
-	*(char*)p = elem;
+	*(int*)p = elem;
 	return 0;
 }
 
@@ -371,7 +385,24 @@ int rnd_stack_insertl(struct rnd_stack *stack, size_t idx, long elem)
 		return RND_ENOMEM;
 	p = (char*)stack->data + stack->elem_size * (stack->size - idx);
 	memmove(p + stack->elem_size, p, stack->elem_size * idx);
-	*(char*)p = elem;
+	*(long*)p = elem;
+	return 0;
+}
+
+int rnd_stack_insertsc(struct rnd_stack *stack, size_t idx, signed char elem)
+{
+	char *p;
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	if (rnd_buffit(&stack->data, stack->size * stack->elem_size, &stack->capacity))
+		return RND_ENOMEM;
+	p = (char*)stack->data + stack->elem_size * (stack->size - idx);
+	memmove(p + stack->elem_size, p, stack->elem_size * idx);
+	*(signed char*)p = elem;
 	return 0;
 }
 
@@ -388,7 +419,7 @@ int rnd_stack_insertuc(struct rnd_stack *stack, size_t idx, unsigned char elem)
 		return RND_ENOMEM;
 	p = (char*)stack->data + stack->elem_size * (stack->size - idx);
 	memmove(p + stack->elem_size, p, stack->elem_size * idx);
-	*(char*)p = elem;
+	*(unsigned char*)p = elem;
 	return 0;
 }
 
@@ -405,7 +436,7 @@ int rnd_stack_insertus(struct rnd_stack *stack, size_t idx, unsigned short elem)
 		return RND_ENOMEM;
 	p = (char*)stack->data + stack->elem_size * (stack->size - idx);
 	memmove(p + stack->elem_size, p, stack->elem_size * idx);
-	*(char*)p = elem;
+	*(unsigned short*)p = elem;
 	return 0;
 }
 
@@ -422,7 +453,7 @@ int rnd_stack_insertui(struct rnd_stack *stack, size_t idx, unsigned int elem)
 		return RND_ENOMEM;
 	p = (char*)stack->data + stack->elem_size * (stack->size - idx);
 	memmove(p + stack->elem_size, p, stack->elem_size * idx);
-	*(char*)p = elem;
+	*(unsigned int*)p = elem;
 	return 0;
 }
 
@@ -439,7 +470,7 @@ int rnd_stack_insertul(struct rnd_stack *stack, size_t idx, unsigned long elem)
 		return RND_ENOMEM;
 	p = (char*)stack->data + stack->elem_size * (stack->size - idx);
 	memmove(p + stack->elem_size, p, stack->elem_size * idx);
-	*(char*)p = elem;
+	*(unsigned long*)p = elem;
 	return 0;
 }
 
@@ -456,7 +487,7 @@ int rnd_stack_insertf(struct rnd_stack *stack, size_t idx, float elem)
 		return RND_ENOMEM;
 	p = (char*)stack->data + stack->elem_size * (stack->size - idx);
 	memmove(p + stack->elem_size, p, stack->elem_size * idx);
-	*(char*)p = elem;
+	*(float*)p = elem;
 	return 0;
 }
 
@@ -473,7 +504,7 @@ int rnd_stack_insertd(struct rnd_stack *stack, size_t idx, double elem)
 		return RND_ENOMEM;
 	p = (char*)stack->data + stack->elem_size * (stack->size - idx);
 	memmove(p + stack->elem_size, p, stack->elem_size * idx);
-	*(char*)p = elem;
+	*(double*)p = elem;
 	return 0;
 }
 
@@ -490,7 +521,7 @@ int rnd_stack_insertld(struct rnd_stack *stack, size_t idx, long double elem)
 		return RND_ENOMEM;
 	p = (char*)stack->data + stack->elem_size * (stack->size - idx);
 	memmove(p + stack->elem_size, p, stack->elem_size * idx);
-	*(char*)p = elem;
+	*(long double*)p = elem;
 	return 0;
 }
 
@@ -569,6 +600,21 @@ long rnd_stack_peekl(const struct rnd_stack *stack)
 	}
 #endif
 	return ((long*)stack->data)[stack->size - 1];
+}
+
+signed char rnd_stack_peeksc(const struct rnd_stack *stack)
+{
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return 0;
+	}
+	if (stack->size == 0) {
+		warn(("stack is empty"));
+		return 0;
+	}
+#endif
+	return ((signed char*)stack->data)[stack->size - 1];
 }
 
 unsigned char rnd_stack_peekuc(const struct rnd_stack *stack)
@@ -736,6 +782,17 @@ long rnd_stack_popl(struct rnd_stack *stack)
 	return ((long*)stack->data)[--stack->size];
 }
 
+signed char rnd_stack_popsc(struct rnd_stack *stack)
+{
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	return ((signed char*)stack->data)[--stack->size];
+}
+
 unsigned char rnd_stack_popuc(struct rnd_stack *stack)
 {
 #ifdef RND_DEBUG
@@ -894,6 +951,23 @@ long rnd_stack_removel(struct rnd_stack *stack, size_t idx)
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	ret = *(long*)p;
+	memmove(p, p + stack->elem_size, idx * stack->elem_size);
+	--stack->size;
+	return ret;
+}
+
+signed char rnd_stack_removesc(struct rnd_stack *stack, size_t idx)
+{
+	char *p;
+	signed char ret;
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return 0;
+	}
+#endif
+	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	ret = *(signed char*)p;
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;
 	return ret;
