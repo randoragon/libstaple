@@ -2,7 +2,7 @@ CC = cc
 LINKER = cc
 CFLAGS = -fpic -std=c89 -Wall -Wextra -pedantic -Werror -Werror=vla
 LDFLAGS = -shared
-CTESTFLAGS = -std=c89 -Wall -Wextra -pedantic -Werror=vla
+CTESTFLAGS = -std=c89 -Wall -Wextra -pedantic -Werror=vla -g -Og
 LDTESTFLAGS = -L . -lrnd
 
 SRCDIR = src
@@ -32,6 +32,7 @@ $(TESTDIR)/$(OBJDIR)/%.o: $(TESTDIR)/$(SRCDIR)/%.c
 
 clean:
 	rm -f $(OBJS)
+	rm -f $(TESTDIR)/$(OBJDIR)/*
 
 debug: CFLAGS += -g -Og -DRND_DEBUG
 debug: clean all
