@@ -15,7 +15,7 @@ int               rnd_stack_clear(struct rnd_stack *stack, int (*dtor)(void*));
 int               rnd_stack_destroy(struct rnd_stack *stack, int (*dtor)(void*));
 int               rnd_stack_copy(struct rnd_stack *dest, const struct rnd_stack *src, void *(*cpy)(const void *));
 
-int rnd_stack_push(struct rnd_stack *stack, const void *elem);
+int rnd_stack_pushp(struct rnd_stack *stack, const void *elem);
 int rnd_stack_pushc(struct rnd_stack *stack, char elem);
 int rnd_stack_pushs(struct rnd_stack *stack, short elem);
 int rnd_stack_pushi(struct rnd_stack *stack, int elem);
@@ -28,7 +28,7 @@ int rnd_stack_pushf(struct rnd_stack *stack, float elem);
 int rnd_stack_pushd(struct rnd_stack *stack, double elem);
 int rnd_stack_pushld(struct rnd_stack *stack, long double elem);
 
-int rnd_stack_insert(struct rnd_stack *stack, size_t idx, const void *elem);
+int rnd_stack_insertp(struct rnd_stack *stack, size_t idx, const void *elem);
 int rnd_stack_insertc(struct rnd_stack *stack, size_t idx, char elem);
 int rnd_stack_inserts(struct rnd_stack *stack, size_t idx, short elem);
 int rnd_stack_inserti(struct rnd_stack *stack, size_t idx, int elem);
@@ -41,7 +41,7 @@ int rnd_stack_insertf(struct rnd_stack *stack, size_t idx, float elem);
 int rnd_stack_insertd(struct rnd_stack *stack, size_t idx, double elem);
 int rnd_stack_insertld(struct rnd_stack *stack, size_t idx, long double elem);
 
-void          *rnd_stack_peek(const struct rnd_stack *stack);
+void          *rnd_stack_peekp(const struct rnd_stack *stack);
 char           rnd_stack_peekc(const struct rnd_stack *stack);
 short          rnd_stack_peeks(const struct rnd_stack *stack);
 int            rnd_stack_peeki(const struct rnd_stack *stack);
@@ -54,7 +54,7 @@ float          rnd_stack_peekf(const struct rnd_stack *stack);
 double         rnd_stack_peekd(const struct rnd_stack *stack);
 long double    rnd_stack_peekld(const struct rnd_stack *stack);
 
-void          *rnd_stack_pop(struct rnd_stack *stack);
+void          *rnd_stack_popp(struct rnd_stack *stack);
 char           rnd_stack_popc(struct rnd_stack *stack);
 short          rnd_stack_pops(struct rnd_stack *stack);
 int            rnd_stack_popi(struct rnd_stack *stack);
@@ -67,7 +67,7 @@ float          rnd_stack_popf(struct rnd_stack *stack);
 double         rnd_stack_popd(struct rnd_stack *stack);
 long double    rnd_stack_popld(struct rnd_stack *stack);
 
-void          *rnd_stack_remove(struct rnd_stack *stack, size_t idx);
+void          *rnd_stack_removep(struct rnd_stack *stack, size_t idx);
 char           rnd_stack_removec(struct rnd_stack *stack, size_t idx);
 short          rnd_stack_removes(struct rnd_stack *stack, size_t idx);
 int            rnd_stack_removei(struct rnd_stack *stack, size_t idx);
