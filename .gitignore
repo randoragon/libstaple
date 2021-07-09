@@ -2,3 +2,5 @@ Session.vim
 librnd.so
 librnd.a
 obj
+test/bin
+test/obj
