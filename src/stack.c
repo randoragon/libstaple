@@ -30,6 +30,7 @@ struct rnd_stack *rnd_stack_create(size_t elem_size, size_t capacity)
 	ret->data      = malloc(capacity * elem_size);
 	if (ret->data == NULL) {
 		error(("malloc"));
+		free(ret);
 		return NULL;
 	}
 
