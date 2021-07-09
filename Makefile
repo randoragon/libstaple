@@ -2,6 +2,8 @@ CC = cc
 LINKER = cc
 CFLAGS = -fpic -std=c89 -Wall -Wextra -pedantic -Werror -Werror=vla
 LDFLAGS = -shared
+CTESTFLAGS = -std=c89 -Wall -Wextra -pedantic -Werror=vla
+LDTESTFLAGS = -L . -lrnd
 
 SRCDIR = src
 OBJDIR = obj
@@ -26,12 +28,12 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) -c $(CFLAGS) $^ -o $@
 
 $(TESTDIR)/$(OBJDIR)/%.o: $(TESTDIR)/$(SRCDIR)/%.c
-	$(CC) -c $(CFLAGS) $^ -o $@
+	$(CC) -c $(CTESTFLAGS) $^ -o $@
 
 clean:
 	rm -f $(OBJS)
 
-debug: CFLAGS += -g -Og
+debug: CFLAGS += -g -Og -DRND_DEBUG
 debug: clean all
 
 profile: CFLAGS += -pg
@@ -40,6 +42,6 @@ profile: clean all
 
 test: test-stack
 
-test-stack: main test/obj/stack.o
-	$(LINKER) -L . -lrnd "test/obj/stack.o" -o $(TESTDIR)/bin/stack
+test-stack: debug test/obj/stack.o
+	$(LINKER) $(LDTESTFLAGS) "test/obj/stack.o" -o $(TESTDIR)/bin/stack
 	LD_LIBRARY_PATH=. ./test/bin/stack
