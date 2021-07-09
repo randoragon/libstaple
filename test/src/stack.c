@@ -109,9 +109,29 @@ TEST push_peek_pop(void)
 	PASS();
 }
 
+TEST push_realloc(void)
+{
+	struct rnd_stack *s;
+	s = rnd_stack_create(sizeof(int), 4);
+	ASSERT_EQ_FMT(4lu, s->capacity, "%lu");
+	rnd_stack_pushi(s, 2);
+	ASSERT_EQ_FMT(4lu, s->capacity, "%lu");
+	rnd_stack_pushi(s, 1);
+	ASSERT_EQ_FMT(4lu, s->capacity, "%lu");
+	rnd_stack_pushi(s, 3);
+	ASSERT_EQ_FMT(4lu, s->capacity, "%lu");
+	rnd_stack_pushi(s, 7);
+	ASSERT_EQ_FMT(4lu, s->capacity, "%lu");
+	rnd_stack_pushi(s, 0);
+	ASSERT_EQ_FMT(8lu, s->capacity, "%lu");
+	rnd_stack_destroy(s, NULL);
+	PASS();
+}
+
 SUITE(stack) {
 	RUN_TEST(create_destroy);
 	RUN_TEST(push_peek_pop);
+	RUN_TEST(push_realloc);
 }
 
 int main(int argc, char **argv)
