@@ -319,6 +319,7 @@ int rnd_stack_insertp(struct rnd_stack *stack, size_t idx, const void *elem)
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
 	memcpy(p, elem, stack->elem_size);
+	++stack->size;
 	return 0;
 }
 
@@ -330,12 +331,17 @@ int rnd_stack_insertc(struct rnd_stack *stack, size_t idx, char elem)
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return RND_EORANGE;
+	}
 #endif
 	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
 	*(char*)p = elem;
+	++stack->size;
 	return 0;
 }
 
@@ -347,12 +353,17 @@ int rnd_stack_inserts(struct rnd_stack *stack, size_t idx, short elem)
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return RND_EORANGE;
+	}
 #endif
 	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
 	*(short*)p = elem;
+	++stack->size;
 	return 0;
 }
 
@@ -364,12 +375,17 @@ int rnd_stack_inserti(struct rnd_stack *stack, size_t idx, int elem)
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return RND_EORANGE;
+	}
 #endif
 	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
 	*(int*)p = elem;
+	++stack->size;
 	return 0;
 }
 
@@ -381,12 +397,17 @@ int rnd_stack_insertl(struct rnd_stack *stack, size_t idx, long elem)
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return RND_EORANGE;
+	}
 #endif
 	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
 	*(long*)p = elem;
+	++stack->size;
 	return 0;
 }
 
@@ -398,12 +419,21 @@ int rnd_stack_insertsc(struct rnd_stack *stack, size_t idx, signed char elem)
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return RND_EORANGE;
+	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return RND_EORANGE;
+	}
 #endif
 	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
 	*(signed char*)p = elem;
+	++stack->size;
 	return 0;
 }
 
@@ -415,12 +445,17 @@ int rnd_stack_insertuc(struct rnd_stack *stack, size_t idx, unsigned char elem)
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return RND_EORANGE;
+	}
 #endif
 	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
 	*(unsigned char*)p = elem;
+	++stack->size;
 	return 0;
 }
 
@@ -432,12 +467,21 @@ int rnd_stack_insertus(struct rnd_stack *stack, size_t idx, unsigned short elem)
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return RND_EORANGE;
+	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return RND_EORANGE;
+	}
 #endif
 	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
 	*(unsigned short*)p = elem;
+	++stack->size;
 	return 0;
 }
 
@@ -449,12 +493,17 @@ int rnd_stack_insertui(struct rnd_stack *stack, size_t idx, unsigned int elem)
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return RND_EORANGE;
+	}
 #endif
 	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
 	*(unsigned int*)p = elem;
+	++stack->size;
 	return 0;
 }
 
@@ -466,12 +515,17 @@ int rnd_stack_insertul(struct rnd_stack *stack, size_t idx, unsigned long elem)
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return RND_EORANGE;
+	}
 #endif
 	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
 	*(unsigned long*)p = elem;
+	++stack->size;
 	return 0;
 }
 
@@ -483,12 +537,17 @@ int rnd_stack_insertf(struct rnd_stack *stack, size_t idx, float elem)
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return RND_EORANGE;
+	}
 #endif
 	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
 	*(float*)p = elem;
+	++stack->size;
 	return 0;
 }
 
@@ -500,12 +559,17 @@ int rnd_stack_insertd(struct rnd_stack *stack, size_t idx, double elem)
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return RND_EORANGE;
+	}
 #endif
 	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
 	*(double*)p = elem;
+	++stack->size;
 	return 0;
 }
 
@@ -517,12 +581,17 @@ int rnd_stack_insertld(struct rnd_stack *stack, size_t idx, long double elem)
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return RND_EORANGE;
+	}
 #endif
 	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
 	*(long double*)p = elem;
+	++stack->size;
 	return 0;
 }
 
@@ -881,6 +950,10 @@ void *rnd_stack_removep(struct rnd_stack *stack, size_t idx)
 		error(("stack is NULL"));
 		return NULL;
 	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
+		return NULL;
+	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	ret = *(void**)p;
@@ -896,6 +969,10 @@ char rnd_stack_removec(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
+		return 0;
+	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
@@ -916,6 +993,10 @@ short rnd_stack_removes(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 #endif
+	if (idx >= stack->size) {
+		error(("index out of range"));
+		return 0;
+	}
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	ret = *(short*)p;
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
@@ -930,6 +1011,10 @@ int rnd_stack_removei(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
+		return 0;
+	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
@@ -949,6 +1034,14 @@ long rnd_stack_removel(struct rnd_stack *stack, size_t idx)
 		error(("stack is NULL"));
 		return 0;
 	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
+		return 0;
+	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
+		return 0;
+	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	ret = *(long*)p;
@@ -964,6 +1057,10 @@ signed char rnd_stack_removesc(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
+		return 0;
+	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
@@ -983,6 +1080,10 @@ unsigned char rnd_stack_removeuc(struct rnd_stack *stack, size_t idx)
 		error(("stack is NULL"));
 		return 0;
 	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
+		return 0;
+	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	ret = *(unsigned char*)p;
@@ -998,6 +1099,10 @@ unsigned short rnd_stack_removeus(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
+		return 0;
+	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
@@ -1017,6 +1122,10 @@ unsigned int rnd_stack_removeui(struct rnd_stack *stack, size_t idx)
 		error(("stack is NULL"));
 		return 0;
 	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
+		return 0;
+	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	ret = *(unsigned int*)p;
@@ -1032,6 +1141,10 @@ unsigned long rnd_stack_removeul(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
+		return 0;
+	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
@@ -1051,6 +1164,10 @@ float rnd_stack_removef(struct rnd_stack *stack, size_t idx)
 		error(("stack is NULL"));
 		return 0;
 	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
+		return 0;
+	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	ret = *(float*)p;
@@ -1068,6 +1185,10 @@ double rnd_stack_removed(struct rnd_stack *stack, size_t idx)
 		error(("stack is NULL"));
 		return 0;
 	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
+		return 0;
+	}
 #endif
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	ret = *(double*)p;
@@ -1083,6 +1204,10 @@ long double rnd_stack_removeld(struct rnd_stack *stack, size_t idx)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
+		return 0;
+	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
