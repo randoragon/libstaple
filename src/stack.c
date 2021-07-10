@@ -118,7 +118,7 @@ int rnd_stack_copy(struct rnd_stack *dest, const struct rnd_stack *src, void *(*
 }
 
 
-int rnd_stack_pushp(struct rnd_stack *stack, const void *elem)
+int rnd_stack_push(struct rnd_stack *stack, const void *elem)
 {
 #ifdef RND_DEBUG
 	if (stack == NULL) {
@@ -301,7 +301,7 @@ int rnd_stack_pushld(struct rnd_stack *stack, long double elem)
 }
 
 
-int rnd_stack_insertp(struct rnd_stack *stack, size_t idx, const void *elem)
+int rnd_stack_insert(struct rnd_stack *stack, size_t idx, const void *elem)
 {
 	char *p;
 #ifdef RND_DEBUG
@@ -596,19 +596,26 @@ int rnd_stack_insertld(struct rnd_stack *stack, size_t idx, long double elem)
 }
 
 
-void *rnd_stack_peekp(const struct rnd_stack *stack)
+int rnd_stack_peek(const struct rnd_stack *stack, void *output)
 {
+	const void *src;
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return NULL;
+		return RND_EINVAL;
+	}
+	if (output == NULL) {
+		error(("output is NULL"));
+		return RND_EINVAL;
 	}
 	if (stack->size == 0) {
 		warn(("stack is empty"));
-		return NULL;
+		return RND_EILLEGAL;
 	}
 #endif
-	return (char*)stack->data + (stack->size - 1) * stack->elem_size;
+	src = (char*)stack->data + (stack->size - 1) * stack->elem_size;
+	memcpy(output, src, stack->elem_size);
+	return 0;
 }
 
 char rnd_stack_peekc(const struct rnd_stack *stack)
@@ -793,19 +800,27 @@ long double rnd_stack_peekld(const struct rnd_stack *stack)
 }
 
 
-void *rnd_stack_popp(struct rnd_stack *stack)
+int rnd_stack_pop(struct rnd_stack *stack, void *output)
 {
+	const void *src;
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return NULL;
+		return RND_EINVAL;
+	}
+	if (output == NULL) {
+		error(("output is NULL"));
+		return RND_EINVAL;
 	}
 	if (stack->size == 0) {
 		warn(("stack is empty"));
-		return NULL;
+		return RND_EILLEGAL;
 	}
 #endif
-	return (char*)stack->data + --stack->size * stack->elem_size;
+	src = (char*)stack->data + (stack->size - 1) * stack->elem_size;
+	memcpy(output, src, stack->elem_size);
+	--stack->size;
+	return 0;
 }
 
 char rnd_stack_popc(struct rnd_stack *stack)
@@ -941,25 +956,28 @@ long double rnd_stack_popld(struct rnd_stack *stack)
 }
 
 
-void *rnd_stack_removep(struct rnd_stack *stack, size_t idx)
+int rnd_stack_remove(struct rnd_stack *stack, size_t idx, void *output)
 {
 	char *p;
-	void *ret;
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return NULL;
+		return RND_EINVAL;
+	}
+	if (output == NULL) {
+		error(("output is NULL"));
+		return RND_EINVAL;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
-		return NULL;
+		return RND_EORANGE;
 	}
 #endif
-	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
-	ret = *(void**)p;
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	memcpy(output, p, stack->elem_size);
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;
-	return ret;
+	return 0;
 }
 
 char rnd_stack_removec(struct rnd_stack *stack, size_t idx)
@@ -976,7 +994,7 @@ char rnd_stack_removec(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 #endif
-	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	ret = *(char*)p;
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;
@@ -997,7 +1015,7 @@ short rnd_stack_removes(struct rnd_stack *stack, size_t idx)
 		error(("index out of range"));
 		return 0;
 	}
-	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	ret = *(short*)p;
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;
@@ -1018,7 +1036,7 @@ int rnd_stack_removei(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 #endif
-	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	ret = *(int*)p;
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;
@@ -1043,7 +1061,7 @@ long rnd_stack_removel(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 #endif
-	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	ret = *(long*)p;
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;
@@ -1064,7 +1082,7 @@ signed char rnd_stack_removesc(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 #endif
-	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	ret = *(signed char*)p;
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;
@@ -1085,7 +1103,7 @@ unsigned char rnd_stack_removeuc(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 #endif
-	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	ret = *(unsigned char*)p;
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;
@@ -1106,7 +1124,7 @@ unsigned short rnd_stack_removeus(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 #endif
-	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	ret = *(unsigned short*)p;
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;
@@ -1127,7 +1145,7 @@ unsigned int rnd_stack_removeui(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 #endif
-	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	ret = *(unsigned int*)p;
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;
@@ -1148,7 +1166,7 @@ unsigned long rnd_stack_removeul(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 #endif
-	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	ret = *(unsigned long*)p;
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;
@@ -1169,7 +1187,7 @@ float rnd_stack_removef(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 #endif
-	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	ret = *(float*)p;
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;
@@ -1190,7 +1208,7 @@ double rnd_stack_removed(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 #endif
-	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	ret = *(double*)p;
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;
@@ -1211,7 +1229,7 @@ long double rnd_stack_removeld(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 #endif
-	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	ret = *(long double*)p;
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;

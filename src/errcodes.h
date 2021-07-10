@@ -16,4 +16,4 @@
 #define RND_EORANGE 4
 
 /* Illegal operation */
-#define RND_ILLEGAL 5
+#define RND_EILLEGAL 5
