@@ -41,6 +41,7 @@ profile: CFLAGS += -pg
 profile: LDFLAGS += -pg
 profile: clean all
 
+test: CFLAGS += -DRND_QUIET
 test: test-stack
 
 test-stack: debug test/obj/stack.o
