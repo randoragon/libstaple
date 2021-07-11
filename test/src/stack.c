@@ -253,11 +253,62 @@ TEST insert_remove(void)
 	PASS();
 }
 
+TEST get_set(void)
+{
+	struct rnd_stack *s;
+
+	{
+		double a = 4.5, b = -3.14, out;
+		s = rnd_stack_create(sizeof(double), 30);
+		ASSERT_EQ_FMT(0, rnd_stack_push(s, &a), "%d");
+		ASSERT_EQ_FMT(0, rnd_stack_get(s, 0, &out), "%d");
+		ASSERT_EQ_FMT(a, out, "%f");
+		ASSERT_EQ_FMT(0, rnd_stack_set(s, 0, &b), "%d");
+		ASSERT_EQ_FMT(0, rnd_stack_get(s, 0, &out), "%d");
+		ASSERT_EQ_FMT(b, out, "%f");
+		ASSERT_EQ_FMT(0, rnd_stack_pop(s, &out), "%d");
+		ASSERT_EQ_FMT(b, out, "%f");
+		ASSERT_EQ_FMT(RND_EILLEGAL, rnd_stack_get(s, 0, &out), "%d");
+		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+	}
+
+	/* F1 - push, F2 - pop, F3 - get, F4 - set */
+#define test(T, F1, F2, F3, F4, F, A, B)                            \
+	do {                                                        \
+		T a = A, b = B;                                     \
+		s = rnd_stack_create(sizeof(T), 30);                \
+		ASSERT_EQ_FMT(0, F1(s, a), "%d");                   \
+		ASSERT_EQ_FMT(a, F3(s, 0), F);                      \
+		ASSERT_EQ_FMT(0, F4(s, 0, b), "%d");                \
+		ASSERT_EQ_FMT(b, F3(s, 0), F);                      \
+		ASSERT_EQ_FMT(b, F2(s), F);                         \
+		ASSERT_EQ_FMT((T)0, F3(s, 0), F);                   \
+		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d"); \
+	} while(0)
+
+	test(char          , rnd_stack_pushc , rnd_stack_popc , rnd_stack_getc , rnd_stack_setc , "%d", 9, 4);
+	test(short         , rnd_stack_pushs , rnd_stack_pops , rnd_stack_gets , rnd_stack_sets , "%d", 13, 12);
+	test(int           , rnd_stack_pushi , rnd_stack_popi , rnd_stack_geti , rnd_stack_seti , "%d", INT_MAX, 0);
+	test(long          , rnd_stack_pushl , rnd_stack_popl , rnd_stack_getl , rnd_stack_setl , "%ld", 555l, 55l);
+	test(signed char   , rnd_stack_pushsc, rnd_stack_popsc, rnd_stack_getsc, rnd_stack_setsc, "%d", 2, 1);
+	test(unsigned char , rnd_stack_pushuc, rnd_stack_popuc, rnd_stack_getuc, rnd_stack_setuc, "%d", 10, 5);
+	test(unsigned short, rnd_stack_pushus, rnd_stack_popus, rnd_stack_getus, rnd_stack_setus, "%d", 787, 32);
+	test(unsigned int  , rnd_stack_pushui, rnd_stack_popui, rnd_stack_getui, rnd_stack_setui, "%u", 10000, 200);
+	test(unsigned long , rnd_stack_pushul, rnd_stack_popul, rnd_stack_getul, rnd_stack_setul, "%lu", 3ul, 2ul);
+	test(float         , rnd_stack_pushf , rnd_stack_popf , rnd_stack_getf , rnd_stack_setf , "%f", 99., 98.);
+	test(double        , rnd_stack_pushd , rnd_stack_popd , rnd_stack_getd , rnd_stack_setd , "%f", 43., 21.);
+	test(long double   , rnd_stack_pushld, rnd_stack_popld, rnd_stack_getld, rnd_stack_setld, "%Lf", 3.5L, 2.5L);
+
+#undef test
+	PASS();
+}
+
 SUITE(stack) {
 	RUN_TEST(create_destroy);
 	RUN_TEST(push_peek_pop);
 	RUN_TEST(push_realloc);
 	RUN_TEST(insert_remove);
+	RUN_TEST(get_set);
 }
 
 int main(int argc, char **argv)

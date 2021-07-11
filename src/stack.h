@@ -113,4 +113,32 @@ float          rnd_stack_quickremovef(struct rnd_stack *stack, size_t idx);
 double         rnd_stack_quickremoved(struct rnd_stack *stack, size_t idx);
 long double    rnd_stack_quickremoveld(struct rnd_stack *stack, size_t idx);
 
+int            rnd_stack_get(const struct rnd_stack *stack, size_t idx, void *output);
+char           rnd_stack_getc(const struct rnd_stack *stack, size_t idx);
+short          rnd_stack_gets(const struct rnd_stack *stack, size_t idx);
+int            rnd_stack_geti(const struct rnd_stack *stack, size_t idx);
+long           rnd_stack_getl(const struct rnd_stack *stack, size_t idx);
+signed char    rnd_stack_getsc(const struct rnd_stack *stack, size_t idx);
+unsigned char  rnd_stack_getuc(const struct rnd_stack *stack, size_t idx);
+unsigned short rnd_stack_getus(const struct rnd_stack *stack, size_t idx);
+unsigned int   rnd_stack_getui(const struct rnd_stack *stack, size_t idx);
+unsigned long  rnd_stack_getul(const struct rnd_stack *stack, size_t idx);
+float          rnd_stack_getf(const struct rnd_stack *stack, size_t idx);
+double         rnd_stack_getd(const struct rnd_stack *stack, size_t idx);
+long double    rnd_stack_getld(const struct rnd_stack *stack, size_t idx);
+
+int rnd_stack_set(struct rnd_stack *stack, size_t idx, void *val);
+int rnd_stack_setc(struct rnd_stack *stack, size_t idx, char val);
+int rnd_stack_sets(struct rnd_stack *stack, size_t idx, short val);
+int rnd_stack_seti(struct rnd_stack *stack, size_t idx, int val);
+int rnd_stack_setl(struct rnd_stack *stack, size_t idx, long val);
+int rnd_stack_setsc(struct rnd_stack *stack, size_t idx, signed char val);
+int rnd_stack_setuc(struct rnd_stack *stack, size_t idx, unsigned char val);
+int rnd_stack_setus(struct rnd_stack *stack, size_t idx, unsigned short val);
+int rnd_stack_setui(struct rnd_stack *stack, size_t idx, unsigned int val);
+int rnd_stack_setul(struct rnd_stack *stack, size_t idx, unsigned long val);
+int rnd_stack_setf(struct rnd_stack *stack, size_t idx, float val);
+int rnd_stack_setd(struct rnd_stack *stack, size_t idx, double val);
+int rnd_stack_setld(struct rnd_stack *stack, size_t idx, long double val);
+
 #endif /* RND_STACK_H */
