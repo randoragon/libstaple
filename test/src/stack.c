@@ -209,6 +209,46 @@ TEST insert_remove(void)
 	test(double        , rnd_stack_insertd , rnd_stack_peekd , rnd_stack_removed , "%f", 43., 21., -7421.);
 	test(long double   , rnd_stack_insertld, rnd_stack_peekld, rnd_stack_removeld, "%Lf", 3.5L, 2.5L, -9.3219L);
 
+	/* A > B > C */
+	/* F1 - insert, F2 - peek, F3 - remove */
+#undef test
+#define test(T, F1, F2, F3, F, A, B, C)                             \
+	do {                                                        \
+		s = rnd_stack_create(sizeof(T), 1);                 \
+		ASSERT_EQ_FMT(RND_EORANGE, F1(s, 1, A), "%d");      \
+		ASSERT_EQ_FMT(0, F1(s, 0, A), "%d");                \
+		ASSERT_EQ_FMT(A, F2(s), F);                         \
+		ASSERT_EQ_FMT(1lu, s->size, "%lu");                 \
+		ASSERT_EQ_FMT(A, F3(s, 0), F);                      \
+		ASSERT_EQ_FMT(0lu, s->size, "%lu");                 \
+		ASSERT_EQ_FMT(0, F1(s, 0, A), "%d");                \
+		ASSERT_EQ_FMT(A, F2(s), F);                         \
+		ASSERT_EQ_FMT(0, F1(s, 1, B), "%d");                \
+		ASSERT_EQ_FMT(A, F2(s), F);                         \
+		ASSERT_EQ_FMT(0, F1(s, 2, C), "%d");                \
+		ASSERT_EQ_FMT(B, F2(s), F);                         \
+		ASSERT_EQ_FMT(A, F3(s, 1), F);                      \
+		ASSERT_EQ_FMT(B, F2(s), F);                         \
+		ASSERT_EQ_FMT(B, F3(s, 0), F);                      \
+		ASSERT_EQ_FMT(C, F2(s), F);                         \
+		ASSERT_EQ_FMT(1lu, s->size, "%lu");                 \
+		ASSERT_EQ_FMT(4lu, s->capacity, "%lu");             \
+		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d"); \
+	} while (0)
+
+	test(char          , rnd_stack_quickinsertc , rnd_stack_peekc , rnd_stack_quickremovec , "%d", 9, 4, 1);
+	test(short         , rnd_stack_quickinserts , rnd_stack_peeks , rnd_stack_quickremoves , "%d", 13, 12, -555);
+	test(int           , rnd_stack_quickinserti , rnd_stack_peeki , rnd_stack_quickremovei , "%d", INT_MAX, 0, INT_MIN);
+	test(long          , rnd_stack_quickinsertl , rnd_stack_peekl , rnd_stack_quickremovel , "%ld", 555l, 55l, 5l);
+	test(signed char   , rnd_stack_quickinsertsc, rnd_stack_peeksc, rnd_stack_quickremovesc, "%d", 2, 1, 0);
+	test(unsigned char , rnd_stack_quickinsertuc, rnd_stack_peekuc, rnd_stack_quickremoveuc, "%d", 10, 5, 3);
+	test(unsigned short, rnd_stack_quickinsertus, rnd_stack_peekus, rnd_stack_quickremoveus, "%d", 787, 32, 1);
+	test(unsigned int  , rnd_stack_quickinsertui, rnd_stack_peekui, rnd_stack_quickremoveui, "%u", 10000, 200, 3);
+	test(unsigned long , rnd_stack_quickinsertul, rnd_stack_peekul, rnd_stack_quickremoveul, "%lu", 3ul, 2ul, 1ul);
+	test(float         , rnd_stack_quickinsertf , rnd_stack_peekf , rnd_stack_quickremovef , "%f", 99., 98., 97.);
+	test(double        , rnd_stack_quickinsertd , rnd_stack_peekd , rnd_stack_quickremoved , "%f", 43., 21., -7421.);
+	test(long double   , rnd_stack_quickinsertld, rnd_stack_peekld, rnd_stack_quickremoveld, "%Lf", 3.5L, 2.5L, -9.3219L);
+
 #undef test
 	PASS();
 }

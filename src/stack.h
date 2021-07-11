@@ -43,6 +43,20 @@ int rnd_stack_insertf(struct rnd_stack *stack, size_t idx, float elem);
 int rnd_stack_insertd(struct rnd_stack *stack, size_t idx, double elem);
 int rnd_stack_insertld(struct rnd_stack *stack, size_t idx, long double elem);
 
+int rnd_stack_quickinsert(struct rnd_stack *stack, size_t idx, const void *elem);
+int rnd_stack_quickinsertc(struct rnd_stack *stack, size_t idx, char elem);
+int rnd_stack_quickinserts(struct rnd_stack *stack, size_t idx, short elem);
+int rnd_stack_quickinserti(struct rnd_stack *stack, size_t idx, int elem);
+int rnd_stack_quickinsertl(struct rnd_stack *stack, size_t idx, long elem);
+int rnd_stack_quickinsertsc(struct rnd_stack *stack, size_t idx, signed char elem);
+int rnd_stack_quickinsertuc(struct rnd_stack *stack, size_t idx, unsigned char elem);
+int rnd_stack_quickinsertus(struct rnd_stack *stack, size_t idx, unsigned short elem);
+int rnd_stack_quickinsertui(struct rnd_stack *stack, size_t idx, unsigned int elem);
+int rnd_stack_quickinsertul(struct rnd_stack *stack, size_t idx, unsigned long elem);
+int rnd_stack_quickinsertf(struct rnd_stack *stack, size_t idx, float elem);
+int rnd_stack_quickinsertd(struct rnd_stack *stack, size_t idx, double elem);
+int rnd_stack_quickinsertld(struct rnd_stack *stack, size_t idx, long double elem);
+
 int            rnd_stack_peek(const struct rnd_stack *stack, void *output);
 char           rnd_stack_peekc(const struct rnd_stack *stack);
 short          rnd_stack_peeks(const struct rnd_stack *stack);
@@ -84,5 +98,19 @@ unsigned long  rnd_stack_removeul(struct rnd_stack *stack, size_t idx);
 float          rnd_stack_removef(struct rnd_stack *stack, size_t idx);
 double         rnd_stack_removed(struct rnd_stack *stack, size_t idx);
 long double    rnd_stack_removeld(struct rnd_stack *stack, size_t idx);
+
+int            rnd_stack_quickremove(struct rnd_stack *stack, size_t idx, void *output);
+char           rnd_stack_quickremovec(struct rnd_stack *stack, size_t idx);
+short          rnd_stack_quickremoves(struct rnd_stack *stack, size_t idx);
+int            rnd_stack_quickremovei(struct rnd_stack *stack, size_t idx);
+long           rnd_stack_quickremovel(struct rnd_stack *stack, size_t idx);
+signed char    rnd_stack_quickremovesc(struct rnd_stack *stack, size_t idx);
+unsigned char  rnd_stack_quickremoveuc(struct rnd_stack *stack, size_t idx);
+unsigned short rnd_stack_quickremoveus(struct rnd_stack *stack, size_t idx);
+unsigned int   rnd_stack_quickremoveui(struct rnd_stack *stack, size_t idx);
+unsigned long  rnd_stack_quickremoveul(struct rnd_stack *stack, size_t idx);
+float          rnd_stack_quickremovef(struct rnd_stack *stack, size_t idx);
+double         rnd_stack_quickremoved(struct rnd_stack *stack, size_t idx);
+long double    rnd_stack_quickremoveld(struct rnd_stack *stack, size_t idx);
 
 #endif /* RND_STACK_H */
