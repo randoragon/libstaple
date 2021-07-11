@@ -346,6 +346,7 @@ SUITE(stack) {
 	RUN_TEST(push_realloc);
 	RUN_TEST(insert_remove);
 	RUN_TEST(get_set);
+	RUN_TEST(copy_clear);
 	RUN_TEST(size_overflow);
 }
 
