@@ -46,4 +46,18 @@ test: test-stack
 
 test-stack: debug test/obj/stack.o
 	$(LINKER) $(LDTESTFLAGS) "test/obj/stack.o" -o $(TESTDIR)/bin/stack
-	LD_LIBRARY_PATH=. ./test/bin/stack
+	@tput setaf 4
+	@printf "\n##########"
+	@tput setaf 3
+	@printf "[ BEGIN ]"
+	@tput setaf 4
+	@printf "##########\n\n"
+	@tput setaf 7
+	LD_LIBRARY_PATH=. valgrind ./test/bin/stack
+	@tput setaf 4
+	@printf "\n###########"
+	@tput setaf 3
+	@printf "[ END ]"
+	@tput setaf 4
+	@printf "###########\n\n"
+	@tput setaf 7
