@@ -41,7 +41,9 @@ profile: CFLAGS += -pg
 profile: LDFLAGS += -pg
 profile: clean all
 
-test: CFLAGS += -DRND_QUIET
+# To check if overflow protection is working,
+# set SIZE_MAX to 65535 to reduce memory footprint.
+test: CFLAGS += -DRND_QUIET -DSIZE_MAX=65535
 test: test-stack
 
 test-stack: debug test/obj/stack.o

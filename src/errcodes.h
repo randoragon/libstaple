@@ -13,7 +13,10 @@
 #define RND_EHANDLER 3
 
 /* Index out of range */
-#define RND_EORANGE 4
+#define RND_EINDEX 4
 
 /* Illegal operation */
 #define RND_EILLEGAL 5
+
+/* Numerical range exceeded (underflow/overflow) */
+#define RND_ERANGE 6

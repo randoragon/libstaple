@@ -8,6 +8,7 @@
 
 #define IRANGE(X,Y) ((X) + (rand() % ((Y) - (X) + 1)))
 #define FRANGE(X,Y) ((X) + ((double)rand() / RAND_MAX * ((Y) - (X))))
+#define SIZE_MAX 65535LU
 
 GREATEST_MAIN_DEFS();
 
@@ -140,7 +141,7 @@ TEST insert_remove(void)
 	{
 		int a = 5, b = -14, c = -3547, out;
 		s = rnd_stack_create(sizeof(int), 1);
-		ASSERT_EQ_FMT(RND_EORANGE, rnd_stack_insert(s, 1, &a), "%d");
+		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_insert(s, 1, &a), "%d");
 		ASSERT_EQ_FMT(0, rnd_stack_insert(s, 0, &a), "%d");
 		ASSERT_EQ_FMT(0, rnd_stack_peek(s, &out), "%d");
 		ASSERT_EQ_FMT(a, out, "%d");
@@ -175,7 +176,7 @@ TEST insert_remove(void)
 #define test(T, F1, F2, F3, F, A, B, C)                             \
 	do {                                                        \
 		s = rnd_stack_create(sizeof(T), 1);                 \
-		ASSERT_EQ_FMT(RND_EORANGE, F1(s, 1, A), "%d");      \
+		ASSERT_EQ_FMT(RND_EINDEX, F1(s, 1, A), "%d");       \
 		ASSERT_EQ_FMT(0, F1(s, 0, A), "%d");                \
 		ASSERT_EQ_FMT(A, F2(s), F);                         \
 		ASSERT_EQ_FMT(1lu, s->size, "%lu");                 \
@@ -215,7 +216,7 @@ TEST insert_remove(void)
 #define test(T, F1, F2, F3, F, A, B, C)                             \
 	do {                                                        \
 		s = rnd_stack_create(sizeof(T), 1);                 \
-		ASSERT_EQ_FMT(RND_EORANGE, F1(s, 1, A), "%d");      \
+		ASSERT_EQ_FMT(RND_EINDEX, F1(s, 1, A), "%d");       \
 		ASSERT_EQ_FMT(0, F1(s, 0, A), "%d");                \
 		ASSERT_EQ_FMT(A, F2(s), F);                         \
 		ASSERT_EQ_FMT(1lu, s->size, "%lu");                 \
@@ -325,13 +326,27 @@ TEST copy_clear(void)
 	PASS();
 }
 
+TEST size_overflow(void)
+{
+	struct rnd_stack *s;
+	size_t i;
+	s = rnd_stack_create(sizeof(char), 4096);
+	for (i = SIZE_MAX; i-- != 0;)
+		ASSERT_EQ_FMT(0, rnd_stack_pushuc(s, i % 256), "%d");
+	ASSERT_EQ_FMT(RND_ERANGE, rnd_stack_pushuc(s, 0), "%d");
+	ASSERT_EQ_FMT(RND_ERANGE, rnd_stack_pushuc(s, 0), "%d");
+	ASSERT_EQ_FMT(RND_ERANGE, rnd_stack_pushuc(s, 0), "%d");
+	ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+	PASS();
+}
+
 SUITE(stack) {
 	RUN_TEST(create_destroy);
 	RUN_TEST(push_peek_pop);
 	RUN_TEST(push_realloc);
 	RUN_TEST(insert_remove);
 	RUN_TEST(get_set);
-	RUN_TEST(copy_clear);
+	RUN_TEST(size_overflow);
 }
 
 int main(int argc, char **argv)

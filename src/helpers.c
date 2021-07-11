@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <limits.h>
+
+#ifndef SIZE_MAX
+#define SIZE_MAX ((size_t)(-1))
+#endif
 
 void stderr_printf(const char *fmt, ...)
 {
@@ -35,6 +40,15 @@ int rnd_foomap(void *buf, size_t elem_size, size_t size, int (*foo)(void*))
 			return 1;
 		}
 		p += elem_size;
+	}
+	return 0;
+}
+
+int rnd_size_try_add(size_t size, size_t amount)
+{
+	if (size > SIZE_MAX - amount) {
+		error(("size_t overflow detected, unable to increment by %lu", amount));
+		return 1;
 	}
 	return 0;
 }
