@@ -2,6 +2,6 @@
 #ifndef RND_H
 #define RND_H
 
-#include "stack.h"
+#include "rnd_stack.h"
 
 #endif /* RND_H */

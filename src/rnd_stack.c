@@ -1,4 +1,4 @@
-#include "stack.h"
+#include "rnd_stack.h"
 #include "helpers.h"
 #include "errcodes.h"
 #include <string.h>
