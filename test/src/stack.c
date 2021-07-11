@@ -303,12 +303,35 @@ TEST get_set(void)
 	PASS();
 }
 
+TEST copy_clear(void)
+{
+	struct rnd_stack *s1, *s2;
+	unsigned int i;
+
+	s1 = rnd_stack_create(sizeof(int), 10);
+	ASSERT_NEQ(NULL, (s2 = malloc(sizeof(*s2))));
+	ASSERT_EQ_FMT(0, rnd_stack_clear(s1, NULL), "%d");
+	for (i = 0; i < 5000; i++)
+		ASSERT_EQ_FMT(0, rnd_stack_pushi(s1, IRANGE(0, USHRT_MAX)), "%d");
+	ASSERT_EQ_FMT(0, rnd_stack_copy(s2, s1, NULL), "%d");
+	for (i = 0; i < 5000; i++) {
+		ASSERT_EQ(rnd_stack_geti(s1, i), rnd_stack_geti(s2, i));
+	}
+	ASSERT_EQ_FMT(0, rnd_stack_seti(s1, 0, -1), "%d");
+	ASSERT_NEQ(rnd_stack_geti(s1, 0), rnd_stack_geti(s2, 0));
+	ASSERT_EQ_FMT(0, rnd_stack_clear(s2, NULL), "%d");
+	ASSERT_EQ_FMT(0, rnd_stack_destroy(s1, NULL), "%d");
+	ASSERT_EQ_FMT(0, rnd_stack_destroy(s2, NULL), "%d");
+	PASS();
+}
+
 SUITE(stack) {
 	RUN_TEST(create_destroy);
 	RUN_TEST(push_peek_pop);
 	RUN_TEST(push_realloc);
 	RUN_TEST(insert_remove);
 	RUN_TEST(get_set);
+	RUN_TEST(copy_clear);
 }
 
 int main(int argc, char **argv)
