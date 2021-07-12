@@ -4,10 +4,6 @@
 #include <stdarg.h>
 #include <limits.h>
 
-#ifndef SIZE_MAX
-#define SIZE_MAX ((size_t)(-1))
-#endif
-
 void stderr_printf(const char *fmt, ...)
 {
 	va_list ap;
@@ -19,7 +15,14 @@ void stderr_printf(const char *fmt, ...)
 int rnd_buffit(void **buf, size_t elem_size, size_t size, size_t *capacity)
 {
 	if (size == *capacity) {
-		*capacity *= 2;
+		if (!rnd_size_try_add(*capacity, *capacity)) {
+			*capacity *= 2;
+		} else if (size < SIZE_MAX / elem_size) {
+			*capacity = SIZE_MAX / elem_size;
+		} else {
+			error(("size_t overflow detected, stack size limit reached"));
+			return 2;
+		}
 		*buf = realloc(*buf, *capacity * elem_size);
 		if (*buf == NULL) {
 			error(("realloc"));

@@ -10,6 +10,9 @@
 
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
+#ifndef SIZE_MAX
+#define SIZE_MAX ((size_t)(-1))
+#endif
 
 /* RND_DEBUG enables extra debug checks during runtime.
  * RND_QUIET disables all output from the library (if RND_DEBUG is enabled, each

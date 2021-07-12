@@ -330,12 +330,21 @@ TEST size_overflow(void)
 	struct rnd_stack *s;
 	size_t i;
 	s = rnd_stack_create(sizeof(char), 4096);
-	for (i = SIZE_MAX; i-- != 0;)
+	for (i = SIZE_MAX / sizeof(char); i-- != 0;)
 		ASSERT_EQ_FMT(0, rnd_stack_pushuc(s, i % 256), "%d");
 	ASSERT_EQ_FMT(RND_ERANGE, rnd_stack_pushuc(s, 0), "%d");
 	ASSERT_EQ_FMT(RND_ERANGE, rnd_stack_pushuc(s, 0), "%d");
 	ASSERT_EQ_FMT(RND_ERANGE, rnd_stack_pushuc(s, 0), "%d");
 	ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+
+	s = rnd_stack_create(sizeof(int), 4096);
+	for (i = SIZE_MAX / sizeof(int); i-- != 0;)
+		ASSERT_EQ_FMT(0, rnd_stack_inserti(s, 0, i % 256), "%d");
+	ASSERT_EQ_FMT(RND_ERANGE, rnd_stack_inserti(s, 1, 0), "%d");
+	ASSERT_EQ_FMT(RND_ERANGE, rnd_stack_inserti(s, 2, 0), "%d");
+	ASSERT_EQ_FMT(RND_ERANGE, rnd_stack_inserti(s, 3, 0), "%d");
+	ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+
 	PASS();
 }
 
