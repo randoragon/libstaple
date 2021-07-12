@@ -1,6 +1,6 @@
 #include "rnd_stack.h"
 #include "helpers.h"
-#include "errcodes.h"
+#include "rnd_errcodes.h"
 #include <string.h>
 
 struct rnd_stack *rnd_stack_create(size_t elem_size, size_t capacity)

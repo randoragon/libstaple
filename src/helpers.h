@@ -1,6 +1,6 @@
 /* This header includes supplementary functions and macros for things like
  * message logging and reporting errors, which are consistently used throughout
- * other source files. This file should be hidden from a library user.
+ * other source files. This file should be hidden from the library user.
  */
 #ifndef RND_HELPERS_H
 #define RND_HELPERS_H

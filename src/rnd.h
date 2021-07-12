@@ -2,7 +2,7 @@
 #ifndef RND_H
 #define RND_H
 
-#include "errcodes.h"
+#include "rnd_errcodes.h"
 #include "rnd_stack.h"
 
 #endif /* RND_H */

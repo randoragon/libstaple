@@ -1,6 +1,6 @@
 /* This header defines symbolic names for all error codes returned by various
  * functions of the library. That way it's easier for the end-user to capture,
- * identify and maintain errors.
+ * identify and handle errors.
  */
 
 /* Invalid argmuent value */
