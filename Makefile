@@ -46,8 +46,8 @@ profile: clean all
 test: CFLAGS += -DRND_QUIET -DSIZE_MAX=65535
 test: test-stack
 
-test-stack: debug test/obj/stack.o
-	$(LINKER) $(LDTESTFLAGS) "test/obj/stack.o" -o $(TESTDIR)/bin/stack
+test-stack: debug test/obj/test_struct.o test/obj/stack.o
+	$(LINKER) $(LDTESTFLAGS)  "test/obj/test_struct.o" "test/obj/stack.o" -o $(TESTDIR)/bin/stack
 	@tput setaf 4
 	@printf "\n##########"
 	@tput setaf 3

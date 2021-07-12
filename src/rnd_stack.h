@@ -13,7 +13,8 @@ struct rnd_stack {
 struct rnd_stack *rnd_stack_create(size_t elem_size, size_t capacity);
 int               rnd_stack_clear(struct rnd_stack *stack, int (*dtor)(void*));
 int               rnd_stack_destroy(struct rnd_stack *stack, int (*dtor)(void*));
-int               rnd_stack_copy(struct rnd_stack *dest, const struct rnd_stack *src, void *(*cpy)(const void *));
+int               rnd_stack_copy(struct rnd_stack *dest, const struct rnd_stack *src, int (*cpy)(void*, const void*));
+int               rnd_stack_map(struct rnd_stack *stack, int (*func)(void*, size_t));
 
 int rnd_stack_push(struct rnd_stack *stack, const void *elem);
 int rnd_stack_pushc(struct rnd_stack *stack, char elem);

@@ -69,7 +69,7 @@ int rnd_stack_destroy(struct rnd_stack *stack, int (*dtor)(void*))
 	return 0;
 }
 
-int rnd_stack_copy(struct rnd_stack *dest, const struct rnd_stack *src, void *(*cpy)(const void *))
+int rnd_stack_copy(struct rnd_stack *dest, const struct rnd_stack *src, int (*cpy)(void*, const void*))
 {
 	char *s, *d;
 #ifdef RND_DEBUG
@@ -82,16 +82,18 @@ int rnd_stack_copy(struct rnd_stack *dest, const struct rnd_stack *src, void *(*
 		return RND_EINVAL;
 	}
 #endif
+	if (dest->capacity * dest->elem_size < src->size * src->elem_size) {
+		dest->capacity = src->size + 64;
+		dest->data = realloc(dest->data, dest->capacity * src->elem_size);
+		if (dest->data == NULL) {
+			error(("realloc"));
+			return RND_ENOMEM;
+		}
+	}
 	dest->elem_size = src->elem_size;
 	dest->size      = src->size;
-	dest->capacity  = src->capacity;
-	dest->data      = calloc(dest->capacity, dest->elem_size);
-	if (dest->data == NULL) {
-		error(("calloc"));
-		return RND_ENOMEM;
-	}
 	if (cpy == NULL) {
-		const void *const src_end = (char*)src->data + src->capacity * src->elem_size;
+		const void *const src_end = (char*)src->data + src->size * src->elem_size;
 		s = src->data;
 		d = dest->data;
 		while (s != src_end) {
@@ -100,16 +102,15 @@ int rnd_stack_copy(struct rnd_stack *dest, const struct rnd_stack *src, void *(*
 			d += dest->elem_size;
 		}
 	} else {
-		const void *const src_end = (char*)src->data + src->capacity * src->elem_size;
+		const void *const src_end = (char*)src->data + src->size * src->elem_size;
 		s = src->data;
 		d = dest->data;
 		while (s != src_end) {
-			const void *const new = cpy(s);
-			if (new == NULL) {
-				error(("external cpy function returned NULL"));
+			int err;
+			if ((err = cpy(d, s))) {
+				error(("external cpy function returned %d (non-0)", err));
 				return RND_EHANDLER;
 			}
-			memcpy(d, new, src->elem_size);
 			s += src->elem_size;
 			d += dest->elem_size;
 		}
@@ -117,6 +118,29 @@ int rnd_stack_copy(struct rnd_stack *dest, const struct rnd_stack *src, void *(*
 	return 0;
 }
 
+int rnd_stack_map(struct rnd_stack *stack, int (*func)(void*, size_t))
+{
+	size_t i;
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+	if (func == NULL) {
+		error(("func is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	for (i = 0; i < stack->size; i++) {
+		void *const p = (char*)stack->data + i * stack->elem_size;
+		int err;
+		if ((err = func(p, i))) {
+			warn(("external func function returned %d (non-0)", err));
+			return RND_EHANDLER;
+		}
+	}
+	return 0;
+}
 
 int rnd_stack_push(struct rnd_stack *stack, const void *elem)
 {

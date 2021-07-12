@@ -1,13 +1,12 @@
 #include <stdlib.h>
 #include <time.h>
 #include "../../src/rnd.h"
-#include "../../src/errcodes.h"
+#include "test_struct.h"
 #include <greatest.h>
 #include <limits.h>
 #include <float.h>
 
-#define IRANGE(X,Y) ((X) + (rand() % ((Y) - (X) + 1)))
-#define FRANGE(X,Y) ((X) + ((double)rand() / RAND_MAX * ((Y) - (X))))
+/* Make testing for size overflow feasible */
 #define SIZE_MAX 65535LU
 
 GREATEST_MAIN_DEFS();
@@ -310,7 +309,7 @@ TEST copy_clear(void)
 	unsigned int i;
 
 	s1 = rnd_stack_create(sizeof(int), 10);
-	ASSERT_NEQ(NULL, (s2 = malloc(sizeof(*s2))));
+	s2 = rnd_stack_create(1, 1);
 	ASSERT_EQ_FMT(0, rnd_stack_clear(s1, NULL), "%d");
 	for (i = 0; i < 5000; i++)
 		ASSERT_EQ_FMT(0, rnd_stack_pushi(s1, IRANGE(0, USHRT_MAX)), "%d");
@@ -340,6 +339,25 @@ TEST size_overflow(void)
 	PASS();
 }
 
+TEST struct_cpy_dtor_map(void)
+{
+	struct rnd_stack *s1, *s2;
+	size_t i;
+	s1 = rnd_stack_create(sizeof(struct data), 16);
+	s2 = rnd_stack_create(1, 1);
+	for (i = 0; i < 500; i++) {
+		struct data d;
+		ASSERT_EQ_FMT(0, data_init(&d), "%d");
+		ASSERT_EQ_FMT(0, rnd_stack_push(s1, &d), "%d");
+	}
+	ASSERT_EQ_FMT(0, rnd_stack_copy(s2, s1, data_cpy), "%d");
+	ASSERT_EQ_FMT(0, rnd_stack_map(s1, data_mutate), "%d");
+	ASSERT_EQ_FMT(0, rnd_stack_map(s1, data_verify), "%d");
+	ASSERT_EQ_FMT(0, rnd_stack_destroy(s1, data_dtor), "%d");
+	ASSERT_EQ_FMT(0, rnd_stack_destroy(s2, data_dtor), "%d");
+	PASS();
+}
+
 SUITE(stack) {
 	RUN_TEST(create_destroy);
 	RUN_TEST(push_peek_pop);
@@ -348,6 +366,7 @@ SUITE(stack) {
 	RUN_TEST(get_set);
 	RUN_TEST(copy_clear);
 	RUN_TEST(size_overflow);
+	RUN_TEST(struct_cpy_dtor_map);
 }
 
 int main(int argc, char **argv)

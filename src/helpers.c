@@ -29,7 +29,7 @@ int rnd_buffit(void **buf, size_t elem_size, size_t size, size_t *capacity)
 	return 0;
 }
 
-int rnd_foomap(void *buf, size_t elem_size, size_t size, int (*foo)(void*))
+int rnd_foomap(void *buf, size_t size, size_t elem_size, int (*foo)(void*))
 {
 	const void *const end = (char*)buf + size * elem_size;
 	char *p = buf;
