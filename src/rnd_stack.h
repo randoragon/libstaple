@@ -142,4 +142,18 @@ int rnd_stack_setf(struct rnd_stack *stack, size_t idx, float val);
 int rnd_stack_setd(struct rnd_stack *stack, size_t idx, double val);
 int rnd_stack_setld(struct rnd_stack *stack, size_t idx, long double val);
 
+int rnd_stack_print(struct rnd_stack *stack);
+int rnd_stack_printc(struct rnd_stack *stack);
+int rnd_stack_prints(struct rnd_stack *stack);
+int rnd_stack_printi(struct rnd_stack *stack);
+int rnd_stack_printl(struct rnd_stack *stack);
+int rnd_stack_printsc(struct rnd_stack *stack);
+int rnd_stack_printuc(struct rnd_stack *stack);
+int rnd_stack_printus(struct rnd_stack *stack);
+int rnd_stack_printui(struct rnd_stack *stack);
+int rnd_stack_printul(struct rnd_stack *stack);
+int rnd_stack_printf(struct rnd_stack *stack);
+int rnd_stack_printd(struct rnd_stack *stack);
+int rnd_stack_printld(struct rnd_stack *stack);
+
 #endif /* RND_STACK_H */

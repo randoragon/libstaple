@@ -367,6 +367,47 @@ TEST struct_cpy_dtor_map(void)
 	PASS();
 }
 
+TEST print(void)
+{
+	struct rnd_stack *s;
+
+	{
+		double a = 4.5, b = -3.14;
+		s = rnd_stack_create(sizeof(double), 30);
+		ASSERT_EQ_FMT(0, rnd_stack_push(s, &a), "%d");
+		ASSERT_EQ_FMT(0, rnd_stack_push(s, &b), "%d");
+		ASSERT_EQ_FMT(0, rnd_stack_print(s), "%d");
+		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+	}
+
+	/* F1 - push, F2 - print */
+#define test(T, F1, F2, A, B)                                       \
+	do {                                                        \
+		T a = A, b = B;                                     \
+		s = rnd_stack_create(sizeof(T), 30);                \
+		ASSERT_EQ_FMT(0, F1(s, a), "%d");                   \
+		ASSERT_EQ_FMT(0, F1(s, b), "%d");                   \
+		ASSERT_EQ_FMT(0, F2(s), "%d");                      \
+		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d"); \
+	} while(0)
+
+	test(char          , rnd_stack_pushc , rnd_stack_printc , 'A', 'B');
+	test(short         , rnd_stack_pushs , rnd_stack_prints , SHRT_MIN, SHRT_MAX);
+	test(int           , rnd_stack_pushi , rnd_stack_printi , INT_MIN, INT_MAX);
+	test(long          , rnd_stack_pushl , rnd_stack_printl , LONG_MIN, LONG_MAX);
+	test(signed char   , rnd_stack_pushsc, rnd_stack_printsc, SCHAR_MIN, SCHAR_MAX);
+	test(unsigned char , rnd_stack_pushuc, rnd_stack_printuc, 0, UCHAR_MAX);
+	test(unsigned short, rnd_stack_pushus, rnd_stack_printus, 0, USHRT_MAX);
+	test(unsigned int  , rnd_stack_pushui, rnd_stack_printui, 0, UINT_MAX);
+	test(unsigned long , rnd_stack_pushul, rnd_stack_printul, 0, ULONG_MAX);
+	test(float         , rnd_stack_pushf , rnd_stack_printf , FLT_MIN, FLT_MAX);
+	test(double        , rnd_stack_pushd , rnd_stack_printd , DBL_MIN, DBL_MAX);
+	test(long double   , rnd_stack_pushld, rnd_stack_printld, LDBL_MIN, LDBL_MAX);
+
+#undef test
+	PASS();
+}
+
 SUITE(stack) {
 	RUN_TEST(create_destroy);
 	RUN_TEST(push_peek_pop);
@@ -376,6 +417,7 @@ SUITE(stack) {
 	RUN_TEST(copy_clear);
 	RUN_TEST(size_overflow);
 	RUN_TEST(struct_cpy_dtor_map);
+	RUN_TEST(print);
 }
 
 int main(int argc, char **argv)

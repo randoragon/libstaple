@@ -2878,3 +2878,236 @@ int rnd_stack_setld(struct rnd_stack *stack, size_t idx, long double val)
 }
 
 
+int rnd_stack_print(struct rnd_stack *stack)
+{
+	size_t i;
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	printf("rnd_stack_print()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		stack->size, stack->capacity, stack->elem_size);
+	for (i = stack->size; i-- > 0;) {
+		const void *const elem = (char*)stack->data + i * stack->elem_size;
+		printf("[%lu]\t%p\n", stack->size - 1 - i, elem);
+	}
+	return 0;
+}
+
+int rnd_stack_printc(struct rnd_stack *stack)
+{
+	size_t i;
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	printf("rnd_stack_printc()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		stack->size, stack->capacity, stack->elem_size);
+	for (i = stack->size; i-- > 0;) {
+		const char elem = ((char*)stack->data)[i];
+		printf("[%lu]\t%hd\t'%c'\n", stack->size - 1 - i, elem, elem);
+	}
+	return 0;
+}
+
+int rnd_stack_prints(struct rnd_stack *stack)
+{
+	size_t i;
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	printf("rnd_stack_prints()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		stack->size, stack->capacity, stack->elem_size);
+	for (i = stack->size; i-- > 0;) {
+		const short elem = ((short*)stack->data)[i];
+		printf("[%lu]\t%hd\n", stack->size - 1 - i, elem);
+	}
+	return 0;
+}
+
+int rnd_stack_printi(struct rnd_stack *stack)
+{
+	size_t i;
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	printf("rnd_stack_printi()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		stack->size, stack->capacity, stack->elem_size);
+	for (i = stack->size; i-- > 0;) {
+		const int elem = ((int*)stack->data)[i];
+		printf("[%lu]\t%d\n", stack->size - 1 - i, elem);
+	}
+	return 0;
+}
+
+int rnd_stack_printl(struct rnd_stack *stack)
+{
+	size_t i;
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	printf("rnd_stack_printl()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		stack->size, stack->capacity, stack->elem_size);
+	for (i = stack->size; i-- > 0;) {
+		const long elem = ((long*)stack->data)[i];
+		printf("[%lu]\t%ld\n", stack->size - 1 - i, elem);
+	}
+	return 0;
+}
+
+int rnd_stack_printsc(struct rnd_stack *stack)
+{
+	size_t i;
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	printf("rnd_stack_printsc()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		stack->size, stack->capacity, stack->elem_size);
+	for (i = stack->size; i-- > 0;) {
+		const signed char elem = ((signed char*)stack->data)[i];
+		printf("[%lu]\t%hd\t'%c'\n", stack->size - 1 - i, elem, elem);
+	}
+	return 0;
+}
+
+int rnd_stack_printuc(struct rnd_stack *stack)
+{
+	size_t i;
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	printf("rnd_stack_printuc()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		stack->size, stack->capacity, stack->elem_size);
+	for (i = stack->size; i-- > 0;) {
+		const unsigned char elem = ((unsigned char*)stack->data)[i];
+		printf("[%lu]\t%hd\t'%c'\n", stack->size - 1 - i, elem, elem);
+	}
+	return 0;
+}
+
+int rnd_stack_printus(struct rnd_stack *stack)
+{
+	size_t i;
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	printf("rnd_stack_printus()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		stack->size, stack->capacity, stack->elem_size);
+	for (i = stack->size; i-- > 0;) {
+		const unsigned short elem = ((unsigned short*)stack->data)[i];
+		printf("[%lu]\t%hu\n", stack->size - 1 - i, elem);
+	}
+	return 0;
+}
+
+int rnd_stack_printui(struct rnd_stack *stack)
+{
+	size_t i;
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	printf("rnd_stack_printui()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		stack->size, stack->capacity, stack->elem_size);
+	for (i = stack->size; i-- > 0;) {
+		const unsigned int elem = ((unsigned int*)stack->data)[i];
+		printf("[%lu]\t%u\n", stack->size - 1 - i, elem);
+	}
+	return 0;
+}
+
+int rnd_stack_printul(struct rnd_stack *stack)
+{
+	size_t i;
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	printf("rnd_stack_printul()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		stack->size, stack->capacity, stack->elem_size);
+	for (i = stack->size; i-- > 0;) {
+		const unsigned long elem = ((unsigned long*)stack->data)[i];
+		printf("[%lu]\t%lu\n", stack->size - 1 - i, elem);
+	}
+	return 0;
+}
+
+int rnd_stack_printf(struct rnd_stack *stack)
+{
+	size_t i;
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	printf("rnd_stack_printf()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		stack->size, stack->capacity, stack->elem_size);
+	for (i = stack->size; i-- > 0;) {
+		const float elem = ((float*)stack->data)[i];
+		printf("[%lu]\t%g\n", stack->size - 1 - i, elem);
+	}
+	return 0;
+}
+
+int rnd_stack_printd(struct rnd_stack *stack)
+{
+	size_t i;
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	printf("rnd_stack_printd()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		stack->size, stack->capacity, stack->elem_size);
+	for (i = stack->size; i-- > 0;) {
+		const double elem = ((double*)stack->data)[i];
+		printf("[%lu]\t%g\n", stack->size - 1 - i, elem);
+	}
+	return 0;
+}
+
+int rnd_stack_printld(struct rnd_stack *stack)
+{
+	size_t i;
+#ifdef RND_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+#endif
+	printf("rnd_stack_printld()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		stack->size, stack->capacity, stack->elem_size);
+	for (i = stack->size; i-- > 0;) {
+		const long double elem = ((long double*)stack->data)[i];
+		printf("[%lu]\t%Lg\n", stack->size - 1 - i, elem);
+	}
+	return 0;
+}
