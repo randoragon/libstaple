@@ -13,7 +13,7 @@ int
 .SH DESCRIPTION
 .P
 The
-.B rnd_stack_destroy
+.BR rnd_stack_destroy ()
 function
 frees all memory comprising a stack. Accessing the memory after destruction is
 undefined behavior, but the same
@@ -38,12 +38,12 @@ caught error code (if any) is printed on stderr.
 .SH RETURN VALUE
 .P
 If successful, the
-.B rnd_stack_destroy()
+.BR rnd_stack_destroy ()
 function shall return 0. Otherwise, it shall
 return a code indicating the error.
 .SH ERRORS
 The
-.B rnd_stack_destroy()
+.BR rnd_stack_destroy ()
 function shall fail if:
 .IP \fBRND_EINVAL\fP 1.5i
 .I stack
@@ -52,7 +52,8 @@ is a null pointer (debug mode only).
 .I dtor
 returned non-0 for some stack element.
 .SH CONFORMING TO
-See librnd(3).
+See
+.BR librnd (3).
 .SH EXAMPLES
 .P
 This is an example of how to use the
@@ -84,8 +85,19 @@ int main()
 .fi
 .ad
 .SH SEE ALSO
-librnd(3), rnd_stack_create(3), rnd_stack_clear(3), rnd_stack_copy(3),
-rnd_stack_map(3), rnd_stack_push(3), rnd_stack_insert(3),
-rnd_stack_quickinsert(3), rnd_stack_peek(3), rnd_stack_pop(3),
-rnd_stack_remove(3), rnd_stack_quickremove(3), rnd_stack_get(3),
-rnd_stack_set(3), rnd_stack_print(3)
+.ad l
+.BR librnd (7),
+.BR rnd_stack_create (3),
+.BR rnd_stack_clear (3),
+.BR rnd_stack_copy (3),
+.BR rnd_stack_map (3),
+.BR rnd_stack_push (3),
+.BR rnd_stack_insert (3),
+.BR rnd_stack_quickinsert (3),
+.BR rnd_stack_peek (3),
+.BR rnd_stack_pop (3),
+.BR rnd_stack_remove (3),
+.BR rnd_stack_quickremove (3),
+.BR rnd_stack_get (3),
+.BR rnd_stack_set (3),
+.BR rnd_stack_print (3)
