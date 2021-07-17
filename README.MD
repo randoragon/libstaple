@@ -48,6 +48,11 @@ override the `PREFIX` variable:
 - Comments in code are kept to a minimum, because good code speaks for itself,
   and long explanations in comments are hard to maintain and cripple
   readability.
+- Library can be compiled for release and debug code separately, release code
+  does less error checking and therefore is faster.
+- Sometimes error checking is sacrificed in favor of convenience, but only in
+  cases where errors are only a result of library misuse (e.g. popping from an
+  empty stack).
 
 ### Abstractions Vs. Primitives
 
