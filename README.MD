@@ -29,10 +29,12 @@ To uninstall, run
 	make uninstall
 
 By default, the files will be copied to `/usr/local/lib`, `/usr/local/include`
-and `/usr/local/share/man/man3`. If you want them installed directly at `/usr`,
+and `/usr/local/share/man/man3`. If you want them (un)installed directly at
+`/usr` (or somewhere else),
 override the `PREFIX` variable:
 
-	make install PREFIX=/usr
+	make   install PREFIX=/usr
+	make uninstall PREFIX=/usr
 
 ## Library Design
 
