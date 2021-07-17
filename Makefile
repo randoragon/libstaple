@@ -56,8 +56,8 @@ $(TESTDIR)/$(OBJDIR)/%.o: $(TESTDIR)/$(SRCDIR)/%.c
 	$(CC) -c $(CTESTFLAGS) $^ -o $@
 
 clean:
-	rm -f $(OBJS)
-	rm -f $(TESTDIR)/$(OBJDIR)/*
+	$(RM) $(OBJS)
+	$(RM) $(TESTDIR)/$(OBJDIR)/*
 
 debug: CFLAGS += -g -Og -DRND_DEBUG
 debug: clean all
@@ -69,15 +69,14 @@ profile: clean all
 install: CFLAGS += -O3
 install: clean all
 	@mkdir -p -- $(DESTDIR)$(PREFIX)/lib $(DESTDIR)$(PREFIX)/include $(DESTDIR)$(MANPREFIX)/man3
-	cp -- $(TARGET) $(DESTDIR)$(PREFIX)/lib
-	@chmod 644 -- $(DESTDIR)$(PREFIX)/lib/$(TARGET)
-	for f in $(INCLUDES); do cp -- "$(SRCDIR)/$$f" $(DESTDIR)$(PREFIX)/include/"$$f"; chmod 644 -- $(DESTDIR)$(PREFIX)/include/"$$f"; done
+	install -m644 -- $(TARGET) $(DESTDIR)$(PREFIX)/lib
+	for f in $(INCLUDES); do install -m644 -- "$(SRCDIR)/$$f" $(DESTDIR)$(PREFIX)/include/"$$f"; done
 	for f in $(MANPAGES); do sed -e "s/VERSION/$(VERSION_STR)/g" -e "s/DATE/$(DATE)/g"< "$(MANDIR)/$$f" > $(DESTDIR)$(MANPREFIX)/man3/"$$f"; chmod 644 -- $(DESTDIR)$(MANPREFIX)/man3/"$$f"; done
 
 uninstall:
-	rm -f -- $(DESTDIR)$(PREFIX)/lib/$(TARGET)
-	for f in $(INCLUDES); do rm -f -- $(DESTDIR)$(PREFIX)/include/"$$f"; done
-	for f in $(MANPAGES); do rm -f -- $(DESTDIR)$(MANPREFIX)/man3/"$$f"; done
+	$(RM) -- $(DESTDIR)$(PREFIX)/lib/$(TARGET)
+	for f in $(INCLUDES); do $(RM) -- $(DESTDIR)$(PREFIX)/include/"$$f"; done
+	for f in $(MANPAGES); do $(RM) -- $(DESTDIR)$(MANPREFIX)/man3/"$$f"; done
 
 # To check if overflow protection is working,
 # set SIZE_MAX to 65535 to reduce memory footprint.
