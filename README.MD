@@ -38,21 +38,21 @@ override the `PREFIX` variable:
 
 ## Library Design
 
-- The library should be as flexible as reasonably possible, while remaining very
-  intuitive to the user.
-- No typedefs, because explicit `struct` notation is preferred for clarity (the
-  user will add their own typedefs if they want).
-- Documentation as man pages, because it's a format Unix developers are
-  familiar with, doesn't require heavy machinery to work with, and has extremely
-  fast and offline access time.
-- Comments in code are kept to a minimum, because good code speaks for itself,
-  and long explanations in comments are hard to maintain and cripple
-  readability.
-- Library can be compiled for release and debug code separately, release code
-  does less error checking and therefore is faster.
-- Sometimes error checking is sacrificed in favor of convenience, but only in
-  cases where errors are only a result of library misuse (e.g. popping from an
-  empty stack).
+1. The library should be as flexible as reasonably possible, while remaining
+   very intuitive to the user.
+2. No typedefs, because explicit `struct` notation is preferred for clarity (the
+   user will add their own typedefs if they want).
+3. Documentation as man pages, because it's a format Unix developers are
+   familiar with, doesn't require heavy machinery to work with, and has
+   extremely fast and offline access time.
+4. Comments in code are kept to a minimum, because good code speaks for itself,
+   and long explanations in comments are hard to maintain and cripple
+   readability.
+5. Library can be compiled for release and debug code separately, release code
+   does less error checking and therefore is faster.
+6. Sometimes error checking is sacrificed in favor of convenience, but only in
+   cases where errors can only result from library misuse (e.g. popping from an
+   empty stack).
 
 ### Abstractions Vs. Primitives
 
