@@ -2,6 +2,7 @@
 .SH NAME
 rnd_stack_create - initialize a stack
 .SH SYNOPSIS
+.ad l
 #include <rnd.h>
 .sp
 struct rnd_stack *
@@ -9,6 +10,7 @@ struct rnd_stack *
 .IR elem_size ,
 size_t
 .IR capacity )
+.ad
 .SH DESCRIPTION
 .P
 The
@@ -40,14 +42,14 @@ return
 The
 .B rnd_stack_create()
 function shall fail if:
-.IP (1)
+.IP (1) 1.5i
 The buffer size
-.RI ( elem_size " * " capacity )
+.RI ( elem_size "\ *\ " capacity )
 exceeds
 .IR SIZE_MAX .
-.IP (2)
+.IP (2) 1.5i
 Memory allocation failed.
-.IP (3)
+.IP (3) 1.5i
 Either
 .I elem_size
 or

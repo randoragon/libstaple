@@ -1,0 +1,91 @@
+.TH RND_STACK_DESTROY 3 DATE "librnd-VERSION"
+.SH NAME
+rnd_stack_destroy - destroy a stack
+.SH SYNOPSIS
+.ad l
+#include <rnd.h>
+.sp
+int rnd_stack_destroy(struct rnd_stack
+.RI * stack ,
+int
+.RI (* dtor )(void*))
+.ad
+.SH DESCRIPTION
+.P
+The
+.B rnd_stack_destroy
+function
+frees all memory comprising a stack. Accessing the memory after destruction is
+undefined behavior, but the same
+.I stack
+variable can be safely reused to create a new stack.
+.P
+.I stack
+is a pointer to the stack that shall be freed.
+.P
+.I dtor
+is a pointer to a destructor function that shall be invoked on every
+element of the stack.  This mechanism is useful if individual stack elements own
+memory that should be freed (see EXAMPLES). If no such destructor function is
+needed,
+.B NULL
+can be passed to skip this functionality.
+.P
+The destructor function pointed to by
+.I dtor
+must return 0 for success, and anything else for failure. In debug mode, the
+caught error code (if any) is printed on stderr.
+.SH RETURN VALUE
+.P
+If successful, the
+.B rnd_stack_destroy()
+function shall return 0. Otherwise, it shall
+return a code indicating the error.
+.SH ERRORS
+The
+.B rnd_stack_destroy()
+function shall fail if:
+.IP \fBRND_EINVAL\fP 1.5i
+.I stack
+is a null pointer (debug mode only).
+.IP \fBRND_EHANDLER\fP 1.5i
+.I dtor
+returned non-0 for some stack element.
+.SH CONFORMING TO
+See librnd(3).
+.SH EXAMPLES
+.P
+This is an example of how to use the
+.I dtor
+function:
+.IP
+.ad l
+.nf
+struct example {
+	void *ptr;
+};
+
+int example_dtor(void *elem)
+{
+	free(((struct example*)elem)->ptr);
+	return 0;
+}
+
+int main()
+{
+	struct rnd_stack *s;
+	struct example data;
+	s = rnd_stack_create(sizeof(struct example), 1);
+	data.ptr = malloc(32);
+	rnd_stack_push(s, &data);
+	rnd_stack_destroy(s, &example_dtor);
+	return 0;
+}
+.fi
+.ad
+.SH SEE ALSO
+librnd(3), rnd_stack_create(3), rnd_stack_clear(3), rnd_stack_copy(3),
+rnd_stack_map(3), rnd_stack_push(3), rnd_stack_insert(3),
+rnd_stack_quickinsert(3), rnd_stack_peek(3), rnd_stack_pop(3),
+rnd_stack_remove(3), rnd_stack_quickremove(3), rnd_stack_get(3),
+rnd_stack_set(3), rnd_stack_print(3)
