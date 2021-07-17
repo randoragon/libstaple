@@ -1,0 +1,108 @@
+.TH LIBRND 7 DATE "librnd-VERSION"
+.SH NAME
+librnd - a general-purpose data structure library in pure ANSI C
+.SH DESCRIPTION
+.P
+.B librnd
+is a general-purpose library implementing common data structures for programming
+purposes. The library should be as flexible as reasonably possible, while
+remaining very intuitive to the user.
+.P
+Documentation is scattered in form of man pages, please refer to those when in
+need, but generally speaking, for a person well versed in C, there should be no
+big surprises.
+.SS Supported Data Structures \fR(as of VERSION)\fP
+.IP \(bu
+stack
+.SS Abstractions Vs. Primitives
+.P
+Every major function for inserting, removing, getting and setting elements is
+available in 2 forms:
+.IP \(bu
+.B Abstract Form
+- for any data hidden behind a
+.BR void* .
+.sp -1
+.IP \(bu
+.B Suffixed Form
+- for primitive types only.
+.TP
+.IR Examples :
+.IP \(bu
+.BR rnd_stack_push (3)
+\h'2n'- reads from a \fBvoid*\fP, generic
+.sp -1
+.IP \(bu
+.BR rnd_stack_pushi (3)
+\h'1n'- pass-by-value \fBint\fP
+.sp -1
+.IP \(bu
+.BR rnd_stack_pushus (3)
+- pass-by-value \fBunsigned short\fP
+.P
+This design ensures that it is possible to store any kind of data in any data
+structure (using Generic Form functions), but for simple primitives there exist
+separate functions that allow using pass-by-value, which is often more
+convenient.
+.P
+Here is a full table of suffixes, although all you need to remember is to use
+the first letters of your target type:
+.TS
+box;
+rb|lb
+r |l
+rb|lb.
+SUFFIX	TYPE
+_
+none 	any (\fBvoid*\fP)
+l 	long
+ul 	unsigned long
+i 	int
+ui 	unsigned int
+s 	short
+us 	unsigned short
+c 	char
+sc 	signed char
+uc 	unsigned char
+f 	float
+d 	double
+ld 	long double
+.TE
+.P
+.B "signed char"
+is the only explicitly signed type available due to the fact that
+.B char
+signedness is not defined by the standard.
+.SH CONFORMING TO
+The entirety of
+.B librnd
+is written in pure
+.BR C89
+for maximum portability. There are no external dependencies besides the C
+Standard
+Library.
+.SH NOTES
+.P
+In the future, the following additions are planned for the library:
+.IP
+array, queue, hashmap, linked list, 2D Matrix, 3D Matrix, priority queue, avl
+tree, rbtree
+.SH BUGS
+.P
+Please report bugs to the author of the library, either by email contact or by
+opening an issue on GitHub.
+.SH AUTHORS
+.P
+.B librnd
+was written by
+.MT randoragongamedev@gmail.com
+Randoragon
+.ME .
+.br
+The source code is available on
+.UR https://github.com/randoragon/librnd
+GitHub
+.UE .
+.SH SEE ALSO
+.ad l
+.BR rnd_stack_create (3)
