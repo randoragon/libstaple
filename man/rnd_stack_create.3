@@ -1,0 +1,63 @@
+.TH RND_STACK_CREATE 3 DATE "librnd-VERSION"
+.SH NAME
+rnd_stack_create - initialize a stack
+.SH SYNOPSIS
+#include <rnd.h>
+.sp
+struct rnd_stack *
+.BR rnd_stack_create (size_t
+.IR elem_size ,
+size_t
+.IR capacity )
+.SH DESCRIPTION
+.P
+The
+.B rnd_stack_create()
+function allocates and initializes a new stack, returning its address.
+.P
+.I elem_size
+denotes the size of a single element. This allows the user to store any kind of
+data, by setting
+.I elem_size
+to
+.BR sizeof(data) .
+.I elem_size
+cannot be changed during the lifespan of a stack.
+.P
+.I capacity
+denotes the initial number of elements that can be stored on the stack without
+allocating more memory.
+.I capacity
+shall be dynamically increased whenever more space is needed.
+.SH RETURN VALUE
+.P
+If successful, the
+.B rnd_stack_create()
+function shall return a valid pointer to the created stack. Otherwise, it shall
+return
+.BR NULL .
+.SH ERRORS
+The
+.B rnd_stack_create()
+function shall fail if:
+.IP (1)
+The buffer size
+.RI ( elem_size " * " capacity )
+exceeds
+.IR SIZE_MAX .
+.IP (2)
+Memory allocation failed.
+.IP (3)
+Either
+.I elem_size
+or
+.I capacity
+is 0.
+.SH CONFORMING TO
+See librnd(3).
+.SH SEE ALSO
+librnd(3), rnd_stack_destroy(3), rnd_stack_clear(3), rnd_stack_copy(3),
+rnd_stack_map(3), rnd_stack_push(3), rnd_stack_insert(3),
+rnd_stack_quickinsert(3), rnd_stack_peek(3), rnd_stack_pop(3),
+rnd_stack_remove(3), rnd_stack_quickremove(3), rnd_stack_get(3),
+rnd_stack_set(3), rnd_stack_print(3)

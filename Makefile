@@ -1,20 +1,45 @@
+# Modify these 3 numbers to bump librnd version
+VERSION_MAJOR = 1
+VERSION_MINOR = 0
+VERSION_PATCH = 0
+VERSION_STR   = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
+
+# Last major modification date (YYYY-MM-DD)
+DATE = 2021-07-17
+
+# Compilation / Linking
 CC = cc
 LINKER = cc
-CFLAGS = -fpic -std=c89 -Wall -Wextra -pedantic -Werror -Werror=vla
+VFLAGS =  -DVERSION_MAJOR=$(VERSION_MAJOR) -DVERSION_MINOR=$(VERSION_MINOR)
+VFLAGS += -DVERSION_PATCH=$(VERSION_PATCH) -DVERSION_STR="$(VERSION_STR)"
+CFLAGS = -fpic $(VFLAGS) -std=c89 -Wall -Wextra -pedantic -Werror -Werror=vla
 LDFLAGS = -shared
 CTESTFLAGS = -std=c89 -Wall -Wextra -pedantic -Werror=vla -g -Og
 LDTESTFLAGS = -L . -lrnd
 
+# Directories
 SRCDIR = src
 OBJDIR = obj
+MANDIR = man
 TESTDIR = test
+
+# Source and object files (including SRCDIR)
 SRCS := $(wildcard $(SRCDIR)/*.c)
 OBJS := $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(SRCS:.c=.o))
+
+# Header and man page files (only filenames)
+INCLUDES := $(subst $(SRCDIR)/,,$(wildcard $(SRCDIR)/rnd*.h))
+MANPAGES := $(subst $(MANDIR)/,,$(wildcard $(MANDIR)/*.3))
+
+# Main library file
 TARGET = librnd.so
+
+# Output paths
 DESTDIR =
 PREFIX = /usr/local
+MANPREFIX = $(PREFIX)/share/man
 
-.PHONY: directories all main clean debug profile test test-stack
+.PHONY: directories all main clean debug profile install uninstall test test-stack
 
 all: directories main
 
@@ -40,6 +65,19 @@ debug: clean all
 profile: CFLAGS += -pg
 profile: LDFLAGS += -pg
 profile: clean all
+
+install: CFLAGS += -O3
+install: clean all
+	@mkdir -p -- $(DESTDIR)$(PREFIX)/lib $(DESTDIR)$(PREFIX)/include $(DESTDIR)$(MANPREFIX)/man3
+	cp -- $(TARGET) $(DESTDIR)$(PREFIX)/lib
+	@chmod 644 -- $(DESTDIR)$(PREFIX)/lib/$(TARGET)
+	for f in $(INCLUDES); do cp -- "$(SRCDIR)/$$f" $(DESTDIR)$(PREFIX)/include/"$$f"; chmod 644 -- $(DESTDIR)$(PREFIX)/include/"$$f"; done
+	for f in $(MANPAGES); do sed -e "s/VERSION/$(VERSION_STR)/g" -e "s/DATE/$(DATE)/g"< "$(MANDIR)/$$f" > $(DESTDIR)$(MANPREFIX)/man3/"$$f"; chmod 644 -- $(DESTDIR)$(MANPREFIX)/man3/"$$f"; done
+
+uninstall:
+	rm -f -- $(DESTDIR)$(PREFIX)/lib/$(TARGET)
+	for f in $(INCLUDES); do rm -f -- $(DESTDIR)$(PREFIX)/include/"$$f"; done
+	for f in $(MANPAGES); do rm -f -- $(DESTDIR)$(MANPREFIX)/man3/"$$f"; done
 
 # To check if overflow protection is working,
 # set SIZE_MAX to 65535 to reduce memory footprint.
