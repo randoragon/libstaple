@@ -1,0 +1,74 @@
+.TH RND_STACK_MAP 3 DATE "librnd-VERSION"
+.SH NAME
+rnd_stack_map - run a function for each stack element
+.SH SYNOPSIS
+.ad l
+#include <rnd.h>
+.sp
+int
+.BR rnd_stack_map "(struct rnd_stack"
+.RI * stack ,
+int
+.RI (* func ")(void*, size_t))"
+.ad
+.SH DESCRIPTION
+.P
+The
+.BR rnd_stack_map ()
+function intakes a pointer to a map function, then iterates through all stack
+elements in no particular order, and runs the map function for each one.
+.P
+.I stack
+is a pointer to the stack.
+.P
+.I func
+is the pointer to the map function. The map function must be implemented in such
+a way that the first argument
+.RB ( void* )
+is the address to the current element, and the second
+.RB ( size_t )
+is the index of the current element (index 0 corresponds to the top of the
+stack).
+.P
+The map function pointed to by
+.I func
+must return 0 for success, and anything else for failure. In debug mode, the
+caught error code (if any) is printed on stderr.
+.SH RETURN VALUE
+.P
+If successful, the
+.BR rnd_stack_map ()
+function shall return 0. Otherwise, it shall return a code indicating the
+error.
+.SH ERRORS
+The
+.BR rnd_stack_map ()
+function shall fail if:
+.IP RND_EINVAL 1.5i
+Either
+.IR stack " or " func
+are null pointers (debug mode only).
+.IP RND_EHANDLER 1.5i
+.I func
+returned non-0 for some stack element.
+.SH CONFORMING TO
+See
+.BR librnd (3).
+.SH SEE ALSO
+.ad l
+.BR librnd (7),
+.BR rnd_stack (7),
+.BR rnd_stack_create (3),
+.BR rnd_stack_destroy (3),
+.BR rnd_stack_clear (3),
+.BR rnd_stack_copy (3),
+.BR rnd_stack_push (3),
+.BR rnd_stack_insert (3),
+.BR rnd_stack_quickinsert (3),
+.BR rnd_stack_peek (3),
+.BR rnd_stack_pop (3),
+.BR rnd_stack_remove (3),
+.BR rnd_stack_quickremove (3),
+.BR rnd_stack_get (3),
+.BR rnd_stack_set (3),
+.BR rnd_stack_print (3)
