@@ -10,6 +10,7 @@ ANSI C without any external dependencies besides the C standard library.
 ## Pending Implementations
 
 - array,
+- bitarray,
 - queue,
 - hashmap,
 - linked list,

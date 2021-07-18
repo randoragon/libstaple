@@ -29,7 +29,8 @@ OBJS := $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(SRCS:.c=.o))
 
 # Header and man page files (only filenames)
 INCLUDES := $(subst $(SRCDIR)/,,$(wildcard $(SRCDIR)/rnd*.h))
-MANPAGES := $(subst $(MANDIR)/,,$(wildcard $(MANDIR)/*.3))
+MANPAGES3 := $(subst $(MANDIR)/,,$(wildcard $(MANDIR)/*.3))
+MANPAGES7 := $(subst $(MANDIR)/,,$(wildcard $(MANDIR)/*.7))
 
 # Main library file
 TARGET = librnd.so
@@ -71,15 +72,14 @@ install: clean all
 	@mkdir -p -- $(DESTDIR)$(PREFIX)/lib $(DESTDIR)$(PREFIX)/include $(DESTDIR)$(MANPREFIX)/man3 $(DESTDIR)$(MANPREFIX)/man7
 	install -m644 -- $(TARGET) $(DESTDIR)$(PREFIX)/lib
 	for f in $(INCLUDES); do install -m644 -- "$(SRCDIR)/$$f" $(DESTDIR)$(PREFIX)/include/"$$f"; done
-	for f in $(MANPAGES); do sed -e "s/VERSION/$(VERSION_STR)/g" -e "s/DATE/$(DATE)/g" < "$(MANDIR)/$$f" > $(DESTDIR)$(MANPREFIX)/man3/"$$f"; chmod 644 -- $(DESTDIR)$(MANPREFIX)/man3/"$$f"; done
-	sed -e "s/VERSION/$(VERSION_STR)/g" -e "s/DATE/$(DATE)/g" < $(MANDIR)/librnd.7 > $(DESTDIR)$(MANPREFIX)/man7/librnd.7
-	chmod 644 -- $(DESTDIR)$(MANPREFIX)/man7/librnd.7
+	for f in $(MANPAGES3); do sed -e "s/VERSION/$(VERSION_STR)/g" -e "s/DATE/$(DATE)/g" < "$(MANDIR)/$$f" > $(DESTDIR)$(MANPREFIX)/man3/"$$f"; chmod 644 -- $(DESTDIR)$(MANPREFIX)/man3/"$$f"; done
+	for f in $(MANPAGES7); do sed -e "s/VERSION/$(VERSION_STR)/g" -e "s/DATE/$(DATE)/g" < "$(MANDIR)/$$f" > $(DESTDIR)$(MANPREFIX)/man7/"$$f"; chmod 644 -- $(DESTDIR)$(MANPREFIX)/man7/"$$f"; done
 
 uninstall:
 	$(RM) -- $(DESTDIR)$(PREFIX)/lib/$(TARGET)
 	for f in $(INCLUDES); do $(RM) -- $(DESTDIR)$(PREFIX)/include/"$$f"; done
-	for f in $(MANPAGES); do $(RM) -- $(DESTDIR)$(MANPREFIX)/man3/"$$f"; done
-	$(RM) -- $(DESTDIR)$(MANPREFIX)/man7/librnd.7
+	for f in $(MANPAGES3); do $(RM) -- $(DESTDIR)$(MANPREFIX)/man3/"$$f"; done
+	for f in $(MANPAGES7); do $(RM) -- $(DESTDIR)$(MANPREFIX)/man7/"$$f"; done
 
 # To check if overflow protection is working,
 # set SIZE_MAX to 65535 to reduce memory footprint.

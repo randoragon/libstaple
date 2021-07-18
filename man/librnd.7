@@ -73,6 +73,15 @@ ld 	long double
 is the only explicitly signed type available due to the fact that
 .B char
 signedness is not defined by the standard.
+.SS Thread Safety
+.P
+.B librnd
+was not tested for thread safety and there have been no serious attempts at
+ensuring correct execution in a multi-threaded environment.
+.P
+That said, the library does not rely on global variables, and all functions that
+operate on structures are practically self-contained, so it could be sufficient
+to simply lock a structure with a mutex before passing it to a function.
 .SH CONFORMING TO
 The entirety of
 .B librnd
@@ -83,16 +92,18 @@ Standard
 Library.
 .SH NOTES
 .P
-In the future, the following additions are planned for the library:
+In the future, the following additions are planned for the library (order is
+arbitrary):
 .IP
-array, queue, hashmap, linked list, 2D Matrix, 3D Matrix, priority queue, avl
+array, bitarray, queue, hashmap, linked list, 2D Matrix, 3D Matrix, priority queue, avl
 tree, rbtree
 .SH BUGS
 .P
-Please report bugs to the author of the library, either by email contact or by
-opening an issue on GitHub.
+Please report bugs to the author of the library, either by email or by opening
+an issue on GitHub.
 .SH AUTHORS
 .P
+.ad l
 .B librnd
 was written by
 .MT randoragongamedev@gmail.com
@@ -103,6 +114,7 @@ The source code is available on
 .UR https://github.com/randoragon/librnd
 GitHub
 .UE .
+.ad
 .SH SEE ALSO
 .ad l
-.BR rnd_stack_create (3)
+.BR rnd_stack (7)
