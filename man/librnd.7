@@ -14,7 +14,7 @@ big surprises.
 .SS Supported Data Structures \fR(as of VERSION)\fP
 .IP \(bu
 stack
-.SS Generic Data Vs. Primitives
+.SS Generic Data Vs. Primitive Types
 .P
 Every major function for inserting, removing, getting and setting elements is
 available in 2 forms:
@@ -34,11 +34,11 @@ available in 2 forms:
 .sp -1
 .IP \(bu
 .BR rnd_stack_pushi (3)
-\h'1n'- pass-by-value \fBint\fP
+\h'1n'- pass-by-value \fBint\fP, suffixed
 .sp -1
 .IP \(bu
 .BR rnd_stack_pushus (3)
-- pass-by-value \fBunsigned short\fP
+- pass-by-value \fBunsigned short\fP, suffixed
 .P
 This design ensures that it is possible to store any kind of data in any data
 structure (using Generic Form functions), but for simple primitives there exist
@@ -82,6 +82,36 @@ ensuring correct execution in a multi-threaded environment.
 That said, the library does not rely on global variables, and all functions that
 operate on structures are practically self-contained, so it could be sufficient
 to simply lock a structure with a mutex before passing it to a function.
+.SS Debug Mode
+To enable debug mode, recompile the library with
+.B RND_DEBUG
+defined (default: off).
+.P
+Debug mode enables additional error checking, which causes some functions to
+return more error codes.
+.P
+When debug mode is disabled, only the vital errors are checked, such as memory
+allocations and integer overflows. To find out which errors are checked with and
+without debug mode for a particular function, refer to its man page.
+.SS Quiet Mode
+To enable quiet mode, recompile the library with
+.B RND_QUIET
+defined (default: off).
+.P
+Quiet mode suppresses all debug output. By default, all functions aside from
+returning error codes also print short error messages and warnings.
+.SS Abort Mode
+To enable abort mode, recompile the library with
+.B RND_ABORT
+defined (default: off).
+.P
+When abort mode is enabled, every caught warning and error will call
+.BR exit (1)
+after having printed the error message (unless
+.B RND_QUIET
+was defined).
+This functionality is useful for writing simple programs that shouldn't need to
+bother with error checking.
 .SH CONFORMING TO
 The entirety of
 .B librnd

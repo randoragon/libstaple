@@ -17,10 +17,10 @@
 /* RND_DEBUG enables extra debug checks during runtime.
  * RND_QUIET disables all output from the library (if RND_DEBUG is enabled, each
  *           check will produce the appropriate error code, only silently)
- * RND_AUTOABORT causes every warning or error to call exit(1). This can be
+ * RND_ABORT causes every warning or error to call exit(1). This can be
  *               useful as implicit error-handling in small simple programs.
  */
-#if !defined(RND_QUIET) && !defined(RND_AUTOABORT)
+#if !defined(RND_QUIET) && !defined(RND_ABORT)
 	#define warn(x) do { \
 		fprintf(stderr, "%s:%u: warning: ", __FILE__, __LINE__); \
 		stderr_printf x; \
@@ -31,7 +31,7 @@
 		stderr_printf x; \
 		fputc('\n', stderr); \
 	} while (0)
-#elif !defined(RND_QUIET) && defined(RND_AUTOABORT)
+#elif !defined(RND_QUIET) && defined(RND_ABORT)
 	#define warn(x) do { \
 		fprintf(stderr, "%s:%u: warning: ", __FILE__, __LINE__); \
 		stderr_printf x; \
@@ -44,7 +44,7 @@
 		fputc('\n', stderr); \
 		exit(1); \
 	} while (0)
-#elif defined(RND_QUIET) && !defined(RND_AUTOABORT)
+#elif defined(RND_QUIET) && !defined(RND_ABORT)
 	#define warn(x)  ;
 	#define error(x) ;
 #else
