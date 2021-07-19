@@ -45,6 +45,15 @@ source code for more details.
 .SH CONFORMING TO
 See
 .BR librnd (7).
+.SH BUGS
+The size of the
+.I data
+buffer is capped at
+.BR SIZE_MAX .
+In consequence, the product
+.RI ( capacity " * " elem_size )
+also cannot exceed
+.BR SIZE_MAX .
 .SH SEE ALSO
 .ad l
 .BR librnd (7)

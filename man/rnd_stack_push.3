@@ -1,0 +1,153 @@
+.TH RND_STACK_PUSH 3 DATE "librnd-VERSION"
+.SH NAME
+rnd_stack_push - push a new element onto a stack
+.SH SYNOPSIS
+.ad l
+#include <rnd.h>
+.sp
+int
+.BR rnd_stack_push "(struct rnd_stack"
+.RI * stack ,
+const void
+.RI * elem )
+.br
+int
+.BR rnd_stack_pushc "(struct rnd_stack"
+.RI * stack ,
+char
+.IR elem )
+.br
+int
+.BR rnd_stack_pushs "(struct rnd_stack"
+.RI * stack ,
+short
+.IR elem )
+.br
+int
+.BR rnd_stack_pushi "(struct rnd_stack"
+.RI * stack ,
+int
+.IR elem )
+.br
+int
+.BR rnd_stack_pushl "(struct rnd_stack"
+.RI * stack ,
+long
+.IR elem )
+.br
+int
+.BR rnd_stack_pushsc "(struct rnd_stack"
+.RI * stack ,
+signed char
+.IR elem )
+.br
+int
+.BR rnd_stack_pushuc "(struct rnd_stack"
+.RI * stack ,
+unsigned char
+.IR elem )
+.br
+int
+.BR rnd_stack_pushus "(struct rnd_stack"
+.RI * stack ,
+unsigned short
+.IR elem )
+.br
+int
+.BR rnd_stack_pushui "(struct rnd_stack"
+.RI * stack ,
+unsigned int
+.IR elem )
+.br
+int
+.BR rnd_stack_pushul "(struct rnd_stack"
+.RI * stack ,
+unsigned long
+.IR elem )
+.br
+int
+.BR rnd_stack_pushf "(struct rnd_stack"
+.RI * stack ,
+float
+.IR elem )
+.br
+int
+.BR rnd_stack_pushd "(struct rnd_stack"
+.RI * stack ,
+double
+.IR elem )
+.br
+int
+.BR rnd_stack_pushld "(struct rnd_stack"
+.RI * stack ,
+long double
+.IR elem )
+.ad
+.SH DESCRIPTION
+.P
+The functions in the
+.BR rnd_stack_push ()
+family are used to push a new element onto a stack. The element's size must
+match the stack's
+.I elem_size
+field, so it is illegal to, for example, create a stack with
+.I elem_size
+equal to 4, and then use it with the
+.BR rnd_stack_pushc ()
+function.
+.P
+.I stack
+is the stack that shall be pushed onto.
+.P
+.I
+elem
+is the element to be pushed.
+.SS Generic Form
+.P
+.I elem
+must be a void pointer to the first byte of the element that shall be pushed.
+The number of bytes to copy is equal to
+.IR stack "'s " elem_size
+field.
+.SS Suffixed Form
+.I elem
+is passed directly in the function argument.
+.SH RETURN VALUE
+.P
+If successful, the functions in the
+.BR rnd_stack_push ()
+family shall return 0. Otherwise, they shall return a code indicating the
+error.
+.SH ERRORS
+The functions in the
+.BR rnd_stack_push ()
+family shall fail if:
+.IP \fBRND_EINVAL\fP 1.5i
+.I stack
+is a null pointer (debug mode only).
+.IP \fBRND_ERANGE\fP 1.5i
+Maximum buffer size exceeded. See BUGS in
+.BR rnd_stack (7).
+.IP \fBRND_ENOMEM\fP 1.5i
+Memory allocation failed.
+.SH CONFORMING TO
+See
+.BR librnd (3).
+.SH SEE ALSO
+.ad l
+.BR librnd (7),
+.BR rnd_stack (7),
+.BR rnd_stack_create (3),
+.BR rnd_stack_destroy (3),
+.BR rnd_stack_clear (3),
+.BR rnd_stack_copy (3),
+.BR rnd_stack_map (3),
+.BR rnd_stack_insert (3),
+.BR rnd_stack_quickinsert (3),
+.BR rnd_stack_peek (3),
+.BR rnd_stack_pop (3),
+.BR rnd_stack_remove (3),
+.BR rnd_stack_quickremove (3),
+.BR rnd_stack_get (3),
+.BR rnd_stack_set (3),
+.BR rnd_stack_print (3)
