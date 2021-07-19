@@ -55,12 +55,12 @@ override the `PREFIX` variable:
    cases where errors can only result from library misuse (e.g. popping from an
    empty stack).
 
-### Abstractions Vs. Primitives
+### Generic Data Vs. Primitives
 
 Every major function for inserting, removing, getting and setting elements is
 available in 2 forms:
 
-- **abstract form** with `void*` - allows you to store any structure
+- **generic form** with `void*` - allows you to store any structure
 - **suffixed form** for all major primitive types
 
 Example:
@@ -92,7 +92,7 @@ none | any (`void*`)
 it is not defined by the standard whether or not `char` alone is signed or
 unsigned.
 
-This division into abstract and suffixed form introduces a **lot** of redundancy
+This division into generic and suffixed form introduces a **lot** of redundancy
 and inflation to the code base, but I believe it's worthwhile to spend 3 times
 longer writing a library that you're going to use for a long time, even if it
 constitutes only a small speed improvement.
