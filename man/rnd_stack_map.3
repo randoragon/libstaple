@@ -12,7 +12,6 @@ int
 .RI (* func ")(void*, size_t))"
 .ad
 .SH DESCRIPTION
-.P
 The
 .BR rnd_stack_map ()
 function intakes a pointer to a map function, then iterates through all stack
@@ -35,7 +34,6 @@ The map function pointed to by
 must return 0 for success, and anything else for failure. In debug mode, the
 caught error code (if any) is printed on stderr.
 .SH RETURN VALUE
-.P
 If successful, the
 .BR rnd_stack_map ()
 function shall return 0. Otherwise, it shall return a code indicating the

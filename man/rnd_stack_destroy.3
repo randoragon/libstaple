@@ -11,7 +11,6 @@ int
 .RI (* dtor )(void*))
 .ad
 .SH DESCRIPTION
-.P
 The
 .BR rnd_stack_destroy ()
 function
@@ -36,7 +35,6 @@ The destructor function pointed to by
 must return 0 for success, and anything else for failure. In debug mode, the
 caught error code (if any) is printed on stderr.
 .SH RETURN VALUE
-.P
 If successful, the
 .BR rnd_stack_destroy ()
 function shall return 0. Otherwise, it shall
@@ -55,7 +53,6 @@ returned non-0 for some stack element.
 See
 .BR librnd (7).
 .SH EXAMPLES
-.P
 This is an example of how to use the
 .I dtor
 function:

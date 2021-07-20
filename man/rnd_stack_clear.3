@@ -12,7 +12,6 @@ int
 .RI (* dtor )(void*))
 .ad
 .SH DESCRIPTION
-.P
 The
 .BR rnd_stack_clear ()
 function removes every element from a stack. The stack does not have to contain
@@ -33,7 +32,6 @@ The destructor function pointed to by
 must return 0 for success, and anything else for failure. In debug mode, the
 caught error code (if any) is printed on stderr.
 .SH RETURN VALUE
-.P
 If successful, the
 .BR rnd_stack_clear ()
 function shall return 0 Otherwise, it shall
