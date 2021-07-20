@@ -172,6 +172,7 @@ int rnd_stack_pushc(struct rnd_stack *stack, char elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
@@ -192,6 +193,7 @@ int rnd_stack_pushs(struct rnd_stack *stack, short elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
@@ -212,6 +214,7 @@ int rnd_stack_pushi(struct rnd_stack *stack, int elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
@@ -232,6 +235,7 @@ int rnd_stack_pushl(struct rnd_stack *stack, long elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
@@ -252,6 +256,7 @@ int rnd_stack_pushsc(struct rnd_stack *stack, signed char elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
@@ -272,6 +277,7 @@ int rnd_stack_pushuc(struct rnd_stack *stack, unsigned char elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
@@ -292,6 +298,7 @@ int rnd_stack_pushus(struct rnd_stack *stack, unsigned short elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
@@ -312,6 +319,7 @@ int rnd_stack_pushui(struct rnd_stack *stack, unsigned int elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
@@ -332,6 +340,7 @@ int rnd_stack_pushul(struct rnd_stack *stack, unsigned long elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
@@ -352,6 +361,7 @@ int rnd_stack_pushf(struct rnd_stack *stack, float elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
@@ -372,6 +382,7 @@ int rnd_stack_pushd(struct rnd_stack *stack, double elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
@@ -392,6 +403,7 @@ int rnd_stack_pushld(struct rnd_stack *stack, long double elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
@@ -442,6 +454,7 @@ int rnd_stack_insertc(struct rnd_stack *stack, size_t idx, char elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -470,6 +483,7 @@ int rnd_stack_inserts(struct rnd_stack *stack, size_t idx, short elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -498,6 +512,7 @@ int rnd_stack_inserti(struct rnd_stack *stack, size_t idx, int elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -526,6 +541,7 @@ int rnd_stack_insertl(struct rnd_stack *stack, size_t idx, long elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -554,6 +570,7 @@ int rnd_stack_insertsc(struct rnd_stack *stack, size_t idx, signed char elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -586,6 +603,7 @@ int rnd_stack_insertuc(struct rnd_stack *stack, size_t idx, unsigned char elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -614,6 +632,7 @@ int rnd_stack_insertus(struct rnd_stack *stack, size_t idx, unsigned short elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -646,6 +665,7 @@ int rnd_stack_insertui(struct rnd_stack *stack, size_t idx, unsigned int elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -674,6 +694,7 @@ int rnd_stack_insertul(struct rnd_stack *stack, size_t idx, unsigned long elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -702,6 +723,7 @@ int rnd_stack_insertf(struct rnd_stack *stack, size_t idx, float elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -730,6 +752,7 @@ int rnd_stack_insertd(struct rnd_stack *stack, size_t idx, double elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -758,6 +781,7 @@ int rnd_stack_insertld(struct rnd_stack *stack, size_t idx, long double elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -812,6 +836,7 @@ int rnd_stack_quickinsertc(struct rnd_stack *stack, size_t idx, char elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -841,6 +866,7 @@ int rnd_stack_quickinserts(struct rnd_stack *stack, size_t idx, short elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -870,6 +896,7 @@ int rnd_stack_quickinserti(struct rnd_stack *stack, size_t idx, int elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -899,6 +926,7 @@ int rnd_stack_quickinsertl(struct rnd_stack *stack, size_t idx, long elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -928,6 +956,7 @@ int rnd_stack_quickinsertsc(struct rnd_stack *stack, size_t idx, signed char ele
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -961,6 +990,7 @@ int rnd_stack_quickinsertuc(struct rnd_stack *stack, size_t idx, unsigned char e
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -990,6 +1020,7 @@ int rnd_stack_quickinsertus(struct rnd_stack *stack, size_t idx, unsigned short 
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -1023,6 +1054,7 @@ int rnd_stack_quickinsertui(struct rnd_stack *stack, size_t idx, unsigned int el
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -1052,6 +1084,7 @@ int rnd_stack_quickinsertul(struct rnd_stack *stack, size_t idx, unsigned long e
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -1081,6 +1114,7 @@ int rnd_stack_quickinsertf(struct rnd_stack *stack, size_t idx, float elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -1110,6 +1144,7 @@ int rnd_stack_quickinsertd(struct rnd_stack *stack, size_t idx, double elem)
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -1139,6 +1174,7 @@ int rnd_stack_quickinsertld(struct rnd_stack *stack, size_t idx, long double ele
 	if (stack->elem_size != sizeof(elem)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(elem)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -1190,6 +1226,7 @@ char rnd_stack_peekc(const struct rnd_stack *stack)
 	if (stack->elem_size != sizeof(char)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(char)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -1209,6 +1246,7 @@ short rnd_stack_peeks(const struct rnd_stack *stack)
 	if (stack->elem_size != sizeof(short)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(short)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -1228,6 +1266,7 @@ int rnd_stack_peeki(const struct rnd_stack *stack)
 	if (stack->elem_size != sizeof(int)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(int)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -1247,6 +1286,7 @@ long rnd_stack_peekl(const struct rnd_stack *stack)
 	if (stack->elem_size != sizeof(long)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(long)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -1266,6 +1306,7 @@ signed char rnd_stack_peeksc(const struct rnd_stack *stack)
 	if (stack->elem_size != sizeof(signed char)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(signed char)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -1285,6 +1326,7 @@ unsigned char rnd_stack_peekuc(const struct rnd_stack *stack)
 	if (stack->elem_size != sizeof(unsigned char)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned char)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -1304,6 +1346,7 @@ unsigned short rnd_stack_peekus(const struct rnd_stack *stack)
 	if (stack->elem_size != sizeof(unsigned short)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned short)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -1323,6 +1366,7 @@ unsigned int rnd_stack_peekui(const struct rnd_stack *stack)
 	if (stack->elem_size != sizeof(unsigned int)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned int)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -1342,6 +1386,7 @@ unsigned long rnd_stack_peekul(const struct rnd_stack *stack)
 	if (stack->elem_size != sizeof(unsigned long)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned long)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -1361,6 +1406,7 @@ float rnd_stack_peekf(const struct rnd_stack *stack)
 	if (stack->elem_size != sizeof(float)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(float)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -1380,6 +1426,7 @@ double rnd_stack_peekd(const struct rnd_stack *stack)
 	if (stack->elem_size != sizeof(double)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(double)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -1399,6 +1446,7 @@ long double rnd_stack_peekld(const struct rnd_stack *stack)
 	if (stack->elem_size != sizeof(long double)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(long double)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -1437,15 +1485,16 @@ char rnd_stack_popc(struct rnd_stack *stack)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
-		return RND_EILLEGAL;
+		return 0;
 	}
 	if (stack->elem_size != sizeof(char)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(char)));
+		return 0;
 	}
 #endif
 	return ((char*)stack->data)[--stack->size];
@@ -1456,15 +1505,16 @@ short rnd_stack_pops(struct rnd_stack *stack)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
-		return RND_EILLEGAL;
+		return 0;
 	}
 	if (stack->elem_size != sizeof(short)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(short)));
+		return 0;
 	}
 #endif
 	return ((short*)stack->data)[--stack->size];
@@ -1475,15 +1525,16 @@ int rnd_stack_popi(struct rnd_stack *stack)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
-		return RND_EILLEGAL;
+		return 0;
 	}
 	if (stack->elem_size != sizeof(int)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(int)));
+		return 0;
 	}
 #endif
 	return ((int*)stack->data)[--stack->size];
@@ -1494,15 +1545,16 @@ long rnd_stack_popl(struct rnd_stack *stack)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
-		return RND_EILLEGAL;
+		return 0;
 	}
 	if (stack->elem_size != sizeof(long)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(long)));
+		return 0;
 	}
 #endif
 	return ((long*)stack->data)[--stack->size];
@@ -1513,15 +1565,16 @@ signed char rnd_stack_popsc(struct rnd_stack *stack)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
-		return RND_EILLEGAL;
+		return 0;
 	}
 	if (stack->elem_size != sizeof(signed char)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(signed char)));
+		return 0;
 	}
 #endif
 	return ((signed char*)stack->data)[--stack->size];
@@ -1532,15 +1585,16 @@ unsigned char rnd_stack_popuc(struct rnd_stack *stack)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
-		return RND_EILLEGAL;
+		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned char)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned char)));
+		return 0;
 	}
 #endif
 	return ((unsigned char*)stack->data)[--stack->size];
@@ -1551,15 +1605,16 @@ unsigned short rnd_stack_popus(struct rnd_stack *stack)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
-		return RND_EILLEGAL;
+		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned short)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned short)));
+		return 0;
 	}
 #endif
 	return ((unsigned short*)stack->data)[--stack->size];
@@ -1570,15 +1625,16 @@ unsigned int rnd_stack_popui(struct rnd_stack *stack)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
-		return RND_EILLEGAL;
+		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned int)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned int)));
+		return 0;
 	}
 #endif
 	return ((unsigned int*)stack->data)[--stack->size];
@@ -1589,15 +1645,16 @@ unsigned long rnd_stack_popul(struct rnd_stack *stack)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
-		return RND_EILLEGAL;
+		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned long)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned long)));
+		return 0;
 	}
 #endif
 	return ((unsigned long*)stack->data)[--stack->size];
@@ -1608,15 +1665,16 @@ float rnd_stack_popf(struct rnd_stack *stack)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
-		return RND_EILLEGAL;
+		return 0;
 	}
 	if (stack->elem_size != sizeof(float)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(float)));
+		return 0;
 	}
 #endif
 	return ((float*)stack->data)[--stack->size];
@@ -1627,15 +1685,16 @@ double rnd_stack_popd(struct rnd_stack *stack)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
-		return RND_EILLEGAL;
+		return 0;
 	}
 	if (stack->elem_size != sizeof(double)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(double)));
+		return 0;
 	}
 #endif
 	return ((double*)stack->data)[--stack->size];
@@ -1646,15 +1705,16 @@ long double rnd_stack_popld(struct rnd_stack *stack)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return RND_EINVAL;
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
-		return RND_EILLEGAL;
+		return 0;
 	}
 	if (stack->elem_size != sizeof(long double)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(long double)));
+		return 0;
 	}
 #endif
 	return ((long double*)stack->data)[--stack->size];
@@ -1722,6 +1782,7 @@ short rnd_stack_removes(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(short)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(short)));
+		return 0;
 	}
 #endif
 	if (idx >= stack->size) {
@@ -1746,6 +1807,7 @@ int rnd_stack_removei(struct rnd_stack *stack, size_t idx)
 	}
 	if (stack->elem_size != sizeof(int)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					return 0;
 					stack->elem_size, sizeof(int)));
 	}
 	if (idx >= stack->size) {
@@ -1772,6 +1834,7 @@ long rnd_stack_removel(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(long)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(long)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -1801,6 +1864,7 @@ signed char rnd_stack_removesc(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(signed char)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(signed char)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -1826,6 +1890,7 @@ unsigned char rnd_stack_removeuc(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(unsigned char)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned char)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -1851,6 +1916,7 @@ unsigned short rnd_stack_removeus(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(unsigned short)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned short)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -1876,6 +1942,7 @@ unsigned int rnd_stack_removeui(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(unsigned int)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned int)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -1901,6 +1968,7 @@ unsigned long rnd_stack_removeul(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(unsigned long)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned long)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -1926,6 +1994,7 @@ float rnd_stack_removef(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(float)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(float)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -1951,6 +2020,7 @@ double rnd_stack_removed(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(double)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(double)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -1976,6 +2046,7 @@ long double rnd_stack_removeld(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(long double)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(long double)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -2027,6 +2098,7 @@ char rnd_stack_quickremovec(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(char)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(char)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -2053,6 +2125,7 @@ short rnd_stack_quickremoves(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(short)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(short)));
+		return 0;
 	}
 #endif
 	if (idx >= stack->size) {
@@ -2079,6 +2152,7 @@ int rnd_stack_quickremovei(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(int)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(int)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -2105,6 +2179,7 @@ long rnd_stack_quickremovel(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(long)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(long)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -2135,6 +2210,7 @@ signed char rnd_stack_quickremovesc(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(signed char)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(signed char)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -2161,6 +2237,7 @@ unsigned char rnd_stack_quickremoveuc(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(unsigned char)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned char)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -2187,6 +2264,7 @@ unsigned short rnd_stack_quickremoveus(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(unsigned short)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned short)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -2213,6 +2291,7 @@ unsigned int rnd_stack_quickremoveui(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(unsigned int)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned int)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -2239,6 +2318,7 @@ unsigned long rnd_stack_quickremoveul(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(unsigned long)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned long)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -2265,6 +2345,7 @@ float rnd_stack_quickremovef(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(float)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(float)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -2291,6 +2372,7 @@ double rnd_stack_quickremoved(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(double)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(double)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -2317,6 +2399,7 @@ long double rnd_stack_quickremoveld(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(long double)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(long double)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -2364,6 +2447,7 @@ char rnd_stack_getc(const struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(char)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(char)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -2383,6 +2467,7 @@ short rnd_stack_gets(const struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(short)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(short)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -2402,6 +2487,7 @@ int rnd_stack_geti(const struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(int)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(int)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -2421,6 +2507,7 @@ long rnd_stack_getl(const struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(long)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(long)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -2440,6 +2527,7 @@ signed char rnd_stack_getsc(const struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(signed char)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(signed char)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -2459,6 +2547,7 @@ unsigned char rnd_stack_getuc(const struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(unsigned char)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned char)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -2478,6 +2567,7 @@ unsigned short rnd_stack_getus(const struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(unsigned short)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned short)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -2497,6 +2587,7 @@ unsigned int rnd_stack_getui(const struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(unsigned int)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned int)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -2516,6 +2607,7 @@ unsigned long rnd_stack_getul(const struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(unsigned long)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(unsigned long)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -2535,6 +2627,7 @@ float rnd_stack_getf(const struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(float)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(float)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -2554,6 +2647,7 @@ double rnd_stack_getd(const struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(double)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(double)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -2573,6 +2667,7 @@ long double rnd_stack_getld(const struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(long double)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					stack->elem_size, sizeof(long double)));
+		return 0;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
@@ -2616,6 +2711,7 @@ int rnd_stack_setc(struct rnd_stack *stack, size_t idx, char val)
 	if (stack->elem_size != sizeof(val)) {
 		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
 					stack->elem_size, sizeof(val)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -2638,6 +2734,7 @@ int rnd_stack_sets(struct rnd_stack *stack, size_t idx, short val)
 	if (stack->elem_size != sizeof(val)) {
 		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
 					stack->elem_size, sizeof(val)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -2660,6 +2757,7 @@ int rnd_stack_seti(struct rnd_stack *stack, size_t idx, int val)
 	if (stack->elem_size != sizeof(val)) {
 		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
 					stack->elem_size, sizeof(val)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -2682,6 +2780,7 @@ int rnd_stack_setl(struct rnd_stack *stack, size_t idx, long val)
 	if (stack->elem_size != sizeof(val)) {
 		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
 					stack->elem_size, sizeof(val)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -2704,6 +2803,7 @@ int rnd_stack_setsc(struct rnd_stack *stack, size_t idx, signed char val)
 	if (stack->elem_size != sizeof(val)) {
 		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
 					stack->elem_size, sizeof(val)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -2730,6 +2830,7 @@ int rnd_stack_setuc(struct rnd_stack *stack, size_t idx, unsigned char val)
 	if (stack->elem_size != sizeof(val)) {
 		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
 					stack->elem_size, sizeof(val)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -2752,6 +2853,7 @@ int rnd_stack_setus(struct rnd_stack *stack, size_t idx, unsigned short val)
 	if (stack->elem_size != sizeof(val)) {
 		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
 					stack->elem_size, sizeof(val)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -2778,6 +2880,7 @@ int rnd_stack_setui(struct rnd_stack *stack, size_t idx, unsigned int val)
 	if (stack->elem_size != sizeof(val)) {
 		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
 					stack->elem_size, sizeof(val)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -2800,6 +2903,7 @@ int rnd_stack_setul(struct rnd_stack *stack, size_t idx, unsigned long val)
 	if (stack->elem_size != sizeof(val)) {
 		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
 					stack->elem_size, sizeof(val)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -2822,6 +2926,7 @@ int rnd_stack_setf(struct rnd_stack *stack, size_t idx, float val)
 	if (stack->elem_size != sizeof(val)) {
 		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
 					stack->elem_size, sizeof(val)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -2844,6 +2949,7 @@ int rnd_stack_setd(struct rnd_stack *stack, size_t idx, double val)
 	if (stack->elem_size != sizeof(val)) {
 		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
 					stack->elem_size, sizeof(val)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -2866,6 +2972,7 @@ int rnd_stack_setld(struct rnd_stack *stack, size_t idx, long double val)
 	if (stack->elem_size != sizeof(val)) {
 		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
 					stack->elem_size, sizeof(val)));
+		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
