@@ -50,7 +50,7 @@ int rnd_foomap(void *buf, size_t size, size_t elem_size, int (*foo)(void*))
 int rnd_size_try_add(size_t size, size_t amount)
 {
 	if (size > SIZE_MAX - amount) {
-		error(("size_t overflow detected, unable to increment by %lu", amount));
+		error(("size_t overflow detected, unable to increment by "SIZE_T_FMT, amount));
 		return 1;
 	}
 	return 0;

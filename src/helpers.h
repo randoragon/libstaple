@@ -8,6 +8,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/* IMPORTANT:
+ * Due to c89 constraints, the printf format string for size_t must be manually
+ * defined below. Adjust this string if you're getting compilation errors about
+ * size_t and printf.
+ */
+#define SIZE_T_FMT "%lu"
+
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 #ifndef SIZE_MAX
