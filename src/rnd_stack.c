@@ -153,6 +153,10 @@ int rnd_stack_push(struct rnd_stack *stack, const void *elem)
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
+	if (elem == NULL) {
+		error(("elem is NULL"));
+		return RND_EINVAL;
+	}
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
@@ -806,6 +810,10 @@ int rnd_stack_quickinsert(struct rnd_stack *stack, size_t idx, const void *elem)
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
+		return RND_EINVAL;
+	}
+	if (elem == NULL) {
+		error(("elem is NULL"));
 		return RND_EINVAL;
 	}
 	if (idx > stack->size) {

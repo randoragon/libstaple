@@ -127,8 +127,15 @@ Maximum buffer size exceeded. See BUGS in
 .BR rnd_stack (7).
 .IP \fBRND_ENOMEM\fP 1.5i
 Memory allocation failed.
+.SS Generic Form
+The
+.BR rnd_stack_push ()
+function shall fail if:
+.IP \fBRND_EINVAL\fP 1.5i
+.I elem
+is a null pointer (debug mode only).
 .SS Suffixed Form
-Additionally, the suffixed
+The suffixed
 .BR rnd_stack_push ()
 functions shall fail if:
 .IP \fBRND_EILLEGAL\fP 1.5i
