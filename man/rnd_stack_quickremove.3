@@ -1,0 +1,157 @@
+.TH RND_STACK_QUICKREMOVE 3 DATE "librnd-VERSION"
+.SH NAME
+rnd_stack_quickremove - remove an element from any position of a stack
+.SH SYNOPSIS
+.ad l
+#include <rnd.h>
+.sp
+int
+.BR rnd_stack_quickremove "(struct rnd_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+void
+.RI * output )
+.br
+char
+.BR rnd_stack_quickremovec "(struct rnd_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+short
+.BR rnd_stack_quickremoves "(struct rnd_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+int
+.BR rnd_stack_quickremovei "(struct rnd_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+long
+.BR rnd_stack_quickremovel "(struct rnd_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+signed char
+.BR rnd_stack_quickremovesc "(struct rnd_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+unsigned char
+.BR rnd_stack_quickremoveuc "(struct rnd_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+unsigned short
+.BR rnd_stack_quickremoveus "(struct rnd_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+unsigned int
+.BR rnd_stack_quickremoveui "(struct rnd_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+unsigned long
+.BR rnd_stack_quickremoveul "(struct rnd_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+float
+.BR rnd_stack_quickremovef "(struct rnd_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+double
+.BR rnd_stack_quickremoved "(struct rnd_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+long double
+.BR rnd_stack_quickremoveld "(struct rnd_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.ad
+.SH DESCRIPTION
+See
+.BR rnd_stack_remove (3).
+.P
+The functions in the
+.BR rnd_stack_quickremove ()
+family operate in constant time, which is achievable by changing the order of
+the elements during removal.
+.SH EXMAPLES
+To explain how the
+.BR rnd_stack_remove ()
+and
+.BR rnd_stack_quickremove ()
+families differ, consider the following initial stack (elements listed
+from bottom to top):
+.IP
+.B 1 2 3 4 _ _ _
+.P
+Now, let us investigate what happens when we try to remove the number
+.BR 2 .
+.P
+The functions in the
+.BR rnd_stack_remove ()
+family would remove the element, and then move
+.BR 3 " and " 4
+downwards into the freed spot, without affecting the order:
+.IP (1)
+.B 1 _ 3 4 _ _ _
+.br
+\h'2n'^
+.IP (2)
+.B 1 3 4 _ _ _ _
+.br
+\h'2n'^ ^
+.P
+On the contrary, the functions in the
+.BR rnd_stack_quickremove ()
+family achieve the goal faster by moving the top of the stack (in this case
+.BR 4 )
+into the value that should be removed:
+.IP (1)
+.B 1 _ 3 4 _ _ _
+.br
+\h'2n'^
+.IP (2)
+.B 1 4 3 _ _ _ _
+.br
+\h'2n'^
+.P
+The second approach guarantees constant time, but does not preserve the order of
+the elements.
+.SH SEE ALSO
+.ad l
+.BR librnd (7),
+.BR rnd_stack (7),
+.BR rnd_stack_create (3),
+.BR rnd_stack_destroy (3),
+.BR rnd_stack_clear (3),
+.BR rnd_stack_copy (3),
+.BR rnd_stack_map (3),
+.BR rnd_stack_push (3),
+.BR rnd_stack_insert (3),
+.BR rnd_stack_quickinsert (3),
+.BR rnd_stack_peek (3),
+.BR rnd_stack_pop (3),
+.BR rnd_stack_remove (3),
+.BR rnd_stack_get (3),
+.BR rnd_stack_set (3),
+.BR rnd_stack_print (3)
+
