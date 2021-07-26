@@ -970,10 +970,6 @@ int rnd_stack_quickinsertsc(struct rnd_stack *stack, size_t idx, signed char ele
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
-	if (idx > stack->size) {
-		error(("index out of range"));
-		return RND_EINDEX;
-	}
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
@@ -1029,10 +1025,6 @@ int rnd_stack_quickinsertus(struct rnd_stack *stack, size_t idx, unsigned short 
 		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
 					stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
-	}
-	if (idx > stack->size) {
-		error(("index out of range"));
-		return RND_EINDEX;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -2435,7 +2427,7 @@ int rnd_stack_get(const struct rnd_stack *stack, size_t idx, void *output)
 		error(("output is NULL"));
 		return RND_EINVAL;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
@@ -2457,7 +2449,7 @@ char rnd_stack_getc(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(char)));
 		return 0;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return 0;
 	}
@@ -2477,7 +2469,7 @@ short rnd_stack_gets(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(short)));
 		return 0;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return 0;
 	}
@@ -2497,7 +2489,7 @@ int rnd_stack_geti(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(int)));
 		return 0;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return 0;
 	}
@@ -2517,7 +2509,7 @@ long rnd_stack_getl(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(long)));
 		return 0;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return 0;
 	}
@@ -2537,7 +2529,7 @@ signed char rnd_stack_getsc(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(signed char)));
 		return 0;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return 0;
 	}
@@ -2557,7 +2549,7 @@ unsigned char rnd_stack_getuc(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(unsigned char)));
 		return 0;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return 0;
 	}
@@ -2577,7 +2569,7 @@ unsigned short rnd_stack_getus(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(unsigned short)));
 		return 0;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return 0;
 	}
@@ -2597,7 +2589,7 @@ unsigned int rnd_stack_getui(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(unsigned int)));
 		return 0;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return 0;
 	}
@@ -2617,7 +2609,7 @@ unsigned long rnd_stack_getul(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(unsigned long)));
 		return 0;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return 0;
 	}
@@ -2637,7 +2629,7 @@ float rnd_stack_getf(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(float)));
 		return 0;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return 0;
 	}
@@ -2657,7 +2649,7 @@ double rnd_stack_getd(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(double)));
 		return 0;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return 0;
 	}
@@ -2677,7 +2669,7 @@ long double rnd_stack_getld(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(long double)));
 		return 0;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return 0;
 	}
@@ -2698,7 +2690,7 @@ int rnd_stack_set(struct rnd_stack *stack, size_t idx, void *val)
 		error(("val is NULL"));
 		return RND_EINVAL;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
@@ -2721,7 +2713,7 @@ int rnd_stack_setc(struct rnd_stack *stack, size_t idx, char val)
 					stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
@@ -2744,7 +2736,7 @@ int rnd_stack_sets(struct rnd_stack *stack, size_t idx, short val)
 					stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
@@ -2767,7 +2759,7 @@ int rnd_stack_seti(struct rnd_stack *stack, size_t idx, int val)
 					stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
@@ -2790,7 +2782,7 @@ int rnd_stack_setl(struct rnd_stack *stack, size_t idx, long val)
 					stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
@@ -2813,11 +2805,11 @@ int rnd_stack_setsc(struct rnd_stack *stack, size_t idx, signed char val)
 					stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
@@ -2840,7 +2832,7 @@ int rnd_stack_setuc(struct rnd_stack *stack, size_t idx, unsigned char val)
 					stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
@@ -2863,11 +2855,11 @@ int rnd_stack_setus(struct rnd_stack *stack, size_t idx, unsigned short val)
 					stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
@@ -2890,7 +2882,7 @@ int rnd_stack_setui(struct rnd_stack *stack, size_t idx, unsigned int val)
 					stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
@@ -2913,7 +2905,7 @@ int rnd_stack_setul(struct rnd_stack *stack, size_t idx, unsigned long val)
 					stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
@@ -2936,7 +2928,7 @@ int rnd_stack_setf(struct rnd_stack *stack, size_t idx, float val)
 					stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
@@ -2959,7 +2951,7 @@ int rnd_stack_setd(struct rnd_stack *stack, size_t idx, double val)
 					stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
@@ -2982,7 +2974,7 @@ int rnd_stack_setld(struct rnd_stack *stack, size_t idx, long double val)
 					stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
-	if (idx > stack->size) {
+	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}

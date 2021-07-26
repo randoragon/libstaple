@@ -268,7 +268,7 @@ TEST get_set(void)
 		ASSERT_EQ_FMT(b, out, "%f");
 		ASSERT_EQ_FMT(0, rnd_stack_pop(s, &out), "%d");
 		ASSERT_EQ_FMT(b, out, "%f");
-		ASSERT_EQ_FMT(RND_EILLEGAL, rnd_stack_get(s, 0, &out), "%d");
+		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_get(s, 0, &out), "%d");
 		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
 	}
 
