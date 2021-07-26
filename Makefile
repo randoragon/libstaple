@@ -5,7 +5,7 @@ VERSION_PATCH = 0
 VERSION_STR   = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
 
 # Last major modification date (YYYY-MM-DD)
-DATE = 2021-07-17
+DATE = 2021-07-26
 
 # Compilation / Linking
 CC = cc
