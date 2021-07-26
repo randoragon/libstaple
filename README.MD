@@ -30,7 +30,7 @@ To uninstall, run
 	make uninstall
 
 By default, the files will be copied to `/usr/local/lib`, `/usr/local/include`
-and `/usr/local/share/man/man3`. If you want them (un)installed directly at
+and `/usr/local/share/man`. If you want them (un)installed directly at
 `/usr` (or somewhere else),
 override the `PREFIX` variable:
 
@@ -55,7 +55,7 @@ override the `PREFIX` variable:
    cases where errors can only result from library misuse (e.g. popping from an
    empty stack).
 
-### Generic Data Vs. Primitives
+### Generic Data vs. Primitives
 
 Every major function for inserting, removing, getting and setting elements is
 available in 2 forms:
