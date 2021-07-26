@@ -1465,17 +1465,14 @@ int rnd_stack_pop(struct rnd_stack *stack, void *output)
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
-	if (output == NULL) {
-		error(("output is NULL"));
-		return RND_EINVAL;
-	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
 		return RND_EILLEGAL;
 	}
 #endif
 	src = (char*)stack->data + (stack->size - 1) * stack->elem_size;
-	memcpy(output, src, stack->elem_size);
+	if (output != NULL)
+		memcpy(output, src, stack->elem_size);
 	--stack->size;
 	return 0;
 }
@@ -1729,17 +1726,14 @@ int rnd_stack_remove(struct rnd_stack *stack, size_t idx, void *output)
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
-	if (output == NULL) {
-		error(("output is NULL"));
-		return RND_EINVAL;
-	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
 #endif
 	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
-	memcpy(output, p, stack->elem_size);
+	if (output != NULL)
+		memcpy(output, p, stack->elem_size);
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;
 	return 0;
@@ -2069,10 +2063,6 @@ int rnd_stack_quickremove(struct rnd_stack *stack, size_t idx, void *output)
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
-	if (output == NULL) {
-		error(("output is NULL"));
-		return RND_EINVAL;
-	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
 		return RND_EINDEX;
@@ -2080,7 +2070,8 @@ int rnd_stack_quickremove(struct rnd_stack *stack, size_t idx, void *output)
 #endif
 	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	q = (char*)stack->data + (stack->size - 1) * stack->elem_size;
-	memcpy(output, p, stack->elem_size);
+	if (output != NULL)
+		memcpy(output, p, stack->elem_size);
 	memcpy(p, q, stack->elem_size);
 	--stack->size;
 	return 0;
