@@ -148,7 +148,7 @@ is a null pointer (debug mode only).
 out of range (debug mode only).
 .IP 0 1.5i
 .IR stack "'s " elem_size
-does not match the size of the function's return type.
+does not match the size of the function's return type (debug mode only).
 .P
 Note that 0 can also be a successful return value, since it is a number that can
 be stored on the stack, like any other.
@@ -181,4 +181,3 @@ See
 .BR rnd_stack_get (3),
 .BR rnd_stack_set (3),
 .BR rnd_stack_print (3)
-
