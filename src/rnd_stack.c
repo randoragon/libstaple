@@ -174,8 +174,8 @@ int rnd_stack_pushc(struct rnd_stack *stack, char elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -195,8 +195,8 @@ int rnd_stack_pushs(struct rnd_stack *stack, short elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -216,8 +216,8 @@ int rnd_stack_pushi(struct rnd_stack *stack, int elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -237,8 +237,8 @@ int rnd_stack_pushl(struct rnd_stack *stack, long elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -258,8 +258,8 @@ int rnd_stack_pushsc(struct rnd_stack *stack, signed char elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -279,8 +279,8 @@ int rnd_stack_pushuc(struct rnd_stack *stack, unsigned char elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -300,8 +300,8 @@ int rnd_stack_pushus(struct rnd_stack *stack, unsigned short elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -321,8 +321,8 @@ int rnd_stack_pushui(struct rnd_stack *stack, unsigned int elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -342,8 +342,8 @@ int rnd_stack_pushul(struct rnd_stack *stack, unsigned long elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -363,8 +363,8 @@ int rnd_stack_pushf(struct rnd_stack *stack, float elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -384,8 +384,8 @@ int rnd_stack_pushd(struct rnd_stack *stack, double elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -405,8 +405,8 @@ int rnd_stack_pushld(struct rnd_stack *stack, long double elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -456,8 +456,8 @@ int rnd_stack_insertc(struct rnd_stack *stack, size_t idx, char elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -485,8 +485,8 @@ int rnd_stack_inserts(struct rnd_stack *stack, size_t idx, short elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -514,8 +514,8 @@ int rnd_stack_inserti(struct rnd_stack *stack, size_t idx, int elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -543,8 +543,8 @@ int rnd_stack_insertl(struct rnd_stack *stack, size_t idx, long elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -572,8 +572,8 @@ int rnd_stack_insertsc(struct rnd_stack *stack, size_t idx, signed char elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -605,8 +605,8 @@ int rnd_stack_insertuc(struct rnd_stack *stack, size_t idx, unsigned char elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -634,8 +634,8 @@ int rnd_stack_insertus(struct rnd_stack *stack, size_t idx, unsigned short elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -667,8 +667,8 @@ int rnd_stack_insertui(struct rnd_stack *stack, size_t idx, unsigned int elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -696,8 +696,8 @@ int rnd_stack_insertul(struct rnd_stack *stack, size_t idx, unsigned long elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -725,8 +725,8 @@ int rnd_stack_insertf(struct rnd_stack *stack, size_t idx, float elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -754,8 +754,8 @@ int rnd_stack_insertd(struct rnd_stack *stack, size_t idx, double elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -783,8 +783,8 @@ int rnd_stack_insertld(struct rnd_stack *stack, size_t idx, long double elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -842,8 +842,8 @@ int rnd_stack_quickinsertc(struct rnd_stack *stack, size_t idx, char elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -872,8 +872,8 @@ int rnd_stack_quickinserts(struct rnd_stack *stack, size_t idx, short elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -902,8 +902,8 @@ int rnd_stack_quickinserti(struct rnd_stack *stack, size_t idx, int elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -932,8 +932,8 @@ int rnd_stack_quickinsertl(struct rnd_stack *stack, size_t idx, long elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -962,8 +962,8 @@ int rnd_stack_quickinsertsc(struct rnd_stack *stack, size_t idx, signed char ele
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -992,8 +992,8 @@ int rnd_stack_quickinsertuc(struct rnd_stack *stack, size_t idx, unsigned char e
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -1022,8 +1022,8 @@ int rnd_stack_quickinsertus(struct rnd_stack *stack, size_t idx, unsigned short 
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -1052,8 +1052,8 @@ int rnd_stack_quickinsertui(struct rnd_stack *stack, size_t idx, unsigned int el
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -1082,8 +1082,8 @@ int rnd_stack_quickinsertul(struct rnd_stack *stack, size_t idx, unsigned long e
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -1112,8 +1112,8 @@ int rnd_stack_quickinsertf(struct rnd_stack *stack, size_t idx, float elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -1142,8 +1142,8 @@ int rnd_stack_quickinsertd(struct rnd_stack *stack, size_t idx, double elem)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -1172,8 +1172,8 @@ int rnd_stack_quickinsertld(struct rnd_stack *stack, size_t idx, long double ele
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(elem)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(elem)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
 	}
 	if (idx > stack->size) {
@@ -1224,8 +1224,8 @@ char rnd_stack_peekc(const struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(char)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(char)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(char)));
 		return 0;
 	}
 	if (stack->size == 0) {
@@ -1244,8 +1244,8 @@ short rnd_stack_peeks(const struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(short)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(short)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(short)));
 		return 0;
 	}
 	if (stack->size == 0) {
@@ -1264,8 +1264,8 @@ int rnd_stack_peeki(const struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(int)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(int)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(int)));
 		return 0;
 	}
 	if (stack->size == 0) {
@@ -1284,8 +1284,8 @@ long rnd_stack_peekl(const struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(long)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(long)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(long)));
 		return 0;
 	}
 	if (stack->size == 0) {
@@ -1304,8 +1304,8 @@ signed char rnd_stack_peeksc(const struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(signed char)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(signed char)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(signed char)));
 		return 0;
 	}
 	if (stack->size == 0) {
@@ -1324,8 +1324,8 @@ unsigned char rnd_stack_peekuc(const struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned char)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned char)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned char)));
 		return 0;
 	}
 	if (stack->size == 0) {
@@ -1344,8 +1344,8 @@ unsigned short rnd_stack_peekus(const struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned short)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned short)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned short)));
 		return 0;
 	}
 	if (stack->size == 0) {
@@ -1364,8 +1364,8 @@ unsigned int rnd_stack_peekui(const struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned int)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned int)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned int)));
 		return 0;
 	}
 	if (stack->size == 0) {
@@ -1384,8 +1384,8 @@ unsigned long rnd_stack_peekul(const struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned long)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned long)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned long)));
 		return 0;
 	}
 	if (stack->size == 0) {
@@ -1404,8 +1404,8 @@ float rnd_stack_peekf(const struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(float)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(float)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(float)));
 		return 0;
 	}
 	if (stack->size == 0) {
@@ -1424,8 +1424,8 @@ double rnd_stack_peekd(const struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(double)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(double)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(double)));
 		return 0;
 	}
 	if (stack->size == 0) {
@@ -1444,8 +1444,8 @@ long double rnd_stack_peekld(const struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(long double)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(long double)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(long double)));
 		return 0;
 	}
 	if (stack->size == 0) {
@@ -1489,8 +1489,8 @@ char rnd_stack_popc(struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(char)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(char)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(char)));
 		return 0;
 	}
 #endif
@@ -1509,8 +1509,8 @@ short rnd_stack_pops(struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(short)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(short)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(short)));
 		return 0;
 	}
 #endif
@@ -1529,8 +1529,8 @@ int rnd_stack_popi(struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(int)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(int)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(int)));
 		return 0;
 	}
 #endif
@@ -1549,8 +1549,8 @@ long rnd_stack_popl(struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(long)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(long)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(long)));
 		return 0;
 	}
 #endif
@@ -1569,8 +1569,8 @@ signed char rnd_stack_popsc(struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(signed char)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(signed char)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(signed char)));
 		return 0;
 	}
 #endif
@@ -1589,8 +1589,8 @@ unsigned char rnd_stack_popuc(struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned char)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned char)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned char)));
 		return 0;
 	}
 #endif
@@ -1609,8 +1609,8 @@ unsigned short rnd_stack_popus(struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned short)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned short)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned short)));
 		return 0;
 	}
 #endif
@@ -1629,8 +1629,8 @@ unsigned int rnd_stack_popui(struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned int)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned int)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned int)));
 		return 0;
 	}
 #endif
@@ -1649,8 +1649,8 @@ unsigned long rnd_stack_popul(struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned long)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned long)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned long)));
 		return 0;
 	}
 #endif
@@ -1669,8 +1669,8 @@ float rnd_stack_popf(struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(float)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(float)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(float)));
 		return 0;
 	}
 #endif
@@ -1689,8 +1689,8 @@ double rnd_stack_popd(struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(double)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(double)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(double)));
 		return 0;
 	}
 #endif
@@ -1709,8 +1709,8 @@ long double rnd_stack_popld(struct rnd_stack *stack)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(long double)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(long double)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(long double)));
 		return 0;
 	}
 #endif
@@ -1749,8 +1749,9 @@ char rnd_stack_removec(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(char)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(char)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(char)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -1774,8 +1775,8 @@ short rnd_stack_removes(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(short)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(short)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(short)));
 		return 0;
 	}
 #endif
@@ -1800,9 +1801,9 @@ int rnd_stack_removei(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(int)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					return 0;
-					stack->elem_size, sizeof(int)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(int)));
+		return 0;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
@@ -1826,8 +1827,8 @@ long rnd_stack_removel(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(long)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(long)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(long)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -1856,8 +1857,8 @@ signed char rnd_stack_removesc(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(signed char)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(signed char)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(signed char)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -1882,8 +1883,8 @@ unsigned char rnd_stack_removeuc(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned char)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned char)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned char)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -1908,8 +1909,8 @@ unsigned short rnd_stack_removeus(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned short)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned short)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned short)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -1934,8 +1935,8 @@ unsigned int rnd_stack_removeui(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned int)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned int)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned int)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -1960,8 +1961,8 @@ unsigned long rnd_stack_removeul(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned long)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned long)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned long)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -1986,8 +1987,8 @@ float rnd_stack_removef(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(float)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(float)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(float)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2012,8 +2013,8 @@ double rnd_stack_removed(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(double)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(double)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(double)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2038,8 +2039,8 @@ long double rnd_stack_removeld(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(long double)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(long double)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(long double)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2087,8 +2088,8 @@ char rnd_stack_quickremovec(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(char)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(char)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(char)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2114,8 +2115,8 @@ short rnd_stack_quickremoves(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(short)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(short)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(short)));
 		return 0;
 	}
 #endif
@@ -2141,8 +2142,8 @@ int rnd_stack_quickremovei(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(int)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(int)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(int)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2168,8 +2169,8 @@ long rnd_stack_quickremovel(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(long)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(long)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(long)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2199,8 +2200,8 @@ signed char rnd_stack_quickremovesc(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(signed char)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(signed char)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(signed char)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2226,8 +2227,8 @@ unsigned char rnd_stack_quickremoveuc(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned char)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned char)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned char)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2253,8 +2254,8 @@ unsigned short rnd_stack_quickremoveus(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned short)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned short)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned short)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2280,8 +2281,8 @@ unsigned int rnd_stack_quickremoveui(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned int)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned int)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned int)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2307,8 +2308,8 @@ unsigned long rnd_stack_quickremoveul(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned long)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned long)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned long)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2334,8 +2335,8 @@ float rnd_stack_quickremovef(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(float)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(float)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(float)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2361,8 +2362,8 @@ double rnd_stack_quickremoved(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(double)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(double)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(double)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2388,8 +2389,8 @@ long double rnd_stack_quickremoveld(struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(long double)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(long double)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(long double)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2436,8 +2437,8 @@ char rnd_stack_getc(const struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(char)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(char)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(char)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2456,8 +2457,8 @@ short rnd_stack_gets(const struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(short)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(short)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(short)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2476,8 +2477,8 @@ int rnd_stack_geti(const struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(int)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(int)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(int)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2496,8 +2497,8 @@ long rnd_stack_getl(const struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(long)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(long)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(long)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2516,8 +2517,8 @@ signed char rnd_stack_getsc(const struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(signed char)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(signed char)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(signed char)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2536,8 +2537,8 @@ unsigned char rnd_stack_getuc(const struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned char)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned char)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned char)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2556,8 +2557,8 @@ unsigned short rnd_stack_getus(const struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned short)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned short)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned short)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2576,8 +2577,8 @@ unsigned int rnd_stack_getui(const struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned int)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned int)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned int)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2596,8 +2597,8 @@ unsigned long rnd_stack_getul(const struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(unsigned long)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(unsigned long)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned long)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2616,8 +2617,8 @@ float rnd_stack_getf(const struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(float)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(float)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(float)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2636,8 +2637,8 @@ double rnd_stack_getd(const struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(double)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(double)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(double)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2656,8 +2657,8 @@ long double rnd_stack_getld(const struct rnd_stack *stack, size_t idx)
 		return 0;
 	}
 	if (stack->elem_size != sizeof(long double)) {
-		error(("stack->elem_size is incompatible with elem type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(long double)));
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(long double)));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2700,8 +2701,8 @@ int rnd_stack_setc(struct rnd_stack *stack, size_t idx, char val)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(val)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 	if (idx >= stack->size) {
@@ -2723,8 +2724,8 @@ int rnd_stack_sets(struct rnd_stack *stack, size_t idx, short val)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(val)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 	if (idx >= stack->size) {
@@ -2746,8 +2747,8 @@ int rnd_stack_seti(struct rnd_stack *stack, size_t idx, int val)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(val)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 	if (idx >= stack->size) {
@@ -2769,8 +2770,8 @@ int rnd_stack_setl(struct rnd_stack *stack, size_t idx, long val)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(val)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 	if (idx >= stack->size) {
@@ -2792,8 +2793,8 @@ int rnd_stack_setsc(struct rnd_stack *stack, size_t idx, signed char val)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(val)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 	if (idx >= stack->size) {
@@ -2819,8 +2820,8 @@ int rnd_stack_setuc(struct rnd_stack *stack, size_t idx, unsigned char val)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(val)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 	if (idx >= stack->size) {
@@ -2842,8 +2843,8 @@ int rnd_stack_setus(struct rnd_stack *stack, size_t idx, unsigned short val)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(val)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 	if (idx >= stack->size) {
@@ -2869,8 +2870,8 @@ int rnd_stack_setui(struct rnd_stack *stack, size_t idx, unsigned int val)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(val)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 	if (idx >= stack->size) {
@@ -2892,8 +2893,8 @@ int rnd_stack_setul(struct rnd_stack *stack, size_t idx, unsigned long val)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(val)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 	if (idx >= stack->size) {
@@ -2915,8 +2916,8 @@ int rnd_stack_setf(struct rnd_stack *stack, size_t idx, float val)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(val)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 	if (idx >= stack->size) {
@@ -2938,8 +2939,8 @@ int rnd_stack_setd(struct rnd_stack *stack, size_t idx, double val)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(val)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 	if (idx >= stack->size) {
@@ -2961,8 +2962,8 @@ int rnd_stack_setld(struct rnd_stack *stack, size_t idx, long double val)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(val)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 	if (idx >= stack->size) {
@@ -2985,11 +2986,11 @@ int rnd_stack_print(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 #endif
-	printf("rnd_stack_print()\nsize/capacity: "SIZE_T_FMT"/"SIZE_T_FMT", elem_size: "SIZE_T_FMT"\n",
-		stack->size, stack->capacity, stack->elem_size);
+	printf("rnd_stack_print()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const void *const elem = (char*)stack->data + i * stack->elem_size;
-		printf("["SIZE_T_FMT"]\t%p\n", stack->size - 1 - i, elem);
+		printf("[%lu]\t%p\n", (unsigned long)stack->size - 1 - i, elem);
 	}
 	return 0;
 }
@@ -3003,16 +3004,16 @@ int rnd_stack_printc(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(char)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 #endif
-	printf("rnd_stack_printc()\nsize/capacity: "SIZE_T_FMT"/"SIZE_T_FMT", elem_size: "SIZE_T_FMT"\n",
-		stack->size, stack->capacity, stack->elem_size);
+	printf("rnd_stack_printc()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const char elem = ((char*)stack->data)[i];
-		printf("["SIZE_T_FMT"]\t%hd\t'%c'\n", stack->size - 1 - i, elem, elem);
+		printf("[%lu]\t%hd\t'%c'\n", (unsigned long)stack->size - 1 - i, elem, elem);
 	}
 	return 0;
 }
@@ -3026,16 +3027,16 @@ int rnd_stack_prints(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(short)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 #endif
-	printf("rnd_stack_prints()\nsize/capacity: "SIZE_T_FMT"/"SIZE_T_FMT", elem_size: "SIZE_T_FMT"\n",
-		stack->size, stack->capacity, stack->elem_size);
+	printf("rnd_stack_prints()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const short elem = ((short*)stack->data)[i];
-		printf("["SIZE_T_FMT"]\t%hd\n", stack->size - 1 - i, elem);
+		printf("[%lu]\t%hd\n", (unsigned long)stack->size - 1 - i, elem);
 	}
 	return 0;
 }
@@ -3049,16 +3050,16 @@ int rnd_stack_printi(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(int)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 #endif
-	printf("rnd_stack_printi()\nsize/capacity: "SIZE_T_FMT"/"SIZE_T_FMT", elem_size: "SIZE_T_FMT"\n",
-		stack->size, stack->capacity, stack->elem_size);
+	printf("rnd_stack_printi()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const int elem = ((int*)stack->data)[i];
-		printf("["SIZE_T_FMT"]\t%d\n", stack->size - 1 - i, elem);
+		printf("[%lu]\t%d\n", (unsigned long)stack->size - 1 - i, elem);
 	}
 	return 0;
 }
@@ -3072,16 +3073,16 @@ int rnd_stack_printl(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(long)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 #endif
-	printf("rnd_stack_printl()\nsize/capacity: "SIZE_T_FMT"/"SIZE_T_FMT", elem_size: "SIZE_T_FMT"\n",
-		stack->size, stack->capacity, stack->elem_size);
+	printf("rnd_stack_printl()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const long elem = ((long*)stack->data)[i];
-		printf("["SIZE_T_FMT"]\t%ld\n", stack->size - 1 - i, elem);
+		printf("[%lu]\t%ld\n", (unsigned long)stack->size - 1 - i, elem);
 	}
 	return 0;
 }
@@ -3095,16 +3096,16 @@ int rnd_stack_printsc(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(signed char)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 #endif
-	printf("rnd_stack_printsc()\nsize/capacity: "SIZE_T_FMT"/"SIZE_T_FMT", elem_size: "SIZE_T_FMT"\n",
-		stack->size, stack->capacity, stack->elem_size);
+	printf("rnd_stack_printsc()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const signed char elem = ((signed char*)stack->data)[i];
-		printf("["SIZE_T_FMT"]\t%hd\t'%c'\n", stack->size - 1 - i, elem, elem);
+		printf("[%lu]\t%hd\t'%c'\n", (unsigned long)stack->size - 1 - i, elem, elem);
 	}
 	return 0;
 }
@@ -3118,16 +3119,16 @@ int rnd_stack_printuc(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(unsigned char)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 #endif
-	printf("rnd_stack_printuc()\nsize/capacity: "SIZE_T_FMT"/"SIZE_T_FMT", elem_size: "SIZE_T_FMT"\n",
-		stack->size, stack->capacity, stack->elem_size);
+	printf("rnd_stack_printuc()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const unsigned char elem = ((unsigned char*)stack->data)[i];
-		printf("["SIZE_T_FMT"]\t%hd\t'%c'\n", stack->size - 1 - i, elem, elem);
+		printf("[%lu]\t%hd\t'%c'\n", (unsigned long)stack->size - 1 - i, elem, elem);
 	}
 	return 0;
 }
@@ -3141,16 +3142,16 @@ int rnd_stack_printus(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(unsigned short)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 #endif
-	printf("rnd_stack_printus()\nsize/capacity: "SIZE_T_FMT"/"SIZE_T_FMT", elem_size: "SIZE_T_FMT"\n",
-		stack->size, stack->capacity, stack->elem_size);
+	printf("rnd_stack_printus()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const unsigned short elem = ((unsigned short*)stack->data)[i];
-		printf("["SIZE_T_FMT"]\t%hu\n", stack->size - 1 - i, elem);
+		printf("[%lu]\t%hu\n", (unsigned long)stack->size - 1 - i, elem);
 	}
 	return 0;
 }
@@ -3164,16 +3165,16 @@ int rnd_stack_printui(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(unsigned int)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 #endif
-	printf("rnd_stack_printui()\nsize/capacity: "SIZE_T_FMT"/"SIZE_T_FMT", elem_size: "SIZE_T_FMT"\n",
-		stack->size, stack->capacity, stack->elem_size);
+	printf("rnd_stack_printui()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const unsigned int elem = ((unsigned int*)stack->data)[i];
-		printf("["SIZE_T_FMT"]\t%u\n", stack->size - 1 - i, elem);
+		printf("[%lu]\t%u\n", (unsigned long)stack->size - 1 - i, elem);
 	}
 	return 0;
 }
@@ -3187,16 +3188,16 @@ int rnd_stack_printul(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(unsigned long)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 #endif
-	printf("rnd_stack_printul()\nsize/capacity: "SIZE_T_FMT"/"SIZE_T_FMT", elem_size: "SIZE_T_FMT"\n",
-		stack->size, stack->capacity, stack->elem_size);
+	printf("rnd_stack_printul()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const unsigned long elem = ((unsigned long*)stack->data)[i];
-		printf("["SIZE_T_FMT"]\t"SIZE_T_FMT"\n", stack->size - 1 - i, elem);
+		printf("[%lu]\t%lu\n", (unsigned long)stack->size - 1 - i, elem);
 	}
 	return 0;
 }
@@ -3210,16 +3211,16 @@ int rnd_stack_printf(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(float)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 #endif
-	printf("rnd_stack_printf()\nsize/capacity: "SIZE_T_FMT"/"SIZE_T_FMT", elem_size: "SIZE_T_FMT"\n",
-		stack->size, stack->capacity, stack->elem_size);
+	printf("rnd_stack_printf()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const float elem = ((float*)stack->data)[i];
-		printf("["SIZE_T_FMT"]\t%g\n", stack->size - 1 - i, elem);
+		printf("[%lu]\t%g\n", (unsigned long)stack->size - 1 - i, elem);
 	}
 	return 0;
 }
@@ -3233,16 +3234,16 @@ int rnd_stack_printd(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(double)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 #endif
-	printf("rnd_stack_printd()\nsize/capacity: "SIZE_T_FMT"/"SIZE_T_FMT", elem_size: "SIZE_T_FMT"\n",
-		stack->size, stack->capacity, stack->elem_size);
+	printf("rnd_stack_printd()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const double elem = ((double*)stack->data)[i];
-		printf("["SIZE_T_FMT"]\t%g\n", stack->size - 1 - i, elem);
+		printf("[%lu]\t%g\n", (unsigned long)stack->size - 1 - i, elem);
 	}
 	return 0;
 }
@@ -3256,16 +3257,16 @@ int rnd_stack_printld(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(long double)) {
-		error(("stack->elem_size is incompatible with val type ("SIZE_T_FMT" != "SIZE_T_FMT")",
-					stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
 	}
 #endif
-	printf("rnd_stack_printld()\nsize/capacity: "SIZE_T_FMT"/"SIZE_T_FMT", elem_size: "SIZE_T_FMT"\n",
-		stack->size, stack->capacity, stack->elem_size);
+	printf("rnd_stack_printld()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const long double elem = ((long double*)stack->data)[i];
-		printf("["SIZE_T_FMT"]\t%Lg\n", stack->size - 1 - i, elem);
+		printf("[%lu]\t%Lg\n", (unsigned long)stack->size - 1 - i, elem);
 	}
 	return 0;
 }
