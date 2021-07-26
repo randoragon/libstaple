@@ -2435,9 +2435,9 @@ int rnd_stack_get(const struct rnd_stack *stack, size_t idx, void *output)
 		error(("output is NULL"));
 		return RND_EINVAL;
 	}
-	if (stack->size == 0) {
-		error(("stack is empty"));
-		return RND_EILLEGAL;
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return RND_EINDEX;
 	}
 #endif
 	src = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
@@ -2457,8 +2457,8 @@ char rnd_stack_getc(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(char)));
 		return 0;
 	}
-	if (stack->size == 0) {
-		error(("stack is empty"));
+	if (idx > stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
@@ -2477,8 +2477,8 @@ short rnd_stack_gets(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(short)));
 		return 0;
 	}
-	if (stack->size == 0) {
-		error(("stack is empty"));
+	if (idx > stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
@@ -2497,8 +2497,8 @@ int rnd_stack_geti(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(int)));
 		return 0;
 	}
-	if (stack->size == 0) {
-		error(("stack is empty"));
+	if (idx > stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
@@ -2517,8 +2517,8 @@ long rnd_stack_getl(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(long)));
 		return 0;
 	}
-	if (stack->size == 0) {
-		error(("stack is empty"));
+	if (idx > stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
@@ -2537,8 +2537,8 @@ signed char rnd_stack_getsc(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(signed char)));
 		return 0;
 	}
-	if (stack->size == 0) {
-		error(("stack is empty"));
+	if (idx > stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
@@ -2557,8 +2557,8 @@ unsigned char rnd_stack_getuc(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(unsigned char)));
 		return 0;
 	}
-	if (stack->size == 0) {
-		error(("stack is empty"));
+	if (idx > stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
@@ -2577,8 +2577,8 @@ unsigned short rnd_stack_getus(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(unsigned short)));
 		return 0;
 	}
-	if (stack->size == 0) {
-		error(("stack is empty"));
+	if (idx > stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
@@ -2597,8 +2597,8 @@ unsigned int rnd_stack_getui(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(unsigned int)));
 		return 0;
 	}
-	if (stack->size == 0) {
-		error(("stack is empty"));
+	if (idx > stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
@@ -2617,8 +2617,8 @@ unsigned long rnd_stack_getul(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(unsigned long)));
 		return 0;
 	}
-	if (stack->size == 0) {
-		error(("stack is empty"));
+	if (idx > stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
@@ -2637,8 +2637,8 @@ float rnd_stack_getf(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(float)));
 		return 0;
 	}
-	if (stack->size == 0) {
-		error(("stack is empty"));
+	if (idx > stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
@@ -2657,8 +2657,8 @@ double rnd_stack_getd(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(double)));
 		return 0;
 	}
-	if (stack->size == 0) {
-		error(("stack is empty"));
+	if (idx > stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
@@ -2677,8 +2677,8 @@ long double rnd_stack_getld(const struct rnd_stack *stack, size_t idx)
 					stack->elem_size, sizeof(long double)));
 		return 0;
 	}
-	if (stack->size == 0) {
-		error(("stack is empty"));
+	if (idx > stack->size) {
+		error(("index out of range"));
 		return 0;
 	}
 #endif
