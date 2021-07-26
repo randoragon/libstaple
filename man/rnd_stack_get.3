@@ -109,11 +109,16 @@ into.
 .I output
 must not overlap in memory with the removed element.
 .SH RETURN VALUE
-.P
-If successful, the functions in the
+.SS Generic Form
+If successful, the
 .BR rnd_stack_get ()
-family shall return 0. Otherwise, they shall return a code indicating the
+function shall return 0. Otherwise, it shall return a code indicating the
 error.
+.SS Suffixed Form
+If successful, the suffixed
+.BR rnd_stack_get ()
+functions shall return the value of the element at \fIidx\fP. Otherwise, they shall
+return 0.
 .SH ERRORS
 .SS Generic Form
 The
