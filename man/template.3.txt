@@ -8,6 +8,8 @@ foo - ##
 ##
 .BR foo (##
 .IR ## )
+.sp
+Link with \fI-lrnd\fP.
 .ad
 .SH DESCRIPTION
 .P
