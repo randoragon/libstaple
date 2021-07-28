@@ -40,26 +40,26 @@ TEST push_peek_pop(void)
 		ASSERT_EQ_FMT(0, rnd_stack_push(s, &c), "%d");;
 		ASSERT_EQ_FMT(0, rnd_stack_peek(s, &out), "%d");
 		ASSERT_EQ_FMT(c, out, "%d");
-		ASSERT_EQ_FMT(3lu, s->capacity, "%lu");
+		ASSERT_EQ_FMT(3lu, (unsigned long)s->capacity, "%lu");
 		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");;
 	}
 
 	/* With this macro we can easily run an equivalent to the above block of
 	 * code for every primitive type */
-#define test(T, F1, F2, F, A, B, C)                                 \
-	do {                                                        \
-		T a = A;                                            \
-		T b = B;                                            \
-		T c = C;                                            \
-		s = rnd_stack_create(sizeof(T), 3);                 \
-		ASSERT_EQ_FMT(0, F1(s, a), "%d");                   \
-		ASSERT_EQ_FMT(a, F2(s), F);                         \
-		ASSERT_EQ_FMT(0, F1(s, b), "%d");                   \
-		ASSERT_EQ_FMT(b, F2(s), F);                         \
-		ASSERT_EQ_FMT(0, F1(s, c), "%d");                   \
-		ASSERT_EQ_FMT(c, F2(s), F);                         \
-		ASSERT_EQ_FMT(3lu, s->capacity, "%lu");             \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d"); \
+#define test(T, F1, F2, F, A, B, C)                                    \
+	do {                                                           \
+		T a = A;                                               \
+		T b = B;                                               \
+		T c = C;                                               \
+		s = rnd_stack_create(sizeof(T), 3);                    \
+		ASSERT_EQ_FMT(0, F1(s, a), "%d");                      \
+		ASSERT_EQ_FMT(a, F2(s), F);                            \
+		ASSERT_EQ_FMT(0, F1(s, b), "%d");                      \
+		ASSERT_EQ_FMT(b, F2(s), F);                            \
+		ASSERT_EQ_FMT(0, F1(s, c), "%d");                      \
+		ASSERT_EQ_FMT(c, F2(s), F);                            \
+		ASSERT_EQ_FMT(3lu, (unsigned long)s->capacity, "%lu"); \
+		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");    \
 	} while (0)
 
 	test(char, rnd_stack_pushc, rnd_stack_peekc, "%d",
@@ -118,17 +118,17 @@ TEST push_realloc(void)
 {
 	struct rnd_stack *s;
 	s = rnd_stack_create(sizeof(int), 4);
-	ASSERT_EQ_FMT(4lu, s->capacity, "%lu");
+	ASSERT_EQ_FMT(4lu, (unsigned long)s->capacity, "%lu");
 	ASSERT_EQ_FMT(0, rnd_stack_pushi(s, 2), "%d");
-	ASSERT_EQ_FMT(4lu, s->capacity, "%lu");
+	ASSERT_EQ_FMT(4lu, (unsigned long)s->capacity, "%lu");
 	ASSERT_EQ_FMT(0, rnd_stack_pushi(s, 1), "%d");
-	ASSERT_EQ_FMT(4lu, s->capacity, "%lu");
+	ASSERT_EQ_FMT(4lu, (unsigned long)s->capacity, "%lu");
 	ASSERT_EQ_FMT(0, rnd_stack_pushi(s, 3), "%d");
-	ASSERT_EQ_FMT(4lu, s->capacity, "%lu");
+	ASSERT_EQ_FMT(4lu, (unsigned long)s->capacity, "%lu");
 	ASSERT_EQ_FMT(0, rnd_stack_pushi(s, 7), "%d");
-	ASSERT_EQ_FMT(4lu, s->capacity, "%lu");
+	ASSERT_EQ_FMT(4lu, (unsigned long)s->capacity, "%lu");
 	ASSERT_EQ_FMT(0, rnd_stack_pushi(s, 0), "%d");
-	ASSERT_EQ_FMT(8lu, s->capacity, "%lu");
+	ASSERT_EQ_FMT(8lu, (unsigned long)s->capacity, "%lu");
 	ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
 	PASS();
 }
@@ -144,10 +144,10 @@ TEST insert_remove(void)
 		ASSERT_EQ_FMT(0, rnd_stack_insert(s, 0, &a), "%d");
 		ASSERT_EQ_FMT(0, rnd_stack_peek(s, &out), "%d");
 		ASSERT_EQ_FMT(a, out, "%d");
-		ASSERT_EQ_FMT(1lu, s->size, "%lu");
+		ASSERT_EQ_FMT(1lu, (unsigned long)s->size, "%lu");
 		ASSERT_EQ_FMT(0, rnd_stack_remove(s, 0, &out), "%d");
 		ASSERT_EQ_FMT(a, out, "%d");
-		ASSERT_EQ_FMT(0lu, s->size, "%lu");
+		ASSERT_EQ_FMT(0lu, (unsigned long)s->size, "%lu");
 		ASSERT_EQ_FMT(0, rnd_stack_insert(s, 0, &a), "%d");
 		ASSERT_EQ_FMT(0, rnd_stack_peek(s, &out), "%d");
 		ASSERT_EQ_FMT(a, out, "%d");
@@ -165,35 +165,35 @@ TEST insert_remove(void)
 		ASSERT_EQ_FMT(b, out, "%d");
 		ASSERT_EQ_FMT(0, rnd_stack_peek(s, &out), "%d");
 		ASSERT_EQ_FMT(c, out, "%d");
-		ASSERT_EQ_FMT(1lu, s->size, "%lu");
-		ASSERT_EQ_FMT(4lu, s->capacity, "%lu");
+		ASSERT_EQ_FMT(1lu, (unsigned long)s->size, "%lu");
+		ASSERT_EQ_FMT(4lu, (unsigned long)s->capacity, "%lu");
 		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
 	}
 
 	/* A > B > C */
 	/* F1 - insert, F2 - peek, F3 - remove */
-#define test(T, F1, F2, F3, F, A, B, C)                             \
-	do {                                                        \
-		s = rnd_stack_create(sizeof(T), 1);                 \
-		ASSERT_EQ_FMT(RND_EINDEX, F1(s, 1, A), "%d");       \
-		ASSERT_EQ_FMT(0, F1(s, 0, A), "%d");                \
-		ASSERT_EQ_FMT(A, F2(s), F);                         \
-		ASSERT_EQ_FMT(1lu, s->size, "%lu");                 \
-		ASSERT_EQ_FMT(A, F3(s, 0), F);                      \
-		ASSERT_EQ_FMT(0lu, s->size, "%lu");                 \
-		ASSERT_EQ_FMT(0, F1(s, 0, A), "%d");                \
-		ASSERT_EQ_FMT(A, F2(s), F);                         \
-		ASSERT_EQ_FMT(0, F1(s, 1, B), "%d");                \
-		ASSERT_EQ_FMT(A, F2(s), F);                         \
-		ASSERT_EQ_FMT(0, F1(s, 2, C), "%d");                \
-		ASSERT_EQ_FMT(A, F2(s), F);                         \
-		ASSERT_EQ_FMT(B, F3(s, 1), F);                      \
-		ASSERT_EQ_FMT(A, F2(s), F);                         \
-		ASSERT_EQ_FMT(A, F3(s, 0), F);                      \
-		ASSERT_EQ_FMT(C, F2(s), F);                         \
-		ASSERT_EQ_FMT(1lu, s->size, "%lu");                 \
-		ASSERT_EQ_FMT(4lu, s->capacity, "%lu");             \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d"); \
+#define test(T, F1, F2, F3, F, A, B, C)                                \
+	do {                                                           \
+		s = rnd_stack_create(sizeof(T), 1);                    \
+		ASSERT_EQ_FMT(RND_EINDEX, F1(s, 1, A), "%d");          \
+		ASSERT_EQ_FMT(0, F1(s, 0, A), "%d");                   \
+		ASSERT_EQ_FMT(A, F2(s), F);                            \
+		ASSERT_EQ_FMT(1lu, (unsigned long)s->size, "%lu");     \
+		ASSERT_EQ_FMT(A, F3(s, 0), F);                         \
+		ASSERT_EQ_FMT(0lu, (unsigned long)s->size, "%lu");     \
+		ASSERT_EQ_FMT(0, F1(s, 0, A), "%d");                   \
+		ASSERT_EQ_FMT(A, F2(s), F);                            \
+		ASSERT_EQ_FMT(0, F1(s, 1, B), "%d");                   \
+		ASSERT_EQ_FMT(A, F2(s), F);                            \
+		ASSERT_EQ_FMT(0, F1(s, 2, C), "%d");                   \
+		ASSERT_EQ_FMT(A, F2(s), F);                            \
+		ASSERT_EQ_FMT(B, F3(s, 1), F);                         \
+		ASSERT_EQ_FMT(A, F2(s), F);                            \
+		ASSERT_EQ_FMT(A, F3(s, 0), F);                         \
+		ASSERT_EQ_FMT(C, F2(s), F);                            \
+		ASSERT_EQ_FMT(1lu, (unsigned long)s->size, "%lu");     \
+		ASSERT_EQ_FMT(4lu, (unsigned long)s->capacity, "%lu"); \
+		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");    \
 	} while (0)
 
 	test(char          , rnd_stack_insertc , rnd_stack_peekc , rnd_stack_removec , "%d", 9, 4, 1);
@@ -212,28 +212,28 @@ TEST insert_remove(void)
 	/* A > B > C */
 	/* F1 - insert, F2 - peek, F3 - remove */
 #undef test
-#define test(T, F1, F2, F3, F, A, B, C)                             \
-	do {                                                        \
-		s = rnd_stack_create(sizeof(T), 1);                 \
-		ASSERT_EQ_FMT(RND_EINDEX, F1(s, 1, A), "%d");       \
-		ASSERT_EQ_FMT(0, F1(s, 0, A), "%d");                \
-		ASSERT_EQ_FMT(A, F2(s), F);                         \
-		ASSERT_EQ_FMT(1lu, s->size, "%lu");                 \
-		ASSERT_EQ_FMT(A, F3(s, 0), F);                      \
-		ASSERT_EQ_FMT(0lu, s->size, "%lu");                 \
-		ASSERT_EQ_FMT(0, F1(s, 0, A), "%d");                \
-		ASSERT_EQ_FMT(A, F2(s), F);                         \
-		ASSERT_EQ_FMT(0, F1(s, 1, B), "%d");                \
-		ASSERT_EQ_FMT(A, F2(s), F);                         \
-		ASSERT_EQ_FMT(0, F1(s, 2, C), "%d");                \
-		ASSERT_EQ_FMT(B, F2(s), F);                         \
-		ASSERT_EQ_FMT(A, F3(s, 1), F);                      \
-		ASSERT_EQ_FMT(B, F2(s), F);                         \
-		ASSERT_EQ_FMT(B, F3(s, 0), F);                      \
-		ASSERT_EQ_FMT(C, F2(s), F);                         \
-		ASSERT_EQ_FMT(1lu, s->size, "%lu");                 \
-		ASSERT_EQ_FMT(4lu, s->capacity, "%lu");             \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d"); \
+#define test(T, F1, F2, F3, F, A, B, C)                                \
+	do {                                                           \
+		s = rnd_stack_create(sizeof(T), 1);                    \
+		ASSERT_EQ_FMT(RND_EINDEX, F1(s, 1, A), "%d");          \
+		ASSERT_EQ_FMT(0, F1(s, 0, A), "%d");                   \
+		ASSERT_EQ_FMT(A, F2(s), F);                            \
+		ASSERT_EQ_FMT(1lu, (unsigned long)s->size, "%lu");     \
+		ASSERT_EQ_FMT(A, F3(s, 0), F);                         \
+		ASSERT_EQ_FMT(0lu, (unsigned long)s->size, "%lu");     \
+		ASSERT_EQ_FMT(0, F1(s, 0, A), "%d");                   \
+		ASSERT_EQ_FMT(A, F2(s), F);                            \
+		ASSERT_EQ_FMT(0, F1(s, 1, B), "%d");                   \
+		ASSERT_EQ_FMT(A, F2(s), F);                            \
+		ASSERT_EQ_FMT(0, F1(s, 2, C), "%d");                   \
+		ASSERT_EQ_FMT(B, F2(s), F);                            \
+		ASSERT_EQ_FMT(A, F3(s, 1), F);                         \
+		ASSERT_EQ_FMT(B, F2(s), F);                            \
+		ASSERT_EQ_FMT(B, F3(s, 0), F);                         \
+		ASSERT_EQ_FMT(C, F2(s), F);                            \
+		ASSERT_EQ_FMT(1lu, (unsigned long)s->size, "%lu");     \
+		ASSERT_EQ_FMT(4lu, (unsigned long)s->capacity, "%lu"); \
+		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");    \
 	} while (0)
 
 	test(char          , rnd_stack_quickinsertc , rnd_stack_peekc , rnd_stack_quickremovec , "%d", 9, 4, 1);

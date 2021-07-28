@@ -2987,7 +2987,7 @@ int rnd_stack_print(struct rnd_stack *stack)
 	}
 #endif
 	printf("rnd_stack_print()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
-		(unsigned long)stack->size, (unsigned long)stack->capacity, stack->elem_size);
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const void *const elem = (char*)stack->data + i * stack->elem_size;
 		printf("[%lu]\t%p\n", (unsigned long)stack->size - 1 - i, elem);
