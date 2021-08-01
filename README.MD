@@ -37,6 +37,9 @@ override the `PREFIX` variable:
 	make   install PREFIX=/usr
 	make uninstall PREFIX=/usr
 
+The Makefile produces two library files, `librnd.so` and `librnd.a`. The former
+is a dynamically linked library, the latter is static.
+
 ## Library Design
 
 1. The library should be as flexible as reasonably possible, while remaining
