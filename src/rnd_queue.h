@@ -5,6 +5,7 @@
 
 struct rnd_queue {
 	void *data;
+	void *head;
 	void *tail;
 	size_t elem_size;
 	size_t size;
