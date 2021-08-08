@@ -36,7 +36,7 @@ caught error code (if any) is printed on stderr.
 .SH RETURN VALUE
 If successful, the
 .BR rnd_stack_clear ()
-function shall return 0 Otherwise, it shall
+function shall return 0. Otherwise, it shall
 return a code indicating the error.
 .SH ERRORS
 The
@@ -52,10 +52,38 @@ returned non-0 for some stack element.
 See
 .BR librnd (7).
 .SH EXAMPLES
-An example for how to use the
+This is an example of how to use the
 .I dtor
-function can be found in
-.BR rnd_stack_destroy (3).
+function:
+.IP
+.ad l
+.nf
+struct example {
+	void *ptr;
+};
+
+int example_dtor(void *elem)
+{
+	free(((struct example*)elem)->ptr);
+	return 0;
+}
+
+int main()
+{
+	struct rnd_stack *s;
+	struct example data;
+	s = rnd_stack_create(sizeof(struct example), 1);
+	data.ptr = malloc(32);
+	rnd_stack_push(s, &data);
+	rnd_stack_destroy(s, &example_dtor);
+	/* The above function call is equivalent to:
+	       rnd_stack_clear(s, &example_dtor);
+	       rnd_stack_destroy(s, NULL);
+	*/
+	return 0;
+}
+.fi
+.ad
 .SH SEE ALSO
 .ad l
 .BR librnd (7),

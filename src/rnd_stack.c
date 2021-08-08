@@ -60,13 +60,14 @@ int rnd_stack_clear(struct rnd_stack *stack, int (*dtor)(void*))
 
 int rnd_stack_destroy(struct rnd_stack *stack, int (*dtor)(void*))
 {
+	int error;
 #ifdef RND_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
 		return RND_EINVAL;
 	}
 #endif
-	if (dtor != NULL && rnd_foomap(stack->data, stack->size, stack->elem_size, dtor))
+	if ((error = rnd_stack_clear(stack, dtor)))
 		return RND_EHANDLER;
 	free(stack->data);
 	free(stack);
