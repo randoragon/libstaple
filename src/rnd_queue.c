@@ -114,16 +114,14 @@ int rnd_queue_copy(struct rnd_queue *dest, const struct rnd_queue *src, int (*cp
 		char *s = src->head;
 		while (s != src->tail) {
 			memcpy(dest->tail, s, src->elem_size);
-			if (s == (char*)src->data + (src->size - 1) * src->elem_size) {
+			if (s == (char*)src->data + (src->size - 1) * src->elem_size)
 				s = src->data;
-			} else {
+			else
 				s += src->elem_size;
-			}
-			if (dest->tail == (char*)dest->data + (dest->size - 1) * dest->elem_size) {
+			if (dest->tail == (char*)dest->data + (dest->size - 1) * dest->elem_size)
 				dest->tail = dest->data;
-			} else {
+			else
 				dest->tail = (char*)dest->tail + dest->elem_size;
-			}
 		}
 	} else {
 		char *s = src->head;
