@@ -50,8 +50,16 @@ int rnd_stack_clear(struct rnd_stack *stack, int (*dtor)(void*))
 	}
 #endif
 	if (dtor != NULL) {
-		if (rnd_foomap(stack->data, stack->size, stack->elem_size, dtor))
-			return RND_EHANDLER;
+		const void *const end = (char*)stack->data + stack->size * stack->elem_size;
+		char *p = stack->data;
+		while (p != end) {
+			int err;
+			if ((err = dtor(p))) {
+				error(("external function handler returned %d (non-0)", err));
+				return RND_EHANDLER;
+			}
+			p += stack->elem_size;
+		}
 	} else {
 		stack->size = 0;
 	}
