@@ -57,10 +57,7 @@ int rnd_queue_clear(struct rnd_queue *queue, int (*dtor)(void*))
 				error(("external dtor function returned %d (non-0)", error));
 				return RND_EHANDLER;
 			}
-			if (queue->head == (char*)queue->data + queue->elem_size * (queue->capacity - 1))
-				queue->head = queue->data;
-			else
-				queue->head = (char*)queue->head + queue->elem_size;
+			rnd_ringbuf_incr(&queue->head, queue->data, queue->size, queue->elem_size);
 			queue->size--;
 		}
 	} else {
@@ -111,36 +108,22 @@ int rnd_queue_copy(struct rnd_queue *dest, const struct rnd_queue *src, int (*cp
 	dest->head      = dest->data;
 	dest->tail      = dest->data;
 	if (cpy == NULL) {
-		char *s = src->head;
+		void *s = src->head;
 		while (s != src->tail) {
 			memcpy(dest->tail, s, src->elem_size);
-			if (s == (char*)src->data + (src->size - 1) * src->elem_size)
-				s = src->data;
-			else
-				s += src->elem_size;
-			if (dest->tail == (char*)dest->data + (dest->size - 1) * dest->elem_size)
-				dest->tail = dest->data;
-			else
-				dest->tail = (char*)dest->tail + dest->elem_size;
+			rnd_ringbuf_incr(&s, src->data, src->size, src->elem_size);
+			rnd_ringbuf_incr(&dest->tail, dest->data, dest->size, dest->elem_size);
 		}
 	} else {
-		char *s = src->head;
+		void *s = src->head;
 		while (s != src->tail) {
 			int err;
 			if ((err = cpy(dest->tail, s))) {
 				error(("external cpy function returned %d (non-0)", err));
 				return RND_EHANDLER;
 			}
-			if (s == (char*)src->data + (src->size - 1) * src->elem_size) {
-				s = src->data;
-			} else {
-				s += src->elem_size;
-			}
-			if (dest->tail == (char*)dest->data + (dest->size - 1) * dest->elem_size) {
-				dest->tail = dest->data;
-			} else {
-				dest->tail = (char*)dest->tail + dest->elem_size;
-			}
+			rnd_ringbuf_incr(&s, src->data, src->size, src->elem_size);
+			rnd_ringbuf_incr(&dest->tail, dest->data, dest->size, dest->elem_size);
 		}
 	}
 	return 0;
@@ -149,7 +132,7 @@ int rnd_queue_copy(struct rnd_queue *dest, const struct rnd_queue *src, int (*cp
 int rnd_queue_map(struct rnd_queue *queue, int (*func)(void*, size_t))
 {
 	size_t i;
-	char *p;
+	void *p;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -168,10 +151,7 @@ int rnd_queue_map(struct rnd_queue *queue, int (*func)(void*, size_t))
 			warn(("external func function returned %d (non-0)", err));
 			return RND_EHANDLER;
 		}
-		if (p == (char*)queue->data + (queue->size - 1) * queue->elem_size)
-			p = queue->data;
-		else
-			p += queue->elem_size;
+		rnd_ringbuf_incr(&p, queue->data, queue->size, queue->elem_size);
 		++i;
 	}
 	return 0;
