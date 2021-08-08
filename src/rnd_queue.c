@@ -151,6 +151,7 @@ int rnd_queue_copy(struct rnd_queue *dest, const struct rnd_queue *src, int (*cp
 int rnd_queue_map(struct rnd_queue *queue, int (*func)(void*, size_t))
 {
 	size_t i;
+	char *p;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -161,13 +162,19 @@ int rnd_queue_map(struct rnd_queue *queue, int (*func)(void*, size_t))
 		return RND_EINVAL;
 	}
 #endif
-	for (i = 0; i < queue->size; i++) {
-		void *const p = (char*)queue->data + i * queue->elem_size;
+	p = queue->head;
+	i = 0;
+	while (p != queue->tail) {
 		int err;
 		if ((err = func(p, i))) {
 			warn(("external func function returned %d (non-0)", err));
 			return RND_EHANDLER;
 		}
+		if (p == (char*)queue->data + (queue->size - 1) * queue->elem_size)
+			p = queue->data;
+		else
+			p += queue->elem_size;
+		++i;
 	}
 	return 0;
 }
