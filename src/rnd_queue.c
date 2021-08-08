@@ -88,7 +88,6 @@ int rnd_queue_destroy(struct rnd_queue *queue, int (*dtor)(void*))
 
 int rnd_queue_copy(struct rnd_queue *dest, const struct rnd_queue *src, int (*cpy)(void*, const void*))
 {
-	char *s, *d;
 #ifdef RND_DEBUG
 	if (src == NULL) {
 		error(("src is NULL"));
@@ -100,7 +99,7 @@ int rnd_queue_copy(struct rnd_queue *dest, const struct rnd_queue *src, int (*cp
 	}
 #endif
 	if (dest->capacity * dest->elem_size < src->size * src->elem_size) {
-		dest->capacity = src->size + 64;
+		dest->capacity = src->size;
 		dest->data = realloc(dest->data, dest->capacity * src->elem_size);
 		if (dest->data == NULL) {
 			error(("realloc"));
@@ -109,27 +108,41 @@ int rnd_queue_copy(struct rnd_queue *dest, const struct rnd_queue *src, int (*cp
 	}
 	dest->elem_size = src->elem_size;
 	dest->size      = src->size;
+	dest->head      = dest->data;
+	dest->tail      = dest->data;
 	if (cpy == NULL) {
-		const void *const src_end = (char*)src->data + src->size * src->elem_size;
-		s = src->data;
-		d = dest->data;
-		while (s != src_end) {
-			memcpy(d, s, src->elem_size);
-			s += src->elem_size;
-			d += dest->elem_size;
+		char *s = src->head;
+		while (s != src->tail) {
+			memcpy(dest->tail, s, src->elem_size);
+			if (s == src->data + (src->size - 1) * src->elem_size) {
+				s = src->data;
+			} else {
+				s += src->elem_size;
+			}
+			if (dest->tail == dest->data + (dest->size - 1) * dest->elem_size) {
+				dest->tail = dest->data;
+			} else {
+				dest->tail += dest->elem_size;
+			}
 		}
 	} else {
-		const void *const src_end = (char*)src->data + src->size * src->elem_size;
-		s = src->data;
-		d = dest->data;
-		while (s != src_end) {
+		char *s = src->head;
+		while (s != src->tail) {
 			int err;
-			if ((err = cpy(d, s))) {
+			if ((err = cpy(dest->tail, s))) {
 				error(("external cpy function returned %d (non-0)", err));
 				return RND_EHANDLER;
 			}
-			s += src->elem_size;
-			d += dest->elem_size;
+			if (s == src->data + (src->size - 1) * src->elem_size) {
+				s = src->data;
+			} else {
+				s += src->elem_size;
+			}
+			if (dest->tail == dest->data + (dest->size - 1) * dest->elem_size) {
+				dest->tail = dest->data;
+			} else {
+				dest->tail += dest->elem_size;
+			}
 		}
 	}
 	return 0;
