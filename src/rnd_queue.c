@@ -37,6 +37,7 @@ struct rnd_queue *rnd_queue_create(size_t elem_size, size_t capacity)
 		free(ret);
 		return NULL;
 	}
+	ret->head = ret->tail = ret->data;
 
 	return ret;
 }
@@ -50,24 +51,36 @@ int rnd_queue_clear(struct rnd_queue *queue, int (*dtor)(void*))
 	}
 #endif
 	if (dtor != NULL) {
-		if (rnd_foomap(queue->data, queue->size, queue->elem_size, dtor))
-			return RND_EHANDLER;
+		while (queue->size != 0) {
+			int error;
+			if ((error = dtor(queue->head))) {
+				error(("external dtor function returned %d (non-0)", error));
+				return RND_EHANDLER;
+			}
+			if (queue->head == queue->data + queue->elem_size * (queue->capacity - 1))
+				queue->head = queue->data;
+			else
+				queue->head += queue->elem_size;
+			queue->size--;
+		}
 	} else {
 		queue->size = 0;
+		queue->head = queue->tail;
 	}
 	return 0;
 }
 
 int rnd_queue_destroy(struct rnd_queue *queue, int (*dtor)(void*))
 {
+	int error;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
 		return RND_EINVAL;
 	}
 #endif
-	if (dtor != NULL && rnd_foomap(queue->data, queue->size, queue->elem_size, dtor))
-		return RND_EHANDLER;
+	if ((error = rnd_queue_clear(queue, dtor)))
+		return error;
 	free(queue->data);
 	free(queue);
 	return 0;

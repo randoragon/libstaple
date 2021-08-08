@@ -1,0 +1,104 @@
+.TH RND_QUEUE_DESTROY 3 DATE "librnd-VERSION"
+.SH NAME
+rnd_queue_destroy - destroy a queue
+.SH SYNOPSIS
+.ad l
+#include <rnd.h>
+.sp
+int rnd_queue_destroy(struct rnd_queue
+.RI * queue ,
+int
+.RI (* dtor )(void*))
+.sp
+Link with \fI-lrnd\fP.
+.ad
+.SH DESCRIPTION
+The
+.BR rnd_queue_destroy ()
+function frees all memory comprising a queue. Accessing the memory after
+destruction is undefined behavior, but the same
+.I queue
+variable can be safely reused to create a new queue.
+.P
+The
+.BR rnd_queue_destroy ()
+function shall first call
+.BR rnd_queue_clear ()
+to free all memory attributed to the contents of
+.IR queue ,
+and finally the memory of the container itself
+is freed.
+.P
+.I queue
+is a pointer to the queue that shall be freed.
+.P
+.I dtor
+is transparently passed to the
+.BR rnd_queue_clear ()
+function. See
+.BR rnd_queue_clear (3).
+.SH RETURN VALUE
+If successful, the
+.BR rnd_queue_destroy ()
+function shall return 0. Otherwise, it shall
+return a code indicating the error.
+.SH ERRORS
+The
+.BR rnd_queue_destroy ()
+function shall fail if:
+.IP \fBRND_EINVAL\fP 1.5i
+.I queue
+is a null pointer (debug mode only).
+.IP \fBRND_EHANDLER\fP 1.5i
+.I dtor
+returned non-0 for some queue element.
+.SH CONFORMING TO
+See
+.BR librnd (7).
+.SH EXAMPLES
+This is an example of how to use the
+.I dtor
+function:
+.IP
+.ad l
+.nf
+struct example {
+	void *ptr;
+};
+
+int example_dtor(void *elem)
+{
+	free(((struct example*)elem)->ptr);
+	return 0;
+}
+
+int main()
+{
+	struct rnd_queue *s;
+	struct example data;
+	s = rnd_queue_create(sizeof(struct example), 1);
+	data.ptr = malloc(32);
+	rnd_queue_push(s, &data);
+	rnd_queue_destroy(s, &example_dtor);
+	return 0;
+}
+.fi
+.ad
+.SH SEE ALSO
+.ad l
+.BR librnd (7),
+.BR rnd_queue (7),
+.BR rnd_queue_create (3),
+.BR rnd_queue_clear (3),
+.BR rnd_queue_copy (3),
+.BR rnd_queue_map (3),
+.BR rnd_queue_push (3),
+.BR rnd_queue_insert (3),
+.BR rnd_queue_quickinsert (3),
+.BR rnd_queue_peek (3),
+.BR rnd_queue_pop (3),
+.BR rnd_queue_remove (3),
+.BR rnd_queue_quickremove (3),
+.BR rnd_queue_get (3),
+.BR rnd_queue_set (3),
+.BR rnd_queue_print (3)
