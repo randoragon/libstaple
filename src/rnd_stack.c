@@ -96,7 +96,7 @@ int rnd_stack_copy(struct rnd_stack *dest, const struct rnd_stack *src, int (*cp
 	}
 #endif
 	if (dest->capacity * dest->elem_size < src->size * src->elem_size) {
-		dest->capacity = src->size + 64;
+		dest->capacity = src->size;
 		dest->data = realloc(dest->data, dest->capacity * src->elem_size);
 		if (dest->data == NULL) {
 			error(("realloc"));
