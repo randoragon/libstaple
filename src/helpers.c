@@ -104,6 +104,20 @@ void rnd_ringbuf_decr(void **ptr, void *buf, size_t capacity, size_t elem_size)
 		*ptr = (char*)ptr - elem_size;
 }
 
+/* Return address of nth element in a ring buffer. The obvious way to find a
+ * specific index is by looping, but this function calculates it faster.
+ * index 0 gives head, index size-1 gives tail.
+ */
+void *rnd_ringbuf_get(size_t idx, void *buf, size_t elem_size, size_t capacity, void *head)
+{
+	const char *const buf_end = (char*)buf + (capacity - 1) * elem_size;
+	const size_t no_elements_ahead = 1 + (buf_end - (char*)head) / elem_size;
+	if (idx < no_elements_ahead)
+		return (char*)head + idx * elem_size;
+	else
+		return (char*)buf + (idx - no_elements_ahead) * elem_size;
+}
+
 /* Insert an element into a ring buffer. The buffer must already have sufficient
  * capacity. Indexing starts from left to right, valid index values are in range
  * <0;size>. */

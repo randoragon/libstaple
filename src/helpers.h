@@ -57,8 +57,9 @@ int rnd_buffit(void **buf, size_t elem_size, size_t size, size_t *capacity);
 int rnd_ringbuffit(void **buf, size_t elem_size, size_t size, size_t *capacity, void **head, void **tail);
 int rnd_foomap(void *buf, size_t size, size_t elem_size, int (*foo)(void*));
 int rnd_size_try_add(size_t size, size_t amount);
-void rnd_ringbuf_insert(const void *elem, size_t idx, void *buf, size_t *size, size_t elem_size, size_t capacity, void **head, void **tail);
 void  rnd_ringbuf_incr(void **ptr, void *buf, size_t capacity, size_t elem_size);
 void  rnd_ringbuf_decr(void **ptr, void *buf, size_t capacity, size_t elem_size);
+void *rnd_ringbuf_get(size_t idx, void *buf, size_t elem_size, size_t capacity, void *head);
+void  rnd_ringbuf_insert(const void *elem, size_t idx, void *buf, size_t *size, size_t elem_size, size_t capacity, void **head, void **tail);
 
 #endif /* RND_HELPERS_H */
