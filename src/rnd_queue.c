@@ -2944,9 +2944,9 @@ int rnd_queue_print(struct rnd_queue *queue)
 #endif
 	printf("rnd_queue_print()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
 		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
-	for (i = queue->size; i-- > 0;) {
-		const void *const elem = (char*)queue->data + i * queue->elem_size;
-		printf("[%lu]\t%p\n", (unsigned long)queue->size - 1 - i, elem);
+	for (i = 0; i < queue->size; i++) {
+		const void *const elem = rnd_ringbuf_get(i, queue->data, queue->elem_size, queue->capacity, queue->head);
+		printf("[%lu]\t%p\n", (unsigned long)i, elem);
 	}
 	return 0;
 }
@@ -2967,9 +2967,9 @@ int rnd_queue_printc(struct rnd_queue *queue)
 #endif
 	printf("rnd_queue_printc()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
 		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
-	for (i = queue->size; i-- > 0;) {
-		const char elem = ((char*)queue->data)[i];
-		printf("[%lu]\t%hd\t'%c'\n", (unsigned long)queue->size - 1 - i, elem, elem);
+	for (i = 0; i < queue->size; i++) {
+		const char elem = *(char*)rnd_ringbuf_get(i, queue->data, queue->elem_size, queue->capacity, queue->head);
+		printf("[%lu]\t%hd\t'%c'\n", (unsigned long)i, elem, elem);
 	}
 	return 0;
 }
@@ -2990,9 +2990,9 @@ int rnd_queue_prints(struct rnd_queue *queue)
 #endif
 	printf("rnd_queue_prints()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
 		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
-	for (i = queue->size; i-- > 0;) {
-		const short elem = ((short*)queue->data)[i];
-		printf("[%lu]\t%hd\n", (unsigned long)queue->size - 1 - i, elem);
+	for (i = 0; i < queue->size; i++) {
+		const short elem = *(short*)rnd_ringbuf_get(i, queue->data, queue->elem_size, queue->capacity, queue->head);
+		printf("[%lu]\t%hd\n", (unsigned long)i, elem);
 	}
 	return 0;
 }
@@ -3013,9 +3013,9 @@ int rnd_queue_printi(struct rnd_queue *queue)
 #endif
 	printf("rnd_queue_printi()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
 		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
-	for (i = queue->size; i-- > 0;) {
-		const int elem = ((int*)queue->data)[i];
-		printf("[%lu]\t%d\n", (unsigned long)queue->size - 1 - i, elem);
+	for (i = 0; i < queue->size; i++) {
+		const int elem = *(int*)rnd_ringbuf_get(i, queue->data, queue->elem_size, queue->capacity, queue->head);
+		printf("[%lu]\t%d\n", (unsigned long)i, elem);
 	}
 	return 0;
 }
@@ -3036,9 +3036,9 @@ int rnd_queue_printl(struct rnd_queue *queue)
 #endif
 	printf("rnd_queue_printl()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
 		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
-	for (i = queue->size; i-- > 0;) {
-		const long elem = ((long*)queue->data)[i];
-		printf("[%lu]\t%ld\n", (unsigned long)queue->size - 1 - i, elem);
+	for (i = 0; i < queue->size; i++) {
+		const long elem = *(long*)rnd_ringbuf_get(i, queue->data, queue->elem_size, queue->capacity, queue->head);
+		printf("[%lu]\t%ld\n", (unsigned long)i, elem);
 	}
 	return 0;
 }
@@ -3059,9 +3059,9 @@ int rnd_queue_printsc(struct rnd_queue *queue)
 #endif
 	printf("rnd_queue_printsc()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
 		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
-	for (i = queue->size; i-- > 0;) {
-		const signed char elem = ((signed char*)queue->data)[i];
-		printf("[%lu]\t%hd\t'%c'\n", (unsigned long)queue->size - 1 - i, elem, elem);
+	for (i = 0; i < queue->size; i++) {
+		const signed char elem = *(signed char*)rnd_ringbuf_get(i, queue->data, queue->elem_size, queue->capacity, queue->head);
+		printf("[%lu]\t%hd\t'%c'\n", (unsigned long)i, elem, elem);
 	}
 	return 0;
 }
@@ -3082,9 +3082,9 @@ int rnd_queue_printuc(struct rnd_queue *queue)
 #endif
 	printf("rnd_queue_printuc()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
 		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
-	for (i = queue->size; i-- > 0;) {
-		const unsigned char elem = ((unsigned char*)queue->data)[i];
-		printf("[%lu]\t%hd\t'%c'\n", (unsigned long)queue->size - 1 - i, elem, elem);
+	for (i = 0; i < queue->size; i++) {
+		const unsigned char elem = *(unsigned char*)rnd_ringbuf_get(i, queue->data, queue->elem_size, queue->capacity, queue->head);
+		printf("[%lu]\t%hd\t'%c'\n", (unsigned long)i, elem, elem);
 	}
 	return 0;
 }
@@ -3105,9 +3105,9 @@ int rnd_queue_printus(struct rnd_queue *queue)
 #endif
 	printf("rnd_queue_printus()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
 		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
-	for (i = queue->size; i-- > 0;) {
-		const unsigned short elem = ((unsigned short*)queue->data)[i];
-		printf("[%lu]\t%hu\n", (unsigned long)queue->size - 1 - i, elem);
+	for (i = 0; i < queue->size; i++) {
+		const unsigned short elem = *(unsigned short*)rnd_ringbuf_get(i, queue->data, queue->elem_size, queue->capacity, queue->head);
+		printf("[%lu]\t%hu\n", (unsigned long)i, elem);
 	}
 	return 0;
 }
@@ -3128,9 +3128,9 @@ int rnd_queue_printui(struct rnd_queue *queue)
 #endif
 	printf("rnd_queue_printui()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
 		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
-	for (i = queue->size; i-- > 0;) {
-		const unsigned int elem = ((unsigned int*)queue->data)[i];
-		printf("[%lu]\t%u\n", (unsigned long)queue->size - 1 - i, elem);
+	for (i = 0; i < queue->size; i++) {
+		const unsigned int elem = *(unsigned int*)rnd_ringbuf_get(i, queue->data, queue->elem_size, queue->capacity, queue->head);
+		printf("[%lu]\t%u\n", (unsigned long)i, elem);
 	}
 	return 0;
 }
@@ -3151,9 +3151,9 @@ int rnd_queue_printul(struct rnd_queue *queue)
 #endif
 	printf("rnd_queue_printul()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
 		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
-	for (i = queue->size; i-- > 0;) {
-		const unsigned long elem = ((unsigned long*)queue->data)[i];
-		printf("[%lu]\t%lu\n", (unsigned long)queue->size - 1 - i, elem);
+	for (i = 0; i < queue->size; i++) {
+		const unsigned long elem = *(unsigned long*)rnd_ringbuf_get(i, queue->data, queue->elem_size, queue->capacity, queue->head);
+		printf("[%lu]\t%lu\n", (unsigned long)i, elem);
 	}
 	return 0;
 }
@@ -3174,9 +3174,9 @@ int rnd_queue_printf(struct rnd_queue *queue)
 #endif
 	printf("rnd_queue_printf()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
 		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
-	for (i = queue->size; i-- > 0;) {
-		const float elem = ((float*)queue->data)[i];
-		printf("[%lu]\t%g\n", (unsigned long)queue->size - 1 - i, elem);
+	for (i = 0; i < queue->size; i++) {
+		const float elem = *(float*)rnd_ringbuf_get(i, queue->data, queue->elem_size, queue->capacity, queue->head);
+		printf("[%lu]\t%g\n", (unsigned long)i, elem);
 	}
 	return 0;
 }
@@ -3197,9 +3197,9 @@ int rnd_queue_printd(struct rnd_queue *queue)
 #endif
 	printf("rnd_queue_printd()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
 		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
-	for (i = queue->size; i-- > 0;) {
-		const double elem = ((double*)queue->data)[i];
-		printf("[%lu]\t%g\n", (unsigned long)queue->size - 1 - i, elem);
+	for (i = 0; i < queue->size; i++) {
+		const double elem = *(double*)rnd_ringbuf_get(i, queue->data, queue->elem_size, queue->capacity, queue->head);
+		printf("[%lu]\t%g\n", (unsigned long)i, elem);
 	}
 	return 0;
 }
@@ -3220,9 +3220,9 @@ int rnd_queue_printld(struct rnd_queue *queue)
 #endif
 	printf("rnd_queue_printld()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
 		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
-	for (i = queue->size; i-- > 0;) {
-		const long double elem = ((long double*)queue->data)[i];
-		printf("[%lu]\t%Lg\n", (unsigned long)queue->size - 1 - i, elem);
+	for (i = 0; i < queue->size; i++) {
+		const long double elem = *(long double*)rnd_ringbuf_get(i, queue->data, queue->elem_size, queue->capacity, queue->head);
+		printf("[%lu]\t%Lg\n", (unsigned long)i, elem);
 	}
 	return 0;
 }
