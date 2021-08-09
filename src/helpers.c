@@ -95,3 +95,50 @@ void rnd_ringbuf_incr(void **ptr, void *buf, size_t size, size_t elem_size)
 	else
 		*ptr = (char*)ptr + elem_size;
 }
+
+void rnd_ringbuf_decr(void **ptr, void *buf, size_t size, size_t elem_size)
+{
+	if (*ptr == buf)
+		*ptr = (char*)buf + (size - 1) * elem_size;
+	else
+		*ptr = (char*)ptr - elem_size;
+}
+
+/* Insert an element into a ring buffer. The buffer must already have sufficient
+ * capacity. Indexing starts from left to right, valid index values are in range
+ * <0;size>. */
+void rnd_ringbuf_insert(const void *elem, size_t idx, void *buf, size_t *size, size_t elem_size, size_t capacity, void **head, void **tail)
+{
+	void *s, *d;
+	size_t i;
+	/* The new element splits the original buffer into 2 sub-buffers. Since
+	 * the entire buffer is circular, we can choose which of the 2
+	 * sub-buffers to shift away to make room. We pick the smaller one to
+	 * minimize the number of shifts.
+	 */
+	if (idx <= *size / 2) {
+		s = *head;
+		rnd_ringbuf_decr(head, buf, capacity, elem_size);
+		d = *head;
+		i = 0;
+		while (i != idx) {
+			memcpy(d, s, elem_size);
+			d = s;
+			rnd_ringbuf_incr(&s, buf, capacity, elem_size);
+			++i;
+		}
+	} else {
+		s = *tail;
+		rnd_ringbuf_incr(tail, buf, capacity, elem_size);
+		d = *tail;
+		i = *size;
+		while (i != idx) {
+			memcpy(d, s, elem_size);
+			d = s;
+			rnd_ringbuf_decr(&s, buf, capacity, elem_size);
+			--i;
+		}
+	}
+	memcpy(d, elem, elem_size);
+	++(*size);
+}
