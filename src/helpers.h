@@ -54,6 +54,7 @@
 
 void stderr_printf(const char *fmt, ...);
 int rnd_buffit(void **buf, size_t elem_size, size_t size, size_t *capacity);
+int rnd_ringbuffit(void **buf, size_t elem_size, size_t size, size_t *capacity, void **head, void **tail);
 int rnd_foomap(void *buf, size_t size, size_t elem_size, int (*foo)(void*));
 int rnd_size_try_add(size_t size, size_t amount);
 void rnd_ringbuf_incr(void **ptr, void *buf, size_t size, size_t elem_size);

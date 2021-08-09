@@ -1,0 +1,168 @@
+.TH RND_QUEUE_PUSH 3 DATE "librnd-VERSION"
+.SH NAME
+rnd_queue_push - push a new element to the back of a queue
+.SH SYNOPSIS
+.ad l
+#include <rnd.h>
+.sp
+int
+.BR rnd_queue_push "(struct rnd_queue"
+.RI * queue ,
+const void
+.RI * elem )
+.br
+int
+.BR rnd_queue_pushc "(struct rnd_queue"
+.RI * queue ,
+char
+.IR elem )
+.br
+int
+.BR rnd_queue_pushs "(struct rnd_queue"
+.RI * queue ,
+short
+.IR elem )
+.br
+int
+.BR rnd_queue_pushi "(struct rnd_queue"
+.RI * queue ,
+int
+.IR elem )
+.br
+int
+.BR rnd_queue_pushl "(struct rnd_queue"
+.RI * queue ,
+long
+.IR elem )
+.br
+int
+.BR rnd_queue_pushsc "(struct rnd_queue"
+.RI * queue ,
+signed char
+.IR elem )
+.br
+int
+.BR rnd_queue_pushuc "(struct rnd_queue"
+.RI * queue ,
+unsigned char
+.IR elem )
+.br
+int
+.BR rnd_queue_pushus "(struct rnd_queue"
+.RI * queue ,
+unsigned short
+.IR elem )
+.br
+int
+.BR rnd_queue_pushui "(struct rnd_queue"
+.RI * queue ,
+unsigned int
+.IR elem )
+.br
+int
+.BR rnd_queue_pushul "(struct rnd_queue"
+.RI * queue ,
+unsigned long
+.IR elem )
+.br
+int
+.BR rnd_queue_pushf "(struct rnd_queue"
+.RI * queue ,
+float
+.IR elem )
+.br
+int
+.BR rnd_queue_pushd "(struct rnd_queue"
+.RI * queue ,
+double
+.IR elem )
+.br
+int
+.BR rnd_queue_pushld "(struct rnd_queue"
+.RI * queue ,
+long double
+.IR elem )
+.sp
+Link with \fI-lrnd\fP.
+.ad
+.SH DESCRIPTION
+The functions in the
+.BR rnd_queue_push ()
+family are used to append a new element to a queue. The element's size must
+match the queue's
+.I elem_size
+field, so it is illegal to, for example, create a queue with
+.I elem_size
+equal to 4, and then use it with the
+.BR rnd_queue_pushc ()
+function.
+.P
+.I queue
+is the queue that shall be pushed onto.
+.P
+.I
+elem
+is the element to be pushed.
+.SS Generic Form
+.I elem
+must be a void pointer to the first byte of the element that shall be pushed.
+The number of bytes to copy is equal to
+.IR queue "'s " elem_size
+field.
+.SS Suffixed Form
+.I elem
+is passed directly in the function argument.
+.SH RETURN VALUE
+If successful, the functions in the
+.BR rnd_queue_push ()
+family shall return 0. Otherwise, they shall return a code indicating the
+error.
+.SH ERRORS
+The functions in the
+.BR rnd_queue_push ()
+family shall fail if:
+.IP \fBRND_EINVAL\fP 1.5i
+.I queue
+is a null pointer (debug mode only).
+.IP \fBRND_ERANGE\fP 1.5i
+Maximum buffer size exceeded. See BUGS in
+.BR rnd_queue (7).
+.IP \fBRND_ENOMEM\fP 1.5i
+Memory allocation failed.
+.SS Generic Form
+The
+.BR rnd_queue_push ()
+function shall fail if:
+.IP \fBRND_EINVAL\fP 1.5i
+.I elem
+is a null pointer (debug mode only).
+.SS Suffixed Form
+The suffixed
+.BR rnd_queue_push ()
+functions shall fail if:
+.IP \fBRND_EILLEGAL\fP 1.5i
+.IR queue "'s " elem_size
+does not match the size of the
+.I elem
+argument (debug mode only).
+.SH CONFORMING TO
+See
+.BR librnd (7).
+.SH SEE ALSO
+.ad l
+.BR librnd (7),
+.BR rnd_queue (7),
+.BR rnd_queue_create (3),
+.BR rnd_queue_destroy (3),
+.BR rnd_queue_clear (3),
+.BR rnd_queue_copy (3),
+.BR rnd_queue_map (3),
+.BR rnd_queue_insert (3),
+.BR rnd_queue_quickinsert (3),
+.BR rnd_queue_peek (3),
+.BR rnd_queue_pop (3),
+.BR rnd_queue_remove (3),
+.BR rnd_queue_quickremove (3),
+.BR rnd_queue_get (3),
+.BR rnd_queue_set (3),
+.BR rnd_queue_print (3)

@@ -171,9 +171,10 @@ int rnd_queue_push(struct rnd_queue *queue, const void *elem)
 #endif
 	if (rnd_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
+	if (rnd_ringbuffit(&queue->data, queue->elem_size, queue->size, &queue->capacity, &queue->head, &queue->tail))
 		return RND_ENOMEM;
-	memcpy((char*)queue->data + queue->size++ * queue->elem_size, elem, queue->elem_size);
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->size, queue->elem_size);
+	memcpy(queue->tail, elem, queue->elem_size);
 	return 0;
 }
 
@@ -192,9 +193,10 @@ int rnd_queue_pushc(struct rnd_queue *queue, char elem)
 #endif
 	if (rnd_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
+	if (rnd_ringbuffit(&queue->data, queue->elem_size, queue->size, &queue->capacity, &queue->head, &queue->tail))
 		return RND_ENOMEM;
-	((char*)queue->data)[queue->size++] = elem;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->size, queue->elem_size);
+	*(char*)queue->tail = elem;
 	return 0;
 }
 
@@ -213,9 +215,10 @@ int rnd_queue_pushs(struct rnd_queue *queue, short elem)
 #endif
 	if (rnd_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
+	if (rnd_ringbuffit(&queue->data, queue->elem_size, queue->size, &queue->capacity, &queue->head, &queue->tail))
 		return RND_ENOMEM;
-	((short*)queue->data)[queue->size++] = elem;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->size, queue->elem_size);
+	*(short*)queue->tail = elem;
 	return 0;
 }
 
@@ -234,9 +237,10 @@ int rnd_queue_pushi(struct rnd_queue *queue, int elem)
 #endif
 	if (rnd_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
+	if (rnd_ringbuffit(&queue->data, queue->elem_size, queue->size, &queue->capacity, &queue->head, &queue->tail))
 		return RND_ENOMEM;
-	((int*)queue->data)[queue->size++] = elem;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->size, queue->elem_size);
+	*(int*)queue->tail = elem;
 	return 0;
 }
 
@@ -255,9 +259,10 @@ int rnd_queue_pushl(struct rnd_queue *queue, long elem)
 #endif
 	if (rnd_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
+	if (rnd_ringbuffit(&queue->data, queue->elem_size, queue->size, &queue->capacity, &queue->head, &queue->tail))
 		return RND_ENOMEM;
-	((long*)queue->data)[queue->size++] = elem;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->size, queue->elem_size);
+	*(long*)queue->tail = elem;
 	return 0;
 }
 
@@ -276,9 +281,10 @@ int rnd_queue_pushsc(struct rnd_queue *queue, signed char elem)
 #endif
 	if (rnd_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
+	if (rnd_ringbuffit(&queue->data, queue->elem_size, queue->size, &queue->capacity, &queue->head, &queue->tail))
 		return RND_ENOMEM;
-	((signed char*)queue->data)[queue->size++] = elem;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->size, queue->elem_size);
+	*(signed char*)queue->tail = elem;
 	return 0;
 }
 
@@ -297,9 +303,10 @@ int rnd_queue_pushuc(struct rnd_queue *queue, unsigned char elem)
 #endif
 	if (rnd_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
+	if (rnd_ringbuffit(&queue->data, queue->elem_size, queue->size, &queue->capacity, &queue->head, &queue->tail))
 		return RND_ENOMEM;
-	((unsigned char*)queue->data)[queue->size++] = elem;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->size, queue->elem_size);
+	*(unsigned char*)queue->tail = elem;
 	return 0;
 }
 
@@ -318,9 +325,10 @@ int rnd_queue_pushus(struct rnd_queue *queue, unsigned short elem)
 #endif
 	if (rnd_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
+	if (rnd_ringbuffit(&queue->data, queue->elem_size, queue->size, &queue->capacity, &queue->head, &queue->tail))
 		return RND_ENOMEM;
-	((unsigned short*)queue->data)[queue->size++] = elem;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->size, queue->elem_size);
+	*(unsigned short*)queue->tail = elem;
 	return 0;
 }
 
@@ -339,9 +347,10 @@ int rnd_queue_pushui(struct rnd_queue *queue, unsigned int elem)
 #endif
 	if (rnd_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
+	if (rnd_ringbuffit(&queue->data, queue->elem_size, queue->size, &queue->capacity, &queue->head, &queue->tail))
 		return RND_ENOMEM;
-	((unsigned int*)queue->data)[queue->size++] = elem;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->size, queue->elem_size);
+	*(unsigned int*)queue->tail = elem;
 	return 0;
 }
 
@@ -360,9 +369,10 @@ int rnd_queue_pushul(struct rnd_queue *queue, unsigned long elem)
 #endif
 	if (rnd_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
+	if (rnd_ringbuffit(&queue->data, queue->elem_size, queue->size, &queue->capacity, &queue->head, &queue->tail))
 		return RND_ENOMEM;
-	((unsigned long*)queue->data)[queue->size++] = elem;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->size, queue->elem_size);
+	*(unsigned long*)queue->tail = elem;
 	return 0;
 }
 
@@ -381,9 +391,10 @@ int rnd_queue_pushf(struct rnd_queue *queue, float elem)
 #endif
 	if (rnd_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
+	if (rnd_ringbuffit(&queue->data, queue->elem_size, queue->size, &queue->capacity, &queue->head, &queue->tail))
 		return RND_ENOMEM;
-	((float*)queue->data)[queue->size++] = elem;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->size, queue->elem_size);
+	*(float*)queue->tail = elem;
 	return 0;
 }
 
@@ -402,9 +413,10 @@ int rnd_queue_pushd(struct rnd_queue *queue, double elem)
 #endif
 	if (rnd_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
+	if (rnd_ringbuffit(&queue->data, queue->elem_size, queue->size, &queue->capacity, &queue->head, &queue->tail))
 		return RND_ENOMEM;
-	((double*)queue->data)[queue->size++] = elem;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->size, queue->elem_size);
+	*(double*)queue->tail = elem;
 	return 0;
 }
 
@@ -423,9 +435,10 @@ int rnd_queue_pushld(struct rnd_queue *queue, long double elem)
 #endif
 	if (rnd_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
+	if (rnd_ringbuffit(&queue->data, queue->elem_size, queue->size, &queue->capacity, &queue->head, &queue->tail))
 		return RND_ENOMEM;
-	((long double*)queue->data)[queue->size++] = elem;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->size, queue->elem_size);
+	*(long double*)queue->tail = elem;
 	return 0;
 }
 

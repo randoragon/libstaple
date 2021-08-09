@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <limits.h>
+#include <string.h>
 
 void stderr_printf(const char *fmt, ...)
 {
@@ -28,6 +29,37 @@ int rnd_buffit(void **buf, size_t elem_size, size_t size, size_t *capacity)
 			error(("realloc"));
 			return 1;
 		}
+	}
+	return 0;
+}
+
+/* Same as rnd_buffit, but for ring buffers.
+ * Example (numbers denote order of insertion):
+ * 	(1)	4 5 1 2 3
+ * 	we start with a queue of capacity 5. Suppose we want to insert 6. First,
+ * 	the buffer is enlarged:
+ * 	(2)	4 5 1 2 3 _ _ _ _ _
+ * 	the above ring buffer would break if a new element were to be inserted
+ * 	after 5! To fix this, we shift the "tail part":
+ * 	(3)	_ _ 1 2 3 4 5 _ _ _
+ * 	then, the ring buffer can be used as normal:
+ * 	(4)	_ _ 1 2 3 4 5 6 _ _
+ * Return values are identical to rnd_buffit.
+ */
+int rnd_ringbuffit(void **buf, size_t elem_size, size_t size, size_t *capacity, void **head, void **tail)
+{
+	if (size == *capacity) {
+		const size_t head_offset = *(char*)head - *(char*)buf;
+		void *dest;
+
+		int error;
+		if ((error = rnd_buffit(buf, elem_size, size, capacity)))
+			return error;
+
+		*head = (char*)(*buf) + head_offset;
+		*tail = (char*)(*head) + (size - 1) * elem_size;
+		dest  = (char*)(*buf) + size * elem_size;
+		memcpy(dest, buf, head_offset);
 	}
 	return 0;
 }
