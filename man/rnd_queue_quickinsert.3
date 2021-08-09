@@ -124,10 +124,9 @@ To explain how the
 .BR rnd_queue_insert ()
 and
 .BR rnd_queue_quickinsert ()
-families differ, consider the following initial queue (\fB1\fP is the head,
-\fB4\fP is the tail):
+families differ, consider the following initial queue (from head to tail):
 .IP
-.B 3 4 _ _ _ 1 2
+.B 1 2 3 4 _ _ _
 .P
 Now, let us investigate what happens when we try to insert the number
 .B 5
@@ -142,13 +141,13 @@ backwards, and insert
 .B 5
 without altering the order:
 .IP (1)
-.B _ 3 4 _ _ 1 2
+.B 1 2 _ 3 4 _ _
 .br
-\h'2n'^ ^
+\h'6n'^ ^
 .IP (2)
-.B 5 3 4 _ _ 1 2
+.B 1 2 5 3 4 _ _
 .br
-^
+\h'4n'^
 .P
 On the contrary, the functions in the
 .BR rnd_queue_quickinsert ()
@@ -156,13 +155,13 @@ family achieve the goal faster by moving the element "in the way" (in this case
 .BR 3 )
 to the back of the queue:
 .IP (1)
-.B _ 4 3 _ _ 1 2
+.B 1 2 _ 4 3 _ _
+.br
+\h'8n'^
+.IP (2)
+.B 1 2 5 4 3 _ _
 .br
 \h'4n'^
-.IP (2)
-.B 5 4 3 _ _ 1 2
-.br
-^
 .P
 The second approach guarantees constant time, but does not preserve the order of
 the elements.
