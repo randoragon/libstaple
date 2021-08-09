@@ -88,18 +88,18 @@ int rnd_size_try_add(size_t size, size_t amount)
 	return 0;
 }
 
-void rnd_ringbuf_incr(void **ptr, void *buf, size_t size, size_t elem_size)
+void rnd_ringbuf_incr(void **ptr, void *buf, size_t capacity, size_t elem_size)
 {
-	if (*ptr == (char*)buf + (size - 1) * elem_size)
+	if (*ptr == (char*)buf + (capacity - 1) * elem_size)
 		*ptr = buf;
 	else
 		*ptr = (char*)ptr + elem_size;
 }
 
-void rnd_ringbuf_decr(void **ptr, void *buf, size_t size, size_t elem_size)
+void rnd_ringbuf_decr(void **ptr, void *buf, size_t capacity, size_t elem_size)
 {
 	if (*ptr == buf)
-		*ptr = (char*)buf + (size - 1) * elem_size;
+		*ptr = (char*)buf + (capacity - 1) * elem_size;
 	else
 		*ptr = (char*)ptr - elem_size;
 }
