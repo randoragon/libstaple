@@ -156,3 +156,41 @@ void rnd_ringbuf_insert(const void *elem, size_t idx, void *buf, size_t *size, s
 	memcpy(d, elem, elem_size);
 	++(*size);
 }
+
+/* Remove an element from a ring buffer. Indexing starts from left to right,
+ * valid index values are in range <0;size>.
+ */
+void rnd_ringbuf_remove(size_t idx, void *buf, size_t *size, size_t elem_size, size_t capacity, void **head, void **tail)
+{
+	void *s, *d;
+	size_t i;
+	/* The gap from the removed element splits the original buffer into 2
+	 * sub-buffers.  Since the entire buffer is circular, we can choose
+	 * which of the 2 sub-buffers to shift to cover the gap. We pick the
+	 * smaller one to minimize the number of shifts.
+	 */
+	if (idx < *size / 2) {
+		s = *head;
+		rnd_ringbuf_incr(head, buf, capacity, elem_size);
+		d = *head;
+		i = 0;
+		while (i != idx) {
+			memcpy(d, s, elem_size);
+			d = s;
+			rnd_ringbuf_incr(&s, buf, capacity, elem_size);
+			++i;
+		}
+	} else {
+		s = *tail;
+		rnd_ringbuf_decr(tail, buf, capacity, elem_size);
+		d = *tail;
+		i = *size;
+		while (i != idx) {
+			memcpy(d, s, elem_size);
+			d = s;
+			rnd_ringbuf_decr(&s, buf, capacity, elem_size);
+			--i;
+		}
+	}
+	--(*size);
+}
