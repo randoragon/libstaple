@@ -122,11 +122,11 @@ is the queue that shall be inserted into.
 .P
 .I idx
 is the index at which the new element will be placed. Indices start from 0 and
-extend further \(em 0 is the last element, 1 is the element in front of it, and
+extend to the rear \(em 0 is the front element, 1 is the element behind it, and
 so on.
 .br
-Inserting at position \fBn\fP requires \fBn\fP elements to be moved in memory.
-Inserting at 0 has the same effect as
+Inserting at position \fBn\fP requires up to \fBsize / 2\fP elements to be moved
+in memory. Inserting at \fBsize\fP has the same effect as
 .BR rnd_queue_push (3).
 .br
 .I idx
