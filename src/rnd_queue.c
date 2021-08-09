@@ -2388,7 +2388,7 @@ int rnd_queue_get(const struct rnd_queue *queue, size_t idx, void *output)
 		return RND_EINDEX;
 	}
 #endif
-	src = (char*)queue->data + (queue->size - 1 - idx) * queue->elem_size;
+	src = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	memcpy(output, src, queue->elem_size);
 	return 0;
 }
@@ -2410,7 +2410,7 @@ char rnd_queue_getc(const struct rnd_queue *queue, size_t idx)
 		return 0;
 	}
 #endif
-	return ((char*)queue->data)[queue->size - 1 - idx];
+	return *(char*)rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 }
 
 short rnd_queue_gets(const struct rnd_queue *queue, size_t idx)
@@ -2430,7 +2430,7 @@ short rnd_queue_gets(const struct rnd_queue *queue, size_t idx)
 		return 0;
 	}
 #endif
-	return ((short*)queue->data)[queue->size - 1 - idx];
+	return *(short*)rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 }
 
 int rnd_queue_geti(const struct rnd_queue *queue, size_t idx)
@@ -2450,7 +2450,7 @@ int rnd_queue_geti(const struct rnd_queue *queue, size_t idx)
 		return 0;
 	}
 #endif
-	return ((int*)queue->data)[queue->size - 1 - idx];
+	return *(int*)rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 }
 
 long rnd_queue_getl(const struct rnd_queue *queue, size_t idx)
@@ -2470,7 +2470,7 @@ long rnd_queue_getl(const struct rnd_queue *queue, size_t idx)
 		return 0;
 	}
 #endif
-	return ((long*)queue->data)[queue->size - 1 - idx];
+	return *(long*)rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 }
 
 signed char rnd_queue_getsc(const struct rnd_queue *queue, size_t idx)
@@ -2490,7 +2490,7 @@ signed char rnd_queue_getsc(const struct rnd_queue *queue, size_t idx)
 		return 0;
 	}
 #endif
-	return ((signed char*)queue->data)[queue->size - 1 - idx];
+	return *(signed char*)rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 }
 
 unsigned char rnd_queue_getuc(const struct rnd_queue *queue, size_t idx)
@@ -2510,7 +2510,7 @@ unsigned char rnd_queue_getuc(const struct rnd_queue *queue, size_t idx)
 		return 0;
 	}
 #endif
-	return ((unsigned char*)queue->data)[queue->size - 1 - idx];
+	return *(unsigned char*)rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 }
 
 unsigned short rnd_queue_getus(const struct rnd_queue *queue, size_t idx)
@@ -2530,7 +2530,7 @@ unsigned short rnd_queue_getus(const struct rnd_queue *queue, size_t idx)
 		return 0;
 	}
 #endif
-	return ((unsigned short*)queue->data)[queue->size - 1 - idx];
+	return *(unsigned short*)rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 }
 
 unsigned int rnd_queue_getui(const struct rnd_queue *queue, size_t idx)
@@ -2550,7 +2550,7 @@ unsigned int rnd_queue_getui(const struct rnd_queue *queue, size_t idx)
 		return 0;
 	}
 #endif
-	return ((unsigned int*)queue->data)[queue->size - 1 - idx];
+	return *(unsigned int*)rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 }
 
 unsigned long rnd_queue_getul(const struct rnd_queue *queue, size_t idx)
@@ -2570,7 +2570,7 @@ unsigned long rnd_queue_getul(const struct rnd_queue *queue, size_t idx)
 		return 0;
 	}
 #endif
-	return ((unsigned long*)queue->data)[queue->size - 1 - idx];
+	return *(unsigned long*)rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 }
 
 float rnd_queue_getf(const struct rnd_queue *queue, size_t idx)
@@ -2590,7 +2590,7 @@ float rnd_queue_getf(const struct rnd_queue *queue, size_t idx)
 		return 0;
 	}
 #endif
-	return ((float*)queue->data)[queue->size - 1 - idx];
+	return *(float*)rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 }
 
 double rnd_queue_getd(const struct rnd_queue *queue, size_t idx)
@@ -2610,7 +2610,7 @@ double rnd_queue_getd(const struct rnd_queue *queue, size_t idx)
 		return 0;
 	}
 #endif
-	return ((double*)queue->data)[queue->size - 1 - idx];
+	return *(double*)rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 }
 
 long double rnd_queue_getld(const struct rnd_queue *queue, size_t idx)
@@ -2630,7 +2630,7 @@ long double rnd_queue_getld(const struct rnd_queue *queue, size_t idx)
 		return 0;
 	}
 #endif
-	return ((long double*)queue->data)[queue->size - 1 - idx];
+	return *(long double*)rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 }
 
 
