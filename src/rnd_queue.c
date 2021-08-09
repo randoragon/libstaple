@@ -453,7 +453,6 @@ int rnd_queue_insert(struct rnd_queue *queue, size_t idx, const void *elem)
 	if (elem == NULL) {
 		error(("elem is NULL"));
 		return RND_EINVAL;
-	memcpy(d, elem, queue->elem_size);
 	}
 	if (idx > queue->size) {
 		error(("index out of range"));
@@ -584,10 +583,6 @@ int rnd_queue_insertsc(struct rnd_queue *queue, size_t idx, signed char elem)
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
-	if (idx > queue->size) {
-		error(("index out of range"));
-		return RND_EINDEX;
-	}
 #endif
 	if (rnd_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return RND_ERANGE;
@@ -633,10 +628,6 @@ int rnd_queue_insertus(struct rnd_queue *queue, size_t idx, unsigned short elem)
 		error(("queue->elem_size is incompatible with elem type (%lu != %lu)",
 					(unsigned long)queue->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
-	}
-	if (idx > queue->size) {
-		error(("index out of range"));
-		return RND_EINDEX;
 	}
 	if (idx > queue->size) {
 		error(("index out of range"));
@@ -1842,10 +1833,6 @@ long rnd_queue_removel(struct rnd_queue *queue, size_t idx)
 		error(("index out of range"));
 		return 0;
 	}
-	if (idx >= queue->size) {
-		error(("index out of range"));
-		return 0;
-	}
 #endif
 	ret = *(long*)rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	rnd_ringbuf_remove(idx, queue->data, &queue->size, queue->elem_size, queue->capacity, &queue->head, &queue->tail);
@@ -2100,11 +2087,11 @@ short rnd_queue_quickremoves(struct rnd_queue *queue, size_t idx)
 					(unsigned long)queue->elem_size, sizeof(short)));
 		return 0;
 	}
-#endif
 	if (idx >= queue->size) {
 		error(("index out of range"));
 		return 0;
 	}
+#endif
 	p = (char*)queue->data + (queue->size - 1 - idx) * queue->elem_size;
 	q = (char*)queue->data + (queue->size - 1) * queue->elem_size;
 	ret = *(short*)p;
@@ -2152,10 +2139,6 @@ long rnd_queue_quickremovel(struct rnd_queue *queue, size_t idx)
 	if (queue->elem_size != sizeof(long)) {
 		error(("queue->elem_size is incompatible with elem type (%lu != %lu)",
 					(unsigned long)queue->elem_size, sizeof(long)));
-		return 0;
-	}
-	if (idx >= queue->size) {
-		error(("index out of range"));
 		return 0;
 	}
 	if (idx >= queue->size) {
@@ -2782,10 +2765,6 @@ int rnd_queue_setsc(struct rnd_queue *queue, size_t idx, signed char val)
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
-	if (idx >= queue->size) {
-		error(("index out of range"));
-		return RND_EINDEX;
-	}
 #endif
 	p = (char*)queue->data + (queue->size - 1 - idx) * queue->elem_size;
 	*(signed char*)p = val;
@@ -2827,10 +2806,6 @@ int rnd_queue_setus(struct rnd_queue *queue, size_t idx, unsigned short val)
 		error(("queue->elem_size is incompatible with val type (%lu != %lu)",
 					(unsigned long)queue->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
-	}
-	if (idx >= queue->size) {
-		error(("index out of range"));
-		return RND_EINDEX;
 	}
 	if (idx >= queue->size) {
 		error(("index out of range"));
