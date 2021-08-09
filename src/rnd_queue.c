@@ -779,7 +779,7 @@ int rnd_queue_insertld(struct rnd_queue *queue, size_t idx, long double elem)
 
 int rnd_queue_quickinsert(struct rnd_queue *queue, size_t idx, const void *elem)
 {
-	char *p, *q;
+	char *p;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -799,9 +799,8 @@ int rnd_queue_quickinsert(struct rnd_queue *queue, size_t idx, const void *elem)
 	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
 		return RND_ENOMEM;
 	rnd_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
-	p = (char*)queue->data + (queue->size - idx) * queue->elem_size;
-	q = (char*)queue->data + queue->size * queue->elem_size;
-	memcpy(q, p, queue->elem_size);
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
+	memcpy(queue->tail, p, queue->elem_size);
 	memcpy(p, elem, queue->elem_size);
 	++queue->size;
 	return 0;
@@ -809,7 +808,7 @@ int rnd_queue_quickinsert(struct rnd_queue *queue, size_t idx, const void *elem)
 
 int rnd_queue_quickinsertc(struct rnd_queue *queue, size_t idx, char elem)
 {
-	char *p, *q;
+	char *p;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -829,9 +828,9 @@ int rnd_queue_quickinsertc(struct rnd_queue *queue, size_t idx, char elem)
 		return RND_ERANGE;
 	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
 		return RND_ENOMEM;
-	p = (char*)queue->data + (queue->size - idx) * queue->elem_size;
-	q = (char*)queue->data + queue->size * queue->elem_size;
-	*(char*)q = *(char*)p;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
+	*(char*)queue->tail = *(char*)p;
 	*(char*)p = elem;
 	++queue->size;
 	return 0;
@@ -839,7 +838,7 @@ int rnd_queue_quickinsertc(struct rnd_queue *queue, size_t idx, char elem)
 
 int rnd_queue_quickinserts(struct rnd_queue *queue, size_t idx, short elem)
 {
-	char *p, *q;
+	char *p;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -859,9 +858,9 @@ int rnd_queue_quickinserts(struct rnd_queue *queue, size_t idx, short elem)
 		return RND_ERANGE;
 	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
 		return RND_ENOMEM;
-	p = (char*)queue->data + (queue->size - idx) * queue->elem_size;
-	q = (char*)queue->data + queue->size * queue->elem_size;
-	*(short*)q = *(short*)p;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
+	*(short*)queue->tail = *(short*)p;
 	*(short*)p = elem;
 	++queue->size;
 	return 0;
@@ -869,7 +868,7 @@ int rnd_queue_quickinserts(struct rnd_queue *queue, size_t idx, short elem)
 
 int rnd_queue_quickinserti(struct rnd_queue *queue, size_t idx, int elem)
 {
-	char *p, *q;
+	char *p;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -889,9 +888,9 @@ int rnd_queue_quickinserti(struct rnd_queue *queue, size_t idx, int elem)
 		return RND_ERANGE;
 	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
 		return RND_ENOMEM;
-	p = (char*)queue->data + (queue->size - idx) * queue->elem_size;
-	q = (char*)queue->data + queue->size * queue->elem_size;
-	*(int*)q = *(int*)p;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
+	*(int*)queue->tail = *(int*)p;
 	*(int*)p = elem;
 	++queue->size;
 	return 0;
@@ -899,7 +898,7 @@ int rnd_queue_quickinserti(struct rnd_queue *queue, size_t idx, int elem)
 
 int rnd_queue_quickinsertl(struct rnd_queue *queue, size_t idx, long elem)
 {
-	char *p, *q;
+	char *p;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -919,9 +918,9 @@ int rnd_queue_quickinsertl(struct rnd_queue *queue, size_t idx, long elem)
 		return RND_ERANGE;
 	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
 		return RND_ENOMEM;
-	p = (char*)queue->data + (queue->size - idx) * queue->elem_size;
-	q = (char*)queue->data + queue->size * queue->elem_size;
-	*(long*)q = *(long*)p;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
+	*(long*)queue->tail = *(long*)p;
 	*(long*)p = elem;
 	++queue->size;
 	return 0;
@@ -929,7 +928,7 @@ int rnd_queue_quickinsertl(struct rnd_queue *queue, size_t idx, long elem)
 
 int rnd_queue_quickinsertsc(struct rnd_queue *queue, size_t idx, signed char elem)
 {
-	char *p, *q;
+	char *p;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -949,9 +948,9 @@ int rnd_queue_quickinsertsc(struct rnd_queue *queue, size_t idx, signed char ele
 		return RND_ERANGE;
 	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
 		return RND_ENOMEM;
-	p = (char*)queue->data + (queue->size - idx) * queue->elem_size;
-	q = (char*)queue->data + queue->size * queue->elem_size;
-	*(signed char*)q = *(signed char*)p;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
+	*(signed char*)queue->tail = *(signed char*)p;
 	*(signed char*)p = elem;
 	++queue->size;
 	return 0;
@@ -959,7 +958,7 @@ int rnd_queue_quickinsertsc(struct rnd_queue *queue, size_t idx, signed char ele
 
 int rnd_queue_quickinsertuc(struct rnd_queue *queue, size_t idx, unsigned char elem)
 {
-	char *p, *q;
+	char *p;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -979,9 +978,9 @@ int rnd_queue_quickinsertuc(struct rnd_queue *queue, size_t idx, unsigned char e
 		return RND_ERANGE;
 	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
 		return RND_ENOMEM;
-	p = (char*)queue->data + (queue->size - idx) * queue->elem_size;
-	q = (char*)queue->data + queue->size * queue->elem_size;
-	*(unsigned char*)q = *(unsigned char*)p;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
+	*(unsigned char*)queue->tail = *(unsigned char*)p;
 	*(unsigned char*)p = elem;
 	++queue->size;
 	return 0;
@@ -989,7 +988,7 @@ int rnd_queue_quickinsertuc(struct rnd_queue *queue, size_t idx, unsigned char e
 
 int rnd_queue_quickinsertus(struct rnd_queue *queue, size_t idx, unsigned short elem)
 {
-	char *p, *q;
+	char *p;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1009,9 +1008,9 @@ int rnd_queue_quickinsertus(struct rnd_queue *queue, size_t idx, unsigned short 
 		return RND_ERANGE;
 	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
 		return RND_ENOMEM;
-	p = (char*)queue->data + (queue->size - idx) * queue->elem_size;
-	q = (char*)queue->data + queue->size * queue->elem_size;
-	*(unsigned short*)q = *(unsigned short*)p;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
+	*(unsigned short*)queue->tail = *(unsigned short*)p;
 	*(unsigned short*)p = elem;
 	++queue->size;
 	return 0;
@@ -1019,7 +1018,7 @@ int rnd_queue_quickinsertus(struct rnd_queue *queue, size_t idx, unsigned short 
 
 int rnd_queue_quickinsertui(struct rnd_queue *queue, size_t idx, unsigned int elem)
 {
-	char *p, *q;
+	char *p;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1039,9 +1038,9 @@ int rnd_queue_quickinsertui(struct rnd_queue *queue, size_t idx, unsigned int el
 		return RND_ERANGE;
 	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
 		return RND_ENOMEM;
-	p = (char*)queue->data + (queue->size - idx) * queue->elem_size;
-	q = (char*)queue->data + queue->size * queue->elem_size;
-	*(unsigned int*)q = *(unsigned int*)p;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
+	*(unsigned int*)queue->tail = *(unsigned int*)p;
 	*(unsigned int*)p = elem;
 	++queue->size;
 	return 0;
@@ -1049,7 +1048,7 @@ int rnd_queue_quickinsertui(struct rnd_queue *queue, size_t idx, unsigned int el
 
 int rnd_queue_quickinsertul(struct rnd_queue *queue, size_t idx, unsigned long elem)
 {
-	char *p, *q;
+	char *p;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1069,9 +1068,9 @@ int rnd_queue_quickinsertul(struct rnd_queue *queue, size_t idx, unsigned long e
 		return RND_ERANGE;
 	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
 		return RND_ENOMEM;
-	p = (char*)queue->data + (queue->size - idx) * queue->elem_size;
-	q = (char*)queue->data + queue->size * queue->elem_size;
-	*(unsigned long*)q = *(unsigned long*)p;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
+	*(unsigned long*)queue->tail = *(unsigned long*)p;
 	*(unsigned long*)p = elem;
 	++queue->size;
 	return 0;
@@ -1079,7 +1078,7 @@ int rnd_queue_quickinsertul(struct rnd_queue *queue, size_t idx, unsigned long e
 
 int rnd_queue_quickinsertf(struct rnd_queue *queue, size_t idx, float elem)
 {
-	char *p, *q;
+	char *p;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1099,9 +1098,9 @@ int rnd_queue_quickinsertf(struct rnd_queue *queue, size_t idx, float elem)
 		return RND_ERANGE;
 	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
 		return RND_ENOMEM;
-	p = (char*)queue->data + (queue->size - idx) * queue->elem_size;
-	q = (char*)queue->data + queue->size * queue->elem_size;
-	*(float*)q = *(float*)p;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
+	*(float*)queue->tail = *(float*)p;
 	*(float*)p = elem;
 	++queue->size;
 	return 0;
@@ -1109,7 +1108,7 @@ int rnd_queue_quickinsertf(struct rnd_queue *queue, size_t idx, float elem)
 
 int rnd_queue_quickinsertd(struct rnd_queue *queue, size_t idx, double elem)
 {
-	char *p, *q;
+	char *p;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1129,9 +1128,9 @@ int rnd_queue_quickinsertd(struct rnd_queue *queue, size_t idx, double elem)
 		return RND_ERANGE;
 	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
 		return RND_ENOMEM;
-	p = (char*)queue->data + (queue->size - idx) * queue->elem_size;
-	q = (char*)queue->data + queue->size * queue->elem_size;
-	*(double*)q = *(double*)p;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
+	*(double*)queue->tail = *(double*)p;
 	*(double*)p = elem;
 	++queue->size;
 	return 0;
@@ -1139,7 +1138,7 @@ int rnd_queue_quickinsertd(struct rnd_queue *queue, size_t idx, double elem)
 
 int rnd_queue_quickinsertld(struct rnd_queue *queue, size_t idx, long double elem)
 {
-	char *p, *q;
+	char *p;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1159,9 +1158,9 @@ int rnd_queue_quickinsertld(struct rnd_queue *queue, size_t idx, long double ele
 		return RND_ERANGE;
 	if (rnd_buffit(&queue->data, queue->elem_size, queue->size, &queue->capacity))
 		return RND_ENOMEM;
-	p = (char*)queue->data + (queue->size - idx) * queue->elem_size;
-	q = (char*)queue->data + queue->size * queue->elem_size;
-	*(long double*)q = *(long double*)p;
+	rnd_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
+	*(long double*)queue->tail = *(long double*)p;
 	*(long double*)p = elem;
 	++queue->size;
 	return 0;

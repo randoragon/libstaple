@@ -1,0 +1,187 @@
+.TH RND_QUEUE_QUICKINSERT 3 DATE "librnd-VERSION"
+.SH NAME
+rnd_queue_quickinsert - insert an element at any position of a queue
+.SH SYNOPSIS
+.ad l
+#include <rnd.h>
+.sp
+int
+.BR rnd_queue_quickinsert "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+const void
+.RI * elem )
+.br
+int
+.BR rnd_queue_quickinsertc "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+char
+.IR elem )
+.br
+int
+.BR rnd_queue_quickinserts "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+short
+.IR elem )
+.br
+int
+.BR rnd_queue_quickinserti "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+int
+.IR elem )
+.br
+int
+.BR rnd_queue_quickinsertl "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+long
+.IR elem )
+.br
+int
+.BR rnd_queue_quickinsertsc "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+signed char
+.IR elem )
+.br
+int
+.BR rnd_queue_quickinsertuc "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned char
+.IR elem )
+.br
+int
+.BR rnd_queue_quickinsertus "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned short
+.IR elem )
+.br
+int
+.BR rnd_queue_quickinsertui "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned int
+.IR elem )
+.br
+int
+.BR rnd_queue_quickinsertul "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned long
+.IR elem )
+.br
+int
+.BR rnd_queue_quickinsertf "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+float
+.IR elem )
+.br
+int
+.BR rnd_queue_quickinsertd "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+double
+.IR elem )
+.br
+int
+.BR rnd_queue_quickinsertld "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+long double
+.IR elem )
+.sp
+Link with \fI-lrnd\fP.
+.ad
+.SH DESCRIPTION
+See
+.BR rnd_queue_insert (3).
+.P
+The functions in the
+.BR rnd_queue_quickinsert ()
+family operate in constant time, which is achievable by changing the order of
+the elements upon insertion.
+.SH EXAMPLES
+To explain how the
+.BR rnd_queue_insert ()
+and
+.BR rnd_queue_quickinsert ()
+families differ, consider the following initial queue (\fB1\fP is the head,
+\fB4\fP is the tail):
+.IP
+.B 3 4 _ _ _ 1 2
+.P
+Now, let us investigate what happens when we try to insert the number
+.B 5
+at position
+.IR 2 .
+.P
+The functions in the
+.BR rnd_queue_insert ()
+family would move
+.BR 3 " and " 4
+backwards, and insert
+.B 5
+without altering the order:
+.IP (1)
+.B _ 3 4 _ _ 1 2
+.br
+\h'2n'^ ^
+.IP (2)
+.B 5 3 4 _ _ 1 2
+.br
+^
+.P
+On the contrary, the functions in the
+.BR rnd_queue_quickinsert ()
+family achieve the goal faster by moving the element "in the way" (in this case
+.BR 3 )
+to the back of the queue:
+.IP (1)
+.B _ 4 3 _ _ 1 2
+.br
+\h'4n'^
+.IP (2)
+.B 5 4 3 _ _ 1 2
+.br
+^
+.P
+The second approach guarantees constant time, but does not preserve the order of
+the elements.
+.SH SEE ALSO
+.ad l
+.BR librnd (7),
+.BR rnd_queue (7),
+.BR rnd_queue_create (3),
+.BR rnd_queue_destroy (3),
+.BR rnd_queue_clear (3),
+.BR rnd_queue_copy (3),
+.BR rnd_queue_map (3),
+.BR rnd_queue_push (3),
+.BR rnd_queue_insert (3),
+.BR rnd_queue_peek (3),
+.BR rnd_queue_pop (3),
+.BR rnd_queue_remove (3),
+.BR rnd_queue_quickremove (3),
+.BR rnd_queue_get (3),
+.BR rnd_queue_set (3),
+.BR rnd_queue_print (3)
+
