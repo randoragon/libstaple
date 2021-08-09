@@ -1169,7 +1169,6 @@ int rnd_queue_quickinsertld(struct rnd_queue *queue, size_t idx, long double ele
 
 int rnd_queue_peek(const struct rnd_queue *queue, void *output)
 {
-	const void *src;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1184,8 +1183,7 @@ int rnd_queue_peek(const struct rnd_queue *queue, void *output)
 		return RND_EILLEGAL;
 	}
 #endif
-	src = (char*)queue->data + (queue->size - 1) * queue->elem_size;
-	memcpy(output, src, queue->elem_size);
+	memcpy(output, queue->head, queue->elem_size);
 	return 0;
 }
 
@@ -1206,7 +1204,7 @@ char rnd_queue_peekc(const struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((char*)queue->data)[queue->size - 1];
+	return *(char*)queue->head;
 }
 
 short rnd_queue_peeks(const struct rnd_queue *queue)
@@ -1226,7 +1224,7 @@ short rnd_queue_peeks(const struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((short*)queue->data)[queue->size - 1];
+	return *(short*)queue->head;
 }
 
 int rnd_queue_peeki(const struct rnd_queue *queue)
@@ -1246,7 +1244,7 @@ int rnd_queue_peeki(const struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((int*)queue->data)[queue->size - 1];
+	return *(int*)queue->head;
 }
 
 long rnd_queue_peekl(const struct rnd_queue *queue)
@@ -1266,7 +1264,7 @@ long rnd_queue_peekl(const struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((long*)queue->data)[queue->size - 1];
+	return *(long*)queue->head;
 }
 
 signed char rnd_queue_peeksc(const struct rnd_queue *queue)
@@ -1286,7 +1284,7 @@ signed char rnd_queue_peeksc(const struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((signed char*)queue->data)[queue->size - 1];
+	return *(signed char*)queue->head;
 }
 
 unsigned char rnd_queue_peekuc(const struct rnd_queue *queue)
@@ -1306,7 +1304,7 @@ unsigned char rnd_queue_peekuc(const struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((unsigned char*)queue->data)[queue->size - 1];
+	return *(unsigned char*)queue->head;
 }
 
 unsigned short rnd_queue_peekus(const struct rnd_queue *queue)
@@ -1326,7 +1324,7 @@ unsigned short rnd_queue_peekus(const struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((unsigned short*)queue->data)[queue->size - 1];
+	return *(unsigned short*)queue->head;
 }
 
 unsigned int rnd_queue_peekui(const struct rnd_queue *queue)
@@ -1346,7 +1344,7 @@ unsigned int rnd_queue_peekui(const struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((unsigned int*)queue->data)[queue->size - 1];
+	return *(unsigned int*)queue->head;
 }
 
 unsigned long rnd_queue_peekul(const struct rnd_queue *queue)
@@ -1366,7 +1364,7 @@ unsigned long rnd_queue_peekul(const struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((unsigned long*)queue->data)[queue->size - 1];
+	return *(unsigned long*)queue->head;
 }
 
 float rnd_queue_peekf(const struct rnd_queue *queue)
@@ -1386,7 +1384,7 @@ float rnd_queue_peekf(const struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((float*)queue->data)[queue->size - 1];
+	return *(float*)queue->head;
 }
 
 double rnd_queue_peekd(const struct rnd_queue *queue)
@@ -1406,7 +1404,7 @@ double rnd_queue_peekd(const struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((double*)queue->data)[queue->size - 1];
+	return *(double*)queue->head;
 }
 
 long double rnd_queue_peekld(const struct rnd_queue *queue)
@@ -1426,7 +1424,7 @@ long double rnd_queue_peekld(const struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((long double*)queue->data)[queue->size - 1];
+	return *(long double*)queue->head;
 }
 
 
