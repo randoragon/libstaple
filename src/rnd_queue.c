@@ -2651,8 +2651,8 @@ int rnd_queue_set(struct rnd_queue *queue, size_t idx, void *val)
 		return RND_EINDEX;
 	}
 #endif
-	p = (char*)queue->data + (queue->size - 1 - idx) * queue->elem_size;
-	memcpy(val, p, queue->elem_size);
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
+	memcpy(p, val, queue->elem_size);
 	return 0;
 }
 
@@ -2674,7 +2674,7 @@ int rnd_queue_setc(struct rnd_queue *queue, size_t idx, char val)
 		return RND_EINDEX;
 	}
 #endif
-	p = (char*)queue->data + (queue->size - 1 - idx) * queue->elem_size;
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	*p = val;
 	return 0;
 }
@@ -2697,7 +2697,7 @@ int rnd_queue_sets(struct rnd_queue *queue, size_t idx, short val)
 		return RND_EINDEX;
 	}
 #endif
-	p = (char*)queue->data + (queue->size - 1 - idx) * queue->elem_size;
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	*(short*)p = val;
 	return 0;
 }
@@ -2720,7 +2720,7 @@ int rnd_queue_seti(struct rnd_queue *queue, size_t idx, int val)
 		return RND_EINDEX;
 	}
 #endif
-	p = (char*)queue->data + (queue->size - 1 - idx) * queue->elem_size;
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	*(int*)p = val;
 	return 0;
 }
@@ -2743,7 +2743,7 @@ int rnd_queue_setl(struct rnd_queue *queue, size_t idx, long val)
 		return RND_EINDEX;
 	}
 #endif
-	p = (char*)queue->data + (queue->size - 1 - idx) * queue->elem_size;
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	*(long*)p = val;
 	return 0;
 }
@@ -2766,7 +2766,7 @@ int rnd_queue_setsc(struct rnd_queue *queue, size_t idx, signed char val)
 		return RND_EINDEX;
 	}
 #endif
-	p = (char*)queue->data + (queue->size - 1 - idx) * queue->elem_size;
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	*(signed char*)p = val;
 	return 0;
 }
@@ -2789,7 +2789,7 @@ int rnd_queue_setuc(struct rnd_queue *queue, size_t idx, unsigned char val)
 		return RND_EINDEX;
 	}
 #endif
-	p = (char*)queue->data + (queue->size - 1 - idx) * queue->elem_size;
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	*(unsigned char*)p = val;
 	return 0;
 }
@@ -2812,7 +2812,7 @@ int rnd_queue_setus(struct rnd_queue *queue, size_t idx, unsigned short val)
 		return RND_EINDEX;
 	}
 #endif
-	p = (char*)queue->data + (queue->size - 1 - idx) * queue->elem_size;
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	*(unsigned short*)p = val;
 	return 0;
 }
@@ -2835,7 +2835,7 @@ int rnd_queue_setui(struct rnd_queue *queue, size_t idx, unsigned int val)
 		return RND_EINDEX;
 	}
 #endif
-	p = (char*)queue->data + (queue->size - 1 - idx) * queue->elem_size;
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	*(unsigned int*)p = val;
 	return 0;
 }
@@ -2858,7 +2858,7 @@ int rnd_queue_setul(struct rnd_queue *queue, size_t idx, unsigned long val)
 		return RND_EINDEX;
 	}
 #endif
-	p = (char*)queue->data + (queue->size - 1 - idx) * queue->elem_size;
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	*(unsigned long*)p = val;
 	return 0;
 }
@@ -2881,7 +2881,7 @@ int rnd_queue_setf(struct rnd_queue *queue, size_t idx, float val)
 		return RND_EINDEX;
 	}
 #endif
-	p = (char*)queue->data + (queue->size - 1 - idx) * queue->elem_size;
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	*(float*)p = val;
 	return 0;
 }
@@ -2904,7 +2904,7 @@ int rnd_queue_setd(struct rnd_queue *queue, size_t idx, double val)
 		return RND_EINDEX;
 	}
 #endif
-	p = (char*)queue->data + (queue->size - 1 - idx) * queue->elem_size;
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	*(double*)p = val;
 	return 0;
 }
@@ -2927,7 +2927,7 @@ int rnd_queue_setld(struct rnd_queue *queue, size_t idx, long double val)
 		return RND_EINDEX;
 	}
 #endif
-	p = (char*)queue->data + (queue->size - 1 - idx) * queue->elem_size;
+	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	*(long double*)p = val;
 	return 0;
 }
