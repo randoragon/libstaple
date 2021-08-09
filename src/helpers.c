@@ -108,7 +108,7 @@ void rnd_ringbuf_decr(void **ptr, void *buf, size_t capacity, size_t elem_size)
  * specific index is by looping, but this function calculates it faster.
  * index 0 gives head, index size-1 gives tail.
  */
-void *rnd_ringbuf_get(size_t idx, void *buf, size_t elem_size, size_t capacity, void *head)
+void *rnd_ringbuf_get(size_t idx, const void *buf, size_t elem_size, size_t capacity, const void *head)
 {
 	const char *const buf_end = (char*)buf + (capacity - 1) * elem_size;
 	const size_t no_elements_ahead = 1 + (buf_end - (char*)head) / elem_size;
