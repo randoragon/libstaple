@@ -589,10 +589,6 @@ int rnd_stack_insertsc(struct rnd_stack *stack, size_t idx, signed char elem)
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
-	if (idx > stack->size) {
-		error(("index out of range"));
-		return RND_EINDEX;
-	}
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
@@ -646,10 +642,6 @@ int rnd_stack_insertus(struct rnd_stack *stack, size_t idx, unsigned short elem)
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					(unsigned long)stack->elem_size, sizeof(elem)));
 		return RND_EILLEGAL;
-	}
-	if (idx > stack->size) {
-		error(("index out of range"));
-		return RND_EINDEX;
 	}
 	if (idx > stack->size) {
 		error(("index out of range"));
@@ -1788,11 +1780,11 @@ short rnd_stack_removes(struct rnd_stack *stack, size_t idx)
 					(unsigned long)stack->elem_size, sizeof(short)));
 		return 0;
 	}
-#endif
 	if (idx >= stack->size) {
 		error(("index out of range"));
 		return 0;
 	}
+#endif
 	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	ret = *(short*)p;
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
@@ -1838,10 +1830,6 @@ long rnd_stack_removel(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(long)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					(unsigned long)stack->elem_size, sizeof(long)));
-		return 0;
-	}
-	if (idx >= stack->size) {
-		error(("index out of range"));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2128,11 +2116,11 @@ short rnd_stack_quickremoves(struct rnd_stack *stack, size_t idx)
 					(unsigned long)stack->elem_size, sizeof(short)));
 		return 0;
 	}
-#endif
 	if (idx >= stack->size) {
 		error(("index out of range"));
 		return 0;
 	}
+#endif
 	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	q = (char*)stack->data + (stack->size - 1) * stack->elem_size;
 	ret = *(short*)p;
@@ -2180,10 +2168,6 @@ long rnd_stack_quickremovel(struct rnd_stack *stack, size_t idx)
 	if (stack->elem_size != sizeof(long)) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
 					(unsigned long)stack->elem_size, sizeof(long)));
-		return 0;
-	}
-	if (idx >= stack->size) {
-		error(("index out of range"));
 		return 0;
 	}
 	if (idx >= stack->size) {
@@ -2810,10 +2794,6 @@ int rnd_stack_setsc(struct rnd_stack *stack, size_t idx, signed char val)
 		error(("index out of range"));
 		return RND_EINDEX;
 	}
-	if (idx >= stack->size) {
-		error(("index out of range"));
-		return RND_EINDEX;
-	}
 #endif
 	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	*(signed char*)p = val;
@@ -2855,10 +2835,6 @@ int rnd_stack_setus(struct rnd_stack *stack, size_t idx, unsigned short val)
 		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
 					(unsigned long)stack->elem_size, sizeof(val)));
 		return RND_EILLEGAL;
-	}
-	if (idx >= stack->size) {
-		error(("index out of range"));
-		return RND_EINDEX;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
