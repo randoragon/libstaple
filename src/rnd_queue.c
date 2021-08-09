@@ -1430,7 +1430,6 @@ long double rnd_queue_peekld(const struct rnd_queue *queue)
 
 int rnd_queue_pop(struct rnd_queue *queue, void *output)
 {
-	const void *src;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1441,15 +1440,16 @@ int rnd_queue_pop(struct rnd_queue *queue, void *output)
 		return RND_EILLEGAL;
 	}
 #endif
-	src = (char*)queue->data + (queue->size - 1) * queue->elem_size;
 	if (output != NULL)
-		memcpy(output, src, queue->elem_size);
+		memcpy(output, queue->head, queue->elem_size);
+	rnd_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
 	--queue->size;
 	return 0;
 }
 
 char rnd_queue_popc(struct rnd_queue *queue)
 {
+	char ret;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1465,11 +1465,15 @@ char rnd_queue_popc(struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((char*)queue->data)[--queue->size];
+	ret = *(char*)queue->head;
+	rnd_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
+	--queue->size;
+	return ret;
 }
 
 short rnd_queue_pops(struct rnd_queue *queue)
 {
+	short ret;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1485,11 +1489,15 @@ short rnd_queue_pops(struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((short*)queue->data)[--queue->size];
+	ret = *(short*)queue->head;
+	rnd_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
+	--queue->size;
+	return ret;
 }
 
 int rnd_queue_popi(struct rnd_queue *queue)
 {
+	int ret;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1505,11 +1513,15 @@ int rnd_queue_popi(struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((int*)queue->data)[--queue->size];
+	ret = *(int*)queue->head;
+	rnd_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
+	--queue->size;
+	return ret;
 }
 
 long rnd_queue_popl(struct rnd_queue *queue)
 {
+	long ret;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1525,11 +1537,15 @@ long rnd_queue_popl(struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((long*)queue->data)[--queue->size];
+	ret = *(long*)queue->head;
+	rnd_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
+	--queue->size;
+	return ret;
 }
 
 signed char rnd_queue_popsc(struct rnd_queue *queue)
 {
+	signed char ret;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1545,11 +1561,15 @@ signed char rnd_queue_popsc(struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((signed char*)queue->data)[--queue->size];
+	ret = *(signed char*)queue->head;
+	rnd_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
+	--queue->size;
+	return ret;
 }
 
 unsigned char rnd_queue_popuc(struct rnd_queue *queue)
 {
+	unsigned char ret;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1565,11 +1585,15 @@ unsigned char rnd_queue_popuc(struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((unsigned char*)queue->data)[--queue->size];
+	ret = *(unsigned char*)queue->head;
+	rnd_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
+	--queue->size;
+	return ret;
 }
 
 unsigned short rnd_queue_popus(struct rnd_queue *queue)
 {
+	unsigned short ret;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1585,11 +1609,15 @@ unsigned short rnd_queue_popus(struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((unsigned short*)queue->data)[--queue->size];
+	ret = *(unsigned short*)queue->head;
+	rnd_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
+	--queue->size;
+	return ret;
 }
 
 unsigned int rnd_queue_popui(struct rnd_queue *queue)
 {
+	unsigned int ret;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1605,11 +1633,15 @@ unsigned int rnd_queue_popui(struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((unsigned int*)queue->data)[--queue->size];
+	ret = *(unsigned int*)queue->head;
+	rnd_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
+	--queue->size;
+	return ret;
 }
 
 unsigned long rnd_queue_popul(struct rnd_queue *queue)
 {
+	unsigned long ret;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1625,11 +1657,15 @@ unsigned long rnd_queue_popul(struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((unsigned long*)queue->data)[--queue->size];
+	ret = *(unsigned long*)queue->head;
+	rnd_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
+	--queue->size;
+	return ret;
 }
 
 float rnd_queue_popf(struct rnd_queue *queue)
 {
+	float ret;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1645,11 +1681,15 @@ float rnd_queue_popf(struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((float*)queue->data)[--queue->size];
+	ret = *(float*)queue->head;
+	rnd_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
+	--queue->size;
+	return ret;
 }
 
 double rnd_queue_popd(struct rnd_queue *queue)
 {
+	double ret;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1665,11 +1705,15 @@ double rnd_queue_popd(struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((double*)queue->data)[--queue->size];
+	ret = *(double*)queue->head;
+	rnd_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
+	--queue->size;
+	return ret;
 }
 
 long double rnd_queue_popld(struct rnd_queue *queue)
 {
+	long double ret;
 #ifdef RND_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -1685,7 +1729,10 @@ long double rnd_queue_popld(struct rnd_queue *queue)
 		return 0;
 	}
 #endif
-	return ((long double*)queue->data)[--queue->size];
+	ret = *(long double*)queue->head;
+	rnd_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
+	--queue->size;
+	return ret;
 }
 
 
