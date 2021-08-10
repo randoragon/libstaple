@@ -252,6 +252,23 @@ TEST t_clear(void)
 TEST t_map(void)
 {
 	struct rnd_queue *q;
+	unsigned i;
+	q = rnd_queue_create(sizeof(long double), 1000);
+	ASSERT_NEQ(NULL, q);
+	ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_map(NULL, data_mutate), "%d");
+	ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_map(q, NULL), "%d");
+	ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_map(NULL, NULL), "%d");
+	ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
+	q = rnd_queue_create(sizeof(struct data), 1000);
+	for (i = 0; i < 1000; i++) {
+		struct data d;
+		ASSERT_EQ_FMT(0, data_init(&d), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_push(q, &d), "%d");
+	}
+	ASSERT_EQ_FMT(RND_EHANDLER, rnd_queue_map(q, data_mutate_bad), "%d");
+	ASSERT_EQ_FMT(0, rnd_queue_map(q, data_mutate), "%d");
+	ASSERT_EQ_FMT(0, rnd_queue_map(q, data_verify), "%d");
+	ASSERT_EQ_FMT(0, rnd_queue_destroy(q, data_dtor), "%d");
 	PASS();
 }
 
