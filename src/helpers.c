@@ -93,7 +93,7 @@ void rnd_ringbuf_incr(void **ptr, void *buf, size_t capacity, size_t elem_size)
 	if (*ptr == (char*)buf + (capacity - 1) * elem_size)
 		*ptr = buf;
 	else
-		*ptr = (char*)ptr + elem_size;
+		*ptr = (char*)(*ptr) + elem_size;
 }
 
 void rnd_ringbuf_decr(void **ptr, void *buf, size_t capacity, size_t elem_size)
@@ -101,7 +101,7 @@ void rnd_ringbuf_decr(void **ptr, void *buf, size_t capacity, size_t elem_size)
 	if (*ptr == buf)
 		*ptr = (char*)buf + (capacity - 1) * elem_size;
 	else
-		*ptr = (char*)ptr - elem_size;
+		*ptr = (char*)(*ptr) - elem_size;
 }
 
 /* Return address of nth element in a ring buffer. The obvious way to find a
