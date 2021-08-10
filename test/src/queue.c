@@ -144,18 +144,18 @@ TEST t_peek(void)
 		ASSERT_EQ_FMT(a, F1(q), M);                         \
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d"); \
 	} while (0)
-	test(char          , rnd_queue_peekc , rnd_queue_pushc , IRANGE(CHAR_MIN , CHAR_MAX) , "%hd");
-	test(short         , rnd_queue_peeks , rnd_queue_pushs , IRANGE(SHRT_MIN , SHRT_MAX) , "%hd");
-	test(int           , rnd_queue_peeki , rnd_queue_pushi , FRANGE(INT_MIN  , INT_MAX)  , "%d");
-	test(long          , rnd_queue_peekl , rnd_queue_pushl , FRANGE(LONG_MIN , LONG_MAX) , "%ld");
-	test(signed char   , rnd_queue_peeksc, rnd_queue_pushsc, IRANGE(SCHAR_MIN, SCHAR_MAX), "%hd");
-	test(unsigned char , rnd_queue_peekuc, rnd_queue_pushuc, IRANGE(0        , UCHAR_MAX), "%hd");
-	test(unsigned short, rnd_queue_peekus, rnd_queue_pushus, IRANGE(0        , USHRT_MAX), "%hu");
-	test(unsigned int  , rnd_queue_peekui, rnd_queue_pushui, FRANGE(0        , UINT_MAX) , "%u");
-	test(unsigned long , rnd_queue_peekul, rnd_queue_pushul, FRANGE(0        , ULONG_MAX), "%lu");
-	test(float         , rnd_queue_peekf , rnd_queue_pushf , FRANGE(FLT_MIN  , FLT_MAX)  , "%f");
-	test(double        , rnd_queue_peekd , rnd_queue_pushd , FRANGE(DBL_MIN  , DBL_MAX)  , "%lf");
-	test(long double   , rnd_queue_peekld, rnd_queue_pushld, FRANGE(LDBL_MIN , LDBL_MAX) , "%Lf");
+	test(char          , rnd_queue_peekc , rnd_queue_pushc , IRANGE(1, CHAR_MAX) , "%hd");
+	test(short         , rnd_queue_peeks , rnd_queue_pushs , IRANGE(1, SHRT_MAX) , "%hd");
+	test(int           , rnd_queue_peeki , rnd_queue_pushi , FRANGE(1, INT_MAX)  , "%d");
+	test(long          , rnd_queue_peekl , rnd_queue_pushl , FRANGE(1, LONG_MAX) , "%ld");
+	test(signed char   , rnd_queue_peeksc, rnd_queue_pushsc, IRANGE(1, SCHAR_MAX), "%hd");
+	test(unsigned char , rnd_queue_peekuc, rnd_queue_pushuc, IRANGE(1, UCHAR_MAX), "%hd");
+	test(unsigned short, rnd_queue_peekus, rnd_queue_pushus, IRANGE(1, USHRT_MAX), "%hu");
+	test(unsigned int  , rnd_queue_peekui, rnd_queue_pushui, FRANGE(1, UINT_MAX) , "%u");
+	test(unsigned long , rnd_queue_peekul, rnd_queue_pushul, FRANGE(1, ULONG_MAX), "%lu");
+	test(float         , rnd_queue_peekf , rnd_queue_pushf , FRANGE(1, FLT_MAX)  , "%f");
+	test(double        , rnd_queue_peekd , rnd_queue_pushd , FRANGE(1, DBL_MAX)  , "%lf");
+	test(long double   , rnd_queue_peekld, rnd_queue_pushld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
 	PASS();
 }
