@@ -143,6 +143,11 @@ TEST t_peek(void)
 		ASSERT_EQ_FMT(0, F2(q, a), "%d");                   \
 		ASSERT_EQ_FMT(a, F1(q), M);                         \
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d"); \
+		q = rnd_queue_create(sizeof(T) + 1, 1);             \
+		ASSERT_NEQ(NULL, q);                                \
+		q->size = 1;                                        \
+		ASSERT_EQ_FMT(z, F1(q), M);                         \
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d"); \
 	} while (0)
 	test(char          , rnd_queue_peekc , rnd_queue_pushc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , rnd_queue_peeks , rnd_queue_pushs , IRANGE(1, SHRT_MAX) , "%hd");
@@ -196,6 +201,11 @@ TEST t_pop(void)
 		ASSERT_EQ_FMT(z, F1(NULL), M);                      \
 		ASSERT_EQ_FMT(0, F2(q, a), "%d");                   \
 		ASSERT_EQ_FMT(a, F1(q), M);                         \
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d"); \
+		q = rnd_queue_create(sizeof(T) + 1, 1);             \
+		ASSERT_NEQ(NULL, q);                                \
+		q->size = 1;                                        \
+		ASSERT_EQ_FMT(z, F1(q), M);                         \
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d"); \
 	} while (0)
 	test(char          , rnd_queue_popc , rnd_queue_pushc , IRANGE(1, CHAR_MAX) , "%hd");
