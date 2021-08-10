@@ -94,9 +94,8 @@ The
 .BR rnd_queue_pop ()
 function shall fail if:
 .IP \fBRND_EINVAL\fP 1.5i
-Either
-.IR queue " or " output
-are null pointers (debug mode only).
+.IR queue
+is a null pointer (debug mode only).
 .IP \fBRND_EILLEGAL\fP 1.5i
 .I queue
 is empty (debug mode only).
