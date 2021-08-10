@@ -5,6 +5,7 @@
 #include <greatest.h>
 #include <limits.h>
 #include <float.h>
+#include <string.h>
 
 /* Make testing for size overflow feasible */
 #define SIZE_MAX 65535LU
@@ -107,6 +108,55 @@ TEST t_push(void)
 TEST t_peek(void)
 {
 	struct rnd_queue *q;
+
+	{ /* Generic form */
+		struct data a, b;
+		q = rnd_queue_create(sizeof(struct data), 2);
+		ASSERT_NEQ(NULL, q);
+		ASSERT_EQ_FMT(RND_EILLEGAL, rnd_queue_peek(q, &b), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_peek(q, NULL), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_peek(NULL, &b), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_peek(NULL, NULL), "%d");
+		data_init(&a);
+		ASSERT_EQ_FMT(0, rnd_queue_push(q, &a), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_peek(q, &b), "%d");
+		ASSERT_EQ(a.age, b.age);
+		ASSERT_EQ(a.id, b.id);
+		ASSERT_EQ(0, strcmp(a.name, b.name));
+		ASSERT_EQ(0, strcmp(a.surname, b.surname));
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, data_dtor), "%d");
+	}
+
+	/* Suffixed form
+	 * T  - type
+	 * F1 - peek function
+	 * F2 - push function
+	 * V  - random value snippet
+	 * M  - printf format string
+	 */
+#define test(T, F1, F2, V, M) do {                                  \
+		T a = (V), z = 0;                                   \
+		q = rnd_queue_create(sizeof(T), 2);                 \
+		ASSERT_NEQ(NULL, q);                                \
+		ASSERT_EQ_FMT(z, F1(q), M);                         \
+		ASSERT_EQ_FMT(z, F1(NULL), M);                      \
+		ASSERT_EQ_FMT(0, F2(q, a), "%d");                   \
+		ASSERT_EQ_FMT(a, F1(q), M);                         \
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d"); \
+	} while (0)
+	test(char          , rnd_queue_peekc , rnd_queue_pushc , IRANGE(CHAR_MIN , CHAR_MAX) , "%hd");
+	test(short         , rnd_queue_peeks , rnd_queue_pushs , IRANGE(SHRT_MIN , SHRT_MAX) , "%hd");
+	test(int           , rnd_queue_peeki , rnd_queue_pushi , FRANGE(INT_MIN  , INT_MAX)  , "%d");
+	test(long          , rnd_queue_peekl , rnd_queue_pushl , FRANGE(LONG_MIN , LONG_MAX) , "%ld");
+	test(signed char   , rnd_queue_peeksc, rnd_queue_pushsc, IRANGE(SCHAR_MIN, SCHAR_MAX), "%hd");
+	test(unsigned char , rnd_queue_peekuc, rnd_queue_pushuc, IRANGE(0        , UCHAR_MAX), "%hd");
+	test(unsigned short, rnd_queue_peekus, rnd_queue_pushus, IRANGE(0        , USHRT_MAX), "%hu");
+	test(unsigned int  , rnd_queue_peekui, rnd_queue_pushui, FRANGE(0        , UINT_MAX) , "%u");
+	test(unsigned long , rnd_queue_peekul, rnd_queue_pushul, FRANGE(0        , ULONG_MAX), "%lu");
+	test(float         , rnd_queue_peekf , rnd_queue_pushf , FRANGE(FLT_MIN  , FLT_MAX)  , "%f");
+	test(double        , rnd_queue_peekd , rnd_queue_pushd , FRANGE(DBL_MIN  , DBL_MAX)  , "%lf");
+	test(long double   , rnd_queue_peekld, rnd_queue_pushld, FRANGE(LDBL_MIN , LDBL_MAX) , "%Lf");
+#undef test
 	PASS();
 }
 
