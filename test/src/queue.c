@@ -55,9 +55,9 @@ TEST t_push(void)
 		q = rnd_queue_create(sizeof(struct data), 1000);
 		ASSERT_NEQ(NULL, q);
 		data_init(&d);
-		ASSERT_EQ(RND_EINVAL, rnd_queue_push(q, NULL));
-		ASSERT_EQ(RND_EINVAL, rnd_queue_push(NULL, &d));
-		ASSERT_EQ(RND_EINVAL, rnd_queue_push(NULL, NULL));
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_push(q, NULL), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_push(NULL, &d), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_push(NULL, NULL), "%d");
 		data_dtor(&d);
 		for (i = 0; i < 1000; i++) {
 			struct data d;
@@ -77,7 +77,7 @@ TEST t_push(void)
 		unsigned i;                                         \
 		q = rnd_queue_create(sizeof(T), 1000);              \
 		ASSERT_NEQ(NULL, q);                                \
-		ASSERT_EQ(RND_EINVAL, F(NULL, (V)));                \
+		ASSERT_EQ_FMT(RND_EINVAL, F(NULL, (V)), "%d");      \
 		for (i = 0; i < SIZE_MAX / sizeof(T); i++) {        \
 			ASSERT_EQ_FMT(0, F(q, (V)), "%d");          \
 		}                                                   \
@@ -85,7 +85,7 @@ TEST t_push(void)
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d"); \
 		q = rnd_queue_create(sizeof(T) + 1, 1);             \
 		ASSERT_NEQ(NULL, q);                                \
-		ASSERT_EQ(RND_EILLEGAL, F(q, (V)));                 \
+		ASSERT_EQ_FMT(RND_EILLEGAL, F(q, (V)), "%d");       \
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d"); \
 	} while (0)
 	test(char          , rnd_queue_pushc , IRANGE(CHAR_MIN , CHAR_MAX) , "%hd");
