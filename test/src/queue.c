@@ -101,7 +101,7 @@ TEST t_push(void)
 	test(unsigned int  , rnd_queue_pushui, FRANGE(0        , UINT_MAX) , "%u");
 	test(unsigned long , rnd_queue_pushul, FRANGE(0        , ULONG_MAX), "%lu");
 	test(float         , rnd_queue_pushf , FRANGE(FLT_MIN  , FLT_MAX)  , "%f");
-	test(double        , rnd_queue_pushd , FRANGE(DBL_MIN  , DBL_MAX)  , "%lf");
+	test(double        , rnd_queue_pushd , FRANGE(DBL_MIN  , DBL_MAX)  , "%f");
 	test(long double   , rnd_queue_pushld, FRANGE(LDBL_MIN , LDBL_MAX) , "%Lf");
 #undef test
 	PASS();
@@ -161,7 +161,7 @@ TEST t_peek(void)
 	test(unsigned int  , rnd_queue_peekui, rnd_queue_pushui, FRANGE(1, UINT_MAX) , "%u");
 	test(unsigned long , rnd_queue_peekul, rnd_queue_pushul, FRANGE(1, ULONG_MAX), "%lu");
 	test(float         , rnd_queue_peekf , rnd_queue_pushf , FRANGE(1, FLT_MAX)  , "%f");
-	test(double        , rnd_queue_peekd , rnd_queue_pushd , FRANGE(1, DBL_MAX)  , "%lf");
+	test(double        , rnd_queue_peekd , rnd_queue_pushd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , rnd_queue_peekld, rnd_queue_pushld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
 	PASS();
@@ -220,7 +220,7 @@ TEST t_pop(void)
 	test(unsigned int  , rnd_queue_popui, rnd_queue_pushui, FRANGE(1, UINT_MAX) , "%u");
 	test(unsigned long , rnd_queue_popul, rnd_queue_pushul, FRANGE(1, ULONG_MAX), "%lu");
 	test(float         , rnd_queue_popf , rnd_queue_pushf , FRANGE(1, FLT_MAX)  , "%f");
-	test(double        , rnd_queue_popd , rnd_queue_pushd , FRANGE(1, DBL_MAX)  , "%lf");
+	test(double        , rnd_queue_popd , rnd_queue_pushd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , rnd_queue_popld, rnd_queue_pushld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
 	PASS();

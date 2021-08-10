@@ -9,7 +9,7 @@
 
 #define LEN(X) (sizeof(X) / sizeof(*X))
 #define IRANGE(X,Y) ((X) + (rand() % ((Y) - (X) + 1)))
-#define FRANGE(X,Y) ((X) + ((double)rand() / RAND_MAX * ((Y) - (X))))
+#define FRANGE(X,Y) ((X) + ((double)rand() / RAND_MAX * ((long double)(Y) - (X))))
 
 struct data {
 	char    *name;
