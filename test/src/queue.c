@@ -48,6 +48,59 @@ TEST t_destroy(void)
 TEST t_push(void)
 {
 	struct rnd_queue *q;
+
+	{ /* Generic form */
+		unsigned i;
+		struct data d;
+		q = rnd_queue_create(sizeof(struct data), 1000);
+		ASSERT_NEQ(NULL, q);
+		data_init(&d);
+		ASSERT_EQ(RND_EINVAL, rnd_queue_push(q, NULL));
+		ASSERT_EQ(RND_EINVAL, rnd_queue_push(NULL, &d));
+		ASSERT_EQ(RND_EINVAL, rnd_queue_push(NULL, NULL));
+		data_dtor(&d);
+		for (i = 0; i < 1000; i++) {
+			struct data d;
+			ASSERT_EQ_FMT(0, data_init(&d), "%d");
+			ASSERT_EQ_FMT(0, rnd_queue_push(q, &d), "%d");
+		}
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, data_dtor), "%d");
+	}
+
+	/* Suffixed form
+	 * T - type
+	 * F - function
+	 * V - random value snippet
+	 * M - printf format string
+	 */
+#define test(T, F, V, M) do {                                       \
+		unsigned i;                                         \
+		q = rnd_queue_create(sizeof(T), 1000);              \
+		ASSERT_NEQ(NULL, q);                                \
+		ASSERT_EQ(RND_EINVAL, F(NULL, (V)));                \
+		for (i = 0; i < SIZE_MAX / sizeof(T); i++) {        \
+			ASSERT_EQ_FMT(0, F(q, (V)), "%d");          \
+		}                                                   \
+		ASSERT_EQ_FMT(RND_ERANGE, F(q, (V)), "%d");         \
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d"); \
+		q = rnd_queue_create(sizeof(T) + 1, 1);             \
+		ASSERT_NEQ(NULL, q);                                \
+		ASSERT_EQ(RND_EILLEGAL, F(q, (V)));                 \
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d"); \
+	} while (0)
+	test(char          , rnd_queue_pushc , IRANGE(CHAR_MIN , CHAR_MAX) , "%hd");
+	test(short         , rnd_queue_pushs , IRANGE(SHRT_MIN , SHRT_MAX) , "%hd");
+	test(int           , rnd_queue_pushi , FRANGE(INT_MIN  , INT_MAX)  , "%d");
+	test(long          , rnd_queue_pushl , FRANGE(LONG_MIN , LONG_MAX) , "%ld");
+	test(signed char   , rnd_queue_pushsc, IRANGE(SCHAR_MIN, SCHAR_MAX), "%hd");
+	test(unsigned char , rnd_queue_pushuc, IRANGE(0        , UCHAR_MAX), "%hd");
+	test(unsigned short, rnd_queue_pushus, IRANGE(0        , USHRT_MAX), "%hu");
+	test(unsigned int  , rnd_queue_pushui, FRANGE(0        , UINT_MAX) , "%u");
+	test(unsigned long , rnd_queue_pushul, FRANGE(0        , ULONG_MAX), "%lu");
+	test(float         , rnd_queue_pushf , FRANGE(FLT_MIN  , FLT_MAX)  , "%f");
+	test(double        , rnd_queue_pushd , FRANGE(DBL_MIN  , DBL_MAX)  , "%lf");
+	test(long double   , rnd_queue_pushld, FRANGE(LDBL_MIN , LDBL_MAX) , "%Lf");
+#undef test
 	PASS();
 }
 
