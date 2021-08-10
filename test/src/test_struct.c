@@ -22,7 +22,7 @@ int data_init(struct data *d)
 	size_t name_idx, surname_idx;
 	name_idx     = IRANGE(0, LEN(random_names)    - 1);
 	surname_idx  = IRANGE(0, LEN(random_surnames) - 1);
-	d->name    = malloc(32 * sizeof(*d->name));
+	d->name      = malloc(32 * sizeof(*d->name));
 	if (d->name == NULL) {
 		free(d);
 		return 1;
