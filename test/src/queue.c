@@ -163,6 +163,54 @@ TEST t_peek(void)
 TEST t_pop(void)
 {
 	struct rnd_queue *q;
+
+	{ /* Generic form */
+		struct data a, b;
+		q = rnd_queue_create(sizeof(struct data), 2);
+		ASSERT_NEQ(NULL, q);
+		ASSERT_EQ_FMT(RND_EILLEGAL, rnd_queue_pop(q, NULL), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_pop(NULL, NULL), "%d");
+		data_init(&a);
+		ASSERT_EQ_FMT(0, rnd_queue_push(q, &a), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_pop(q, &b), "%d");
+		ASSERT_EQ(a.age, b.age);
+		ASSERT_EQ(a.id, b.id);
+		ASSERT_EQ(0, strcmp(a.name, b.name));
+		ASSERT_EQ(0, strcmp(a.surname, b.surname));
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
+		data_dtor(&b);
+	}
+
+	/* Suffixed form
+	 * T  - type
+	 * F1 - pop function
+	 * F2 - push function
+	 * V  - random value snippet
+	 * M  - printf format string
+	 */
+#define test(T, F1, F2, V, M) do {                                  \
+		T a = (V), z = 0;                                   \
+		q = rnd_queue_create(sizeof(T), 2);                 \
+		ASSERT_NEQ(NULL, q);                                \
+		ASSERT_EQ_FMT(z, F1(q), M);                         \
+		ASSERT_EQ_FMT(z, F1(NULL), M);                      \
+		ASSERT_EQ_FMT(0, F2(q, a), "%d");                   \
+		ASSERT_EQ_FMT(a, F1(q), M);                         \
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d"); \
+	} while (0)
+	test(char          , rnd_queue_popc , rnd_queue_pushc , IRANGE(1, CHAR_MAX) , "%hd");
+	test(short         , rnd_queue_pops , rnd_queue_pushs , IRANGE(1, SHRT_MAX) , "%hd");
+	test(int           , rnd_queue_popi , rnd_queue_pushi , FRANGE(1, INT_MAX)  , "%d");
+	test(long          , rnd_queue_popl , rnd_queue_pushl , FRANGE(1, LONG_MAX) , "%ld");
+	test(signed char   , rnd_queue_popsc, rnd_queue_pushsc, IRANGE(1, SCHAR_MAX), "%hd");
+	test(unsigned char , rnd_queue_popuc, rnd_queue_pushuc, IRANGE(1, UCHAR_MAX), "%hd");
+	test(unsigned short, rnd_queue_popus, rnd_queue_pushus, IRANGE(1, USHRT_MAX), "%hu");
+	test(unsigned int  , rnd_queue_popui, rnd_queue_pushui, FRANGE(1, UINT_MAX) , "%u");
+	test(unsigned long , rnd_queue_popul, rnd_queue_pushul, FRANGE(1, ULONG_MAX), "%lu");
+	test(float         , rnd_queue_popf , rnd_queue_pushf , FRANGE(1, FLT_MAX)  , "%f");
+	test(double        , rnd_queue_popd , rnd_queue_pushd , FRANGE(1, DBL_MAX)  , "%lf");
+	test(long double   , rnd_queue_popld, rnd_queue_pushld, FRANGE(1, LDBL_MAX) , "%Lf");
+#undef test
 	PASS();
 }
 
