@@ -60,6 +60,11 @@ int data_cpy(void *dest, const void *src)
 	return 0;
 }
 
+int data_cpy_bad(void *dest, const void *src)
+{
+	return 1;
+}
+
 int data_dtor(void *d)
 {
 	struct data *const p = d;
@@ -68,11 +73,21 @@ int data_dtor(void *d)
 	return 0;
 }
 
+int data_dtor_bad(void *d)
+{
+	return 1;
+}
+
 int data_mutate(void *d, size_t idx)
 {
 	struct data *p = d;
 	p->id = idx % 16 + p->age + p->name[0] * p->surname[0];
 	return 0;
+}
+
+int data_mutate_bad(void *d, size_t idx)
+{
+	return 1;
 }
 
 int data_verify(void *d, size_t idx)

@@ -35,6 +35,7 @@ TEST t_destroy(void)
 	unsigned i;
 	q = rnd_queue_create(sizeof(long double), 1000);
 	ASSERT_NEQ(NULL, q);
+	ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_destroy(NULL, NULL), "%d");
 	ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
 	q = rnd_queue_create(sizeof(struct data), 1000);
 	for (i = 0; i < 1000; i++) {
@@ -42,6 +43,7 @@ TEST t_destroy(void)
 		ASSERT_EQ_FMT(0, data_init(&d), "%d");
 		ASSERT_EQ_FMT(0, rnd_queue_push(q, &d), "%d");
 	}
+	ASSERT_EQ_FMT(RND_EHANDLER, rnd_queue_destroy(q, data_dtor_bad), "%d");
 	ASSERT_EQ_FMT(0, rnd_queue_destroy(q, data_dtor), "%d");
 	PASS();
 }
@@ -227,6 +229,23 @@ TEST t_pop(void)
 TEST t_clear(void)
 {
 	struct rnd_queue *q;
+	unsigned i;
+	q = rnd_queue_create(sizeof(long double), 1000);
+	ASSERT_NEQ(NULL, q);
+	ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_clear(NULL, NULL), "%d");
+	ASSERT_EQ_FMT(0, rnd_queue_clear(q, NULL), "%d");
+	ASSERT_EQ_FMT(0LU, (unsigned long)q->size, "%lu");
+	ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
+	q = rnd_queue_create(sizeof(struct data), 1000);
+	for (i = 0; i < 1000; i++) {
+		struct data d;
+		ASSERT_EQ_FMT(0, data_init(&d), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_push(q, &d), "%d");
+	}
+	ASSERT_EQ_FMT(RND_EHANDLER, rnd_queue_clear(q, data_dtor_bad), "%d");
+	ASSERT_EQ_FMT(0, rnd_queue_clear(q, data_dtor), "%d");
+	ASSERT_EQ_FMT(0LU, (unsigned long)q->size, "%lu");
+	ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
 	PASS();
 }
 
