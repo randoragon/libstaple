@@ -2919,7 +2919,7 @@ int rnd_queue_setld(struct rnd_queue *queue, size_t idx, long double val)
 	}
 	if (queue->elem_size != sizeof(val)) {
 		error(("queue->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)queue->elem_size, sizeof(val)));
+					(unsigned long)queue->elem_size, sizeof(long double)));
 		return RND_EILLEGAL;
 	}
 	if (idx >= queue->size) {
@@ -2960,8 +2960,8 @@ int rnd_queue_printc(struct rnd_queue *queue)
 		return RND_EINVAL;
 	}
 	if (queue->elem_size != sizeof(char)) {
-		error(("queue->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)queue->elem_size, sizeof(val)));
+		error(("queue->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(char)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -2983,8 +2983,8 @@ int rnd_queue_prints(struct rnd_queue *queue)
 		return RND_EINVAL;
 	}
 	if (queue->elem_size != sizeof(short)) {
-		error(("queue->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)queue->elem_size, sizeof(val)));
+		error(("queue->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(short)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3006,8 +3006,8 @@ int rnd_queue_printi(struct rnd_queue *queue)
 		return RND_EINVAL;
 	}
 	if (queue->elem_size != sizeof(int)) {
-		error(("queue->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)queue->elem_size, sizeof(val)));
+		error(("queue->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(int)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3029,8 +3029,8 @@ int rnd_queue_printl(struct rnd_queue *queue)
 		return RND_EINVAL;
 	}
 	if (queue->elem_size != sizeof(long)) {
-		error(("queue->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)queue->elem_size, sizeof(val)));
+		error(("queue->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(long)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3052,8 +3052,8 @@ int rnd_queue_printsc(struct rnd_queue *queue)
 		return RND_EINVAL;
 	}
 	if (queue->elem_size != sizeof(signed char)) {
-		error(("queue->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)queue->elem_size, sizeof(val)));
+		error(("queue->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(signed char)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3075,8 +3075,8 @@ int rnd_queue_printuc(struct rnd_queue *queue)
 		return RND_EINVAL;
 	}
 	if (queue->elem_size != sizeof(unsigned char)) {
-		error(("queue->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)queue->elem_size, sizeof(val)));
+		error(("queue->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(unsigned char)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3098,8 +3098,8 @@ int rnd_queue_printus(struct rnd_queue *queue)
 		return RND_EINVAL;
 	}
 	if (queue->elem_size != sizeof(unsigned short)) {
-		error(("queue->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)queue->elem_size, sizeof(val)));
+		error(("queue->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(unsigned short)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3121,8 +3121,8 @@ int rnd_queue_printui(struct rnd_queue *queue)
 		return RND_EINVAL;
 	}
 	if (queue->elem_size != sizeof(unsigned int)) {
-		error(("queue->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)queue->elem_size, sizeof(val)));
+		error(("queue->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(unsigned int)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3144,8 +3144,8 @@ int rnd_queue_printul(struct rnd_queue *queue)
 		return RND_EINVAL;
 	}
 	if (queue->elem_size != sizeof(unsigned long)) {
-		error(("queue->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)queue->elem_size, sizeof(val)));
+		error(("queue->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(unsigned long)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3167,8 +3167,8 @@ int rnd_queue_printf(struct rnd_queue *queue)
 		return RND_EINVAL;
 	}
 	if (queue->elem_size != sizeof(float)) {
-		error(("queue->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)queue->elem_size, sizeof(val)));
+		error(("queue->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(float)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3190,8 +3190,8 @@ int rnd_queue_printd(struct rnd_queue *queue)
 		return RND_EINVAL;
 	}
 	if (queue->elem_size != sizeof(double)) {
-		error(("queue->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)queue->elem_size, sizeof(val)));
+		error(("queue->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(double)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3213,8 +3213,8 @@ int rnd_queue_printld(struct rnd_queue *queue)
 		return RND_EINVAL;
 	}
 	if (queue->elem_size != sizeof(long double)) {
-		error(("queue->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)queue->elem_size, sizeof(val)));
+		error(("queue->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(long double)));
 		return RND_EILLEGAL;
 	}
 #endif
