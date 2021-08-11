@@ -268,7 +268,52 @@ TEST t_map(void)
 
 TEST t_copy(void)
 {
-	struct rnd_queue *q;
+	struct rnd_queue *q, *p;
+	unsigned i;
+	q = rnd_queue_create(sizeof(int), 1000);
+	p = rnd_queue_create(sizeof(int), 333);
+	ASSERT_NEQ(NULL, q);
+	ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_copy(NULL, q, NULL), "%d");
+	ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_copy(p, NULL, NULL), "%d");
+	ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_copy(NULL, NULL, NULL), "%d");
+	ASSERT_EQ_FMT(0, rnd_queue_copy(q, p, NULL), "%d");
+	ASSERT_EQ_FMT((unsigned long)p->size, (unsigned long)q->size, "%lu");
+	ASSERT_EQ_FMT((unsigned long)p->elem_size, (unsigned long)q->elem_size, "%lu");
+	ASSERT_EQ_FMT(0, rnd_queue_copy(p, q, NULL), "%d");
+	ASSERT_EQ_FMT((unsigned long)p->size, (unsigned long)q->size, "%lu");
+	ASSERT_EQ_FMT((unsigned long)p->elem_size, (unsigned long)q->elem_size, "%lu");
+	for (i = 0; i < 1000; i++) {
+		ASSERT_EQ_FMT(0, rnd_queue_pushi(q, FRANGE(INT_MIN, INT_MAX)), "%d");
+	}
+	ASSERT_EQ_FMT(0, rnd_queue_copy(p, q, NULL), "%d");
+	ASSERT_EQ_FMT((unsigned long)p->size, (unsigned long)q->size, "%lu");
+	ASSERT_EQ_FMT((unsigned long)p->elem_size, (unsigned long)q->elem_size, "%lu");
+	for (i = 0; i < 1000; i++) {
+		int a, b;
+		a = rnd_queue_geti(q, i);
+		b = rnd_queue_geti(p, i);
+		ASSERT_EQ_FMT(a, b, "%d");
+	}
+	ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
+	ASSERT_EQ_FMT(0, rnd_queue_clear(p, NULL), "%d");
+	q = rnd_queue_create(sizeof(struct data), 1000);
+	for (i = 0; i < 1000; i++) {
+		struct data d;
+		ASSERT_EQ_FMT(0, data_init(&d), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_push(q, &d), "%d");
+	}
+	ASSERT_EQ_FMT(RND_EHANDLER, rnd_queue_copy(p, q, data_cpy_bad), "%d");
+	ASSERT_EQ_FMT(0, rnd_queue_copy(p, q, data_cpy), "%d");
+	ASSERT_EQ_FMT((unsigned long)p->size, (unsigned long)q->size, "%lu");
+	ASSERT_EQ_FMT((unsigned long)p->elem_size, (unsigned long)q->elem_size, "%lu");
+	for (i = 0; i < 1000; i++) {
+		struct data a, b;
+		ASSERT_EQ_FMT(0, rnd_queue_get(q, i, &a), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_get(p, i, &b), "%d");
+		ASSERT_EQ_FMT(0, data_cmp(&a, &b), "%d");
+	}
+	ASSERT_EQ_FMT(0, rnd_queue_destroy(q, data_dtor), "%d");
+	ASSERT_EQ_FMT(0, rnd_queue_destroy(p, data_dtor), "%d");
 	PASS();
 }
 
