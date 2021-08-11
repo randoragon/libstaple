@@ -61,7 +61,7 @@ TEST t_push(void)
 		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_push(q, NULL), "%d");
 		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_push(NULL, &d), "%d");
 		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_push(NULL, NULL), "%d");
-		data_dtor(&d);
+		ASSERT_EQ_FMT(0, data_dtor(&d), "%d");
 		for (i = 0; i < 1000; i++) {
 			struct data d;
 			ASSERT_EQ_FMT(0, data_init(&d), "%d");
@@ -122,10 +122,7 @@ TEST t_peek(void)
 		data_init(&a);
 		ASSERT_EQ_FMT(0, rnd_queue_push(q, &a), "%d");
 		ASSERT_EQ_FMT(0, rnd_queue_peek(q, &b), "%d");
-		ASSERT_EQ(a.age, b.age);
-		ASSERT_EQ(a.id, b.id);
-		ASSERT_EQ(0, strcmp(a.name, b.name));
-		ASSERT_EQ(0, strcmp(a.surname, b.surname));
+		ASSERT_EQ_FMT(0, data_cmp(&a, &b), "%d");
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, data_dtor), "%d");
 	}
 
@@ -180,12 +177,9 @@ TEST t_pop(void)
 		data_init(&a);
 		ASSERT_EQ_FMT(0, rnd_queue_push(q, &a), "%d");
 		ASSERT_EQ_FMT(0, rnd_queue_pop(q, &b), "%d");
-		ASSERT_EQ(a.age, b.age);
-		ASSERT_EQ(a.id, b.id);
-		ASSERT_EQ(0, strcmp(a.name, b.name));
-		ASSERT_EQ(0, strcmp(a.surname, b.surname));
+		ASSERT_EQ_FMT(0, data_cmp(&a, &b), "%d");
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
-		data_dtor(&b);
+		ASSERT_EQ_FMT(0, data_dtor(&b), "%d");
 	}
 
 	/* Suffixed form
