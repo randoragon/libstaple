@@ -416,6 +416,7 @@ TEST t_get(void)
 	test(float         , rnd_queue_getf , rnd_queue_pushf , FRANGE(1, FLT_MAX)  , "%f");
 	test(double        , rnd_queue_getd , rnd_queue_pushd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , rnd_queue_getld, rnd_queue_pushld, FRANGE(1, LDBL_MAX) , "%Lf");
+#undef test
 	PASS();
 }
 
