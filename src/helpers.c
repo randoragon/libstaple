@@ -130,28 +130,32 @@ void rnd_ringbuf_insert(const void *elem, size_t idx, void *buf, size_t *size, s
 	 * sub-buffers to shift away to make room. We pick the smaller one to
 	 * minimize the number of shifts.
 	 */
-	if (idx <= *size / 2) {
-		s = *head;
-		rnd_ringbuf_decr(head, buf, capacity, elem_size);
-		d = *head;
-		i = 0;
-		while (i != idx) {
-			memcpy(d, s, elem_size);
-			d = s;
-			rnd_ringbuf_incr(&s, buf, capacity, elem_size);
-			++i;
+	if (*size != 0) {
+		if (idx < *size / 2) {
+			s = *head;
+			rnd_ringbuf_decr(head, buf, capacity, elem_size);
+			d = *head;
+			i = 0;
+			while (i != idx) {
+				memcpy(d, s, elem_size);
+				d = s;
+				rnd_ringbuf_incr(&s, buf, capacity, elem_size);
+				++i;
+			}
+		} else {
+			s = *tail;
+			rnd_ringbuf_incr(tail, buf, capacity, elem_size);
+			d = *tail;
+			i = *size;
+			while (i != idx) {
+				memcpy(d, s, elem_size);
+				d = s;
+				rnd_ringbuf_decr(&s, buf, capacity, elem_size);
+				--i;
+			}
 		}
 	} else {
-		s = *tail;
-		rnd_ringbuf_incr(tail, buf, capacity, elem_size);
 		d = *tail;
-		i = *size;
-		while (i != idx) {
-			memcpy(d, s, elem_size);
-			d = s;
-			rnd_ringbuf_decr(&s, buf, capacity, elem_size);
-			--i;
-		}
 	}
 	memcpy(d, elem, elem_size);
 	++(*size);
