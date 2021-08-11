@@ -23,6 +23,7 @@ int data_cpy(void *dest, const void *src);
 int data_cpy_bad(void *dest, const void *src);
 int data_dtor(void *d);
 int data_dtor_bad(void *d);
+int data_cmp(const struct data *a, const struct data *b);
 
 /* These two functions are used for testing "map" functions, e.g. rnd_stack_map.
  * The goal is to first mutate a bunch of data structs in a loop, and then

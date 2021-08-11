@@ -78,6 +78,15 @@ int data_dtor_bad(void *d)
 	return 1;
 }
 
+int data_cmp(const struct data *a, const struct data *b)
+{
+	if (a->id != b->id)                 return 1;
+	if (a->age != b->age)               return 2;
+	if (strcmp(a->name, b->name))       return 3;
+	if (strcmp(a->surname, b->surname)) return 4;
+	return 0;
+}
+
 int data_mutate(void *d, size_t idx)
 {
 	struct data *p = d;
