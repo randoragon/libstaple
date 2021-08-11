@@ -107,24 +107,29 @@ int rnd_queue_copy(struct rnd_queue *dest, const struct rnd_queue *src, int (*cp
 	dest->size      = src->size;
 	dest->head      = dest->data;
 	dest->tail      = dest->data;
-	if (cpy == NULL) {
-		void *s = src->head;
-		while (s != src->tail) {
-			memcpy(dest->tail, s, src->elem_size);
-			rnd_ringbuf_incr(&s, src->data, src->capacity, src->elem_size);
-			rnd_ringbuf_incr(&dest->tail, dest->data, dest->capacity, dest->elem_size);
-		}
-	} else {
-		void *s = src->head;
-		while (s != src->tail) {
-			int err;
-			if ((err = cpy(dest->tail, s))) {
-				error(("external cpy function returned %d (non-0)", err));
-				return RND_EHANDLER;
+	if (src->size != 0) {
+		void  *s = src->head;
+		size_t i = src->size;
+		rnd_ringbuf_decr(&s, src->data, src->capacity, src->elem_size);
+		rnd_ringbuf_decr(&dest->tail, dest->data, dest->capacity, dest->elem_size);
+		if (cpy == NULL)
+			while (i != 0) {
+				rnd_ringbuf_incr(&s, src->data, src->capacity, src->elem_size);
+				rnd_ringbuf_incr(&dest->tail, dest->data, dest->capacity, dest->elem_size);
+				memcpy(dest->tail, s, src->elem_size);
+				--i;
 			}
-			rnd_ringbuf_incr(&s, src->data, src->capacity, src->elem_size);
-			rnd_ringbuf_incr(&dest->tail, dest->data, dest->capacity, dest->elem_size);
-		}
+		else
+			while (i != 0) {
+				int err;
+				rnd_ringbuf_incr(&s, src->data, src->capacity, src->elem_size);
+				rnd_ringbuf_incr(&dest->tail, dest->data, dest->capacity, dest->elem_size);
+				if ((err = cpy(dest->tail, s))) {
+					error(("external cpy function returned %d (non-0)", err));
+					return RND_EHANDLER;
+				}
+				--i;
+			}
 	}
 	return 0;
 }
