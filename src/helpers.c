@@ -59,7 +59,7 @@ int rnd_ringbuffit(void **buf, size_t elem_size, size_t size, size_t *capacity, 
 		*head = (char*)(*buf) + head_offset;
 		*tail = (char*)(*head) + (size - 1) * elem_size;
 		dest  = (char*)(*buf) + size * elem_size;
-		memcpy(dest, buf, head_offset);
+		memcpy(dest, *buf, head_offset);
 	}
 	return 0;
 }
