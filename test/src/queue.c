@@ -416,6 +416,10 @@ TEST t_insert(void)
 		ASSERT_EQ_FMT(0, F1(q, 3, d[6]), "%d");                                          \
 		ASSERT_EQ_FMT(q->tail, (char*)q->data + 5 * q->elem_size, "%p");                 \
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");                              \
+		q = rnd_queue_create(sizeof(T) + 1, 1000);                                       \
+		ASSERT_NEQ(NULL, q);                                                             \
+		ASSERT_EQ_FMT(RND_EILLEGAL, F1(q, 0, (V)), "%d");                                \
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, 0), "%d");                                 \
 	} while (0)
 	test(char          , rnd_queue_insertc , rnd_queue_getc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , rnd_queue_inserts , rnd_queue_gets , IRANGE(1, SHRT_MAX) , "%hd");
