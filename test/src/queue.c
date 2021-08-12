@@ -200,7 +200,11 @@ TEST t_pop(void)
 		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_pop(NULL, NULL), "%d");
 		data_init(&a);
 		ASSERT_EQ_FMT(0, rnd_queue_push(q, &a), "%d");
+		ASSERT_EQ_FMT(q->head, q->data, "%p");
+		ASSERT_EQ_FMT(q->tail, q->data, "%p");
 		ASSERT_EQ_FMT(0, rnd_queue_pop(q, &b), "%d");
+		ASSERT_EQ_FMT(q->head, q->data, "%p");
+		ASSERT_EQ_FMT(q->tail, q->data, "%p");
 		ASSERT_EQ_FMT(0, data_cmp(&a, &b), "%d");
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
 		ASSERT_EQ_FMT(0, data_dtor(&b), "%d");
@@ -220,7 +224,11 @@ TEST t_pop(void)
 		ASSERT_EQ_FMT(z, F1(q), M);                         \
 		ASSERT_EQ_FMT(z, F1(NULL), M);                      \
 		ASSERT_EQ_FMT(0, F2(q, a), "%d");                   \
+		ASSERT_EQ_FMT(q->head, q->data, "%p");              \
+		ASSERT_EQ_FMT(q->tail, q->data, "%p");              \
 		ASSERT_EQ_FMT(a, F1(q), M);                         \
+		ASSERT_EQ_FMT(q->head, q->data, "%p");              \
+		ASSERT_EQ_FMT(q->tail, q->data, "%p");              \
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d"); \
 		q = rnd_queue_create(sizeof(T) + 1, 1);             \
 		ASSERT_NEQ(NULL, q);                                \
