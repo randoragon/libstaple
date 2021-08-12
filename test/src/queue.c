@@ -102,7 +102,7 @@ TEST t_push(void)
 		ASSERT_EQ_FMT(0, F1(q, (V)), "%d");                          \
 		ASSERT_EQ_FMT(q->head, q->data, "%p");                       \
 		ASSERT_EQ_FMT(q->tail, (char*)q->data + q->elem_size, "%p"); \
-		ASSERT_EQ_FMT(0, rnd_queue_clear(q, NULL), "%p");            \
+		ASSERT_EQ_FMT(0, rnd_queue_clear(q, NULL), "%d");            \
 		for (i = 0; i < SIZE_MAX / sizeof(T); i++) {                 \
 			T a = (V);                                           \
 			ASSERT_EQ_FMT(0, F1(q, a), "%d");                    \
@@ -423,7 +423,6 @@ TEST t_insert(void)
 		q = rnd_queue_create(sizeof(T), 1000);                                           \
 		ASSERT_NEQ(NULL, q);                                                             \
 		for (i = 0; i < 1000; i++) {                                                     \
-			struct data a;                                                           \
 			size_t idx = IRANGE(0, i);                                               \
 			d[i] = (V);                                                              \
 			ASSERT_EQ_FMT(0, F1(q, idx, d[i]), "%d");                                \
@@ -543,7 +542,6 @@ TEST t_quickinsert(void)
 		q = rnd_queue_create(sizeof(T), 1000);                                           \
 		ASSERT_NEQ(NULL, q);                                                             \
 		for (i = 0; i < 1000; i++) {                                                     \
-			struct data a;                                                           \
 			size_t idx = IRANGE(0, i);                                               \
 			d[i] = (V);                                                              \
 			ASSERT_EQ_FMT(0, F1(q, idx, d[i]), "%d");                                \
