@@ -1059,6 +1059,51 @@ TEST t_set(void)
 TEST t_print(void)
 {
 	struct rnd_queue *q;
+
+	{ /* Generic form */
+		double a = 4.5, b = -3.14;
+		q = rnd_queue_create(sizeof(double), 30);
+		ASSERT_EQ_FMT(0, rnd_queue_push(q, &a), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_push(q, &b), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_print(NULL), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_print(q), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
+	}
+
+	/* Suffixed form
+	 * T  - type
+	 * F1 - push function
+	 * F2 - print function
+	 * A  - 1st value
+	 * B  - 2nd value
+	 */
+#define test(T, F1, F2, A, B)                                       \
+	do {                                                        \
+		T a = A, b = B;                                     \
+		q = rnd_queue_create(sizeof(T), 30);                \
+		ASSERT_EQ_FMT(0, F1(q, a), "%d");                   \
+		ASSERT_EQ_FMT(0, F1(q, b), "%d");                   \
+		ASSERT_EQ_FMT(RND_EINVAL, F2(NULL), "%d");          \
+		ASSERT_EQ_FMT(0, F2(q), "%d");                      \
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d"); \
+		q = rnd_queue_create(sizeof(T) + 1, 30);            \
+		ASSERT_EQ_FMT(RND_EILLEGAL, F2(q), "%d");           \
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d"); \
+	} while(0)
+
+	test(char          , rnd_queue_pushc , rnd_queue_printc , 'A', 'B');
+	test(short         , rnd_queue_pushs , rnd_queue_prints , SHRT_MIN, SHRT_MAX);
+	test(int           , rnd_queue_pushi , rnd_queue_printi , INT_MIN, INT_MAX);
+	test(long          , rnd_queue_pushl , rnd_queue_printl , LONG_MIN, LONG_MAX);
+	test(signed char   , rnd_queue_pushsc, rnd_queue_printsc, SCHAR_MIN, SCHAR_MAX);
+	test(unsigned char , rnd_queue_pushuc, rnd_queue_printuc, 0, UCHAR_MAX);
+	test(unsigned short, rnd_queue_pushus, rnd_queue_printus, 0, USHRT_MAX);
+	test(unsigned int  , rnd_queue_pushui, rnd_queue_printui, 0, UINT_MAX);
+	test(unsigned long , rnd_queue_pushul, rnd_queue_printul, 0, ULONG_MAX);
+	test(float         , rnd_queue_pushf , rnd_queue_printf , FLT_MIN, FLT_MAX);
+	test(double        , rnd_queue_pushd , rnd_queue_printd , DBL_MIN, DBL_MAX);
+	test(long double   , rnd_queue_pushld, rnd_queue_printld, LDBL_MIN, LDBL_MAX);
+
 	PASS();
 }
 
