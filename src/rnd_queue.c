@@ -2098,7 +2098,8 @@ int rnd_queue_quickremove(struct rnd_queue *queue, size_t idx, void *output)
 	if (output != NULL)
 		memcpy(output, p, queue->elem_size);
 	memcpy(p, queue->tail, queue->elem_size);
-	rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	if (queue->size != 1)
+		rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
 	--queue->size;
 	return 0;
 }
@@ -2125,7 +2126,8 @@ char rnd_queue_quickremovec(struct rnd_queue *queue, size_t idx)
 	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	ret = *(char*)p;
 	*(char*)p = *(char*)queue->tail;
-	rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	if (queue->size != 1)
+		rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
 	--queue->size;
 	return ret;
 }
@@ -2152,7 +2154,8 @@ short rnd_queue_quickremoves(struct rnd_queue *queue, size_t idx)
 	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	ret = *(short*)p;
 	*(short*)p = *(short*)queue->tail;
-	rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	if (queue->size != 1)
+		rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
 	--queue->size;
 	return ret;
 }
@@ -2179,7 +2182,8 @@ int rnd_queue_quickremovei(struct rnd_queue *queue, size_t idx)
 	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	ret = *(int*)p;
 	*(int*)p = *(int*)queue->tail;
-	rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	if (queue->size != 1)
+		rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
 	--queue->size;
 	return ret;
 }
@@ -2206,7 +2210,8 @@ long rnd_queue_quickremovel(struct rnd_queue *queue, size_t idx)
 	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	ret = *(long*)p;
 	*(long*)p = *(long*)queue->tail;
-	rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	if (queue->size != 1)
+		rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
 	--queue->size;
 	return ret;
 }
@@ -2233,7 +2238,8 @@ signed char rnd_queue_quickremovesc(struct rnd_queue *queue, size_t idx)
 	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	ret = *(signed char*)p;
 	*(signed char*)p = *(signed char*)queue->tail;
-	rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	if (queue->size != 1)
+		rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
 	--queue->size;
 	return ret;
 }
@@ -2260,7 +2266,8 @@ unsigned char rnd_queue_quickremoveuc(struct rnd_queue *queue, size_t idx)
 	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	ret = *(unsigned char*)p;
 	*(unsigned char*)p = *(unsigned char*)queue->tail;
-	rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	if (queue->size != 1)
+		rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
 	--queue->size;
 	return ret;
 }
@@ -2287,7 +2294,8 @@ unsigned short rnd_queue_quickremoveus(struct rnd_queue *queue, size_t idx)
 	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	ret = *(unsigned short*)p;
 	*(unsigned short*)p = *(unsigned short*)queue->tail;
-	rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	if (queue->size != 1)
+		rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
 	--queue->size;
 	return ret;
 }
@@ -2314,7 +2322,8 @@ unsigned int rnd_queue_quickremoveui(struct rnd_queue *queue, size_t idx)
 	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	ret = *(unsigned int*)p;
 	*(unsigned int*)p = *(unsigned int*)queue->tail;
-	rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	if (queue->size != 1)
+		rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
 	--queue->size;
 	return ret;
 }
@@ -2341,7 +2350,8 @@ unsigned long rnd_queue_quickremoveul(struct rnd_queue *queue, size_t idx)
 	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	ret = *(unsigned long*)p;
 	*(unsigned long*)p = *(unsigned long*)queue->tail;
-	rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	if (queue->size != 1)
+		rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
 	--queue->size;
 	return ret;
 }
@@ -2368,7 +2378,8 @@ float rnd_queue_quickremovef(struct rnd_queue *queue, size_t idx)
 	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	ret = *(float*)p;
 	*(float*)p = *(float*)queue->tail;
-	rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	if (queue->size != 1)
+		rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
 	--queue->size;
 	return ret;
 }
@@ -2395,7 +2406,8 @@ double rnd_queue_quickremoved(struct rnd_queue *queue, size_t idx)
 	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	ret = *(double*)p;
 	*(double*)p = *(double*)queue->tail;
-	rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	if (queue->size != 1)
+		rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
 	--queue->size;
 	return ret;
 }
@@ -2422,7 +2434,8 @@ long double rnd_queue_quickremoveld(struct rnd_queue *queue, size_t idx)
 	p = rnd_ringbuf_get(idx, queue->data, queue->elem_size, queue->capacity, queue->head);
 	ret = *(long double*)p;
 	*(long double*)p = *(long double*)queue->tail;
-	rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	if (queue->size != 1)
+		rnd_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
 	--queue->size;
 	return ret;
 }
