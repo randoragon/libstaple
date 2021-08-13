@@ -2989,8 +2989,8 @@ int rnd_stack_printc(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(char)) {
-		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(char)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3012,8 +3012,8 @@ int rnd_stack_prints(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(short)) {
-		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(short)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3035,8 +3035,8 @@ int rnd_stack_printi(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(int)) {
-		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(int)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3058,8 +3058,8 @@ int rnd_stack_printl(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(long)) {
-		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(long)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3081,8 +3081,8 @@ int rnd_stack_printsc(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(signed char)) {
-		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(signed char)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3104,8 +3104,8 @@ int rnd_stack_printuc(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(unsigned char)) {
-		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned char)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3127,8 +3127,8 @@ int rnd_stack_printus(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(unsigned short)) {
-		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned short)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3150,8 +3150,8 @@ int rnd_stack_printui(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(unsigned int)) {
-		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned int)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3173,8 +3173,8 @@ int rnd_stack_printul(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(unsigned long)) {
-		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(unsigned long)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3196,8 +3196,8 @@ int rnd_stack_printf(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(float)) {
-		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(float)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3219,8 +3219,8 @@ int rnd_stack_printd(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(double)) {
-		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(double)));
 		return RND_EILLEGAL;
 	}
 #endif
@@ -3242,8 +3242,8 @@ int rnd_stack_printld(struct rnd_stack *stack)
 		return RND_EINVAL;
 	}
 	if (stack->elem_size != sizeof(long double)) {
-		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
-					(unsigned long)stack->elem_size, sizeof(val)));
+		error(("stack->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(long double)));
 		return RND_EILLEGAL;
 	}
 #endif
