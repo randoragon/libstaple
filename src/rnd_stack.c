@@ -7,6 +7,16 @@ struct rnd_stack *rnd_stack_create(size_t elem_size, size_t capacity)
 {
 	struct rnd_stack *ret;
 
+#ifdef RND_DEBUG
+	if (elem_size == 0) {
+		error(("elem_size cannot be 0"));
+		return NULL;
+	}
+	if (capacity == 0) {
+		error(("capacity cannot be 0"));
+		return NULL;
+	}
+#endif
 	if (capacity > SIZE_MAX / elem_size) {
 		error(("size_t overflow detected, maximum size exceeded"));
 		return NULL;
@@ -18,16 +28,6 @@ struct rnd_stack *rnd_stack_create(size_t elem_size, size_t capacity)
 		return NULL;
 	}
 
-#ifdef RND_DEBUG
-	if (elem_size == 0) {
-		error(("elem_size cannot be 0"));
-		return NULL;
-	}
-	if (capacity == 0) {
-		error(("capacity cannot be 0"));
-		return NULL;
-	}
-#endif
 	ret->elem_size = elem_size;
 	ret->size      = 0;
 	ret->capacity  = capacity;
