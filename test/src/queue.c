@@ -590,6 +590,144 @@ TEST t_quickinsert(void)
 TEST t_remove(void)
 {
 	struct rnd_queue *q;
+	unsigned i;
+
+	{ /* Generic form */
+		struct data a;
+		struct data d[100];
+		q = rnd_queue_create(sizeof(int), 1000);
+		ASSERT_NEQ(NULL, q);
+		ASSERT_EQ_FMT(RND_EINDEX, rnd_queue_remove(q, 0, &a), "%d");
+		ASSERT_EQ_FMT(0, data_init(&a), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_push(q, &a), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_remove(NULL, 0, &a), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_remove(NULL, 0, NULL), "%d");
+		ASSERT_EQ_FMT(RND_EINDEX, rnd_queue_remove(q, 1, &a), "%d");
+		ASSERT_EQ_FMT(q->data, q->head, "%p");
+		ASSERT_EQ_FMT(q->data, q->tail, "%p");
+		ASSERT_EQ_FMT(0, rnd_queue_remove(q, 0, NULL), "%d");
+		ASSERT_EQ_FMT(0LU, q->size, "%lu");
+		ASSERT_EQ_FMT(q->data, q->head, "%p");
+		ASSERT_EQ_FMT(q->data, q->tail, "%p");
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
+		ASSERT_EQ_FMT(0, data_dtor(&a), "%d");
+
+		q = rnd_queue_create(sizeof(struct data), 100);
+		ASSERT_NEQ(NULL, q);
+		for (i = 0; i < 100; i++) {
+			ASSERT_EQ_FMT(0, data_init(d + i), "%d");
+			ASSERT_EQ_FMT(0, rnd_queue_push(q, d + i), "%d");
+		}
+		for (i = 0; i < 100; i++) {
+			struct data a;
+			size_t idx = IRANGE(0, q->size - 1), j;
+			int found = 0;
+			ASSERT_EQ_FMT(0, rnd_queue_remove(q, idx, &a), "%d");
+			for (j = 0; j < 100; j++) {
+				/* Lazy and slow way to check, but on average it's
+				 * enough */
+				if (data_cmp(&a, d + j) == 0) {
+					found = 1;
+					break;
+				}
+			}
+			ASSERT_EQ_FMT(1, found, "%d");
+		}
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
+
+		q = rnd_queue_create(sizeof(struct data), 10);
+		ASSERT_NEQ(NULL, q);
+		for (i = 0; i < 8; i++) {
+			ASSERT_EQ_FMT(0, rnd_queue_push(q, d + i), "%d");
+		}
+		ASSERT_EQ_FMT(0, rnd_queue_remove(q, 3, &a), "%d");
+		ASSERT_EQ_FMT(0, data_cmp(d + 3, &a), "%d");
+		ASSERT_EQ_FMT(q->head, (char*)q->data + q->elem_size, "%p");
+		ASSERT_EQ_FMT(0, rnd_queue_remove(q, 0, &a), "%d");
+		ASSERT_EQ_FMT(0, data_cmp(d, &a), "%d");
+		ASSERT_EQ_FMT(q->head, (char*)q->data + 2 * q->elem_size, "%p");
+		ASSERT_EQ_FMT(0, rnd_queue_remove(q, 3, &a), "%d");
+		ASSERT_EQ_FMT(0, data_cmp(d + 5, &a), "%d");
+		ASSERT_EQ_FMT(q->tail, (char*)q->data + 6 * q->elem_size, "%p");
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
+		for (i = 0; i < 100; i++) {
+			ASSERT_EQ_FMT(0, data_dtor(d + i), "%d");
+		}
+	}
+
+	/* Suffixed form
+	 * T  - type
+	 * F1 - remove function
+	 * F2 - push function
+	 * V  - random value snippet
+	 * M  - printf format string
+	 */
+#define test(T, F1, F2, V, M) do {                                                 \
+		T a = (V), z = 0;                                                  \
+		T d[100];                                                          \
+		q = rnd_queue_create(sizeof(T), 1000);                             \
+		ASSERT_NEQ(NULL, q);                                               \
+		ASSERT_EQ_FMT(z, F1(q, 0), M);                                     \
+		ASSERT_EQ_FMT(0, F2(q, a), "%d");                                  \
+		ASSERT_EQ_FMT(z, F1(NULL, 0), M);                                  \
+		ASSERT_EQ_FMT(z, F1(q, 1), M);                                     \
+		ASSERT_EQ_FMT(q->data, q->head, "%p");                             \
+		ASSERT_EQ_FMT(q->data, q->tail, "%p");                             \
+		ASSERT_EQ_FMT(a, F1(q, 0), M);                                     \
+		ASSERT_EQ_FMT(0LU, q->size, "%lu");                                \
+		ASSERT_EQ_FMT(q->data, q->head, "%p");                             \
+		ASSERT_EQ_FMT(q->data, q->tail, "%p");                             \
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");                \
+                                                                                   \
+		q = rnd_queue_create(sizeof(T), 100);                              \
+		ASSERT_NEQ(NULL, q);                                               \
+		for (i = 0; i < 100; i++) {                                        \
+			d[i] = (V);                                                \
+			ASSERT_EQ_FMT(0, F2(q, d[i]), "%d");                       \
+		}                                                                  \
+		for (i = 0; i < 100; i++) {                                        \
+			T a;                                                       \
+			size_t idx = IRANGE(0, q->size - 1), j;                    \
+			int found = 0;                                             \
+			ASSERT_NEQ(0, (a = F1(q, idx)));                           \
+			for (j = 0; j < 100; j++) {                                \
+				/* Lazy and slow way to check, but on average it's
+				 * enough */                                       \
+				if (a == d[j]) {                                   \
+					found = 1;                                 \
+					break;                                     \
+				}                                                  \
+			}                                                          \
+			ASSERT_EQ_FMT(1, found, "%d");                             \
+		}                                                                  \
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");                \
+                                                                                   \
+		q = rnd_queue_create(sizeof(T), 10);                               \
+		ASSERT_NEQ(NULL, q);                                               \
+		for (i = 0; i < 8; i++) {                                          \
+			ASSERT_EQ_FMT(0, F2(q, d[i]), "%d");                       \
+		}                                                                  \
+		ASSERT_EQ_FMT(d[3], F1(q, 3), M);                                  \
+		ASSERT_EQ_FMT(q->head, (char*)q->data + q->elem_size, "%p");       \
+		ASSERT_EQ_FMT(d[0], F1(q, 0), M);                                  \
+		ASSERT_EQ_FMT(q->head, (char*)q->data + 2 * q->elem_size, "%p");   \
+		ASSERT_EQ_FMT(d[5], F1(q, 3), M);                                  \
+		ASSERT_EQ_FMT(q->tail, (char*)q->data + 6 * q->elem_size, "%p");   \
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");                \
+	} while (0)
+	test(char          , rnd_queue_removec , rnd_queue_pushc , IRANGE(1, CHAR_MAX) , "%hd");
+	test(short         , rnd_queue_removes , rnd_queue_pushs , IRANGE(1, SHRT_MAX) , "%hd");
+	test(int           , rnd_queue_removei , rnd_queue_pushi , FRANGE(1, INT_MAX)  , "%d");
+	test(long          , rnd_queue_removel , rnd_queue_pushl , FRANGE(1, LONG_MAX) , "%ld");
+	test(signed char   , rnd_queue_removesc, rnd_queue_pushsc, IRANGE(1, SCHAR_MAX), "%hd");
+	test(unsigned char , rnd_queue_removeuc, rnd_queue_pushuc, IRANGE(1, UCHAR_MAX), "%hd");
+	test(unsigned short, rnd_queue_removeus, rnd_queue_pushus, IRANGE(1, USHRT_MAX), "%hu");
+	test(unsigned int  , rnd_queue_removeui, rnd_queue_pushui, FRANGE(1, UINT_MAX) , "%u");
+	test(unsigned long , rnd_queue_removeul, rnd_queue_pushul, FRANGE(1, ULONG_MAX), "%lu");
+	test(float         , rnd_queue_removef , rnd_queue_pushf , FRANGE(1, FLT_MAX)  , "%f");
+	test(double        , rnd_queue_removed , rnd_queue_pushd , FRANGE(1, DBL_MAX)  , "%f");
+	test(long double   , rnd_queue_removeld, rnd_queue_pushld, FRANGE(1, LDBL_MAX) , "%Lf");
+#undef test
 	PASS();
 }
 
