@@ -6,10 +6,10 @@ ANSI C without any external dependencies besides the C standard library.
 ## Supported Data Structures
 
 - stack
+- queue
 
 ## Pending Implementations
 
-- queue,
 - deque,
 - bitarray,
 - hashmap,
