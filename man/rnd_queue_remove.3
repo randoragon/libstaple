@@ -133,9 +133,8 @@ The
 .BR rnd_queue_remove ()
 function shall fail if:
 .IP \fBRND_EINVAL\fP 1.5i
-Either
-.IR queue " or " output
-are null pointers (debug mode only).
+.I queue
+is a null pointer (debug mode only).
 .IP \fBRND_EINDEX\fP 1.5i
 .I idx
 out of range (debug mode only).
