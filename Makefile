@@ -102,9 +102,9 @@ uninstall:
 # Runs all testing units
 #     To check if overflow protection is working,
 #     set SIZE_MAX to 65535 to reduce memory footprint.
-test: CFLAGS += -DRND_QUIET -DSIZE_MAX=65535
 test: test-stack test-queue
 
+test-stack: CFLAGS += -DRND_QUIET -DSIZE_MAX=65535
 test-stack: debug test/obj/test_struct.o test/obj/stack.o
 	$(LINKER) "test/obj/test_struct.o" "test/obj/stack.o" $(LDTESTFLAGS) -o $(TESTDIR)/bin/stack
 	@tput setaf 4
@@ -123,6 +123,7 @@ test-stack: debug test/obj/test_struct.o test/obj/stack.o
 	@printf "###########\n\n"
 	@tput setaf 7
 
+test-queue: CFLAGS += -DRND_QUIET -DSIZE_MAX=65535
 test-queue: debug test/obj/test_struct.o test/obj/queue.o
 	$(LINKER) "test/obj/test_struct.o" "test/obj/queue.o" $(LDTESTFLAGS) -o $(TESTDIR)/bin/queue
 	@tput setaf 4
