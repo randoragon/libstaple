@@ -8,6 +8,9 @@
 #include <string.h>
 
 /* Make testing for size overflow feasible */
+#ifdef SIZE_MAX
+#undef SIZE_MAX
+#endif
 #define SIZE_MAX 65535LU
 
 GREATEST_MAIN_DEFS();
