@@ -2681,7 +2681,7 @@ int rnd_stack_set(struct rnd_stack *stack, size_t idx, void *val)
 	}
 #endif
 	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
-	memcpy(val, p, stack->elem_size);
+	memcpy(p, val, stack->elem_size);
 	return 0;
 }
 
