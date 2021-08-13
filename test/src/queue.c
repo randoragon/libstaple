@@ -450,7 +450,7 @@ TEST t_insert(void)
 		q = rnd_queue_create(sizeof(T) + 1, 1000);                                       \
 		ASSERT_NEQ(NULL, q);                                                             \
 		ASSERT_EQ_FMT(RND_EILLEGAL, F1(q, 0, (V)), "%d");                                \
-		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, 0), "%d");                                 \
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");                              \
 	} while (0)
 	test(char          , rnd_queue_insertc , rnd_queue_getc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , rnd_queue_inserts , rnd_queue_gets , IRANGE(1, SHRT_MAX) , "%hd");
@@ -569,7 +569,7 @@ TEST t_quickinsert(void)
 		q = rnd_queue_create(sizeof(T) + 1, 1000);                                       \
 		ASSERT_NEQ(NULL, q);                                                             \
 		ASSERT_EQ_FMT(RND_EILLEGAL, F1(q, 0, (V)), "%d");                                \
-		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, 0), "%d");                                 \
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");                              \
 	} while (0)
 	test(char          , rnd_queue_quickinsertc , rnd_queue_getc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , rnd_queue_quickinserts , rnd_queue_gets , IRANGE(1, SHRT_MAX) , "%hd");
@@ -1033,12 +1033,12 @@ TEST t_set(void)
 			ASSERT_EQ_FMT(0, F1(q, i, b), "%d");        \
 			ASSERT_EQ_FMT(b, F3(q, i), M);              \
 		}                                                   \
-		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, 0), "%d");    \
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d"); \
 		q = rnd_queue_create(sizeof(T) + 1, 1000);          \
 		ASSERT_NEQ(NULL, q);                                \
 		q->size = 1;                                        \
 		ASSERT_EQ_FMT(RND_EILLEGAL, F1(q, 0, (V)), "%d");   \
-		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, 0), "%d");    \
+		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d"); \
 	} while (0)
 	test(char          , rnd_queue_setc , rnd_queue_pushc , rnd_queue_getc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , rnd_queue_sets , rnd_queue_pushs , rnd_queue_gets , IRANGE(1, SHRT_MAX) , "%hd");
