@@ -4,5 +4,6 @@
 
 #include "rnd_errcodes.h"
 #include "rnd_stack.h"
+#include "rnd_queue.h"
 
 #endif /* RND_H */

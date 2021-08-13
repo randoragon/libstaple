@@ -22,7 +22,7 @@ int data_init(struct data *d)
 	size_t name_idx, surname_idx;
 	name_idx     = IRANGE(0, LEN(random_names)    - 1);
 	surname_idx  = IRANGE(0, LEN(random_surnames) - 1);
-	d->name    = malloc(32 * sizeof(*d->name));
+	d->name      = malloc(32 * sizeof(*d->name));
 	if (d->name == NULL) {
 		free(d);
 		return 1;
@@ -60,6 +60,11 @@ int data_cpy(void *dest, const void *src)
 	return 0;
 }
 
+int data_cpy_bad(void *dest, const void *src)
+{
+	return 1;
+}
+
 int data_dtor(void *d)
 {
 	struct data *const p = d;
@@ -68,11 +73,30 @@ int data_dtor(void *d)
 	return 0;
 }
 
+int data_dtor_bad(void *d)
+{
+	return 1;
+}
+
+int data_cmp(const struct data *a, const struct data *b)
+{
+	if (a->id != b->id)                 return 1;
+	if (a->age != b->age)               return 2;
+	if (strcmp(a->name, b->name))       return 3;
+	if (strcmp(a->surname, b->surname)) return 4;
+	return 0;
+}
+
 int data_mutate(void *d, size_t idx)
 {
 	struct data *p = d;
 	p->id = idx % 16 + p->age + p->name[0] * p->surname[0];
 	return 0;
+}
+
+int data_mutate_bad(void *d, size_t idx)
+{
+	return 1;
 }
 
 int data_verify(void *d, size_t idx)

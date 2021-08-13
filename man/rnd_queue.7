@@ -1,0 +1,79 @@
+.TH RND_QUEUE 7 DATE "librnd-VERSION"
+.SH NAME
+rnd_queue - rnd library implementation of the queue
+.SH DESCRIPTION
+.P
+This manual describes the implementation of the
+.B rnd_queue
+structure, as provided by the rnd library.
+.P
+.B rnd_queue
+is a
+.IR transparent
+type. It is encouraged that the user extends the functionality provided by
+default library functions, if there is need to do so.
+.SS Internal Structure
+.IP
+.ad l
+.nf
+struct rnd_queue {
+	void  *data;
+	void  *head;
+	void  *tail;
+	size_t elem_size;
+	size_t size;
+	size_t capacity;
+};
+.fi
+.ad
+.P
+.IP \fIdata\fP 12n
+the beginning of a memory block used as a ring buffer for storing elements.
+.IP \fIhead\fP
+pointer to the first element in the queue.
+.IP \fItail\fP
+pointer to the last element in the queue.
+.IP \fIelem_size\fP
+the size (in bytes) of a single queue element. This value is set once
+during initialization, and must not be changed.
+.IP \fIsize\fP
+the number of elements on the queue.
+.IP \fIcapacity\fP
+the current maximum number of elements possible to store on the
+.I data
+buffer. This value is automatically doubled during insertion operations, if
+there is not enough room for a new element.
+.P
+Refer to
+.BR librnd (7)
+source code for more details.
+.SH CONFORMING TO
+See
+.BR librnd (7).
+.SH BUGS
+The size of the
+.I data
+buffer is capped at
+.BR SIZE_MAX .
+In consequence, the product
+.RI ( capacity " * " elem_size )
+also cannot exceed
+.BR SIZE_MAX .
+.SH SEE ALSO
+.ad l
+.BR librnd (7)
+.BR rnd_queue_create (3),
+.BR rnd_queue_destroy (3),
+.BR rnd_queue_clear (3),
+.BR rnd_queue_copy (3),
+.BR rnd_queue_map (3),
+.BR rnd_queue_push (3),
+.BR rnd_queue_insert (3),
+.BR rnd_queue_quickinsert (3),
+.BR rnd_queue_peek (3),
+.BR rnd_queue_pop (3),
+.BR rnd_queue_remove (3),
+.BR rnd_queue_quickremove (3),
+.BR rnd_queue_get (3),
+.BR rnd_queue_set (3),
+.BR rnd_queue_print (3)

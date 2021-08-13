@@ -1,0 +1,204 @@
+.TH RND_QUEUE_INSERT 3 DATE "librnd-VERSION"
+.SH NAME
+rnd_queue_insert - insert an element at any position of a queue
+.SH SYNOPSIS
+.ad l
+#include <rnd.h>
+.sp
+int
+.BR rnd_queue_insert "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+const void
+.RI * elem )
+.br
+int
+.BR rnd_queue_insertc "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+char
+.IR elem )
+.br
+int
+.BR rnd_queue_inserts "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+short
+.IR elem )
+.br
+int
+.BR rnd_queue_inserti "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+int
+.IR elem )
+.br
+int
+.BR rnd_queue_insertl "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+long
+.IR elem )
+.br
+int
+.BR rnd_queue_insertsc "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+signed char
+.IR elem )
+.br
+int
+.BR rnd_queue_insertuc "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned char
+.IR elem )
+.br
+int
+.BR rnd_queue_insertus "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned short
+.IR elem )
+.br
+int
+.BR rnd_queue_insertui "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned int
+.IR elem )
+.br
+int
+.BR rnd_queue_insertul "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned long
+.IR elem )
+.br
+int
+.BR rnd_queue_insertf "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+float
+.IR elem )
+.br
+int
+.BR rnd_queue_insertd "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+double
+.IR elem )
+.br
+int
+.BR rnd_queue_insertld "(struct rnd_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+long double
+.IR elem )
+.sp
+Link with \fI-lrnd\fP.
+.ad
+.SH DESCRIPTION
+The functions in the
+.BR rnd_queue_insert ()
+family are used to insert elements at any position of a queue. The order of
+elements before and after the newly inserted element shall be preserved.
+.P
+.I queue
+is the queue that shall be inserted into.
+.P
+.I idx
+is the index at which the new element will be placed. Indices start from 0 and
+extend to the rear \(em 0 is the front element, 1 is the element behind it, and
+so on.
+.br
+Inserting at position \fBn\fP requires up to \fBsize / 2\fP elements to be moved
+in memory. Inserting at \fBsize\fP has the same effect as
+.BR rnd_queue_push (3).
+.br
+.I idx
+cannot be larger than
+.IR queue "'s " size .
+.P
+.I elem
+is the element to be inserted.
+.SS Generic Form
+.I elem
+must be a void pointer to the first byte of the element that shall be inserted.
+The number of bytes to copy is equal to
+.IR queue "'s " elem_size
+field.
+.SS Suffixed Form
+.I elem
+is passed directly in the function argument.
+.SH RETURN VALUE
+If successful, the functions in the
+.BR rnd_queue_insert ()
+family shall return 0. Otherwise, they shall return a code indicating the
+error.
+.SH ERRORS
+The functions in the
+.BR rnd_queue_insert ()
+family shall fail if:
+.IP \fBRND_EINVAL\fP 1.5i
+.I queue
+is a null pointer (debug mode only).
+.IP \fBRND_EINDEX\fP 1.5i
+.I idx
+out of range (debug mode only).
+.IP \fBRND_ERANGE\fP 1.5i
+Maximum buffer size exceeded. See BUGS in
+.BR rnd_queue (7).
+.IP \fBRND_ENOMEM\fP 1.5i
+Memory allocation failed.
+.SS Generic Form
+The
+.BR rnd_queue_insert ()
+function shall fail if:
+.IP \fBRND_EINVAL\fP 1.5i
+.I elem
+is a null pointer (debug mode only).
+.SS Suffixed Form
+The suffixed
+.BR rnd_queue_insert ()
+functions shall fail if:
+.IP \fBRND_EILLEGAL\fP 1.5i
+.IR queue "'s " elem_size
+does not match the size of the
+.I elem
+argument (debug mode only).
+.SH CONFORMING TO
+See
+.BR librnd (7).
+.SH SEE ALSO
+.ad l
+.BR librnd (7),
+.BR rnd_queue (7),
+.BR rnd_queue_create (3),
+.BR rnd_queue_destroy (3),
+.BR rnd_queue_clear (3),
+.BR rnd_queue_copy (3),
+.BR rnd_queue_map (3),
+.BR rnd_queue_push (3),
+.BR rnd_queue_quickinsert (3),
+.BR rnd_queue_peek (3),
+.BR rnd_queue_pop (3),
+.BR rnd_queue_remove (3),
+.BR rnd_queue_quickremove (3),
+.BR rnd_queue_get (3),
+.BR rnd_queue_set (3),
+.BR rnd_queue_print (3)
+

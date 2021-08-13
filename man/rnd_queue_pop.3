@@ -1,0 +1,147 @@
+.TH RND_QUEUE_POP 3 DATE "librnd-VERSION"
+.SH NAME
+rnd_queue_pop - remove and retrieve the front element of a queue
+.SH SYNOPSIS
+.ad l
+#include <rnd.h>
+.sp
+int
+.BR rnd_queue_pop "(struct rnd_queue"
+.RI * queue ,
+void
+.RI * output )
+.br
+char
+.BR rnd_queue_popc "(struct rnd_queue"
+.RI * queue )
+.br
+short
+.BR rnd_queue_pops "(struct rnd_queue"
+.RI * queue )
+.br
+int
+.BR rnd_queue_popi "(struct rnd_queue"
+.RI * queue )
+.br
+long
+.BR rnd_queue_popl "(struct rnd_queue"
+.RI * queue )
+.br
+signed char
+.BR rnd_queue_popsc "(struct rnd_queue"
+.RI * queue )
+.br
+unsigned char
+.BR rnd_queue_popuc "(struct rnd_queue"
+.RI * queue )
+.br
+unsigned short
+.BR rnd_queue_popus "(struct rnd_queue"
+.RI * queue )
+.br
+unsigned int
+.BR rnd_queue_popui "(struct rnd_queue"
+.RI * queue )
+.br
+unsigned long
+.BR rnd_queue_popul "(struct rnd_queue"
+.RI * queue )
+.br
+float
+.BR rnd_queue_popf "(struct rnd_queue"
+.RI * queue )
+.br
+double
+.BR rnd_queue_popd "(struct rnd_queue"
+.RI * queue )
+.br
+long double
+.BR rnd_queue_popld "(struct rnd_queue"
+.RI * queue )
+.sp
+Link with \fI-lrnd\fP.
+.ad
+.SH DESCRIPTION
+The functions in the
+.BR rnd_queue_pop ()
+family are used to remove the front element of a queue and retrieve its value.
+Attempting to pop an element from an empty queue yields undefined behavior.
+.P
+.I queue
+is the queue.
+.SS Generic Form
+.I output
+is the start of an adequately-sized block of memory the popped element shall be
+copied into.
+.I output
+must not overlap in memory with the popped element.
+.B NULL
+can be passed to skip this functionality.
+.SH RETURN VALUE
+.SS Generic Form
+If successful, the
+.BR rnd_queue_pop ()
+function shall return 0. Otherwise, it shall return a code indicating the
+error.
+.SS Suffixed Form
+If successful, the suffixed
+.BR rnd_queue_pop ()
+functions shall return the value of the popped element. Otherwise, they shall
+return 0.
+.SH ERRORS
+.SS Generic Form
+The
+.BR rnd_queue_pop ()
+function shall fail if:
+.IP \fBRND_EINVAL\fP 1.5i
+.IR queue
+is a null pointer (debug mode only).
+.IP \fBRND_EILLEGAL\fP 1.5i
+.I queue
+is empty (debug mode only).
+.SS Suffixed Form
+The suffixed
+.BR rnd_queue_pop ()
+functions shall fail if:
+.IP 0 1.5i
+.I queue
+is a null pointer (debug mode only).
+.IP 0 1.5i
+.I queue
+is empty (debug mode only).
+.IP 0 1.5i
+.IR queue "'s " elem_size
+does not match the size of the function's return type (debug mode only).
+.P
+Note that 0 can also be a successful return value, since it is a number that can
+be stored on the queue, like any other.
+.SH NOTES
+For practical reasons, functions of the suffixed form do not provide an
+unambiguous error-detecting interface. This design choice was made because these
+functions can only fail if the user misuses the library.
+.P
+This means there is a guaranteed uncertainty whenever a suffixed function
+returns 0. However, failures can be told apart from successes depending on the
+presence or absence of an error message (quiet mode needs to be disabled).
+.SH CONFORMING TO
+See
+.BR librnd (7).
+.SH SEE ALSO
+.ad l
+.BR librnd (7),
+.BR rnd_queue (7),
+.BR rnd_queue_create (3),
+.BR rnd_queue_destroy (3),
+.BR rnd_queue_clear (3),
+.BR rnd_queue_copy (3),
+.BR rnd_queue_map (3),
+.BR rnd_queue_push (3),
+.BR rnd_queue_insert (3),
+.BR rnd_queue_quickinsert (3),
+.BR rnd_queue_peek (3),
+.BR rnd_queue_remove (3),
+.BR rnd_queue_quickremove (3),
+.BR rnd_queue_get (3),
+.BR rnd_queue_set (3),
+.BR rnd_queue_print (3)
+

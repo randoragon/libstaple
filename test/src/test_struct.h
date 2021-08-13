@@ -9,7 +9,7 @@
 
 #define LEN(X) (sizeof(X) / sizeof(*X))
 #define IRANGE(X,Y) ((X) + (rand() % ((Y) - (X) + 1)))
-#define FRANGE(X,Y) ((X) + ((double)rand() / RAND_MAX * ((Y) - (X))))
+#define FRANGE(X,Y) ((X) + ((double)rand() / RAND_MAX * ((long double)(Y) - (X))))
 
 struct data {
 	char    *name;
@@ -20,7 +20,10 @@ struct data {
 
 int data_init(struct data *d);
 int data_cpy(void *dest, const void *src);
+int data_cpy_bad(void *dest, const void *src);
 int data_dtor(void *d);
+int data_dtor_bad(void *d);
+int data_cmp(const struct data *a, const struct data *b);
 
 /* These two functions are used for testing "map" functions, e.g. rnd_stack_map.
  * The goal is to first mutate a bunch of data structs in a loop, and then
@@ -28,6 +31,7 @@ int data_dtor(void *d);
  * what mutation actually does, so long it's something and it's verifiable.
  */
 int data_mutate(void *d, size_t idx);
+int data_mutate_bad(void *d, size_t idx);
 int data_verify(void *d, size_t idx);
 
 #endif /* TEST_STRUCT_H */
