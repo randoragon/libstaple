@@ -91,8 +91,8 @@ install: clean all
 	@echo Installing header files...
 	@for f in $(INCLUDES); do install -m644 -- "$(SRCDIR)/$$f" $(DESTDIR)$(PREFIX)/include/"$$f"; done
 	@echo Installing man pages...
-	@for f in $(MANPAGES3); do sed -e "s/VERSION/$(VERSION_STR)/g" -e "s/DATE/$(DATE)/g" < "$(MANDIR)/$$f" > $(DESTDIR)$(MANPREFIX)/man3/"$${f##*/}"; chmod 644 -- $(DESTDIR)$(MANPREFIX)/man3/"$${f##*/}"; done
-	@for f in $(MANPAGES7); do sed -e "s/VERSION/$(VERSION_STR)/g" -e "s/DATE/$(DATE)/g" < "$(MANDIR)/$$f" > $(DESTDIR)$(MANPREFIX)/man7/"$${f##*/}"; chmod 644 -- $(DESTDIR)$(MANPREFIX)/man7/"$${f##*/}"; done
+	@for f in $(MANPAGES3); do sed -e "s/VERSION/$(VERSION_STR)/g" -e "s/DATE/$(DATE)/g" < "$(MANDIR)/$$f" | gzip -7 - > $(DESTDIR)$(MANPREFIX)/man3/"$${f##*/}.gz"; chmod 644 -- $(DESTDIR)$(MANPREFIX)/man3/"$${f##*/}.gz"; done
+	@for f in $(MANPAGES7); do sed -e "s/VERSION/$(VERSION_STR)/g" -e "s/DATE/$(DATE)/g" < "$(MANDIR)/$$f" | gzip -7 - > $(DESTDIR)$(MANPREFIX)/man7/"$${f##*/}.gz"; chmod 644 -- $(DESTDIR)$(MANPREFIX)/man7/"$${f##*/}.gz"; done
 	@echo Done.
 
 # Removes installed library files from the system (opposite of "install")
@@ -103,8 +103,8 @@ uninstall:
 	@echo Uninstalling header files...
 	@for f in $(INCLUDES); do $(RM) -- $(DESTDIR)$(PREFIX)/include/"$$f"; done
 	@echo Uninstalling man pages...
-	@for f in $(MANPAGES3); do $(RM) -- $(DESTDIR)$(MANPREFIX)/man3/"$${f##*/}"; done
-	@for f in $(MANPAGES7); do $(RM) -- $(DESTDIR)$(MANPREFIX)/man7/"$${f##*/}"; done
+	@for f in $(MANPAGES3); do $(RM) -- $(DESTDIR)$(MANPREFIX)/man3/"$${f##*/}.gz"; done
+	@for f in $(MANPAGES7); do $(RM) -- $(DESTDIR)$(MANPREFIX)/man7/"$${f##*/}.gz"; done
 	@echo Done.
 
 # Runs all testing units
