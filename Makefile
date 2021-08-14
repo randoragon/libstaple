@@ -27,10 +27,10 @@ TESTDIR = test
 SRCS := $(wildcard $(SRCDIR)/*.c)
 OBJS := $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(SRCS:.c=.o))
 
-# Header and man page files (only filenames)
-INCLUDES := $(subst $(SRCDIR)/,,$(wildcard $(SRCDIR)/rnd*.h))
-MANPAGES3 := $(subst $(MANDIR)/,,$(wildcard $(MANDIR)/*.3))
-MANPAGES7 := $(subst $(MANDIR)/,,$(wildcard $(MANDIR)/*.7))
+# Header and man page files (relative to MANDIR)
+INCLUDES := $(notdir $(wildcard $(SRCDIR)/rnd*.h))
+MANPAGES3 := $(patsubst $(MANDIR)/%,%,$(shell find "$(MANDIR)" -type f -name '*.3'))
+MANPAGES7 := $(patsubst $(MANDIR)/%,%,$(shell find "$(MANDIR)" -type f -name '*.7'))
 
 # Main library file
 TARGET = librnd
@@ -83,21 +83,29 @@ debug: clean all
 # Builds and installs the library
 install: CFLAGS += -O3
 install: clean all
+	@echo Creating directories...
 	@mkdir -p -- $(DESTDIR)$(PREFIX)/lib $(DESTDIR)$(PREFIX)/include $(DESTDIR)$(MANPREFIX)/man3 $(DESTDIR)$(MANPREFIX)/man7
-	install -m644 -- $(TARGET).so $(DESTDIR)$(PREFIX)/lib
-	install -m644 -- $(TARGET).a $(DESTDIR)$(PREFIX)/lib
-	for f in $(INCLUDES); do install -m644 -- "$(SRCDIR)/$$f" $(DESTDIR)$(PREFIX)/include/"$$f"; done
-	for f in $(MANPAGES3); do sed -e "s/VERSION/$(VERSION_STR)/g" -e "s/DATE/$(DATE)/g" < "$(MANDIR)/$$f" > $(DESTDIR)$(MANPREFIX)/man3/"$$f"; chmod 644 -- $(DESTDIR)$(MANPREFIX)/man3/"$$f"; done
-	for f in $(MANPAGES7); do sed -e "s/VERSION/$(VERSION_STR)/g" -e "s/DATE/$(DATE)/g" < "$(MANDIR)/$$f" > $(DESTDIR)$(MANPREFIX)/man7/"$$f"; chmod 644 -- $(DESTDIR)$(MANPREFIX)/man7/"$$f"; done
-	@echo Successfully installed.
+	@echo Installing library files...
+	@install -m644 -- $(TARGET).so $(DESTDIR)$(PREFIX)/lib
+	@install -m644 -- $(TARGET).a $(DESTDIR)$(PREFIX)/lib
+	@echo Installing header files...
+	@for f in $(INCLUDES); do install -m644 -- "$(SRCDIR)/$$f" $(DESTDIR)$(PREFIX)/include/"$$f"; done
+	@echo Installing man pages...
+	@for f in $(MANPAGES3); do sed -e "s/VERSION/$(VERSION_STR)/g" -e "s/DATE/$(DATE)/g" < "$(MANDIR)/$$f" > $(DESTDIR)$(MANPREFIX)/man3/"$${f##*/}"; chmod 644 -- $(DESTDIR)$(MANPREFIX)/man3/"$${f##*/}"; done
+	@for f in $(MANPAGES7); do sed -e "s/VERSION/$(VERSION_STR)/g" -e "s/DATE/$(DATE)/g" < "$(MANDIR)/$$f" > $(DESTDIR)$(MANPREFIX)/man7/"$${f##*/}"; chmod 644 -- $(DESTDIR)$(MANPREFIX)/man7/"$${f##*/}"; done
+	@echo Done.
 
 # Removes installed library files from the system (opposite of "install")
 uninstall:
-	$(RM) -- $(DESTDIR)$(PREFIX)/lib/$(TARGET).so
-	$(RM) -- $(DESTDIR)$(PREFIX)/lib/$(TARGET).a
-	for f in $(INCLUDES); do $(RM) -- $(DESTDIR)$(PREFIX)/include/"$$f"; done
-	for f in $(MANPAGES3); do $(RM) -- $(DESTDIR)$(MANPREFIX)/man3/"$$f"; done
-	for f in $(MANPAGES7); do $(RM) -- $(DESTDIR)$(MANPREFIX)/man7/"$$f"; done
+	@echo Uninstalling library files...
+	@$(RM) -- $(DESTDIR)$(PREFIX)/lib/$(TARGET).so
+	@$(RM) -- $(DESTDIR)$(PREFIX)/lib/$(TARGET).a
+	@echo Uninstalling header files...
+	@for f in $(INCLUDES); do $(RM) -- $(DESTDIR)$(PREFIX)/include/"$$f"; done
+	@echo Uninstalling man pages...
+	@for f in $(MANPAGES3); do $(RM) -- $(DESTDIR)$(MANPREFIX)/man3/"$${f##*/}"; done
+	@for f in $(MANPAGES7); do $(RM) -- $(DESTDIR)$(MANPREFIX)/man7/"$${f##*/}"; done
+	@echo Done.
 
 # Runs all testing units
 #     To check if overflow protection is working,
