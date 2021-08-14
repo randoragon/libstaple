@@ -107,37 +107,21 @@ test: test-stack test-queue
 test-stack: CFLAGS += -DRND_QUIET -DSIZE_MAX=65535
 test-stack: debug test/obj/test_struct.o test/obj/stack.o
 	$(LINKER) "test/obj/test_struct.o" "test/obj/stack.o" $(LDTESTFLAGS) -o $(TESTDIR)/bin/stack
-	@tput setaf 4
-	@printf "\n##########"
-	@tput setaf 3
+	@tput setaf 4 ; printf "\n##########" ; tput setaf 3
 	@printf "[ STACK ]"
-	@tput setaf 4
-	@printf "##########\n\n"
-	@tput setaf 7
+	@tput setaf 4 ; printf "##########\n\n" ; tput setaf 7
 	valgrind ./test/bin/stack
-	@tput setaf 4
-	@printf "\n###########"
-	@tput setaf 3
+	@tput setaf 4 ; printf "\n###########" ; tput setaf 3
 	@printf "[ END ]"
-	@tput setaf 4
-	@printf "###########\n\n"
-	@tput setaf 7
+	@tput setaf 4 ; printf "###########\n\n" ; tput setaf 7
 
 test-queue: CFLAGS += -DRND_QUIET -DSIZE_MAX=65535
 test-queue: debug test/obj/test_struct.o test/obj/queue.o
 	$(LINKER) "test/obj/test_struct.o" "test/obj/queue.o" $(LDTESTFLAGS) -o $(TESTDIR)/bin/queue
-	@tput setaf 4
-	@printf "\n##########"
-	@tput setaf 3
+	@tput setaf 4 ; printf "\n##########" ; tput setaf 3
 	@printf "[ QUEUE ]"
-	@tput setaf 4
-	@printf "##########\n\n"
-	@tput setaf 7
+	@tput setaf 4 ; printf "##########\n\n" ; tput setaf 7
 	valgrind ./test/bin/queue
-	@tput setaf 4
-	@printf "\n###########"
-	@tput setaf 3
+	@tput setaf 4 ; printf "\n###########" ; tput setaf 3
 	@printf "[ END ]"
-	@tput setaf 4
-	@printf "###########\n\n"
-	@tput setaf 7
+	@tput setaf 4 ; printf "###########\n\n" ; tput setaf 7
