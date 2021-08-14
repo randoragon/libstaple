@@ -169,7 +169,7 @@ int rnd_stack_push(struct rnd_stack *stack, const void *elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	memcpy((char*)stack->data + stack->size++ * stack->elem_size, elem, stack->elem_size);
 	return 0;
@@ -190,7 +190,7 @@ int rnd_stack_pushc(struct rnd_stack *stack, char elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	((char*)stack->data)[stack->size++] = elem;
 	return 0;
@@ -211,7 +211,7 @@ int rnd_stack_pushs(struct rnd_stack *stack, short elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	((short*)stack->data)[stack->size++] = elem;
 	return 0;
@@ -232,7 +232,7 @@ int rnd_stack_pushi(struct rnd_stack *stack, int elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	((int*)stack->data)[stack->size++] = elem;
 	return 0;
@@ -253,7 +253,7 @@ int rnd_stack_pushl(struct rnd_stack *stack, long elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	((long*)stack->data)[stack->size++] = elem;
 	return 0;
@@ -274,7 +274,7 @@ int rnd_stack_pushsc(struct rnd_stack *stack, signed char elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	((signed char*)stack->data)[stack->size++] = elem;
 	return 0;
@@ -295,7 +295,7 @@ int rnd_stack_pushuc(struct rnd_stack *stack, unsigned char elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	((unsigned char*)stack->data)[stack->size++] = elem;
 	return 0;
@@ -316,7 +316,7 @@ int rnd_stack_pushus(struct rnd_stack *stack, unsigned short elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	((unsigned short*)stack->data)[stack->size++] = elem;
 	return 0;
@@ -337,7 +337,7 @@ int rnd_stack_pushui(struct rnd_stack *stack, unsigned int elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	((unsigned int*)stack->data)[stack->size++] = elem;
 	return 0;
@@ -358,7 +358,7 @@ int rnd_stack_pushul(struct rnd_stack *stack, unsigned long elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	((unsigned long*)stack->data)[stack->size++] = elem;
 	return 0;
@@ -379,7 +379,7 @@ int rnd_stack_pushf(struct rnd_stack *stack, float elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	((float*)stack->data)[stack->size++] = elem;
 	return 0;
@@ -400,7 +400,7 @@ int rnd_stack_pushd(struct rnd_stack *stack, double elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	((double*)stack->data)[stack->size++] = elem;
 	return 0;
@@ -421,7 +421,7 @@ int rnd_stack_pushld(struct rnd_stack *stack, long double elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	((long double*)stack->data)[stack->size++] = elem;
 	return 0;
@@ -447,7 +447,7 @@ int rnd_stack_insert(struct rnd_stack *stack, size_t idx, const void *elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
@@ -476,7 +476,7 @@ int rnd_stack_insertc(struct rnd_stack *stack, size_t idx, char elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
@@ -505,7 +505,7 @@ int rnd_stack_inserts(struct rnd_stack *stack, size_t idx, short elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
@@ -534,7 +534,7 @@ int rnd_stack_inserti(struct rnd_stack *stack, size_t idx, int elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
@@ -563,7 +563,7 @@ int rnd_stack_insertl(struct rnd_stack *stack, size_t idx, long elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
@@ -592,7 +592,7 @@ int rnd_stack_insertsc(struct rnd_stack *stack, size_t idx, signed char elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
@@ -621,7 +621,7 @@ int rnd_stack_insertuc(struct rnd_stack *stack, size_t idx, unsigned char elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
@@ -650,7 +650,7 @@ int rnd_stack_insertus(struct rnd_stack *stack, size_t idx, unsigned short elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
@@ -679,7 +679,7 @@ int rnd_stack_insertui(struct rnd_stack *stack, size_t idx, unsigned int elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
@@ -708,7 +708,7 @@ int rnd_stack_insertul(struct rnd_stack *stack, size_t idx, unsigned long elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
@@ -737,7 +737,7 @@ int rnd_stack_insertf(struct rnd_stack *stack, size_t idx, float elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
@@ -766,7 +766,7 @@ int rnd_stack_insertd(struct rnd_stack *stack, size_t idx, double elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
@@ -795,7 +795,7 @@ int rnd_stack_insertld(struct rnd_stack *stack, size_t idx, long double elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
@@ -824,7 +824,7 @@ int rnd_stack_quickinsert(struct rnd_stack *stack, size_t idx, const void *elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	q = (char*)stack->data + stack->size * stack->elem_size;
@@ -854,7 +854,7 @@ int rnd_stack_quickinsertc(struct rnd_stack *stack, size_t idx, char elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	q = (char*)stack->data + stack->size * stack->elem_size;
@@ -884,7 +884,7 @@ int rnd_stack_quickinserts(struct rnd_stack *stack, size_t idx, short elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	q = (char*)stack->data + stack->size * stack->elem_size;
@@ -914,7 +914,7 @@ int rnd_stack_quickinserti(struct rnd_stack *stack, size_t idx, int elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	q = (char*)stack->data + stack->size * stack->elem_size;
@@ -944,7 +944,7 @@ int rnd_stack_quickinsertl(struct rnd_stack *stack, size_t idx, long elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	q = (char*)stack->data + stack->size * stack->elem_size;
@@ -974,7 +974,7 @@ int rnd_stack_quickinsertsc(struct rnd_stack *stack, size_t idx, signed char ele
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	q = (char*)stack->data + stack->size * stack->elem_size;
@@ -1004,7 +1004,7 @@ int rnd_stack_quickinsertuc(struct rnd_stack *stack, size_t idx, unsigned char e
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	q = (char*)stack->data + stack->size * stack->elem_size;
@@ -1034,7 +1034,7 @@ int rnd_stack_quickinsertus(struct rnd_stack *stack, size_t idx, unsigned short 
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	q = (char*)stack->data + stack->size * stack->elem_size;
@@ -1064,7 +1064,7 @@ int rnd_stack_quickinsertui(struct rnd_stack *stack, size_t idx, unsigned int el
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	q = (char*)stack->data + stack->size * stack->elem_size;
@@ -1094,7 +1094,7 @@ int rnd_stack_quickinsertul(struct rnd_stack *stack, size_t idx, unsigned long e
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	q = (char*)stack->data + stack->size * stack->elem_size;
@@ -1124,7 +1124,7 @@ int rnd_stack_quickinsertf(struct rnd_stack *stack, size_t idx, float elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	q = (char*)stack->data + stack->size * stack->elem_size;
@@ -1154,7 +1154,7 @@ int rnd_stack_quickinsertd(struct rnd_stack *stack, size_t idx, double elem)
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	q = (char*)stack->data + stack->size * stack->elem_size;
@@ -1184,7 +1184,7 @@ int rnd_stack_quickinsertld(struct rnd_stack *stack, size_t idx, long double ele
 #endif
 	if (rnd_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return RND_ERANGE;
-	if (rnd_buffit(&stack->data, stack->elem_size, stack->size, &stack->capacity))
+	if (rnd_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return RND_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	q = (char*)stack->data + stack->size * stack->elem_size;
