@@ -367,7 +367,7 @@ TEST t_insert(void)
 		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_insert(NULL, 0, NULL), "%d");
 		ASSERT_EQ_FMT(RND_EINDEX, rnd_queue_insert(q, 1, &a), "%d");
 		ASSERT_EQ_FMT(0, rnd_queue_insert(q, 0, &a), "%d");
-		ASSERT_EQ_FMT(1LU, q->size, "%lu");
+		ASSERT_EQ_FMT(1LU, (unsigned long)q->size, "%lu");
 		ASSERT_EQ_FMT(10, rnd_queue_geti(q, 0), "%d");
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
 
@@ -419,7 +419,7 @@ TEST t_insert(void)
 		ASSERT_EQ_FMT(RND_EINVAL, F1(NULL, 0, a), "%d");                                 \
 		ASSERT_EQ_FMT(RND_EINDEX, F1(q, 1, a), "%d");                                    \
 		ASSERT_EQ_FMT(0, F1(q, 0, a), "%d");                                             \
-		ASSERT_EQ_FMT(1LU, q->size, "%lu");                                              \
+		ASSERT_EQ_FMT(1LU, (unsigned long)q->size, "%lu");                               \
 		ASSERT_EQ_FMT(a, F2(q, 0), M);                                                   \
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");                              \
                                                                                                  \
@@ -486,7 +486,7 @@ TEST t_quickinsert(void)
 		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_quickinsert(NULL, 0, NULL), "%d");
 		ASSERT_EQ_FMT(RND_EINDEX, rnd_queue_quickinsert(q, 1, &a), "%d");
 		ASSERT_EQ_FMT(0, rnd_queue_quickinsert(q, 0, &a), "%d");
-		ASSERT_EQ_FMT(1LU, q->size, "%lu");
+		ASSERT_EQ_FMT(1LU, (unsigned long)q->size, "%lu");
 		ASSERT_EQ_FMT(10, rnd_queue_geti(q, 0), "%d");
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
 
@@ -538,7 +538,7 @@ TEST t_quickinsert(void)
 		ASSERT_EQ_FMT(RND_EINVAL, F1(NULL, 0, a), "%d");                                 \
 		ASSERT_EQ_FMT(RND_EINDEX, F1(q, 1, a), "%d");                                    \
 		ASSERT_EQ_FMT(0, F1(q, 0, a), "%d");                                             \
-		ASSERT_EQ_FMT(1LU, q->size, "%lu");                                              \
+		ASSERT_EQ_FMT(1LU, (unsigned long)q->size, "%lu");                               \
 		ASSERT_EQ_FMT(a, F2(q, 0), M);                                                   \
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");                              \
                                                                                                  \
@@ -609,7 +609,7 @@ TEST t_remove(void)
 		ASSERT_EQ_FMT(q->data, q->head, "%p");
 		ASSERT_EQ_FMT(q->data, q->tail, "%p");
 		ASSERT_EQ_FMT(0, rnd_queue_remove(q, 0, NULL), "%d");
-		ASSERT_EQ_FMT(0LU, q->size, "%lu");
+		ASSERT_EQ_FMT(0LU, (unsigned long)q->size, "%lu");
 		ASSERT_EQ_FMT(q->data, q->head, "%p");
 		ASSERT_EQ_FMT(q->data, q->tail, "%p");
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
@@ -677,7 +677,7 @@ TEST t_remove(void)
 		ASSERT_EQ_FMT(q->data, q->head, "%p");                             \
 		ASSERT_EQ_FMT(q->data, q->tail, "%p");                             \
 		ASSERT_EQ_FMT(a, F1(q, 0), M);                                     \
-		ASSERT_EQ_FMT(0LU, q->size, "%lu");                                \
+		ASSERT_EQ_FMT(0LU, (unsigned long)q->size, "%lu");                 \
 		ASSERT_EQ_FMT(q->data, q->head, "%p");                             \
 		ASSERT_EQ_FMT(q->data, q->tail, "%p");                             \
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");                \
@@ -758,7 +758,7 @@ TEST t_quickremove(void)
 		ASSERT_EQ_FMT(q->data, q->head, "%p");
 		ASSERT_EQ_FMT(q->data, q->tail, "%p");
 		ASSERT_EQ_FMT(0, rnd_queue_quickremove(q, 0, NULL), "%d");
-		ASSERT_EQ_FMT(0LU, q->size, "%lu");
+		ASSERT_EQ_FMT(0LU, (unsigned long)q->size, "%lu");
 		ASSERT_EQ_FMT(q->data, q->head, "%p");
 		ASSERT_EQ_FMT(q->data, q->tail, "%p");
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
@@ -829,7 +829,7 @@ TEST t_quickremove(void)
 		ASSERT_EQ_FMT(q->data, q->head, "%p");                             \
 		ASSERT_EQ_FMT(q->data, q->tail, "%p");                             \
 		ASSERT_EQ_FMT(a, F1(q, 0), M);                                     \
-		ASSERT_EQ_FMT(0LU, q->size, "%lu");                                \
+		ASSERT_EQ_FMT(0LU, (unsigned long)q->size, "%lu");                 \
 		ASSERT_EQ_FMT(q->data, q->head, "%p");                             \
 		ASSERT_EQ_FMT(q->data, q->tail, "%p");                             \
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");                \
