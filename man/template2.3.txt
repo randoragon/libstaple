@@ -1,6 +1,18 @@
 .TH RND_## 3 DATE "librnd-VERSION"
 .SH NAME
-foo - ##
+foo,
+fooc,
+foos,
+fooi,
+fool,
+foosc,
+foouc,
+foous,
+fooui,
+fooul,
+foof,
+food,
+foold \- ##
 .SH SYNOPSIS
 .ad l
 #include <rnd.h>

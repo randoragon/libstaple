@@ -1,6 +1,6 @@
 .TH RND_## 3 DATE "librnd-VERSION"
 .SH NAME
-foo - ##
+foo \- ##
 .SH SYNOPSIS
 .ad l
 #include <rnd.h>

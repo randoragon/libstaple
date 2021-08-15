@@ -1,6 +1,6 @@
 .TH RND_## 7 DATE "librnd-VERSION"
 .SH NAME
-foo - rnd library implementation of the ##
+foo \- rnd library implementation of the ##
 .SH DESCRIPTION
 .P
 This manual describes the implementation of the
