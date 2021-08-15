@@ -60,9 +60,8 @@ int rnd_stack_clear(struct rnd_stack *stack, int (*dtor)(void*))
 			}
 			p += stack->elem_size;
 		}
-	} else {
-		stack->size = 0;
 	}
+	stack->size = 0;
 	return 0;
 }
 
