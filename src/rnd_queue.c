@@ -134,7 +134,7 @@ int rnd_queue_copy(struct rnd_queue *dest, const struct rnd_queue *src, int (*cp
 	return 0;
 }
 
-int rnd_queue_map(struct rnd_queue *queue, int (*func)(void*, size_t))
+int rnd_queue_foreach(struct rnd_queue *queue, int (*func)(void*, size_t))
 {
 	size_t i;
 	void *p;
@@ -799,7 +799,7 @@ int rnd_queue_insertld(struct rnd_queue *queue, size_t idx, long double elem)
 }
 
 
-int rnd_queue_quickinsert(struct rnd_queue *queue, size_t idx, const void *elem)
+int rnd_queue_qinsert(struct rnd_queue *queue, size_t idx, const void *elem)
 {
 	char *p;
 #ifdef RND_DEBUG
@@ -829,7 +829,7 @@ int rnd_queue_quickinsert(struct rnd_queue *queue, size_t idx, const void *elem)
 	return 0;
 }
 
-int rnd_queue_quickinsertc(struct rnd_queue *queue, size_t idx, char elem)
+int rnd_queue_qinsertc(struct rnd_queue *queue, size_t idx, char elem)
 {
 	char *p;
 #ifdef RND_DEBUG
@@ -860,7 +860,7 @@ int rnd_queue_quickinsertc(struct rnd_queue *queue, size_t idx, char elem)
 	return 0;
 }
 
-int rnd_queue_quickinserts(struct rnd_queue *queue, size_t idx, short elem)
+int rnd_queue_qinserts(struct rnd_queue *queue, size_t idx, short elem)
 {
 	char *p;
 #ifdef RND_DEBUG
@@ -891,7 +891,7 @@ int rnd_queue_quickinserts(struct rnd_queue *queue, size_t idx, short elem)
 	return 0;
 }
 
-int rnd_queue_quickinserti(struct rnd_queue *queue, size_t idx, int elem)
+int rnd_queue_qinserti(struct rnd_queue *queue, size_t idx, int elem)
 {
 	char *p;
 #ifdef RND_DEBUG
@@ -922,7 +922,7 @@ int rnd_queue_quickinserti(struct rnd_queue *queue, size_t idx, int elem)
 	return 0;
 }
 
-int rnd_queue_quickinsertl(struct rnd_queue *queue, size_t idx, long elem)
+int rnd_queue_qinsertl(struct rnd_queue *queue, size_t idx, long elem)
 {
 	char *p;
 #ifdef RND_DEBUG
@@ -953,7 +953,7 @@ int rnd_queue_quickinsertl(struct rnd_queue *queue, size_t idx, long elem)
 	return 0;
 }
 
-int rnd_queue_quickinsertsc(struct rnd_queue *queue, size_t idx, signed char elem)
+int rnd_queue_qinsertsc(struct rnd_queue *queue, size_t idx, signed char elem)
 {
 	char *p;
 #ifdef RND_DEBUG
@@ -984,7 +984,7 @@ int rnd_queue_quickinsertsc(struct rnd_queue *queue, size_t idx, signed char ele
 	return 0;
 }
 
-int rnd_queue_quickinsertuc(struct rnd_queue *queue, size_t idx, unsigned char elem)
+int rnd_queue_qinsertuc(struct rnd_queue *queue, size_t idx, unsigned char elem)
 {
 	char *p;
 #ifdef RND_DEBUG
@@ -1015,7 +1015,7 @@ int rnd_queue_quickinsertuc(struct rnd_queue *queue, size_t idx, unsigned char e
 	return 0;
 }
 
-int rnd_queue_quickinsertus(struct rnd_queue *queue, size_t idx, unsigned short elem)
+int rnd_queue_qinsertus(struct rnd_queue *queue, size_t idx, unsigned short elem)
 {
 	char *p;
 #ifdef RND_DEBUG
@@ -1046,7 +1046,7 @@ int rnd_queue_quickinsertus(struct rnd_queue *queue, size_t idx, unsigned short 
 	return 0;
 }
 
-int rnd_queue_quickinsertui(struct rnd_queue *queue, size_t idx, unsigned int elem)
+int rnd_queue_qinsertui(struct rnd_queue *queue, size_t idx, unsigned int elem)
 {
 	char *p;
 #ifdef RND_DEBUG
@@ -1077,7 +1077,7 @@ int rnd_queue_quickinsertui(struct rnd_queue *queue, size_t idx, unsigned int el
 	return 0;
 }
 
-int rnd_queue_quickinsertul(struct rnd_queue *queue, size_t idx, unsigned long elem)
+int rnd_queue_qinsertul(struct rnd_queue *queue, size_t idx, unsigned long elem)
 {
 	char *p;
 #ifdef RND_DEBUG
@@ -1108,7 +1108,7 @@ int rnd_queue_quickinsertul(struct rnd_queue *queue, size_t idx, unsigned long e
 	return 0;
 }
 
-int rnd_queue_quickinsertf(struct rnd_queue *queue, size_t idx, float elem)
+int rnd_queue_qinsertf(struct rnd_queue *queue, size_t idx, float elem)
 {
 	char *p;
 #ifdef RND_DEBUG
@@ -1139,7 +1139,7 @@ int rnd_queue_quickinsertf(struct rnd_queue *queue, size_t idx, float elem)
 	return 0;
 }
 
-int rnd_queue_quickinsertd(struct rnd_queue *queue, size_t idx, double elem)
+int rnd_queue_qinsertd(struct rnd_queue *queue, size_t idx, double elem)
 {
 	char *p;
 #ifdef RND_DEBUG
@@ -1170,7 +1170,7 @@ int rnd_queue_quickinsertd(struct rnd_queue *queue, size_t idx, double elem)
 	return 0;
 }
 
-int rnd_queue_quickinsertld(struct rnd_queue *queue, size_t idx, long double elem)
+int rnd_queue_qinsertld(struct rnd_queue *queue, size_t idx, long double elem)
 {
 	char *p;
 #ifdef RND_DEBUG
@@ -2081,7 +2081,7 @@ long double rnd_queue_removeld(struct rnd_queue *queue, size_t idx)
 }
 
 
-int rnd_queue_quickremove(struct rnd_queue *queue, size_t idx, void *output)
+int rnd_queue_qremove(struct rnd_queue *queue, size_t idx, void *output)
 {
 	char *p;
 #ifdef RND_DEBUG
@@ -2104,7 +2104,7 @@ int rnd_queue_quickremove(struct rnd_queue *queue, size_t idx, void *output)
 	return 0;
 }
 
-char rnd_queue_quickremovec(struct rnd_queue *queue, size_t idx)
+char rnd_queue_qremovec(struct rnd_queue *queue, size_t idx)
 {
 	char *p;
 	char ret;
@@ -2132,7 +2132,7 @@ char rnd_queue_quickremovec(struct rnd_queue *queue, size_t idx)
 	return ret;
 }
 
-short rnd_queue_quickremoves(struct rnd_queue *queue, size_t idx)
+short rnd_queue_qremoves(struct rnd_queue *queue, size_t idx)
 {
 	char *p;
 	short ret;
@@ -2160,7 +2160,7 @@ short rnd_queue_quickremoves(struct rnd_queue *queue, size_t idx)
 	return ret;
 }
 
-int rnd_queue_quickremovei(struct rnd_queue *queue, size_t idx)
+int rnd_queue_qremovei(struct rnd_queue *queue, size_t idx)
 {
 	char *p;
 	int ret;
@@ -2188,7 +2188,7 @@ int rnd_queue_quickremovei(struct rnd_queue *queue, size_t idx)
 	return ret;
 }
 
-long rnd_queue_quickremovel(struct rnd_queue *queue, size_t idx)
+long rnd_queue_qremovel(struct rnd_queue *queue, size_t idx)
 {
 	char *p;
 	long ret;
@@ -2216,7 +2216,7 @@ long rnd_queue_quickremovel(struct rnd_queue *queue, size_t idx)
 	return ret;
 }
 
-signed char rnd_queue_quickremovesc(struct rnd_queue *queue, size_t idx)
+signed char rnd_queue_qremovesc(struct rnd_queue *queue, size_t idx)
 {
 	char *p;
 	signed char ret;
@@ -2244,7 +2244,7 @@ signed char rnd_queue_quickremovesc(struct rnd_queue *queue, size_t idx)
 	return ret;
 }
 
-unsigned char rnd_queue_quickremoveuc(struct rnd_queue *queue, size_t idx)
+unsigned char rnd_queue_qremoveuc(struct rnd_queue *queue, size_t idx)
 {
 	char *p;
 	unsigned char ret;
@@ -2272,7 +2272,7 @@ unsigned char rnd_queue_quickremoveuc(struct rnd_queue *queue, size_t idx)
 	return ret;
 }
 
-unsigned short rnd_queue_quickremoveus(struct rnd_queue *queue, size_t idx)
+unsigned short rnd_queue_qremoveus(struct rnd_queue *queue, size_t idx)
 {
 	char *p;
 	unsigned short ret;
@@ -2300,7 +2300,7 @@ unsigned short rnd_queue_quickremoveus(struct rnd_queue *queue, size_t idx)
 	return ret;
 }
 
-unsigned int rnd_queue_quickremoveui(struct rnd_queue *queue, size_t idx)
+unsigned int rnd_queue_qremoveui(struct rnd_queue *queue, size_t idx)
 {
 	char *p;
 	unsigned int ret;
@@ -2328,7 +2328,7 @@ unsigned int rnd_queue_quickremoveui(struct rnd_queue *queue, size_t idx)
 	return ret;
 }
 
-unsigned long rnd_queue_quickremoveul(struct rnd_queue *queue, size_t idx)
+unsigned long rnd_queue_qremoveul(struct rnd_queue *queue, size_t idx)
 {
 	char *p;
 	unsigned long ret;
@@ -2356,7 +2356,7 @@ unsigned long rnd_queue_quickremoveul(struct rnd_queue *queue, size_t idx)
 	return ret;
 }
 
-float rnd_queue_quickremovef(struct rnd_queue *queue, size_t idx)
+float rnd_queue_qremovef(struct rnd_queue *queue, size_t idx)
 {
 	char *p;
 	float ret;
@@ -2384,7 +2384,7 @@ float rnd_queue_quickremovef(struct rnd_queue *queue, size_t idx)
 	return ret;
 }
 
-double rnd_queue_quickremoved(struct rnd_queue *queue, size_t idx)
+double rnd_queue_qremoved(struct rnd_queue *queue, size_t idx)
 {
 	char *p;
 	double ret;
@@ -2412,7 +2412,7 @@ double rnd_queue_quickremoved(struct rnd_queue *queue, size_t idx)
 	return ret;
 }
 
-long double rnd_queue_quickremoveld(struct rnd_queue *queue, size_t idx)
+long double rnd_queue_qremoveld(struct rnd_queue *queue, size_t idx)
 {
 	char *p;
 	long double ret;

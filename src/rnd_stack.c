@@ -130,7 +130,7 @@ int rnd_stack_copy(struct rnd_stack *dest, const struct rnd_stack *src, int (*cp
 	return 0;
 }
 
-int rnd_stack_map(struct rnd_stack *stack, int (*func)(void*, size_t))
+int rnd_stack_foreach(struct rnd_stack *stack, int (*func)(void*, size_t))
 {
 	size_t i;
 #ifdef RND_DEBUG
@@ -804,7 +804,7 @@ int rnd_stack_insertld(struct rnd_stack *stack, size_t idx, long double elem)
 }
 
 
-int rnd_stack_quickinsert(struct rnd_stack *stack, size_t idx, const void *elem)
+int rnd_stack_qinsert(struct rnd_stack *stack, size_t idx, const void *elem)
 {
 	char *p, *q;
 #ifdef RND_DEBUG
@@ -833,7 +833,7 @@ int rnd_stack_quickinsert(struct rnd_stack *stack, size_t idx, const void *elem)
 	return 0;
 }
 
-int rnd_stack_quickinsertc(struct rnd_stack *stack, size_t idx, char elem)
+int rnd_stack_qinsertc(struct rnd_stack *stack, size_t idx, char elem)
 {
 	char *p, *q;
 #ifdef RND_DEBUG
@@ -863,7 +863,7 @@ int rnd_stack_quickinsertc(struct rnd_stack *stack, size_t idx, char elem)
 	return 0;
 }
 
-int rnd_stack_quickinserts(struct rnd_stack *stack, size_t idx, short elem)
+int rnd_stack_qinserts(struct rnd_stack *stack, size_t idx, short elem)
 {
 	char *p, *q;
 #ifdef RND_DEBUG
@@ -893,7 +893,7 @@ int rnd_stack_quickinserts(struct rnd_stack *stack, size_t idx, short elem)
 	return 0;
 }
 
-int rnd_stack_quickinserti(struct rnd_stack *stack, size_t idx, int elem)
+int rnd_stack_qinserti(struct rnd_stack *stack, size_t idx, int elem)
 {
 	char *p, *q;
 #ifdef RND_DEBUG
@@ -923,7 +923,7 @@ int rnd_stack_quickinserti(struct rnd_stack *stack, size_t idx, int elem)
 	return 0;
 }
 
-int rnd_stack_quickinsertl(struct rnd_stack *stack, size_t idx, long elem)
+int rnd_stack_qinsertl(struct rnd_stack *stack, size_t idx, long elem)
 {
 	char *p, *q;
 #ifdef RND_DEBUG
@@ -953,7 +953,7 @@ int rnd_stack_quickinsertl(struct rnd_stack *stack, size_t idx, long elem)
 	return 0;
 }
 
-int rnd_stack_quickinsertsc(struct rnd_stack *stack, size_t idx, signed char elem)
+int rnd_stack_qinsertsc(struct rnd_stack *stack, size_t idx, signed char elem)
 {
 	char *p, *q;
 #ifdef RND_DEBUG
@@ -983,7 +983,7 @@ int rnd_stack_quickinsertsc(struct rnd_stack *stack, size_t idx, signed char ele
 	return 0;
 }
 
-int rnd_stack_quickinsertuc(struct rnd_stack *stack, size_t idx, unsigned char elem)
+int rnd_stack_qinsertuc(struct rnd_stack *stack, size_t idx, unsigned char elem)
 {
 	char *p, *q;
 #ifdef RND_DEBUG
@@ -1013,7 +1013,7 @@ int rnd_stack_quickinsertuc(struct rnd_stack *stack, size_t idx, unsigned char e
 	return 0;
 }
 
-int rnd_stack_quickinsertus(struct rnd_stack *stack, size_t idx, unsigned short elem)
+int rnd_stack_qinsertus(struct rnd_stack *stack, size_t idx, unsigned short elem)
 {
 	char *p, *q;
 #ifdef RND_DEBUG
@@ -1043,7 +1043,7 @@ int rnd_stack_quickinsertus(struct rnd_stack *stack, size_t idx, unsigned short 
 	return 0;
 }
 
-int rnd_stack_quickinsertui(struct rnd_stack *stack, size_t idx, unsigned int elem)
+int rnd_stack_qinsertui(struct rnd_stack *stack, size_t idx, unsigned int elem)
 {
 	char *p, *q;
 #ifdef RND_DEBUG
@@ -1073,7 +1073,7 @@ int rnd_stack_quickinsertui(struct rnd_stack *stack, size_t idx, unsigned int el
 	return 0;
 }
 
-int rnd_stack_quickinsertul(struct rnd_stack *stack, size_t idx, unsigned long elem)
+int rnd_stack_qinsertul(struct rnd_stack *stack, size_t idx, unsigned long elem)
 {
 	char *p, *q;
 #ifdef RND_DEBUG
@@ -1103,7 +1103,7 @@ int rnd_stack_quickinsertul(struct rnd_stack *stack, size_t idx, unsigned long e
 	return 0;
 }
 
-int rnd_stack_quickinsertf(struct rnd_stack *stack, size_t idx, float elem)
+int rnd_stack_qinsertf(struct rnd_stack *stack, size_t idx, float elem)
 {
 	char *p, *q;
 #ifdef RND_DEBUG
@@ -1133,7 +1133,7 @@ int rnd_stack_quickinsertf(struct rnd_stack *stack, size_t idx, float elem)
 	return 0;
 }
 
-int rnd_stack_quickinsertd(struct rnd_stack *stack, size_t idx, double elem)
+int rnd_stack_qinsertd(struct rnd_stack *stack, size_t idx, double elem)
 {
 	char *p, *q;
 #ifdef RND_DEBUG
@@ -1163,7 +1163,7 @@ int rnd_stack_quickinsertd(struct rnd_stack *stack, size_t idx, double elem)
 	return 0;
 }
 
-int rnd_stack_quickinsertld(struct rnd_stack *stack, size_t idx, long double elem)
+int rnd_stack_qinsertld(struct rnd_stack *stack, size_t idx, long double elem)
 {
 	char *p, *q;
 #ifdef RND_DEBUG
@@ -2052,7 +2052,7 @@ long double rnd_stack_removeld(struct rnd_stack *stack, size_t idx)
 }
 
 
-int rnd_stack_quickremove(struct rnd_stack *stack, size_t idx, void *output)
+int rnd_stack_qremove(struct rnd_stack *stack, size_t idx, void *output)
 {
 	char *p, *q;
 #ifdef RND_DEBUG
@@ -2074,7 +2074,7 @@ int rnd_stack_quickremove(struct rnd_stack *stack, size_t idx, void *output)
 	return 0;
 }
 
-char rnd_stack_quickremovec(struct rnd_stack *stack, size_t idx)
+char rnd_stack_qremovec(struct rnd_stack *stack, size_t idx)
 {
 	char *p, *q;
 	char ret;
@@ -2101,7 +2101,7 @@ char rnd_stack_quickremovec(struct rnd_stack *stack, size_t idx)
 	return ret;
 }
 
-short rnd_stack_quickremoves(struct rnd_stack *stack, size_t idx)
+short rnd_stack_qremoves(struct rnd_stack *stack, size_t idx)
 {
 	char *p, *q;
 	short ret;
@@ -2128,7 +2128,7 @@ short rnd_stack_quickremoves(struct rnd_stack *stack, size_t idx)
 	return ret;
 }
 
-int rnd_stack_quickremovei(struct rnd_stack *stack, size_t idx)
+int rnd_stack_qremovei(struct rnd_stack *stack, size_t idx)
 {
 	char *p, *q;
 	int ret;
@@ -2155,7 +2155,7 @@ int rnd_stack_quickremovei(struct rnd_stack *stack, size_t idx)
 	return ret;
 }
 
-long rnd_stack_quickremovel(struct rnd_stack *stack, size_t idx)
+long rnd_stack_qremovel(struct rnd_stack *stack, size_t idx)
 {
 	char *p, *q;
 	long ret;
@@ -2182,7 +2182,7 @@ long rnd_stack_quickremovel(struct rnd_stack *stack, size_t idx)
 	return ret;
 }
 
-signed char rnd_stack_quickremovesc(struct rnd_stack *stack, size_t idx)
+signed char rnd_stack_qremovesc(struct rnd_stack *stack, size_t idx)
 {
 	char *p, *q;
 	signed char ret;
@@ -2209,7 +2209,7 @@ signed char rnd_stack_quickremovesc(struct rnd_stack *stack, size_t idx)
 	return ret;
 }
 
-unsigned char rnd_stack_quickremoveuc(struct rnd_stack *stack, size_t idx)
+unsigned char rnd_stack_qremoveuc(struct rnd_stack *stack, size_t idx)
 {
 	char *p, *q;
 	unsigned char ret;
@@ -2236,7 +2236,7 @@ unsigned char rnd_stack_quickremoveuc(struct rnd_stack *stack, size_t idx)
 	return ret;
 }
 
-unsigned short rnd_stack_quickremoveus(struct rnd_stack *stack, size_t idx)
+unsigned short rnd_stack_qremoveus(struct rnd_stack *stack, size_t idx)
 {
 	char *p, *q;
 	unsigned short ret;
@@ -2263,7 +2263,7 @@ unsigned short rnd_stack_quickremoveus(struct rnd_stack *stack, size_t idx)
 	return ret;
 }
 
-unsigned int rnd_stack_quickremoveui(struct rnd_stack *stack, size_t idx)
+unsigned int rnd_stack_qremoveui(struct rnd_stack *stack, size_t idx)
 {
 	char *p, *q;
 	unsigned int ret;
@@ -2290,7 +2290,7 @@ unsigned int rnd_stack_quickremoveui(struct rnd_stack *stack, size_t idx)
 	return ret;
 }
 
-unsigned long rnd_stack_quickremoveul(struct rnd_stack *stack, size_t idx)
+unsigned long rnd_stack_qremoveul(struct rnd_stack *stack, size_t idx)
 {
 	char *p, *q;
 	unsigned long ret;
@@ -2317,7 +2317,7 @@ unsigned long rnd_stack_quickremoveul(struct rnd_stack *stack, size_t idx)
 	return ret;
 }
 
-float rnd_stack_quickremovef(struct rnd_stack *stack, size_t idx)
+float rnd_stack_qremovef(struct rnd_stack *stack, size_t idx)
 {
 	char *p, *q;
 	float ret;
@@ -2344,7 +2344,7 @@ float rnd_stack_quickremovef(struct rnd_stack *stack, size_t idx)
 	return ret;
 }
 
-double rnd_stack_quickremoved(struct rnd_stack *stack, size_t idx)
+double rnd_stack_qremoved(struct rnd_stack *stack, size_t idx)
 {
 	char *p, *q;
 	double ret;
@@ -2371,7 +2371,7 @@ double rnd_stack_quickremoved(struct rnd_stack *stack, size_t idx)
 	return ret;
 }
 
-long double rnd_stack_quickremoveld(struct rnd_stack *stack, size_t idx)
+long double rnd_stack_qremoveld(struct rnd_stack *stack, size_t idx)
 {
 	char *p, *q;
 	long double ret;

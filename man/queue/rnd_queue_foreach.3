@@ -1,12 +1,12 @@
-.TH RND_QUEUE_MAP 3 DATE "librnd-VERSION"
+.TH RND_QUEUE_FOREACH 3 DATE "librnd-VERSION"
 .SH NAME
-rnd_queue_map \- run a function for each queue element
+rnd_queue_foreach \- run a function for each queue element
 .SH SYNOPSIS
 .ad l
 #include <rnd.h>
 .sp
 int
-.BR rnd_queue_map "(struct rnd_queue"
+.BR rnd_queue_foreach "(struct rnd_queue"
 .RI * queue ,
 int
 .RI (* func ")(void*, size_t))"
@@ -15,15 +15,15 @@ Link with \fI-lrnd\fP.
 .ad
 .SH DESCRIPTION
 The
-.BR rnd_queue_map ()
-function intakes a pointer to a map function, then iterates through all queue
-elements in no particular order, and runs the map function for each one.
+.BR rnd_queue_foreach ()
+function intakes a pointer to a function, then iterates through all queue
+elements in no particular order, and runs that function for each one.
 .P
 .I queue
 is a pointer to the queue.
 .P
 .I func
-is the pointer to the map function. The map function must be implemented in such
+is the pointer to a function. The function must be implemented in such
 a way that the first argument
 .RB ( void* )
 is the address to the current element, and the second
@@ -31,18 +31,18 @@ is the address to the current element, and the second
 is the index of the current element (index 0 corresponds to the front of the
 queue, 1 is the element behind it and so on).
 .P
-The map function pointed to by
+The function pointed to by
 .I func
 must return 0 for success, and anything else for failure. In debug mode, the
 caught error code (if any) is printed on stderr.
 .SH RETURN VALUE
 If successful, the
-.BR rnd_queue_map ()
+.BR rnd_queue_foreach ()
 function shall return 0. Otherwise, it shall return a code indicating the
 error.
 .SH ERRORS
 The
-.BR rnd_queue_map ()
+.BR rnd_queue_foreach ()
 function shall fail if:
 .IP \fBRND_EINVAL\fP 1.5i
 Either
@@ -64,11 +64,11 @@ See
 .BR rnd_queue_copy (3),
 .BR rnd_queue_push (3),
 .BR rnd_queue_insert (3),
-.BR rnd_queue_quickinsert (3),
+.BR rnd_queue_qinsert (3),
 .BR rnd_queue_peek (3),
 .BR rnd_queue_pop (3),
 .BR rnd_queue_remove (3),
-.BR rnd_queue_quickremove (3),
+.BR rnd_queue_qremove (3),
 .BR rnd_queue_get (3),
 .BR rnd_queue_set (3),
 .BR rnd_queue_print (3)

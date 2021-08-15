@@ -1,16 +1,16 @@
-.TH RND_QUEUE_QUICKREMOVE 3 DATE "librnd-VERSION"
+.TH RND_QUEUE_QREMOVE 3 DATE "librnd-VERSION"
 .SH NAME
-rnd_queue_quickremove, rnd_queue_quickremovec, rnd_queue_quickremoves,
-rnd_queue_quickremovei, rnd_queue_quickremovel, rnd_queue_quickremovesc,
-rnd_queue_quickremoveuc, rnd_queue_quickremoveus, rnd_queue_quickremoveui,
-rnd_queue_quickremoveul, rnd_queue_quickremovef, rnd_queue_quickremoved,
-rnd_queue_quickremoveld \- remove an element from any position of a queue
+rnd_queue_qremove, rnd_queue_qremovec, rnd_queue_qremoves,
+rnd_queue_qremovei, rnd_queue_qremovel, rnd_queue_qremovesc,
+rnd_queue_qremoveuc, rnd_queue_qremoveus, rnd_queue_qremoveui,
+rnd_queue_qremoveul, rnd_queue_qremovef, rnd_queue_qremoved,
+rnd_queue_qremoveld \- quickly remove an element from any position of a queue
 .SH SYNOPSIS
 .ad l
 #include <rnd.h>
 .sp
 int
-.BR rnd_queue_quickremove "(struct rnd_queue"
+.BR rnd_queue_qremove "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx ,
@@ -18,73 +18,73 @@ void
 .RI * output )
 .br
 char
-.BR rnd_queue_quickremovec "(struct rnd_queue"
+.BR rnd_queue_qremovec "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx )
 .br
 short
-.BR rnd_queue_quickremoves "(struct rnd_queue"
+.BR rnd_queue_qremoves "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx )
 .br
 int
-.BR rnd_queue_quickremovei "(struct rnd_queue"
+.BR rnd_queue_qremovei "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx )
 .br
 long
-.BR rnd_queue_quickremovel "(struct rnd_queue"
+.BR rnd_queue_qremovel "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx )
 .br
 signed char
-.BR rnd_queue_quickremovesc "(struct rnd_queue"
+.BR rnd_queue_qremovesc "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx )
 .br
 unsigned char
-.BR rnd_queue_quickremoveuc "(struct rnd_queue"
+.BR rnd_queue_qremoveuc "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx )
 .br
 unsigned short
-.BR rnd_queue_quickremoveus "(struct rnd_queue"
+.BR rnd_queue_qremoveus "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx )
 .br
 unsigned int
-.BR rnd_queue_quickremoveui "(struct rnd_queue"
+.BR rnd_queue_qremoveui "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx )
 .br
 unsigned long
-.BR rnd_queue_quickremoveul "(struct rnd_queue"
+.BR rnd_queue_qremoveul "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx )
 .br
 float
-.BR rnd_queue_quickremovef "(struct rnd_queue"
+.BR rnd_queue_qremovef "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx )
 .br
 double
-.BR rnd_queue_quickremoved "(struct rnd_queue"
+.BR rnd_queue_qremoved "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx )
 .br
 long double
-.BR rnd_queue_quickremoveld "(struct rnd_queue"
+.BR rnd_queue_qremoveld "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx )
@@ -96,14 +96,14 @@ See
 .BR rnd_queue_remove (3).
 .P
 The functions in the
-.BR rnd_queue_quickremove ()
+.BR rnd_queue_qremove ()
 family operate in constant time, which is achievable by changing the order of
 the elements during removal.
 .SH EXAMPLES
 To explain how the
 .BR rnd_queue_remove ()
 and
-.BR rnd_queue_quickremove ()
+.BR rnd_queue_qremove ()
 families differ, consider the following initial queue (from head to tail):
 .IP
 .B 1 2 3 4 _ _ _
@@ -126,7 +126,7 @@ forward into the freed spot, without affecting the order:
 \h'2n'^ ^
 .P
 On the contrary, the functions in the
-.BR rnd_queue_quickremove ()
+.BR rnd_queue_qremove ()
 family achieve the goal faster by moving the tail of the queue (in this case
 .BR 4 )
 into the value that should be removed:
@@ -149,10 +149,10 @@ the elements.
 .BR rnd_queue_destroy (3),
 .BR rnd_queue_clear (3),
 .BR rnd_queue_copy (3),
-.BR rnd_queue_map (3),
+.BR rnd_queue_foreach (3),
 .BR rnd_queue_push (3),
 .BR rnd_queue_insert (3),
-.BR rnd_queue_quickinsert (3),
+.BR rnd_queue_qinsert (3),
 .BR rnd_queue_peek (3),
 .BR rnd_queue_pop (3),
 .BR rnd_queue_remove (3),

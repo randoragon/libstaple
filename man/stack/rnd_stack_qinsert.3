@@ -1,16 +1,16 @@
-.TH RND_STACK_QUICKINSERT 3 DATE "librnd-VERSION"
+.TH RND_STACK_QINSERT 3 DATE "librnd-VERSION"
 .SH NAME
-rnd_stack_quickinsert, rnd_stack_quickinsertc, rnd_stack_quickinserts,
-rnd_stack_quickinserti, rnd_stack_quickinsertl, rnd_stack_quickinsertsc,
-rnd_stack_quickinsertuc, rnd_stack_quickinsertus, rnd_stack_quickinsertui,
-rnd_stack_quickinsertul, rnd_stack_quickinsertf, rnd_stack_quickinsertd,
-rnd_stack_quickinsertld \- insert an element at any position of a stack
+rnd_stack_qinsert, rnd_stack_qinsertc, rnd_stack_qinserts,
+rnd_stack_qinserti, rnd_stack_qinsertl, rnd_stack_qinsertsc,
+rnd_stack_qinsertuc, rnd_stack_qinsertus, rnd_stack_qinsertui,
+rnd_stack_qinsertul, rnd_stack_qinsertf, rnd_stack_qinsertd,
+rnd_stack_qinsertld \- quickly insert an element at any position of a stack
 .SH SYNOPSIS
 .ad l
 #include <rnd.h>
 .sp
 int
-.BR rnd_stack_quickinsert "(struct rnd_stack"
+.BR rnd_stack_qinsert "(struct rnd_stack"
 .RI * stack ,
 size_t
 .IR idx ,
@@ -18,7 +18,7 @@ const void
 .RI * elem )
 .br
 int
-.BR rnd_stack_quickinsertc "(struct rnd_stack"
+.BR rnd_stack_qinsertc "(struct rnd_stack"
 .RI * stack ,
 size_t
 .IR idx ,
@@ -26,7 +26,7 @@ char
 .IR elem )
 .br
 int
-.BR rnd_stack_quickinserts "(struct rnd_stack"
+.BR rnd_stack_qinserts "(struct rnd_stack"
 .RI * stack ,
 size_t
 .IR idx ,
@@ -34,7 +34,7 @@ short
 .IR elem )
 .br
 int
-.BR rnd_stack_quickinserti "(struct rnd_stack"
+.BR rnd_stack_qinserti "(struct rnd_stack"
 .RI * stack ,
 size_t
 .IR idx ,
@@ -42,7 +42,7 @@ int
 .IR elem )
 .br
 int
-.BR rnd_stack_quickinsertl "(struct rnd_stack"
+.BR rnd_stack_qinsertl "(struct rnd_stack"
 .RI * stack ,
 size_t
 .IR idx ,
@@ -50,7 +50,7 @@ long
 .IR elem )
 .br
 int
-.BR rnd_stack_quickinsertsc "(struct rnd_stack"
+.BR rnd_stack_qinsertsc "(struct rnd_stack"
 .RI * stack ,
 size_t
 .IR idx ,
@@ -58,7 +58,7 @@ signed char
 .IR elem )
 .br
 int
-.BR rnd_stack_quickinsertuc "(struct rnd_stack"
+.BR rnd_stack_qinsertuc "(struct rnd_stack"
 .RI * stack ,
 size_t
 .IR idx ,
@@ -66,7 +66,7 @@ unsigned char
 .IR elem )
 .br
 int
-.BR rnd_stack_quickinsertus "(struct rnd_stack"
+.BR rnd_stack_qinsertus "(struct rnd_stack"
 .RI * stack ,
 size_t
 .IR idx ,
@@ -74,7 +74,7 @@ unsigned short
 .IR elem )
 .br
 int
-.BR rnd_stack_quickinsertui "(struct rnd_stack"
+.BR rnd_stack_qinsertui "(struct rnd_stack"
 .RI * stack ,
 size_t
 .IR idx ,
@@ -82,7 +82,7 @@ unsigned int
 .IR elem )
 .br
 int
-.BR rnd_stack_quickinsertul "(struct rnd_stack"
+.BR rnd_stack_qinsertul "(struct rnd_stack"
 .RI * stack ,
 size_t
 .IR idx ,
@@ -90,7 +90,7 @@ unsigned long
 .IR elem )
 .br
 int
-.BR rnd_stack_quickinsertf "(struct rnd_stack"
+.BR rnd_stack_qinsertf "(struct rnd_stack"
 .RI * stack ,
 size_t
 .IR idx ,
@@ -98,7 +98,7 @@ float
 .IR elem )
 .br
 int
-.BR rnd_stack_quickinsertd "(struct rnd_stack"
+.BR rnd_stack_qinsertd "(struct rnd_stack"
 .RI * stack ,
 size_t
 .IR idx ,
@@ -106,7 +106,7 @@ double
 .IR elem )
 .br
 int
-.BR rnd_stack_quickinsertld "(struct rnd_stack"
+.BR rnd_stack_qinsertld "(struct rnd_stack"
 .RI * stack ,
 size_t
 .IR idx ,
@@ -120,14 +120,14 @@ See
 .BR rnd_stack_insert (3).
 .P
 The functions in the
-.BR rnd_stack_quickinsert ()
+.BR rnd_stack_qinsert ()
 family operate in constant time, which is achievable by changing the order of
 the elements upon insertion.
 .SH EXAMPLES
 To explain how the
 .BR rnd_stack_insert ()
 and
-.BR rnd_stack_quickinsert ()
+.BR rnd_stack_qinsert ()
 families differ, consider the following initial stack (elements listed
 from bottom to top):
 .IP
@@ -155,7 +155,7 @@ without altering the order:
 \h'4n'^
 .P
 On the contrary, the functions in the
-.BR rnd_stack_quickinsert ()
+.BR rnd_stack_qinsert ()
 family achieve the goal faster by moving the element "in the way" (in this case
 .BR 3 )
 to the top of the stack:
@@ -178,13 +178,13 @@ the elements.
 .BR rnd_stack_destroy (3),
 .BR rnd_stack_clear (3),
 .BR rnd_stack_copy (3),
-.BR rnd_stack_map (3),
+.BR rnd_stack_foreach (3),
 .BR rnd_stack_push (3),
 .BR rnd_stack_insert (3),
 .BR rnd_stack_peek (3),
 .BR rnd_stack_pop (3),
 .BR rnd_stack_remove (3),
-.BR rnd_stack_quickremove (3),
+.BR rnd_stack_qremove (3),
 .BR rnd_stack_get (3),
 .BR rnd_stack_set (3),
 .BR rnd_stack_print (3)

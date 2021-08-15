@@ -1,16 +1,16 @@
-.TH RND_QUEUE_QUICKINSERT 3 DATE "librnd-VERSION"
+.TH RND_QUEUE_QINSERT 3 DATE "librnd-VERSION"
 .SH NAME
-rnd_queue_quickinsert, rnd_queue_quickinsertc, rnd_queue_quickinserts,
-rnd_queue_quickinserti, rnd_queue_quickinsertl, rnd_queue_quickinsertsc,
-rnd_queue_quickinsertuc, rnd_queue_quickinsertus, rnd_queue_quickinsertui,
-rnd_queue_quickinsertul, rnd_queue_quickinsertf, rnd_queue_quickinsertd,
-rnd_queue_quickinsertld \- insert an element at any position of a queue
+rnd_queue_qinsert, rnd_queue_qinsertc, rnd_queue_qinserts,
+rnd_queue_qinserti, rnd_queue_qinsertl, rnd_queue_qinsertsc,
+rnd_queue_qinsertuc, rnd_queue_qinsertus, rnd_queue_qinsertui,
+rnd_queue_qinsertul, rnd_queue_qinsertf, rnd_queue_qinsertd,
+rnd_queue_qinsertld \- quickly insert an element at any position of a queue
 .SH SYNOPSIS
 .ad l
 #include <rnd.h>
 .sp
 int
-.BR rnd_queue_quickinsert "(struct rnd_queue"
+.BR rnd_queue_qinsert "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx ,
@@ -18,7 +18,7 @@ const void
 .RI * elem )
 .br
 int
-.BR rnd_queue_quickinsertc "(struct rnd_queue"
+.BR rnd_queue_qinsertc "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx ,
@@ -26,7 +26,7 @@ char
 .IR elem )
 .br
 int
-.BR rnd_queue_quickinserts "(struct rnd_queue"
+.BR rnd_queue_qinserts "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx ,
@@ -34,7 +34,7 @@ short
 .IR elem )
 .br
 int
-.BR rnd_queue_quickinserti "(struct rnd_queue"
+.BR rnd_queue_qinserti "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx ,
@@ -42,7 +42,7 @@ int
 .IR elem )
 .br
 int
-.BR rnd_queue_quickinsertl "(struct rnd_queue"
+.BR rnd_queue_qinsertl "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx ,
@@ -50,7 +50,7 @@ long
 .IR elem )
 .br
 int
-.BR rnd_queue_quickinsertsc "(struct rnd_queue"
+.BR rnd_queue_qinsertsc "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx ,
@@ -58,7 +58,7 @@ signed char
 .IR elem )
 .br
 int
-.BR rnd_queue_quickinsertuc "(struct rnd_queue"
+.BR rnd_queue_qinsertuc "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx ,
@@ -66,7 +66,7 @@ unsigned char
 .IR elem )
 .br
 int
-.BR rnd_queue_quickinsertus "(struct rnd_queue"
+.BR rnd_queue_qinsertus "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx ,
@@ -74,7 +74,7 @@ unsigned short
 .IR elem )
 .br
 int
-.BR rnd_queue_quickinsertui "(struct rnd_queue"
+.BR rnd_queue_qinsertui "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx ,
@@ -82,7 +82,7 @@ unsigned int
 .IR elem )
 .br
 int
-.BR rnd_queue_quickinsertul "(struct rnd_queue"
+.BR rnd_queue_qinsertul "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx ,
@@ -90,7 +90,7 @@ unsigned long
 .IR elem )
 .br
 int
-.BR rnd_queue_quickinsertf "(struct rnd_queue"
+.BR rnd_queue_qinsertf "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx ,
@@ -98,7 +98,7 @@ float
 .IR elem )
 .br
 int
-.BR rnd_queue_quickinsertd "(struct rnd_queue"
+.BR rnd_queue_qinsertd "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx ,
@@ -106,7 +106,7 @@ double
 .IR elem )
 .br
 int
-.BR rnd_queue_quickinsertld "(struct rnd_queue"
+.BR rnd_queue_qinsertld "(struct rnd_queue"
 .RI * queue ,
 size_t
 .IR idx ,
@@ -120,14 +120,14 @@ See
 .BR rnd_queue_insert (3).
 .P
 The functions in the
-.BR rnd_queue_quickinsert ()
+.BR rnd_queue_qinsert ()
 family operate in constant time, which is achievable by changing the order of
 the elements upon insertion.
 .SH EXAMPLES
 To explain how the
 .BR rnd_queue_insert ()
 and
-.BR rnd_queue_quickinsert ()
+.BR rnd_queue_qinsert ()
 families differ, consider the following initial queue (from head to tail):
 .IP
 .B 1 2 3 4 _ _ _
@@ -154,7 +154,7 @@ without altering the order:
 \h'4n'^
 .P
 On the contrary, the functions in the
-.BR rnd_queue_quickinsert ()
+.BR rnd_queue_qinsert ()
 family achieve the goal faster by moving the element "in the way" (in this case
 .BR 3 )
 to the back of the queue:
@@ -177,13 +177,13 @@ the elements.
 .BR rnd_queue_destroy (3),
 .BR rnd_queue_clear (3),
 .BR rnd_queue_copy (3),
-.BR rnd_queue_map (3),
+.BR rnd_queue_foreach (3),
 .BR rnd_queue_push (3),
 .BR rnd_queue_insert (3),
 .BR rnd_queue_peek (3),
 .BR rnd_queue_pop (3),
 .BR rnd_queue_remove (3),
-.BR rnd_queue_quickremove (3),
+.BR rnd_queue_qremove (3),
 .BR rnd_queue_get (3),
 .BR rnd_queue_set (3),
 .BR rnd_queue_print (3)

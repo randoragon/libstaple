@@ -267,15 +267,15 @@ TEST t_clear(void)
 	PASS();
 }
 
-TEST t_map(void)
+TEST t_foreach(void)
 {
 	struct rnd_stack *s;
 	unsigned i;
 	s = rnd_stack_create(sizeof(long double), 1000);
 	ASSERT_NEQ(NULL, s);
-	ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_map(NULL, data_mutate), "%d");
-	ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_map(s, NULL), "%d");
-	ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_map(NULL, NULL), "%d");
+	ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_foreach(NULL, data_mutate), "%d");
+	ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_foreach(s, NULL), "%d");
+	ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_foreach(NULL, NULL), "%d");
 	ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
 	s = rnd_stack_create(sizeof(struct data), 1000);
 	for (i = 0; i < 1000; i++) {
@@ -283,9 +283,9 @@ TEST t_map(void)
 		ASSERT_EQ_FMT(0, data_init(&d), "%d");
 		ASSERT_EQ_FMT(0, rnd_stack_push(s, &d), "%d");
 	}
-	ASSERT_EQ_FMT(RND_EHANDLER, rnd_stack_map(s, data_mutate_bad), "%d");
-	ASSERT_EQ_FMT(0, rnd_stack_map(s, data_mutate), "%d");
-	ASSERT_EQ_FMT(0, rnd_stack_map(s, data_verify), "%d");
+	ASSERT_EQ_FMT(RND_EHANDLER, rnd_stack_foreach(s, data_mutate_bad), "%d");
+	ASSERT_EQ_FMT(0, rnd_stack_foreach(s, data_mutate), "%d");
+	ASSERT_EQ_FMT(0, rnd_stack_foreach(s, data_verify), "%d");
 	ASSERT_EQ_FMT(0, rnd_stack_destroy(s, data_dtor), "%d");
 	PASS();
 }
@@ -466,7 +466,7 @@ TEST t_insert(void)
 	PASS();
 }
 
-TEST t_quickinsert(void)
+TEST t_qinsert(void)
 {
 	struct rnd_stack *s;
 	unsigned i;
@@ -476,11 +476,11 @@ TEST t_quickinsert(void)
 		struct data d[1000];
 		s = rnd_stack_create(sizeof(int), 1000);
 		ASSERT_NEQ(NULL, s);
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_quickinsert(s, 0, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_quickinsert(NULL, 0, &a), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_quickinsert(NULL, 0, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_quickinsert(s, 1, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_quickinsert(s, 0, &a), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_qinsert(s, 0, NULL), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_qinsert(NULL, 0, &a), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_qinsert(NULL, 0, NULL), "%d");
+		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_qinsert(s, 1, &a), "%d");
+		ASSERT_EQ_FMT(0, rnd_stack_qinsert(s, 0, &a), "%d");
 		ASSERT_EQ_FMT(1LU, (unsigned long)s->size, "%lu");
 		ASSERT_EQ_FMT(10, rnd_stack_geti(s, 0), "%d");
 		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
@@ -491,7 +491,7 @@ TEST t_quickinsert(void)
 			struct data a;
 			size_t idx = IRANGE(0, i);
 			ASSERT_EQ_FMT(0, data_init(d + i), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_quickinsert(s, idx, d + i), "%d");
+			ASSERT_EQ_FMT(0, rnd_stack_qinsert(s, idx, d + i), "%d");
 			ASSERT_EQ_FMT((unsigned long)i + 1, (unsigned long)s->size, "%lu");
 			ASSERT_EQ_FMT(0, rnd_stack_get(s, idx, &a), "%d");
 			ASSERT_EQ_FMT(0, data_cmp(&a, d + i), "%d");
@@ -502,7 +502,7 @@ TEST t_quickinsert(void)
 		ASSERT_NEQ(NULL, s);
 		for (i = 0; i < 5; i++) {
 			ASSERT_EQ_FMT(0, data_init(d + i), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_quickinsert(s, i, d + i), "%d");
+			ASSERT_EQ_FMT(0, rnd_stack_qinsert(s, i, d + i), "%d");
 		}
 		for (i = 0; i < 5; i++) {
 			struct data a;
@@ -512,11 +512,11 @@ TEST t_quickinsert(void)
 		{
 			struct data a;
 			ASSERT_EQ_FMT(0, data_init(d + 5), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_quickinsert(s, 1, d + 5), "%d");
+			ASSERT_EQ_FMT(0, rnd_stack_qinsert(s, 1, d + 5), "%d");
 			ASSERT_EQ_FMT(0, rnd_stack_peek(s, &a), "%d");
 			ASSERT_EQ_FMT(0, data_cmp(&a, d + 3), "%d");
 			ASSERT_EQ_FMT(0, data_init(d + 6), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_quickinsert(s, 3, d + 6), "%d");
+			ASSERT_EQ_FMT(0, rnd_stack_qinsert(s, 3, d + 6), "%d");
 			ASSERT_EQ_FMT(0, rnd_stack_peek(s, &a), "%d");
 			ASSERT_EQ_FMT(0, data_cmp(&a, d + 2), "%d");
 			ASSERT_EQ_FMT(7LU, (unsigned long)s->size, "%lu");
@@ -526,7 +526,7 @@ TEST t_quickinsert(void)
 
 	/* Suffixed form
 	 * T  - type
-	 * F1 - quickinsert function
+	 * F1 - qinsert function
 	 * F2 - get function
 	 * V  - random value snippet
 	 * M  - printf format string
@@ -575,18 +575,18 @@ TEST t_quickinsert(void)
 		ASSERT_EQ_FMT(RND_EILLEGAL, F1(s, 0, (V)), "%d");                                \
 		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                              \
 	} while (0)
-	test(char          , rnd_stack_quickinsertc , rnd_stack_getc , IRANGE(1, CHAR_MAX) , "%hd");
-	test(short         , rnd_stack_quickinserts , rnd_stack_gets , IRANGE(1, SHRT_MAX) , "%hd");
-	test(int           , rnd_stack_quickinserti , rnd_stack_geti , FRANGE(1, INT_MAX)  , "%d");
-	test(long          , rnd_stack_quickinsertl , rnd_stack_getl , FRANGE(1, LONG_MAX) , "%ld");
-	test(signed char   , rnd_stack_quickinsertsc, rnd_stack_getsc, IRANGE(1, SCHAR_MAX), "%hd");
-	test(unsigned char , rnd_stack_quickinsertuc, rnd_stack_getuc, IRANGE(1, UCHAR_MAX), "%hd");
-	test(unsigned short, rnd_stack_quickinsertus, rnd_stack_getus, IRANGE(1, USHRT_MAX), "%hu");
-	test(unsigned int  , rnd_stack_quickinsertui, rnd_stack_getui, FRANGE(1, UINT_MAX) , "%u");
-	test(unsigned long , rnd_stack_quickinsertul, rnd_stack_getul, FRANGE(1, ULONG_MAX), "%lu");
-	test(float         , rnd_stack_quickinsertf , rnd_stack_getf , FRANGE(1, FLT_MAX)  , "%f");
-	test(double        , rnd_stack_quickinsertd , rnd_stack_getd , FRANGE(1, DBL_MAX)  , "%f");
-	test(long double   , rnd_stack_quickinsertld, rnd_stack_getld, FRANGE(1, LDBL_MAX) , "%Lf");
+	test(char          , rnd_stack_qinsertc , rnd_stack_getc , IRANGE(1, CHAR_MAX) , "%hd");
+	test(short         , rnd_stack_qinserts , rnd_stack_gets , IRANGE(1, SHRT_MAX) , "%hd");
+	test(int           , rnd_stack_qinserti , rnd_stack_geti , FRANGE(1, INT_MAX)  , "%d");
+	test(long          , rnd_stack_qinsertl , rnd_stack_getl , FRANGE(1, LONG_MAX) , "%ld");
+	test(signed char   , rnd_stack_qinsertsc, rnd_stack_getsc, IRANGE(1, SCHAR_MAX), "%hd");
+	test(unsigned char , rnd_stack_qinsertuc, rnd_stack_getuc, IRANGE(1, UCHAR_MAX), "%hd");
+	test(unsigned short, rnd_stack_qinsertus, rnd_stack_getus, IRANGE(1, USHRT_MAX), "%hu");
+	test(unsigned int  , rnd_stack_qinsertui, rnd_stack_getui, FRANGE(1, UINT_MAX) , "%u");
+	test(unsigned long , rnd_stack_qinsertul, rnd_stack_getul, FRANGE(1, ULONG_MAX), "%lu");
+	test(float         , rnd_stack_qinsertf , rnd_stack_getf , FRANGE(1, FLT_MAX)  , "%f");
+	test(double        , rnd_stack_qinsertd , rnd_stack_getd , FRANGE(1, DBL_MAX)  , "%f");
+	test(long double   , rnd_stack_qinsertld, rnd_stack_getld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
 	PASS();
 }
@@ -734,7 +734,7 @@ TEST t_remove(void)
 	PASS();
 }
 
-TEST t_quickremove(void)
+TEST t_qremove(void)
 {
 	struct rnd_stack *s;
 	unsigned i;
@@ -744,14 +744,14 @@ TEST t_quickremove(void)
 		struct data d[100];
 		s = rnd_stack_create(sizeof(int), 1000);
 		ASSERT_NEQ(NULL, s);
-		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_quickremove(s, 0, &a), "%d");
+		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_qremove(s, 0, &a), "%d");
 		ASSERT_EQ_FMT(0, data_init(&a), "%d");
 		ASSERT_EQ_FMT(0, rnd_stack_push(s, &a), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_quickremove(NULL, 0, &a), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_quickremove(NULL, 0, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_quickremove(s, 1, &a), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_qremove(NULL, 0, &a), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_qremove(NULL, 0, NULL), "%d");
+		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_qremove(s, 1, &a), "%d");
 		ASSERT_EQ_FMT(1LU, (unsigned long)s->size, "%lu");
-		ASSERT_EQ_FMT(0, rnd_stack_quickremove(s, 0, NULL), "%d");
+		ASSERT_EQ_FMT(0, rnd_stack_qremove(s, 0, NULL), "%d");
 		ASSERT_EQ_FMT(0LU, (unsigned long)s->size, "%lu");
 		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
 		ASSERT_EQ_FMT(0, data_dtor(&a), "%d");
@@ -766,7 +766,7 @@ TEST t_quickremove(void)
 			struct data a;
 			size_t idx = IRANGE(0, s->size - 1), j;
 			int found = 0;
-			ASSERT_EQ_FMT(0, rnd_stack_quickremove(s, idx, &a), "%d");
+			ASSERT_EQ_FMT(0, rnd_stack_qremove(s, idx, &a), "%d");
 			for (j = 0; j < 100; j++) {
 				/* Lazy and slow way to check, but on average it's
 				 * enough */
@@ -784,15 +784,15 @@ TEST t_quickremove(void)
 		for (i = 0; i < 8; i++) {
 			ASSERT_EQ_FMT(0, rnd_stack_push(s, d + i), "%d");
 		}
-		ASSERT_EQ_FMT(0, rnd_stack_quickremove(s, 3, &a), "%d");
+		ASSERT_EQ_FMT(0, rnd_stack_qremove(s, 3, &a), "%d");
 		ASSERT_EQ_FMT(0, data_cmp(d + 4, &a), "%d");
 		ASSERT_EQ_FMT(0, rnd_stack_get(s, 3, &a), "%d");
 		ASSERT_EQ_FMT(0, data_cmp(d + 3, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_quickremove(s, 0, &a), "%d");
+		ASSERT_EQ_FMT(0, rnd_stack_qremove(s, 0, &a), "%d");
 		ASSERT_EQ_FMT(0, data_cmp(d + 6, &a), "%d");
 		ASSERT_EQ_FMT(0, rnd_stack_get(s, 0, &a), "%d");
 		ASSERT_EQ_FMT(0, data_cmp(d + 5, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_quickremove(s, 3, &a), "%d");
+		ASSERT_EQ_FMT(0, rnd_stack_qremove(s, 3, &a), "%d");
 		ASSERT_EQ_FMT(0, data_cmp(d + 2, &a), "%d");
 		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
 		for (i = 0; i < 100; i++) {
@@ -802,7 +802,7 @@ TEST t_quickremove(void)
 
 	/* Suffixed form
 	 * T  - type
-	 * F1 - remove function
+	 * F1 - qremove function
 	 * F2 - push function
 	 * F3 - get function
 	 * V  - random value snippet
@@ -863,18 +863,18 @@ TEST t_quickremove(void)
 		ASSERT_EQ_FMT(z, F1(s, 0), M);                                     \
 		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                \
 	} while (0)
-	test(char          , rnd_stack_quickremovec , rnd_stack_pushc , rnd_stack_getc , IRANGE(1, CHAR_MAX) , "%hd");
-	test(short         , rnd_stack_quickremoves , rnd_stack_pushs , rnd_stack_gets , IRANGE(1, SHRT_MAX) , "%hd");
-	test(int           , rnd_stack_quickremovei , rnd_stack_pushi , rnd_stack_geti , FRANGE(1, INT_MAX)  , "%d");
-	test(long          , rnd_stack_quickremovel , rnd_stack_pushl , rnd_stack_getl , FRANGE(1, LONG_MAX) , "%ld");
-	test(signed char   , rnd_stack_quickremovesc, rnd_stack_pushsc, rnd_stack_getsc, IRANGE(1, SCHAR_MAX), "%hd");
-	test(unsigned char , rnd_stack_quickremoveuc, rnd_stack_pushuc, rnd_stack_getuc, IRANGE(1, UCHAR_MAX), "%hd");
-	test(unsigned short, rnd_stack_quickremoveus, rnd_stack_pushus, rnd_stack_getus, IRANGE(1, USHRT_MAX), "%hu");
-	test(unsigned int  , rnd_stack_quickremoveui, rnd_stack_pushui, rnd_stack_getui, FRANGE(1, UINT_MAX) , "%u");
-	test(unsigned long , rnd_stack_quickremoveul, rnd_stack_pushul, rnd_stack_getul, FRANGE(1, ULONG_MAX), "%lu");
-	test(float         , rnd_stack_quickremovef , rnd_stack_pushf , rnd_stack_getf , FRANGE(1, FLT_MAX)  , "%f");
-	test(double        , rnd_stack_quickremoved , rnd_stack_pushd , rnd_stack_getd , FRANGE(1, DBL_MAX)  , "%f");
-	test(long double   , rnd_stack_quickremoveld, rnd_stack_pushld, rnd_stack_getld, FRANGE(1, LDBL_MAX) , "%Lf");
+	test(char          , rnd_stack_qremovec , rnd_stack_pushc , rnd_stack_getc , IRANGE(1, CHAR_MAX) , "%hd");
+	test(short         , rnd_stack_qremoves , rnd_stack_pushs , rnd_stack_gets , IRANGE(1, SHRT_MAX) , "%hd");
+	test(int           , rnd_stack_qremovei , rnd_stack_pushi , rnd_stack_geti , FRANGE(1, INT_MAX)  , "%d");
+	test(long          , rnd_stack_qremovel , rnd_stack_pushl , rnd_stack_getl , FRANGE(1, LONG_MAX) , "%ld");
+	test(signed char   , rnd_stack_qremovesc, rnd_stack_pushsc, rnd_stack_getsc, IRANGE(1, SCHAR_MAX), "%hd");
+	test(unsigned char , rnd_stack_qremoveuc, rnd_stack_pushuc, rnd_stack_getuc, IRANGE(1, UCHAR_MAX), "%hd");
+	test(unsigned short, rnd_stack_qremoveus, rnd_stack_pushus, rnd_stack_getus, IRANGE(1, USHRT_MAX), "%hu");
+	test(unsigned int  , rnd_stack_qremoveui, rnd_stack_pushui, rnd_stack_getui, FRANGE(1, UINT_MAX) , "%u");
+	test(unsigned long , rnd_stack_qremoveul, rnd_stack_pushul, rnd_stack_getul, FRANGE(1, ULONG_MAX), "%lu");
+	test(float         , rnd_stack_qremovef , rnd_stack_pushf , rnd_stack_getf , FRANGE(1, FLT_MAX)  , "%f");
+	test(double        , rnd_stack_qremoved , rnd_stack_pushd , rnd_stack_getd , FRANGE(1, DBL_MAX)  , "%f");
+	test(long double   , rnd_stack_qremoveld, rnd_stack_pushld, rnd_stack_getld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
 	PASS();
 }
@@ -1104,12 +1104,12 @@ SUITE(stack) {
 	RUN_TEST(t_peek);
 	RUN_TEST(t_pop);
 	RUN_TEST(t_clear);
-	RUN_TEST(t_map);
+	RUN_TEST(t_foreach);
 	RUN_TEST(t_copy);
 	RUN_TEST(t_insert);
-	RUN_TEST(t_quickinsert);
+	RUN_TEST(t_qinsert);
 	RUN_TEST(t_remove);
-	RUN_TEST(t_quickremove);
+	RUN_TEST(t_qremove);
 	RUN_TEST(t_get);
 	RUN_TEST(t_set);
 	RUN_TEST(t_print);

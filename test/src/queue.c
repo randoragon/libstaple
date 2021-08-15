@@ -278,15 +278,15 @@ TEST t_clear(void)
 	PASS();
 }
 
-TEST t_map(void)
+TEST t_foreach(void)
 {
 	struct rnd_queue *q;
 	unsigned i;
 	q = rnd_queue_create(sizeof(long double), 1000);
 	ASSERT_NEQ(NULL, q);
-	ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_map(NULL, data_mutate), "%d");
-	ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_map(q, NULL), "%d");
-	ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_map(NULL, NULL), "%d");
+	ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_foreach(NULL, data_mutate), "%d");
+	ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_foreach(q, NULL), "%d");
+	ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_foreach(NULL, NULL), "%d");
 	ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
 	q = rnd_queue_create(sizeof(struct data), 1000);
 	for (i = 0; i < 1000; i++) {
@@ -294,9 +294,9 @@ TEST t_map(void)
 		ASSERT_EQ_FMT(0, data_init(&d), "%d");
 		ASSERT_EQ_FMT(0, rnd_queue_push(q, &d), "%d");
 	}
-	ASSERT_EQ_FMT(RND_EHANDLER, rnd_queue_map(q, data_mutate_bad), "%d");
-	ASSERT_EQ_FMT(0, rnd_queue_map(q, data_mutate), "%d");
-	ASSERT_EQ_FMT(0, rnd_queue_map(q, data_verify), "%d");
+	ASSERT_EQ_FMT(RND_EHANDLER, rnd_queue_foreach(q, data_mutate_bad), "%d");
+	ASSERT_EQ_FMT(0, rnd_queue_foreach(q, data_mutate), "%d");
+	ASSERT_EQ_FMT(0, rnd_queue_foreach(q, data_verify), "%d");
 	ASSERT_EQ_FMT(0, rnd_queue_destroy(q, data_dtor), "%d");
 	PASS();
 }
@@ -471,7 +471,7 @@ TEST t_insert(void)
 	PASS();
 }
 
-TEST t_quickinsert(void)
+TEST t_qinsert(void)
 {
 	struct rnd_queue *q;
 	unsigned i;
@@ -481,11 +481,11 @@ TEST t_quickinsert(void)
 		struct data d[1000];
 		q = rnd_queue_create(sizeof(int), 1000);
 		ASSERT_NEQ(NULL, q);
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_quickinsert(q, 0, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_quickinsert(NULL, 0, &a), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_quickinsert(NULL, 0, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINDEX, rnd_queue_quickinsert(q, 1, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_queue_quickinsert(q, 0, &a), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_qinsert(q, 0, NULL), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_qinsert(NULL, 0, &a), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_qinsert(NULL, 0, NULL), "%d");
+		ASSERT_EQ_FMT(RND_EINDEX, rnd_queue_qinsert(q, 1, &a), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_qinsert(q, 0, &a), "%d");
 		ASSERT_EQ_FMT(1LU, (unsigned long)q->size, "%lu");
 		ASSERT_EQ_FMT(10, rnd_queue_geti(q, 0), "%d");
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
@@ -496,7 +496,7 @@ TEST t_quickinsert(void)
 			struct data a;
 			size_t idx = IRANGE(0, i);
 			ASSERT_EQ_FMT(0, data_init(d + i), "%d");
-			ASSERT_EQ_FMT(0, rnd_queue_quickinsert(q, idx, d + i), "%d");
+			ASSERT_EQ_FMT(0, rnd_queue_qinsert(q, idx, d + i), "%d");
 			ASSERT_EQ_FMT((unsigned long)i + 1, (unsigned long)q->size, "%lu");
 			ASSERT_EQ_FMT(0, rnd_queue_get(q, idx, &a), "%d");
 			ASSERT_EQ_FMT(0, data_cmp(&a, d + i), "%d");
@@ -507,7 +507,7 @@ TEST t_quickinsert(void)
 		ASSERT_NEQ(NULL, q);
 		for (i = 0; i < 5; i++) {
 			ASSERT_EQ_FMT(0, data_init(d + i), "%d");
-			ASSERT_EQ_FMT(0, rnd_queue_quickinsert(q, i, d + i), "%d");
+			ASSERT_EQ_FMT(0, rnd_queue_qinsert(q, i, d + i), "%d");
 		}
 		for (i = 0; i < 5; i++) {
 			struct data a;
@@ -515,17 +515,17 @@ TEST t_quickinsert(void)
 			ASSERT_EQ_FMT(0, data_cmp(&a, d + i), "%d");
 		}
 		ASSERT_EQ_FMT(0, data_init(d + 5), "%d");
-		ASSERT_EQ_FMT(0, rnd_queue_quickinsert(q, 1, d + 5), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_qinsert(q, 1, d + 5), "%d");
 		ASSERT_EQ_FMT(q->tail, (char*)q->data + 5 * q->elem_size, "%p");
 		ASSERT_EQ_FMT(0, data_init(d + 6), "%d");
-		ASSERT_EQ_FMT(0, rnd_queue_quickinsert(q, 3, d + 6), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_qinsert(q, 3, d + 6), "%d");
 		ASSERT_EQ_FMT(q->tail, (char*)q->data + 6 * q->elem_size, "%p");
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, data_dtor), "%d");
 	}
 
 	/* Suffixed form
 	 * T  - type
-	 * F1 - quickinsert function
+	 * F1 - qinsert function
 	 * F2 - get function
 	 * V  - random value snippet
 	 * M  - printf format string
@@ -574,18 +574,18 @@ TEST t_quickinsert(void)
 		ASSERT_EQ_FMT(RND_EILLEGAL, F1(q, 0, (V)), "%d");                                \
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");                              \
 	} while (0)
-	test(char          , rnd_queue_quickinsertc , rnd_queue_getc , IRANGE(1, CHAR_MAX) , "%hd");
-	test(short         , rnd_queue_quickinserts , rnd_queue_gets , IRANGE(1, SHRT_MAX) , "%hd");
-	test(int           , rnd_queue_quickinserti , rnd_queue_geti , FRANGE(1, INT_MAX)  , "%d");
-	test(long          , rnd_queue_quickinsertl , rnd_queue_getl , FRANGE(1, LONG_MAX) , "%ld");
-	test(signed char   , rnd_queue_quickinsertsc, rnd_queue_getsc, IRANGE(1, SCHAR_MAX), "%hd");
-	test(unsigned char , rnd_queue_quickinsertuc, rnd_queue_getuc, IRANGE(1, UCHAR_MAX), "%hd");
-	test(unsigned short, rnd_queue_quickinsertus, rnd_queue_getus, IRANGE(1, USHRT_MAX), "%hu");
-	test(unsigned int  , rnd_queue_quickinsertui, rnd_queue_getui, FRANGE(1, UINT_MAX) , "%u");
-	test(unsigned long , rnd_queue_quickinsertul, rnd_queue_getul, FRANGE(1, ULONG_MAX), "%lu");
-	test(float         , rnd_queue_quickinsertf , rnd_queue_getf , FRANGE(1, FLT_MAX)  , "%f");
-	test(double        , rnd_queue_quickinsertd , rnd_queue_getd , FRANGE(1, DBL_MAX)  , "%f");
-	test(long double   , rnd_queue_quickinsertld, rnd_queue_getld, FRANGE(1, LDBL_MAX) , "%Lf");
+	test(char          , rnd_queue_qinsertc , rnd_queue_getc , IRANGE(1, CHAR_MAX) , "%hd");
+	test(short         , rnd_queue_qinserts , rnd_queue_gets , IRANGE(1, SHRT_MAX) , "%hd");
+	test(int           , rnd_queue_qinserti , rnd_queue_geti , FRANGE(1, INT_MAX)  , "%d");
+	test(long          , rnd_queue_qinsertl , rnd_queue_getl , FRANGE(1, LONG_MAX) , "%ld");
+	test(signed char   , rnd_queue_qinsertsc, rnd_queue_getsc, IRANGE(1, SCHAR_MAX), "%hd");
+	test(unsigned char , rnd_queue_qinsertuc, rnd_queue_getuc, IRANGE(1, UCHAR_MAX), "%hd");
+	test(unsigned short, rnd_queue_qinsertus, rnd_queue_getus, IRANGE(1, USHRT_MAX), "%hu");
+	test(unsigned int  , rnd_queue_qinsertui, rnd_queue_getui, FRANGE(1, UINT_MAX) , "%u");
+	test(unsigned long , rnd_queue_qinsertul, rnd_queue_getul, FRANGE(1, ULONG_MAX), "%lu");
+	test(float         , rnd_queue_qinsertf , rnd_queue_getf , FRANGE(1, FLT_MAX)  , "%f");
+	test(double        , rnd_queue_qinsertd , rnd_queue_getd , FRANGE(1, DBL_MAX)  , "%f");
+	test(long double   , rnd_queue_qinsertld, rnd_queue_getld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
 	PASS();
 }
@@ -739,7 +739,7 @@ TEST t_remove(void)
 	PASS();
 }
 
-TEST t_quickremove(void)
+TEST t_qremove(void)
 {
 	struct rnd_queue *q;
 	unsigned i;
@@ -749,15 +749,15 @@ TEST t_quickremove(void)
 		struct data d[100];
 		q = rnd_queue_create(sizeof(int), 1000);
 		ASSERT_NEQ(NULL, q);
-		ASSERT_EQ_FMT(RND_EINDEX, rnd_queue_quickremove(q, 0, &a), "%d");
+		ASSERT_EQ_FMT(RND_EINDEX, rnd_queue_qremove(q, 0, &a), "%d");
 		ASSERT_EQ_FMT(0, data_init(&a), "%d");
 		ASSERT_EQ_FMT(0, rnd_queue_push(q, &a), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_quickremove(NULL, 0, &a), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_quickremove(NULL, 0, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINDEX, rnd_queue_quickremove(q, 1, &a), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_qremove(NULL, 0, &a), "%d");
+		ASSERT_EQ_FMT(RND_EINVAL, rnd_queue_qremove(NULL, 0, NULL), "%d");
+		ASSERT_EQ_FMT(RND_EINDEX, rnd_queue_qremove(q, 1, &a), "%d");
 		ASSERT_EQ_FMT(q->data, q->head, "%p");
 		ASSERT_EQ_FMT(q->data, q->tail, "%p");
-		ASSERT_EQ_FMT(0, rnd_queue_quickremove(q, 0, NULL), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_qremove(q, 0, NULL), "%d");
 		ASSERT_EQ_FMT(0LU, (unsigned long)q->size, "%lu");
 		ASSERT_EQ_FMT(q->data, q->head, "%p");
 		ASSERT_EQ_FMT(q->data, q->tail, "%p");
@@ -774,7 +774,7 @@ TEST t_quickremove(void)
 			struct data a;
 			size_t idx = IRANGE(0, q->size - 1), j;
 			int found = 0;
-			ASSERT_EQ_FMT(0, rnd_queue_quickremove(q, idx, &a), "%d");
+			ASSERT_EQ_FMT(0, rnd_queue_qremove(q, idx, &a), "%d");
 			for (j = 0; j < 100; j++) {
 				/* Lazy and slow way to check, but on average it's
 				 * enough */
@@ -792,15 +792,15 @@ TEST t_quickremove(void)
 		for (i = 0; i < 8; i++) {
 			ASSERT_EQ_FMT(0, rnd_queue_push(q, d + i), "%d");
 		}
-		ASSERT_EQ_FMT(0, rnd_queue_quickremove(q, 3, &a), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_qremove(q, 3, &a), "%d");
 		ASSERT_EQ_FMT(0, data_cmp(d + 3, &a), "%d");
 		ASSERT_EQ_FMT(0, rnd_queue_get(q, 3, &a), "%d");
 		ASSERT_EQ_FMT(0, data_cmp(d + 7, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_queue_quickremove(q, 0, &a), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_qremove(q, 0, &a), "%d");
 		ASSERT_EQ_FMT(0, data_cmp(d, &a), "%d");
 		ASSERT_EQ_FMT(0, rnd_queue_get(q, 0, &a), "%d");
 		ASSERT_EQ_FMT(0, data_cmp(d + 6, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_queue_quickremove(q, 3, &a), "%d");
+		ASSERT_EQ_FMT(0, rnd_queue_qremove(q, 3, &a), "%d");
 		ASSERT_EQ_FMT(0, data_cmp(d + 7, &a), "%d");
 		ASSERT_EQ_FMT(q->tail, (char*)q->data + 4 * q->elem_size, "%p");
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
@@ -811,7 +811,7 @@ TEST t_quickremove(void)
 
 	/* Suffixed form
 	 * T  - type
-	 * F1 - remove function
+	 * F1 - qremove function
 	 * F2 - push function
 	 * F3 - get function
 	 * V  - random value snippet
@@ -876,18 +876,18 @@ TEST t_quickremove(void)
 		ASSERT_EQ_FMT(z, F1(q, 0), M);                                     \
 		ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");                \
 	} while (0)
-	test(char          , rnd_queue_quickremovec , rnd_queue_pushc , rnd_queue_getc , IRANGE(1, CHAR_MAX) , "%hd");
-	test(short         , rnd_queue_quickremoves , rnd_queue_pushs , rnd_queue_gets , IRANGE(1, SHRT_MAX) , "%hd");
-	test(int           , rnd_queue_quickremovei , rnd_queue_pushi , rnd_queue_geti , FRANGE(1, INT_MAX)  , "%d");
-	test(long          , rnd_queue_quickremovel , rnd_queue_pushl , rnd_queue_getl , FRANGE(1, LONG_MAX) , "%ld");
-	test(signed char   , rnd_queue_quickremovesc, rnd_queue_pushsc, rnd_queue_getsc, IRANGE(1, SCHAR_MAX), "%hd");
-	test(unsigned char , rnd_queue_quickremoveuc, rnd_queue_pushuc, rnd_queue_getuc, IRANGE(1, UCHAR_MAX), "%hd");
-	test(unsigned short, rnd_queue_quickremoveus, rnd_queue_pushus, rnd_queue_getus, IRANGE(1, USHRT_MAX), "%hu");
-	test(unsigned int  , rnd_queue_quickremoveui, rnd_queue_pushui, rnd_queue_getui, FRANGE(1, UINT_MAX) , "%u");
-	test(unsigned long , rnd_queue_quickremoveul, rnd_queue_pushul, rnd_queue_getul, FRANGE(1, ULONG_MAX), "%lu");
-	test(float         , rnd_queue_quickremovef , rnd_queue_pushf , rnd_queue_getf , FRANGE(1, FLT_MAX)  , "%f");
-	test(double        , rnd_queue_quickremoved , rnd_queue_pushd , rnd_queue_getd , FRANGE(1, DBL_MAX)  , "%f");
-	test(long double   , rnd_queue_quickremoveld, rnd_queue_pushld, rnd_queue_getld, FRANGE(1, LDBL_MAX) , "%Lf");
+	test(char          , rnd_queue_qremovec , rnd_queue_pushc , rnd_queue_getc , IRANGE(1, CHAR_MAX) , "%hd");
+	test(short         , rnd_queue_qremoves , rnd_queue_pushs , rnd_queue_gets , IRANGE(1, SHRT_MAX) , "%hd");
+	test(int           , rnd_queue_qremovei , rnd_queue_pushi , rnd_queue_geti , FRANGE(1, INT_MAX)  , "%d");
+	test(long          , rnd_queue_qremovel , rnd_queue_pushl , rnd_queue_getl , FRANGE(1, LONG_MAX) , "%ld");
+	test(signed char   , rnd_queue_qremovesc, rnd_queue_pushsc, rnd_queue_getsc, IRANGE(1, SCHAR_MAX), "%hd");
+	test(unsigned char , rnd_queue_qremoveuc, rnd_queue_pushuc, rnd_queue_getuc, IRANGE(1, UCHAR_MAX), "%hd");
+	test(unsigned short, rnd_queue_qremoveus, rnd_queue_pushus, rnd_queue_getus, IRANGE(1, USHRT_MAX), "%hu");
+	test(unsigned int  , rnd_queue_qremoveui, rnd_queue_pushui, rnd_queue_getui, FRANGE(1, UINT_MAX) , "%u");
+	test(unsigned long , rnd_queue_qremoveul, rnd_queue_pushul, rnd_queue_getul, FRANGE(1, ULONG_MAX), "%lu");
+	test(float         , rnd_queue_qremovef , rnd_queue_pushf , rnd_queue_getf , FRANGE(1, FLT_MAX)  , "%f");
+	test(double        , rnd_queue_qremoved , rnd_queue_pushd , rnd_queue_getd , FRANGE(1, DBL_MAX)  , "%f");
+	test(long double   , rnd_queue_qremoveld, rnd_queue_pushld, rnd_queue_getld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
 	PASS();
 }
@@ -1147,12 +1147,12 @@ SUITE(queue) {
 	RUN_TEST(t_peek);
 	RUN_TEST(t_pop);
 	RUN_TEST(t_clear);
-	RUN_TEST(t_map);
+	RUN_TEST(t_foreach);
 	RUN_TEST(t_copy);
 	RUN_TEST(t_insert);
-	RUN_TEST(t_quickinsert);
+	RUN_TEST(t_qinsert);
 	RUN_TEST(t_remove);
-	RUN_TEST(t_quickremove);
+	RUN_TEST(t_qremove);
 	RUN_TEST(t_get);
 	RUN_TEST(t_set);
 	RUN_TEST(t_print);
