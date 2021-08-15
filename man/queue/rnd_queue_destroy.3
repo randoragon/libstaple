@@ -56,34 +56,10 @@ returned non-0 for some queue element.
 See
 .BR librnd (7).
 .SH EXAMPLES
-This is an example of how to use the
+An example for how to use the
 .I dtor
-function:
-.IP
-.ad l
-.nf
-struct example {
-	void *ptr;
-};
-
-int example_dtor(void *elem)
-{
-	free(((struct example*)elem)->ptr);
-	return 0;
-}
-
-int main()
-{
-	struct rnd_queue *s;
-	struct example data;
-	s = rnd_queue_create(sizeof(struct example), 1);
-	data.ptr = malloc(32);
-	rnd_queue_push(s, &data);
-	rnd_queue_destroy(s, &example_dtor);
-	return 0;
-}
-.fi
-.ad
+function can be found in
+.BR rnd_queue_clear (3).
 .SH SEE ALSO
 .ad l
 .BR librnd (7),
