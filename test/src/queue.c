@@ -1110,6 +1110,36 @@ TEST t_print(void)
 	PASS();
 }
 
+TEST t_ringbuf_resize(void)
+{
+	struct rnd_queue *q;
+	unsigned i;
+	q = rnd_queue_create(sizeof(int), 5);
+	ASSERT_NEQ(NULL, q);
+	for (i = 0; i < 5; i++)
+		ASSERT_EQ_FMT(0, rnd_queue_pushi(q, FRANGE(1, INT_MAX)), "%d");
+	ASSERT_EQ_FMT(q->data, q->head, "%p");
+	ASSERT_EQ_FMT((char*)q->data + (q->size - 1) * q->elem_size, q->tail, "%p");
+	ASSERT_EQ_FMT(5LU, (unsigned long)q->capacity, "%lu");
+	ASSERT_EQ_FMT(0, rnd_queue_pushi(q, FRANGE(1, INT_MAX)), "%d");
+	ASSERT_EQ_FMT(q->data, q->head, "%p");
+	ASSERT_EQ_FMT((char*)q->data + (q->size - 1) * q->elem_size, q->tail, "%p");
+	ASSERT_EQ_FMT(10LU, (unsigned long)q->capacity, "%lu");
+	for (i = 0; i < 3; i++)
+		ASSERT_NEQ(0, rnd_queue_popi(q));
+	for (i = 0; i < 7; i++)
+		ASSERT_EQ_FMT(0, rnd_queue_pushi(q, FRANGE(1, INT_MAX)), "%d");
+	ASSERT_EQ_FMT((char*)q->data + 3 * q->elem_size, q->head, "%p");
+	ASSERT_EQ_FMT((char*)q->data + 2 * q->elem_size, q->tail, "%p");
+	ASSERT_EQ_FMT(10LU, (unsigned long)q->capacity, "%lu");
+	ASSERT_EQ_FMT(0, rnd_queue_pushi(q, FRANGE(1, INT_MAX)), "%d");
+	ASSERT_EQ_FMT((char*)q->data + 3 * q->elem_size, q->head, "%p");
+	ASSERT_EQ_FMT((char*)q->data + 13 * q->elem_size, q->tail, "%p");
+	ASSERT_EQ_FMT(20LU, (unsigned long)q->capacity, "%lu");
+	ASSERT_EQ_FMT(0, rnd_queue_destroy(q, NULL), "%d");
+	PASS();
+}
+
 SUITE(queue) {
 	RUN_TEST(t_create);
 	RUN_TEST(t_destroy);
@@ -1126,6 +1156,7 @@ SUITE(queue) {
 	RUN_TEST(t_get);
 	RUN_TEST(t_set);
 	RUN_TEST(t_print);
+	RUN_TEST(t_ringbuf_resize);
 }
 
 int main(int argc, char **argv)
