@@ -2,6 +2,7 @@
 #define RND_STACK_H
 
 #include <stdlib.h>
+#include "rnd_errcodes.h"
 
 struct rnd_stack {
 	void  *data;

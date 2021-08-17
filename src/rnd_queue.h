@@ -2,6 +2,7 @@
 #define RND_QUEUE_H
 
 #include <stdlib.h>
+#include "rnd_errcodes.h"
 
 struct rnd_queue {
 	void *data;
