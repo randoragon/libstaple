@@ -14,8 +14,8 @@ VFLAGS =  -DVERSION_MAJOR=$(VERSION_MAJOR) -DVERSION_MINOR=$(VERSION_MINOR)
 VFLAGS += -DVERSION_PATCH=$(VERSION_PATCH) -DVERSION_STR="$(VERSION_STR)"
 CFLAGS = -fpic $(VFLAGS) -std=c89 -Wall -Wextra -pedantic -Werror -Werror=vla
 LDFLAGS = -shared
-CTESTFLAGS = -std=c89 -Wall -Wextra -pedantic -Werror=vla -g -Og
-LDTESTFLAGS = -L. -Wl,-Bstatic -lrnd -Wl,-Bdynamic
+CTESTFLAGS = -std=c99 -Wall -Wextra -pedantic -Werror=vla -g -Og
+LDTESTFLAGS = -L. -Wl,-Bstatic -lrnd -Wl,-Bdynamic -lcriterion
 
 # Directories
 SRCDIR = src
@@ -78,7 +78,7 @@ clean:
 
 # Rebuilds the library with debug symbols and RND_DEBUG defined
 debug: CFLAGS += -g -Og -DRND_DEBUG
-debug: clean all
+debug: all
 
 # Builds and installs the library
 install: CFLAGS += -O3

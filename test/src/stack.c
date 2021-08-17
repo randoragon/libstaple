@@ -2,7 +2,7 @@
 #include <time.h>
 #include "../../src/rnd.h"
 #include "test_struct.h"
-#include <greatest.h>
+#include <criterion/criterion.h>
 #include <limits.h>
 #include <float.h>
 
@@ -12,45 +12,41 @@
 #endif
 #define SIZE_MAX 65535LU
 
-GREATEST_MAIN_DEFS();
-
-TEST t_create(void)
+Test(stack, create)
 {
 	struct rnd_stack *s;
 	s = rnd_stack_create(sizeof(int), 0);
-	ASSERT_EQ(NULL, s);
+	cr_assert_null(s);
 	s = rnd_stack_create(0, 16);
-	ASSERT_EQ(NULL, s);
+	cr_assert_null(s);
 	s = rnd_stack_create(0, 0);
-	ASSERT_EQ(NULL, s);
+	cr_assert_null(s);
 	s = rnd_stack_create(SIZE_MAX, SIZE_MAX);
-	ASSERT_EQ(NULL, s);
+	cr_assert_null(s);
 	s = rnd_stack_create(sizeof(int), 16);
-	ASSERT_NEQ(NULL, s);
-	ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
-	PASS();
+	cr_assert_not_null(s);
+	cr_assert_eq(0, rnd_stack_destroy(s, NULL));
 }
 
-TEST t_destroy(void)
+Test(stack, destroy)
 {
 	struct rnd_stack *s;
 	unsigned i;
 	s = rnd_stack_create(sizeof(long double), 1000);
-	ASSERT_NEQ(NULL, s);
-	ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_destroy(NULL, NULL), "%d");
-	ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+	cr_assert_not_null(s);
+	cr_assert_eq(RND_EINVAL, rnd_stack_destroy(NULL, NULL));
+	cr_assert_eq(0, rnd_stack_destroy(s, NULL));
 	s = rnd_stack_create(sizeof(struct data), 1000);
 	for (i = 0; i < 1000; i++) {
 		struct data d;
-		ASSERT_EQ_FMT(0, data_init(&d), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_push(s, &d), "%d");
+		cr_assert_eq(0, data_init(&d));
+		cr_assert_eq(0, rnd_stack_push(s, &d));
 	}
-	ASSERT_EQ_FMT(RND_EHANDLER, rnd_stack_destroy(s, data_dtor_bad), "%d");
-	ASSERT_EQ_FMT(0, rnd_stack_destroy(s, data_dtor), "%d");
-	PASS();
+	cr_assert_eq(RND_EHANDLER, rnd_stack_destroy(s, data_dtor_bad));
+	cr_assert_eq(0, rnd_stack_destroy(s, data_dtor));
 }
 
-TEST t_push(void)
+Test(stack, push)
 {
 	struct rnd_stack *s;
 
@@ -58,27 +54,27 @@ TEST t_push(void)
 		unsigned i;
 		struct data d;
 		s = rnd_stack_create(sizeof(struct data), 1000);
-		ASSERT_NEQ(NULL, s);
+		cr_assert_not_null(s);
 		data_init(&d);
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_push(s, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_push(NULL, &d), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_push(NULL, NULL), "%d");
-		ASSERT_EQ_FMT(0LU, (unsigned long)s->size, "%lu");
-		ASSERT_EQ_FMT(0, rnd_stack_push(s, &d), "%d");
-		ASSERT_EQ_FMT(1LU, (unsigned long)s->size, "%lu");
-		ASSERT_EQ_FMT(0, rnd_stack_push(s, &d), "%d");
-		ASSERT_EQ_FMT(2LU, (unsigned long)s->size, "%lu");
-		ASSERT_EQ_FMT(0, rnd_stack_clear(s, NULL), "%d");
+		cr_assert_eq(RND_EINVAL, rnd_stack_push(s, NULL));
+		cr_assert_eq(RND_EINVAL, rnd_stack_push(NULL, &d));
+		cr_assert_eq(RND_EINVAL, rnd_stack_push(NULL, NULL));
+		cr_assert_eq(0LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(0, rnd_stack_push(s, &d));
+		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(0, rnd_stack_push(s, &d));
+		cr_assert_eq(2LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(0, rnd_stack_clear(s, NULL));
 		for (i = 0; i < SIZE_MAX / sizeof(struct data); i++) {
 			struct data a, b;
-			ASSERT_EQ_FMT(0, data_init(&a), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_push(s, &a), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_get(s, 0, &b), "%d");
-			ASSERT_EQ_FMT(0, data_cmp(&a, &b), "%d");
+			cr_assert_eq(0, data_init(&a));
+			cr_assert_eq(0, rnd_stack_push(s, &a));
+			cr_assert_eq(0, rnd_stack_get(s, 0, &b));
+			cr_assert_eq(0, data_cmp(&a, &b));
 		}
-		ASSERT_EQ_FMT(RND_ERANGE, rnd_stack_push(s, &d), "%d");
-		ASSERT_EQ_FMT(0, data_dtor(&d), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, data_dtor), "%d");
+		cr_assert_eq(RND_ERANGE, rnd_stack_push(s, &d));
+		cr_assert_eq(0, data_dtor(&d));
+		cr_assert_eq(0, rnd_stack_destroy(s, data_dtor));
 	}
 
 	/* Suffixed form
@@ -88,28 +84,28 @@ TEST t_push(void)
 	 * V  - random value snippet
 	 * M  - printf format string
 	 */
-#define test(T, F1, F2, V, M) do {                                           \
-		unsigned i;                                                  \
-		s = rnd_stack_create(sizeof(T), 1000);                       \
-		ASSERT_NEQ(NULL, s);                                         \
-		ASSERT_EQ_FMT(RND_EINVAL, F1(NULL, (V)), "%d");              \
-		ASSERT_EQ_FMT(0LU, (unsigned long)s->size, "%lu");           \
-		ASSERT_EQ_FMT(0, F1(s, (V)), "%d");                          \
-		ASSERT_EQ_FMT(1LU, (unsigned long)s->size, "%lu");           \
-		ASSERT_EQ_FMT(0, F1(s, (V)), "%d");                          \
-		ASSERT_EQ_FMT(2LU, (unsigned long)s->size, "%lu");           \
-		ASSERT_EQ_FMT(0, rnd_stack_clear(s, NULL), "%d");            \
-		for (i = 0; i < SIZE_MAX / sizeof(T); i++) {                 \
-			T a = (V);                                           \
-			ASSERT_EQ_FMT(0, F1(s, a), "%d");                    \
-			ASSERT_EQ_FMT(a, F2(s, 0), M);                       \
-		}                                                            \
-		ASSERT_EQ_FMT(RND_ERANGE, F1(s, (V)), "%d");                 \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");          \
-		s = rnd_stack_create(sizeof(T) + 1, 1);                      \
-		ASSERT_NEQ(NULL, s);                                         \
-		ASSERT_EQ_FMT(RND_EILLEGAL, F1(s, (V)), "%d");               \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");          \
+#define test(T, F1, F2, V, M) do {                                \
+		unsigned i;                                       \
+		s = rnd_stack_create(sizeof(T), 1000);            \
+		cr_assert_not_null(s);                            \
+		cr_assert_eq(RND_EINVAL, F1(NULL, (V)));          \
+		cr_assert_eq(0LU, (unsigned long)s->size, "%lu"); \
+		cr_assert_eq(0, F1(s, (V)));                      \
+		cr_assert_eq(1LU, (unsigned long)s->size, "%lu"); \
+		cr_assert_eq(0, F1(s, (V)));                      \
+		cr_assert_eq(2LU, (unsigned long)s->size, "%lu"); \
+		cr_assert_eq(0, rnd_stack_clear(s, NULL));        \
+		for (i = 0; i < SIZE_MAX / sizeof(T); i++) {      \
+			T a = (V);                                \
+			cr_assert_eq(0, F1(s, a));                \
+			cr_assert_eq(a, F2(s, 0), M);             \
+		}                                                 \
+		cr_assert_eq(RND_ERANGE, F1(s, (V)));             \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));      \
+		s = rnd_stack_create(sizeof(T) + 1, 1);           \
+		cr_assert_not_null(s);                            \
+		cr_assert_eq(RND_EILLEGAL, F1(s, (V)));           \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));      \
 	} while (0)
 	test(char          , rnd_stack_pushc , rnd_stack_getc , IRANGE(CHAR_MIN , CHAR_MAX) , "%hd");
 	test(short         , rnd_stack_pushs , rnd_stack_gets , IRANGE(SHRT_MIN , SHRT_MAX) , "%hd");
@@ -124,26 +120,25 @@ TEST t_push(void)
 	test(double        , rnd_stack_pushd , rnd_stack_getd , FRANGE(DBL_MIN  , DBL_MAX)  , "%f");
 	test(long double   , rnd_stack_pushld, rnd_stack_getld, FRANGE(LDBL_MIN , LDBL_MAX) , "%Lf");
 #undef test
-	PASS();
 }
 
-TEST t_peek(void)
+Test(stack, peek)
 {
 	struct rnd_stack *s;
 
 	{ /* Generic form */
 		struct data a, b;
 		s = rnd_stack_create(sizeof(struct data), 2);
-		ASSERT_NEQ(NULL, s);
-		ASSERT_EQ_FMT(RND_EILLEGAL, rnd_stack_peek(s, &b), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_peek(s, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_peek(NULL, &b), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_peek(NULL, NULL), "%d");
+		cr_assert_not_null(s);
+		cr_assert_eq(RND_EILLEGAL, rnd_stack_peek(s, &b));
+		cr_assert_eq(RND_EINVAL, rnd_stack_peek(s, NULL));
+		cr_assert_eq(RND_EINVAL, rnd_stack_peek(NULL, &b));
+		cr_assert_eq(RND_EINVAL, rnd_stack_peek(NULL, NULL));
 		data_init(&a);
-		ASSERT_EQ_FMT(0, rnd_stack_push(s, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_peek(s, &b), "%d");
-		ASSERT_EQ_FMT(0, data_cmp(&a, &b), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, data_dtor), "%d");
+		cr_assert_eq(0, rnd_stack_push(s, &a));
+		cr_assert_eq(0, rnd_stack_peek(s, &b));
+		cr_assert_eq(0, data_cmp(&a, &b));
+		cr_assert_eq(0, rnd_stack_destroy(s, data_dtor));
 	}
 
 	/* Suffixed form
@@ -153,20 +148,20 @@ TEST t_peek(void)
 	 * V  - random value snippet
 	 * M  - printf format string
 	 */
-#define test(T, F1, F2, V, M) do {                                  \
-		T a = (V), z = 0;                                   \
-		s = rnd_stack_create(sizeof(T), 2);                 \
-		ASSERT_NEQ(NULL, s);                                \
-		ASSERT_EQ_FMT(z, F1(s), M);                         \
-		ASSERT_EQ_FMT(z, F1(NULL), M);                      \
-		ASSERT_EQ_FMT(0, F2(s, a), "%d");                   \
-		ASSERT_EQ_FMT(a, F1(s), M);                         \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d"); \
-		s = rnd_stack_create(sizeof(T) + 1, 1);             \
-		ASSERT_NEQ(NULL, s);                                \
-		s->size = 1;                                        \
-		ASSERT_EQ_FMT(z, F1(s), M);                         \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d"); \
+#define test(T, F1, F2, V, M) do {                           \
+		T a = (V), z = 0;                            \
+		s = rnd_stack_create(sizeof(T), 2);          \
+		cr_assert_not_null(s);                       \
+		cr_assert_eq(z, F1(s), M);                   \
+		cr_assert_eq(z, F1(NULL), M);                \
+		cr_assert_eq(0, F2(s, a));                   \
+		cr_assert_eq(a, F1(s), M);                   \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL)); \
+		s = rnd_stack_create(sizeof(T) + 1, 1);      \
+		cr_assert_not_null(s);                       \
+		s->size = 1;                                 \
+		cr_assert_eq(z, F1(s), M);                   \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL)); \
 	} while (0)
 	test(char          , rnd_stack_peekc , rnd_stack_pushc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , rnd_stack_peeks , rnd_stack_pushs , IRANGE(1, SHRT_MAX) , "%hd");
@@ -181,27 +176,26 @@ TEST t_peek(void)
 	test(double        , rnd_stack_peekd , rnd_stack_pushd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , rnd_stack_peekld, rnd_stack_pushld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
-	PASS();
 }
 
-TEST t_pop(void)
+Test(stack, pop)
 {
 	struct rnd_stack *s;
 
 	{ /* Generic form */
 		struct data a, b;
 		s = rnd_stack_create(sizeof(struct data), 2);
-		ASSERT_NEQ(NULL, s);
-		ASSERT_EQ_FMT(RND_EILLEGAL, rnd_stack_pop(s, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_pop(NULL, NULL), "%d");
+		cr_assert_not_null(s);
+		cr_assert_eq(RND_EILLEGAL, rnd_stack_pop(s, NULL));
+		cr_assert_eq(RND_EINVAL, rnd_stack_pop(NULL, NULL));
 		data_init(&a);
-		ASSERT_EQ_FMT(0, rnd_stack_push(s, &a), "%d");
-		ASSERT_EQ_FMT(1LU, (unsigned long)s->size, "%lu");
-		ASSERT_EQ_FMT(0, rnd_stack_pop(s, &b), "%d");
-		ASSERT_EQ_FMT(0LU, (unsigned long)s->size, "%lu");
-		ASSERT_EQ_FMT(0, data_cmp(&a, &b), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
-		ASSERT_EQ_FMT(0, data_dtor(&b), "%d");
+		cr_assert_eq(0, rnd_stack_push(s, &a));
+		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(0, rnd_stack_pop(s, &b));
+		cr_assert_eq(0LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(0, data_cmp(&a, &b));
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));
+		cr_assert_eq(0, data_dtor(&b));
 	}
 
 	/* Suffixed form
@@ -211,22 +205,22 @@ TEST t_pop(void)
 	 * V  - random value snippet
 	 * M  - printf format string
 	 */
-#define test(T, F1, F2, V, M) do {                                  \
-		T a = (V), z = 0;                                   \
-		s = rnd_stack_create(sizeof(T), 2);                 \
-		ASSERT_NEQ(NULL, s);                                \
-		ASSERT_EQ_FMT(z, F1(s), M);                         \
-		ASSERT_EQ_FMT(z, F1(NULL), M);                      \
-		ASSERT_EQ_FMT(0, F2(s, a), "%d");                   \
-		ASSERT_EQ_FMT(1LU, (unsigned long)s->size, "%lu");  \
-		ASSERT_EQ_FMT(a, F1(s), M);                         \
-		ASSERT_EQ_FMT(0LU, (unsigned long)s->size, "%lu");  \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d"); \
-		s = rnd_stack_create(sizeof(T) + 1, 1);             \
-		ASSERT_NEQ(NULL, s);                                \
-		s->size = 1;                                        \
-		ASSERT_EQ_FMT(z, F1(s), M);                         \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d"); \
+#define test(T, F1, F2, V, M) do {                                \
+		T a = (V), z = 0;                                 \
+		s = rnd_stack_create(sizeof(T), 2);               \
+		cr_assert_not_null(s);                            \
+		cr_assert_eq(z, F1(s), M);                        \
+		cr_assert_eq(z, F1(NULL), M);                     \
+		cr_assert_eq(0, F2(s, a));                        \
+		cr_assert_eq(1LU, (unsigned long)s->size, "%lu"); \
+		cr_assert_eq(a, F1(s), M);                        \
+		cr_assert_eq(0LU, (unsigned long)s->size, "%lu"); \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));      \
+		s = rnd_stack_create(sizeof(T) + 1, 1);           \
+		cr_assert_not_null(s);                            \
+		s->size = 1;                                      \
+		cr_assert_eq(z, F1(s), M);                        \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));      \
 	} while (0)
 	test(char          , rnd_stack_popc , rnd_stack_pushc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , rnd_stack_pops , rnd_stack_pushs , IRANGE(1, SHRT_MAX) , "%hd");
@@ -241,107 +235,103 @@ TEST t_pop(void)
 	test(double        , rnd_stack_popd , rnd_stack_pushd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , rnd_stack_popld, rnd_stack_pushld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
-	PASS();
 }
 
-TEST t_clear(void)
+Test(stack, clear)
 {
 	struct rnd_stack *s;
 	unsigned i;
 	s = rnd_stack_create(sizeof(long double), 1000);
-	ASSERT_NEQ(NULL, s);
-	ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_clear(NULL, NULL), "%d");
-	ASSERT_EQ_FMT(0, rnd_stack_clear(s, NULL), "%d");
-	ASSERT_EQ_FMT(0LU, (unsigned long)s->size, "%lu");
-	ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+	cr_assert_not_null(s);
+	cr_assert_eq(RND_EINVAL, rnd_stack_clear(NULL, NULL));
+	cr_assert_eq(0, rnd_stack_clear(s, NULL));
+	cr_assert_eq(0LU, (unsigned long)s->size, "%lu");
+	cr_assert_eq(0, rnd_stack_destroy(s, NULL));
 	s = rnd_stack_create(sizeof(struct data), 1000);
 	for (i = 0; i < 1000; i++) {
 		struct data d;
-		ASSERT_EQ_FMT(0, data_init(&d), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_push(s, &d), "%d");
+		cr_assert_eq(0, data_init(&d));
+		cr_assert_eq(0, rnd_stack_push(s, &d));
 	}
-	ASSERT_EQ_FMT(RND_EHANDLER, rnd_stack_clear(s, data_dtor_bad), "%d");
-	ASSERT_EQ_FMT(0, rnd_stack_clear(s, data_dtor), "%d");
-	ASSERT_EQ_FMT(0LU, (unsigned long)s->size, "%lu");
-	ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
-	PASS();
+	cr_assert_eq(RND_EHANDLER, rnd_stack_clear(s, data_dtor_bad));
+	cr_assert_eq(0, rnd_stack_clear(s, data_dtor));
+	cr_assert_eq(0LU, (unsigned long)s->size, "%lu");
+	cr_assert_eq(0, rnd_stack_destroy(s, NULL));
 }
 
-TEST t_foreach(void)
+Test(stack, foreach)
 {
 	struct rnd_stack *s;
 	unsigned i;
 	s = rnd_stack_create(sizeof(long double), 1000);
-	ASSERT_NEQ(NULL, s);
-	ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_foreach(NULL, data_mutate), "%d");
-	ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_foreach(s, NULL), "%d");
-	ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_foreach(NULL, NULL), "%d");
-	ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+	cr_assert_not_null(s);
+	cr_assert_eq(RND_EINVAL, rnd_stack_foreach(NULL, data_mutate));
+	cr_assert_eq(RND_EINVAL, rnd_stack_foreach(s, NULL));
+	cr_assert_eq(RND_EINVAL, rnd_stack_foreach(NULL, NULL));
+	cr_assert_eq(0, rnd_stack_destroy(s, NULL));
 	s = rnd_stack_create(sizeof(struct data), 1000);
 	for (i = 0; i < 1000; i++) {
 		struct data d;
-		ASSERT_EQ_FMT(0, data_init(&d), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_push(s, &d), "%d");
+		cr_assert_eq(0, data_init(&d));
+		cr_assert_eq(0, rnd_stack_push(s, &d));
 	}
-	ASSERT_EQ_FMT(RND_EHANDLER, rnd_stack_foreach(s, data_mutate_bad), "%d");
-	ASSERT_EQ_FMT(0, rnd_stack_foreach(s, data_mutate), "%d");
-	ASSERT_EQ_FMT(0, rnd_stack_foreach(s, data_verify), "%d");
-	ASSERT_EQ_FMT(0, rnd_stack_destroy(s, data_dtor), "%d");
-	PASS();
+	cr_assert_eq(RND_EHANDLER, rnd_stack_foreach(s, data_mutate_bad));
+	cr_assert_eq(0, rnd_stack_foreach(s, data_mutate));
+	cr_assert_eq(0, rnd_stack_foreach(s, data_verify));
+	cr_assert_eq(0, rnd_stack_destroy(s, data_dtor));
 }
 
-TEST t_copy(void)
+Test(stack, copy)
 {
 	struct rnd_stack *s, *p;
 	unsigned i;
 	s = rnd_stack_create(sizeof(int), 1000);
 	p = rnd_stack_create(sizeof(int), 333);
-	ASSERT_NEQ(NULL, s);
-	ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_copy(NULL, s, NULL), "%d");
-	ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_copy(p, NULL, NULL), "%d");
-	ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_copy(NULL, NULL, NULL), "%d");
-	ASSERT_EQ_FMT(0, rnd_stack_copy(s, p, NULL), "%d");
-	ASSERT_EQ_FMT((unsigned long)p->size, (unsigned long)s->size, "%lu");
-	ASSERT_EQ_FMT((unsigned long)p->elem_size, (unsigned long)s->elem_size, "%lu");
-	ASSERT_EQ_FMT(0, rnd_stack_copy(p, s, NULL), "%d");
-	ASSERT_EQ_FMT((unsigned long)p->size, (unsigned long)s->size, "%lu");
-	ASSERT_EQ_FMT((unsigned long)p->elem_size, (unsigned long)s->elem_size, "%lu");
+	cr_assert_not_null(s);
+	cr_assert_eq(RND_EINVAL, rnd_stack_copy(NULL, s, NULL));
+	cr_assert_eq(RND_EINVAL, rnd_stack_copy(p, NULL, NULL));
+	cr_assert_eq(RND_EINVAL, rnd_stack_copy(NULL, NULL, NULL));
+	cr_assert_eq(0, rnd_stack_copy(s, p, NULL));
+	cr_assert_eq((unsigned long)p->size, (unsigned long)s->size, "%lu");
+	cr_assert_eq((unsigned long)p->elem_size, (unsigned long)s->elem_size, "%lu");
+	cr_assert_eq(0, rnd_stack_copy(p, s, NULL));
+	cr_assert_eq((unsigned long)p->size, (unsigned long)s->size, "%lu");
+	cr_assert_eq((unsigned long)p->elem_size, (unsigned long)s->elem_size, "%lu");
 	for (i = 0; i < 1000; i++) {
-		ASSERT_EQ_FMT(0, rnd_stack_pushi(s, FRANGE(INT_MIN, INT_MAX)), "%d");
+		cr_assert_eq(0, rnd_stack_pushi(s, FRANGE(INT_MIN, INT_MAX)));
 	}
-	ASSERT_EQ_FMT(0, rnd_stack_copy(p, s, NULL), "%d");
-	ASSERT_EQ_FMT((unsigned long)p->size, (unsigned long)s->size, "%lu");
-	ASSERT_EQ_FMT((unsigned long)p->elem_size, (unsigned long)s->elem_size, "%lu");
+	cr_assert_eq(0, rnd_stack_copy(p, s, NULL));
+	cr_assert_eq((unsigned long)p->size, (unsigned long)s->size, "%lu");
+	cr_assert_eq((unsigned long)p->elem_size, (unsigned long)s->elem_size, "%lu");
 	for (i = 0; i < 1000; i++) {
 		int a, b;
 		a = rnd_stack_geti(s, i);
 		b = rnd_stack_geti(p, i);
-		ASSERT_EQ_FMT(a, b, "%d");
+		cr_assert_eq(a, b);
 	}
-	ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
-	ASSERT_EQ_FMT(0, rnd_stack_clear(p, NULL), "%d");
+	cr_assert_eq(0, rnd_stack_destroy(s, NULL));
+	cr_assert_eq(0, rnd_stack_clear(p, NULL));
 	s = rnd_stack_create(sizeof(struct data), 1000);
 	for (i = 0; i < 1000; i++) {
 		struct data d;
-		ASSERT_EQ_FMT(0, data_init(&d), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_push(s, &d), "%d");
+		cr_assert_eq(0, data_init(&d));
+		cr_assert_eq(0, rnd_stack_push(s, &d));
 	}
-	ASSERT_EQ_FMT(RND_EHANDLER, rnd_stack_copy(p, s, data_cpy_bad), "%d");
-	ASSERT_EQ_FMT(0, rnd_stack_copy(p, s, data_cpy), "%d");
-	ASSERT_EQ_FMT((unsigned long)p->size, (unsigned long)s->size, "%lu");
-	ASSERT_EQ_FMT((unsigned long)p->elem_size, (unsigned long)s->elem_size, "%lu");
+	cr_assert_eq(RND_EHANDLER, rnd_stack_copy(p, s, data_cpy_bad));
+	cr_assert_eq(0, rnd_stack_copy(p, s, data_cpy));
+	cr_assert_eq((unsigned long)p->size, (unsigned long)s->size, "%lu");
+	cr_assert_eq((unsigned long)p->elem_size, (unsigned long)s->elem_size, "%lu");
 	for (i = 0; i < 1000; i++) {
 		struct data a, b;
-		ASSERT_EQ_FMT(0, rnd_stack_get(s, i, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_get(p, i, &b), "%d");
-		ASSERT_EQ_FMT(0, data_cmp(&a, &b), "%d");
+		cr_assert_eq(0, rnd_stack_get(s, i, &a));
+		cr_assert_eq(0, rnd_stack_get(p, i, &b));
+		cr_assert_eq(0, data_cmp(&a, &b));
 	}
-	ASSERT_EQ_FMT(0, rnd_stack_destroy(s, data_dtor), "%d");
-	ASSERT_EQ_FMT(0, rnd_stack_destroy(p, data_dtor), "%d");
-	PASS();
+	cr_assert_eq(0, rnd_stack_destroy(s, data_dtor));
+	cr_assert_eq(0, rnd_stack_destroy(p, data_dtor));
 }
 
-TEST t_insert(void)
+Test(stack, insert)
 {
 	struct rnd_stack *s;
 	unsigned i;
@@ -350,52 +340,52 @@ TEST t_insert(void)
 		int a = 10;
 		struct data d[1000];
 		s = rnd_stack_create(sizeof(int), 1000);
-		ASSERT_NEQ(NULL, s);
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_insert(s, 0, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_insert(NULL, 0, &a), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_insert(NULL, 0, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_insert(s, 1, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_insert(s, 0, &a), "%d");
-		ASSERT_EQ_FMT(1LU, (unsigned long)s->size, "%lu");
-		ASSERT_EQ_FMT(10, rnd_stack_geti(s, 0), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+		cr_assert_not_null(s);
+		cr_assert_eq(RND_EINVAL, rnd_stack_insert(s, 0, NULL));
+		cr_assert_eq(RND_EINVAL, rnd_stack_insert(NULL, 0, &a));
+		cr_assert_eq(RND_EINVAL, rnd_stack_insert(NULL, 0, NULL));
+		cr_assert_eq(RND_EINDEX, rnd_stack_insert(s, 1, &a));
+		cr_assert_eq(0, rnd_stack_insert(s, 0, &a));
+		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(10, rnd_stack_geti(s, 0));
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));
 
 		s = rnd_stack_create(sizeof(struct data), 1000);
-		ASSERT_NEQ(NULL, s);
+		cr_assert_not_null(s);
 		for (i = 0; i < 1000; i++) {
 			struct data a;
 			size_t idx = IRANGE(0, i);
-			ASSERT_EQ_FMT(0, data_init(d + i), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_insert(s, idx, d + i), "%d");
-			ASSERT_EQ_FMT((unsigned long)i + 1, (unsigned long)s->size, "%lu");
-			ASSERT_EQ_FMT(0, rnd_stack_get(s, idx, &a), "%d");
-			ASSERT_EQ_FMT(0, data_cmp(&a, d + i), "%d");
+			cr_assert_eq(0, data_init(d + i));
+			cr_assert_eq(0, rnd_stack_insert(s, idx, d + i));
+			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size, "%lu");
+			cr_assert_eq(0, rnd_stack_get(s, idx, &a));
+			cr_assert_eq(0, data_cmp(&a, d + i));
 		}
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, data_dtor), "%d");
+		cr_assert_eq(0, rnd_stack_destroy(s, data_dtor));
 
 		s = rnd_stack_create(sizeof(struct data), 10);
-		ASSERT_NEQ(NULL, s);
+		cr_assert_not_null(s);
 		for (i = 0; i < 5; i++) {
-			ASSERT_EQ_FMT(0, data_init(d + i), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_insert(s, i, d + i), "%d");
+			cr_assert_eq(0, data_init(d + i));
+			cr_assert_eq(0, rnd_stack_insert(s, i, d + i));
 		}
 		for (i = 0; i < 5; i++) {
 			struct data a;
-			ASSERT_EQ_FMT(0, rnd_stack_get(s, i, &a), "%d");
-			ASSERT_EQ_FMT(0, data_cmp(&a, d + i), "%d");
+			cr_assert_eq(0, rnd_stack_get(s, i, &a));
+			cr_assert_eq(0, data_cmp(&a, d + i));
 		}
 		{
 			struct data a;
-			ASSERT_EQ_FMT(0, data_init(d + 5), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_insert(s, 1, d + 5), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_peek(s, &a), "%d");
-			ASSERT_EQ_FMT(0, data_cmp(&a, d), "%d");
-			ASSERT_EQ_FMT(0, data_init(d + 6), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_insert(s, 3, d + 6), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_peek(s, &a), "%d");
-			ASSERT_EQ_FMT(0, data_cmp(&a, d), "%d");
-			ASSERT_EQ_FMT(7LU, (unsigned long)s->size, "%lu");
-			ASSERT_EQ_FMT(0, rnd_stack_destroy(s, data_dtor), "%d");
+			cr_assert_eq(0, data_init(d + 5));
+			cr_assert_eq(0, rnd_stack_insert(s, 1, d + 5));
+			cr_assert_eq(0, rnd_stack_peek(s, &a));
+			cr_assert_eq(0, data_cmp(&a, d));
+			cr_assert_eq(0, data_init(d + 6));
+			cr_assert_eq(0, rnd_stack_insert(s, 3, d + 6));
+			cr_assert_eq(0, rnd_stack_peek(s, &a));
+			cr_assert_eq(0, data_cmp(&a, d));
+			cr_assert_eq(7LU, (unsigned long)s->size, "%lu");
+			cr_assert_eq(0, rnd_stack_destroy(s, data_dtor));
 		}
 	}
 
@@ -406,49 +396,49 @@ TEST t_insert(void)
 	 * V  - random value snippet
 	 * M  - printf format string
 	 */
-#define test(T, F1, F2, V, M) do {                                                          \
-		T a = (V);                                                                  \
-		T d[1000];                                                                  \
-		s = rnd_stack_create(sizeof(T), 1000);                                      \
-		ASSERT_NEQ(NULL, s);                                                        \
-		ASSERT_EQ_FMT(RND_EINVAL, F1(NULL, 0, a), "%d");                            \
-		ASSERT_EQ_FMT(RND_EINDEX, F1(s, 1, a), "%d");                               \
-		ASSERT_EQ_FMT(0, F1(s, 0, a), "%d");                                        \
-		ASSERT_EQ_FMT(1LU, (unsigned long)s->size, "%lu");                          \
-		ASSERT_EQ_FMT(a, F2(s, 0), M);                                              \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                         \
-                                                                                            \
-		s = rnd_stack_create(sizeof(T), 1000);                                      \
-		ASSERT_NEQ(NULL, s);                                                        \
-		for (i = 0; i < 1000; i++) {                                                \
-			size_t idx = IRANGE(0, i);                                          \
-			d[i] = (V);                                                         \
-			ASSERT_EQ_FMT(0, F1(s, idx, d[i]), "%d");                           \
-			ASSERT_EQ_FMT((unsigned long)i + 1, (unsigned long)s->size, "%lu"); \
-			ASSERT_EQ_FMT(d[i], F2(s, idx), M);                                 \
-		}                                                                           \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                         \
-                                                                                            \
-		s = rnd_stack_create(sizeof(T), 10);                                        \
-		ASSERT_NEQ(NULL, s);                                                        \
-		for (i = 0; i < 5; i++) {                                                   \
-			d[i] = (V);                                                         \
-			ASSERT_EQ_FMT(0, F1(s, i, d[i]), "%d");                             \
-		}                                                                           \
-		for (i = 0; i < 5; i++) {                                                   \
-			ASSERT_EQ_FMT(d[i], F2(s, i), M);                                   \
-		}                                                                           \
-		d[5] = (V);                                                                 \
-		ASSERT_EQ_FMT(0, F1(s, 1, d[5]), "%d");                                     \
-		ASSERT_EQ_FMT(d[0], F2(s, 0), M);                                           \
-		d[6] = (V);                                                                 \
-		ASSERT_EQ_FMT(0, F1(s, 3, d[6]), "%d");                                     \
-		ASSERT_EQ_FMT(d[0], F2(s, 0), M);                                           \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                         \
-		s = rnd_stack_create(sizeof(T) + 1, 1000);                                  \
-		ASSERT_NEQ(NULL, s);                                                        \
-		ASSERT_EQ_FMT(RND_EILLEGAL, F1(s, 0, (V)), "%d");                           \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                         \
+#define test(T, F1, F2, V, M) do {                                                         \
+		T a = (V);                                                                 \
+		T d[1000];                                                                 \
+		s = rnd_stack_create(sizeof(T), 1000);                                     \
+		cr_assert_not_null(s);                                                     \
+		cr_assert_eq(RND_EINVAL, F1(NULL, 0, a));                                  \
+		cr_assert_eq(RND_EINDEX, F1(s, 1, a));                                     \
+		cr_assert_eq(0, F1(s, 0, a));                                              \
+		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");                          \
+		cr_assert_eq(a, F2(s, 0), M);                                              \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));                               \
+                                                                                           \
+		s = rnd_stack_create(sizeof(T), 1000);                                     \
+		cr_assert_not_null(s);                                                     \
+		for (i = 0; i < 1000; i++) {                                               \
+			size_t idx = IRANGE(0, i);                                         \
+			d[i] = (V);                                                        \
+			cr_assert_eq(0, F1(s, idx, d[i]));                                 \
+			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size, "%lu"); \
+			cr_assert_eq(d[i], F2(s, idx), M);                                 \
+		}                                                                          \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));                               \
+                                                                                           \
+		s = rnd_stack_create(sizeof(T), 10);                                       \
+		cr_assert_not_null(s);                                                     \
+		for (i = 0; i < 5; i++) {                                                  \
+			d[i] = (V);                                                        \
+			cr_assert_eq(0, F1(s, i, d[i]));                                   \
+		}                                                                          \
+		for (i = 0; i < 5; i++) {                                                  \
+			cr_assert_eq(d[i], F2(s, i), M);                                   \
+		}                                                                          \
+		d[5] = (V);                                                                \
+		cr_assert_eq(0, F1(s, 1, d[5]));                                           \
+		cr_assert_eq(d[0], F2(s, 0), M);                                           \
+		d[6] = (V);                                                                \
+		cr_assert_eq(0, F1(s, 3, d[6]));                                           \
+		cr_assert_eq(d[0], F2(s, 0), M);                                           \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));                               \
+		s = rnd_stack_create(sizeof(T) + 1, 1000);                                 \
+		cr_assert_not_null(s);                                                     \
+		cr_assert_eq(RND_EILLEGAL, F1(s, 0, (V)));                                 \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));                               \
 	} while (0)
 	test(char          , rnd_stack_insertc , rnd_stack_getc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , rnd_stack_inserts , rnd_stack_gets , IRANGE(1, SHRT_MAX) , "%hd");
@@ -463,10 +453,9 @@ TEST t_insert(void)
 	test(double        , rnd_stack_insertd , rnd_stack_getd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , rnd_stack_insertld, rnd_stack_getld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
-	PASS();
 }
 
-TEST t_qinsert(void)
+Test(stack, qinsert)
 {
 	struct rnd_stack *s;
 	unsigned i;
@@ -475,52 +464,52 @@ TEST t_qinsert(void)
 		int a = 10;
 		struct data d[1000];
 		s = rnd_stack_create(sizeof(int), 1000);
-		ASSERT_NEQ(NULL, s);
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_qinsert(s, 0, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_qinsert(NULL, 0, &a), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_qinsert(NULL, 0, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_qinsert(s, 1, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_qinsert(s, 0, &a), "%d");
-		ASSERT_EQ_FMT(1LU, (unsigned long)s->size, "%lu");
-		ASSERT_EQ_FMT(10, rnd_stack_geti(s, 0), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+		cr_assert_not_null(s);
+		cr_assert_eq(RND_EINVAL, rnd_stack_qinsert(s, 0, NULL));
+		cr_assert_eq(RND_EINVAL, rnd_stack_qinsert(NULL, 0, &a));
+		cr_assert_eq(RND_EINVAL, rnd_stack_qinsert(NULL, 0, NULL));
+		cr_assert_eq(RND_EINDEX, rnd_stack_qinsert(s, 1, &a));
+		cr_assert_eq(0, rnd_stack_qinsert(s, 0, &a));
+		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(10, rnd_stack_geti(s, 0));
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));
 
 		s = rnd_stack_create(sizeof(struct data), 1000);
-		ASSERT_NEQ(NULL, s);
+		cr_assert_not_null(s);
 		for (i = 0; i < 1000; i++) {
 			struct data a;
 			size_t idx = IRANGE(0, i);
-			ASSERT_EQ_FMT(0, data_init(d + i), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_qinsert(s, idx, d + i), "%d");
-			ASSERT_EQ_FMT((unsigned long)i + 1, (unsigned long)s->size, "%lu");
-			ASSERT_EQ_FMT(0, rnd_stack_get(s, idx, &a), "%d");
-			ASSERT_EQ_FMT(0, data_cmp(&a, d + i), "%d");
+			cr_assert_eq(0, data_init(d + i));
+			cr_assert_eq(0, rnd_stack_qinsert(s, idx, d + i));
+			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size, "%lu");
+			cr_assert_eq(0, rnd_stack_get(s, idx, &a));
+			cr_assert_eq(0, data_cmp(&a, d + i));
 		}
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, data_dtor), "%d");
+		cr_assert_eq(0, rnd_stack_destroy(s, data_dtor));
 
 		s = rnd_stack_create(sizeof(struct data), 10);
-		ASSERT_NEQ(NULL, s);
+		cr_assert_not_null(s);
 		for (i = 0; i < 5; i++) {
-			ASSERT_EQ_FMT(0, data_init(d + i), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_qinsert(s, i, d + i), "%d");
+			cr_assert_eq(0, data_init(d + i));
+			cr_assert_eq(0, rnd_stack_qinsert(s, i, d + i));
 		}
 		for (i = 0; i < 5; i++) {
 			struct data a;
-			ASSERT_EQ_FMT(0, rnd_stack_get(s, i, &a), "%d");
-			ASSERT_EQ_FMT(0, data_cmp(&a, d + (8 - i) % 5), "%d");
+			cr_assert_eq(0, rnd_stack_get(s, i, &a));
+			cr_assert_eq(0, data_cmp(&a, d + (8 - i) % 5));
 		}
 		{
 			struct data a;
-			ASSERT_EQ_FMT(0, data_init(d + 5), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_qinsert(s, 1, d + 5), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_peek(s, &a), "%d");
-			ASSERT_EQ_FMT(0, data_cmp(&a, d + 3), "%d");
-			ASSERT_EQ_FMT(0, data_init(d + 6), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_qinsert(s, 3, d + 6), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_peek(s, &a), "%d");
-			ASSERT_EQ_FMT(0, data_cmp(&a, d + 2), "%d");
-			ASSERT_EQ_FMT(7LU, (unsigned long)s->size, "%lu");
-			ASSERT_EQ_FMT(0, rnd_stack_destroy(s, data_dtor), "%d");
+			cr_assert_eq(0, data_init(d + 5));
+			cr_assert_eq(0, rnd_stack_qinsert(s, 1, d + 5));
+			cr_assert_eq(0, rnd_stack_peek(s, &a));
+			cr_assert_eq(0, data_cmp(&a, d + 3));
+			cr_assert_eq(0, data_init(d + 6));
+			cr_assert_eq(0, rnd_stack_qinsert(s, 3, d + 6));
+			cr_assert_eq(0, rnd_stack_peek(s, &a));
+			cr_assert_eq(0, data_cmp(&a, d + 2));
+			cr_assert_eq(7LU, (unsigned long)s->size, "%lu");
+			cr_assert_eq(0, rnd_stack_destroy(s, data_dtor));
 		}
 	}
 
@@ -531,49 +520,49 @@ TEST t_qinsert(void)
 	 * V  - random value snippet
 	 * M  - printf format string
 	 */
-#define test(T, F1, F2, V, M) do {                                                               \
-		T a = (V);                                                                       \
-		T d[1000];                                                                       \
-		s = rnd_stack_create(sizeof(T), 1000);                                           \
-		ASSERT_NEQ(NULL, s);                                                             \
-		ASSERT_EQ_FMT(RND_EINVAL, F1(NULL, 0, a), "%d");                                 \
-		ASSERT_EQ_FMT(RND_EINDEX, F1(s, 1, a), "%d");                                    \
-		ASSERT_EQ_FMT(0, F1(s, 0, a), "%d");                                             \
-		ASSERT_EQ_FMT(1LU, (unsigned long)s->size, "%lu");                               \
-		ASSERT_EQ_FMT(a, F2(s, 0), M);                                                   \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                              \
-                                                                                                 \
-		s = rnd_stack_create(sizeof(T), 1000);                                           \
-		ASSERT_NEQ(NULL, s);                                                             \
-		for (i = 0; i < 1000; i++) {                                                     \
-			size_t idx = IRANGE(0, i);                                               \
-			d[i] = (V);                                                              \
-			ASSERT_EQ_FMT(0, F1(s, idx, d[i]), "%d");                                \
-			ASSERT_EQ_FMT((unsigned long)i + 1, (unsigned long)s->size, "%lu");      \
-			ASSERT_EQ_FMT(d[i], F2(s, idx), M);                                      \
-		}                                                                                \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                              \
-                                                                                                 \
-		s = rnd_stack_create(sizeof(T), 10);                                             \
-		ASSERT_NEQ(NULL, s);                                                             \
-		for (i = 0; i < 5; i++) {                                                        \
-			d[i] = (V);                                                              \
-			ASSERT_EQ_FMT(0, F1(s, i, d[i]), "%d");                                  \
-		}                                                                                \
-		for (i = 0; i < 5; i++) {                                                        \
-			ASSERT_EQ_FMT(d[(8 - i) % 5], F2(s, i), M);                              \
-		}                                                                                \
-		d[5] = (V);                                                                      \
-		ASSERT_EQ_FMT(0, F1(s, 1, d[5]), "%d");                                          \
-		ASSERT_EQ_FMT(d[3], F2(s, 0), M);                                                \
-		d[6] = (V);                                                                      \
-		ASSERT_EQ_FMT(0, F1(s, 3, d[6]), "%d");                                          \
-		ASSERT_EQ_FMT(d[2], F2(s, 0), M);                                                \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                              \
-		s = rnd_stack_create(sizeof(T) + 1, 1000);                                       \
-		ASSERT_NEQ(NULL, s);                                                             \
-		ASSERT_EQ_FMT(RND_EILLEGAL, F1(s, 0, (V)), "%d");                                \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                              \
+#define test(T, F1, F2, V, M) do {                                                         \
+		T a = (V);                                                                 \
+		T d[1000];                                                                 \
+		s = rnd_stack_create(sizeof(T), 1000);                                     \
+		cr_assert_not_null(s);                                                     \
+		cr_assert_eq(RND_EINVAL, F1(NULL, 0, a));                                  \
+		cr_assert_eq(RND_EINDEX, F1(s, 1, a));                                     \
+		cr_assert_eq(0, F1(s, 0, a));                                              \
+		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");                          \
+		cr_assert_eq(a, F2(s, 0), M);                                              \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));                               \
+                                                                                           \
+		s = rnd_stack_create(sizeof(T), 1000);                                     \
+		cr_assert_not_null(s);                                                     \
+		for (i = 0; i < 1000; i++) {                                               \
+			size_t idx = IRANGE(0, i);                                         \
+			d[i] = (V);                                                        \
+			cr_assert_eq(0, F1(s, idx, d[i]));                                 \
+			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size, "%lu"); \
+			cr_assert_eq(d[i], F2(s, idx), M);                                 \
+		}                                                                          \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));                               \
+                                                                                           \
+		s = rnd_stack_create(sizeof(T), 10);                                       \
+		cr_assert_not_null(s);                                                     \
+		for (i = 0; i < 5; i++) {                                                  \
+			d[i] = (V);                                                        \
+			cr_assert_eq(0, F1(s, i, d[i]));                                   \
+		}                                                                          \
+		for (i = 0; i < 5; i++) {                                                  \
+			cr_assert_eq(d[(8 - i) % 5], F2(s, i), M);                         \
+		}                                                                          \
+		d[5] = (V);                                                                \
+		cr_assert_eq(0, F1(s, 1, d[5]));                                           \
+		cr_assert_eq(d[3], F2(s, 0), M);                                           \
+		d[6] = (V);                                                                \
+		cr_assert_eq(0, F1(s, 3, d[6]));                                           \
+		cr_assert_eq(d[2], F2(s, 0), M);                                           \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));                               \
+		s = rnd_stack_create(sizeof(T) + 1, 1000);                                 \
+		cr_assert_not_null(s);                                                     \
+		cr_assert_eq(RND_EILLEGAL, F1(s, 0, (V)));                                 \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));                               \
 	} while (0)
 	test(char          , rnd_stack_qinsertc , rnd_stack_getc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , rnd_stack_qinserts , rnd_stack_gets , IRANGE(1, SHRT_MAX) , "%hd");
@@ -588,10 +577,9 @@ TEST t_qinsert(void)
 	test(double        , rnd_stack_qinsertd , rnd_stack_getd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , rnd_stack_qinsertld, rnd_stack_getld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
-	PASS();
 }
 
-TEST t_remove(void)
+Test(stack, remove)
 {
 	struct rnd_stack *s;
 	unsigned i;
@@ -600,30 +588,30 @@ TEST t_remove(void)
 		struct data a;
 		struct data d[100];
 		s = rnd_stack_create(sizeof(int), 1000);
-		ASSERT_NEQ(NULL, s);
-		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_remove(s, 0, &a), "%d");
-		ASSERT_EQ_FMT(0, data_init(&a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_push(s, &a), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_remove(NULL, 0, &a), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_remove(NULL, 0, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_remove(s, 1, &a), "%d");
-		ASSERT_EQ_FMT(1LU, (unsigned long)s->size, "%lu");
-		ASSERT_EQ_FMT(0, rnd_stack_remove(s, 0, NULL), "%d");
-		ASSERT_EQ_FMT(0LU, (unsigned long)s->size, "%lu");
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
-		ASSERT_EQ_FMT(0, data_dtor(&a), "%d");
+		cr_assert_not_null(s);
+		cr_assert_eq(RND_EINDEX, rnd_stack_remove(s, 0, &a));
+		cr_assert_eq(0, data_init(&a));
+		cr_assert_eq(0, rnd_stack_push(s, &a));
+		cr_assert_eq(RND_EINVAL, rnd_stack_remove(NULL, 0, &a));
+		cr_assert_eq(RND_EINVAL, rnd_stack_remove(NULL, 0, NULL));
+		cr_assert_eq(RND_EINDEX, rnd_stack_remove(s, 1, &a));
+		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(0, rnd_stack_remove(s, 0, NULL));
+		cr_assert_eq(0LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));
+		cr_assert_eq(0, data_dtor(&a));
 
 		s = rnd_stack_create(sizeof(struct data), 100);
-		ASSERT_NEQ(NULL, s);
+		cr_assert_not_null(s);
 		for (i = 0; i < 100; i++) {
-			ASSERT_EQ_FMT(0, data_init(d + i), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_push(s, d + i), "%d");
+			cr_assert_eq(0, data_init(d + i));
+			cr_assert_eq(0, rnd_stack_push(s, d + i));
 		}
 		for (i = 0; i < 100; i++) {
 			struct data a;
 			size_t idx = IRANGE(0, s->size - 1), j;
 			int found = 0;
-			ASSERT_EQ_FMT(0, rnd_stack_remove(s, idx, &a), "%d");
+			cr_assert_eq(0, rnd_stack_remove(s, idx, &a));
 			for (j = 0; j < 100; j++) {
 				/* Lazy and slow way to check, but on average it's
 				 * enough */
@@ -632,27 +620,27 @@ TEST t_remove(void)
 					break;
 				}
 			}
-			ASSERT_EQ_FMT(1, found, "%d");
+			cr_assert_eq(1, found);
 		}
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));
 
 		s = rnd_stack_create(sizeof(struct data), 10);
-		ASSERT_NEQ(NULL, s);
+		cr_assert_not_null(s);
 		for (i = 0; i < 8; i++) {
-			ASSERT_EQ_FMT(0, rnd_stack_push(s, d + i), "%d");
+			cr_assert_eq(0, rnd_stack_push(s, d + i));
 		}
-		ASSERT_EQ_FMT(0, rnd_stack_remove(s, 3, &a), "%d");
-		ASSERT_EQ_FMT(0, data_cmp(d + 4, &a), "%d");
-		ASSERT_EQ_FMT(7LU, (unsigned long)s->size, "%lu");
-		ASSERT_EQ_FMT(0, rnd_stack_remove(s, 0, &a), "%d");
-		ASSERT_EQ_FMT(0, data_cmp(d + 7, &a), "%d");
-		ASSERT_EQ_FMT(6LU, (unsigned long)s->size, "%lu");
-		ASSERT_EQ_FMT(0, rnd_stack_remove(s, 3, &a), "%d");
-		ASSERT_EQ_FMT(0, data_cmp(d + 2, &a), "%d");
-		ASSERT_EQ_FMT(5LU, (unsigned long)s->size, "%lu");
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+		cr_assert_eq(0, rnd_stack_remove(s, 3, &a));
+		cr_assert_eq(0, data_cmp(d + 4, &a));
+		cr_assert_eq(7LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(0, rnd_stack_remove(s, 0, &a));
+		cr_assert_eq(0, data_cmp(d + 7, &a));
+		cr_assert_eq(6LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(0, rnd_stack_remove(s, 3, &a));
+		cr_assert_eq(0, data_cmp(d + 2, &a));
+		cr_assert_eq(5LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));
 		for (i = 0; i < 100; i++) {
-			ASSERT_EQ_FMT(0, data_dtor(d + i), "%d");
+			cr_assert_eq(0, data_dtor(d + i));
 		}
 	}
 
@@ -667,27 +655,27 @@ TEST t_remove(void)
 		T a = (V), z = 0;                                                  \
 		T d[100];                                                          \
 		s = rnd_stack_create(sizeof(T), 1000);                             \
-		ASSERT_NEQ(NULL, s);                                               \
-		ASSERT_EQ_FMT(z, F1(s, 0), M);                                     \
-		ASSERT_EQ_FMT(0, F2(s, a), "%d");                                  \
-		ASSERT_EQ_FMT(z, F1(NULL, 0), M);                                  \
-		ASSERT_EQ_FMT(z, F1(s, 1), M);                                     \
-		ASSERT_EQ_FMT(1LU, (unsigned long)s->size, "%lu");                 \
-		ASSERT_EQ_FMT(a, F1(s, 0), M);                                     \
-		ASSERT_EQ_FMT(0LU, (unsigned long)s->size, "%lu");                 \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                \
+		cr_assert_not_null(s);                                             \
+		cr_assert_eq(z, F1(s, 0), M);                                      \
+		cr_assert_eq(0, F2(s, a));                                         \
+		cr_assert_eq(z, F1(NULL, 0), M);                                   \
+		cr_assert_eq(z, F1(s, 1), M);                                      \
+		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");                  \
+		cr_assert_eq(a, F1(s, 0), M);                                      \
+		cr_assert_eq(0LU, (unsigned long)s->size, "%lu");                  \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));                       \
                                                                                    \
 		s = rnd_stack_create(sizeof(T), 100);                              \
-		ASSERT_NEQ(NULL, s);                                               \
+		cr_assert_not_null(s);                                             \
 		for (i = 0; i < 100; i++) {                                        \
 			d[i] = (V);                                                \
-			ASSERT_EQ_FMT(0, F2(s, d[i]), "%d");                       \
+			cr_assert_eq(0, F2(s, d[i]));                              \
 		}                                                                  \
 		for (i = 0; i < 100; i++) {                                        \
 			T a;                                                       \
 			size_t idx = IRANGE(0, s->size - 1), j;                    \
 			int found = 0;                                             \
-			ASSERT_NEQ(0, (a = F1(s, idx)));                           \
+			cr_assert_neq(0, (a = F1(s, idx)));                        \
 			for (j = 0; j < 100; j++) {                                \
 				/* Lazy and slow way to check, but on average it's
 				 * enough */                                       \
@@ -696,27 +684,27 @@ TEST t_remove(void)
 					break;                                     \
 				}                                                  \
 			}                                                          \
-			ASSERT_EQ_FMT(1, found, "%d");                             \
+			cr_assert_eq(1, found);                                    \
 		}                                                                  \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));                       \
                                                                                    \
 		s = rnd_stack_create(sizeof(T), 10);                               \
-		ASSERT_NEQ(NULL, s);                                               \
+		cr_assert_not_null(s);                                             \
 		for (i = 0; i < 8; i++) {                                          \
-			ASSERT_EQ_FMT(0, F2(s, d[i]), "%d");                       \
+			cr_assert_eq(0, F2(s, d[i]));                              \
 		}                                                                  \
-		ASSERT_EQ_FMT(d[4], F1(s, 3), M);                                  \
-		ASSERT_EQ_FMT(7LU, (unsigned long)s->size, "%lu");                 \
-		ASSERT_EQ_FMT(d[7], F1(s, 0), M);                                  \
-		ASSERT_EQ_FMT(6LU, (unsigned long)s->size, "%lu");                 \
-		ASSERT_EQ_FMT(d[2], F1(s, 3), M);                                  \
-		ASSERT_EQ_FMT(5LU, (unsigned long)s->size, "%lu");                 \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                \
+		cr_assert_eq(d[4], F1(s, 3), M);                                   \
+		cr_assert_eq(7LU, (unsigned long)s->size, "%lu");                  \
+		cr_assert_eq(d[7], F1(s, 0), M);                                   \
+		cr_assert_eq(6LU, (unsigned long)s->size, "%lu");                  \
+		cr_assert_eq(d[2], F1(s, 3), M);                                   \
+		cr_assert_eq(5LU, (unsigned long)s->size, "%lu");                  \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));                       \
 		s = rnd_stack_create(sizeof(T) + 1, 1000);                         \
-		ASSERT_NEQ(NULL, s);                                               \
+		cr_assert_not_null(s);                                             \
 		s->size = 1;                                                       \
-		ASSERT_EQ_FMT(z, F1(s, 0), M);                                     \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                \
+		cr_assert_eq(z, F1(s, 0), M);                                      \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));                       \
 	} while (0)
 	test(char          , rnd_stack_removec , rnd_stack_pushc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , rnd_stack_removes , rnd_stack_pushs , IRANGE(1, SHRT_MAX) , "%hd");
@@ -731,10 +719,9 @@ TEST t_remove(void)
 	test(double        , rnd_stack_removed , rnd_stack_pushd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , rnd_stack_removeld, rnd_stack_pushld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
-	PASS();
 }
 
-TEST t_qremove(void)
+Test(stack, qremove)
 {
 	struct rnd_stack *s;
 	unsigned i;
@@ -743,30 +730,30 @@ TEST t_qremove(void)
 		struct data a;
 		struct data d[100];
 		s = rnd_stack_create(sizeof(int), 1000);
-		ASSERT_NEQ(NULL, s);
-		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_qremove(s, 0, &a), "%d");
-		ASSERT_EQ_FMT(0, data_init(&a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_push(s, &a), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_qremove(NULL, 0, &a), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_qremove(NULL, 0, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_qremove(s, 1, &a), "%d");
-		ASSERT_EQ_FMT(1LU, (unsigned long)s->size, "%lu");
-		ASSERT_EQ_FMT(0, rnd_stack_qremove(s, 0, NULL), "%d");
-		ASSERT_EQ_FMT(0LU, (unsigned long)s->size, "%lu");
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
-		ASSERT_EQ_FMT(0, data_dtor(&a), "%d");
+		cr_assert_not_null(s);
+		cr_assert_eq(RND_EINDEX, rnd_stack_qremove(s, 0, &a));
+		cr_assert_eq(0, data_init(&a));
+		cr_assert_eq(0, rnd_stack_push(s, &a));
+		cr_assert_eq(RND_EINVAL, rnd_stack_qremove(NULL, 0, &a));
+		cr_assert_eq(RND_EINVAL, rnd_stack_qremove(NULL, 0, NULL));
+		cr_assert_eq(RND_EINDEX, rnd_stack_qremove(s, 1, &a));
+		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(0, rnd_stack_qremove(s, 0, NULL));
+		cr_assert_eq(0LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));
+		cr_assert_eq(0, data_dtor(&a));
 
 		s = rnd_stack_create(sizeof(struct data), 100);
-		ASSERT_NEQ(NULL, s);
+		cr_assert_not_null(s);
 		for (i = 0; i < 100; i++) {
-			ASSERT_EQ_FMT(0, data_init(d + i), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_push(s, d + i), "%d");
+			cr_assert_eq(0, data_init(d + i));
+			cr_assert_eq(0, rnd_stack_push(s, d + i));
 		}
 		for (i = 0; i < 100; i++) {
 			struct data a;
 			size_t idx = IRANGE(0, s->size - 1), j;
 			int found = 0;
-			ASSERT_EQ_FMT(0, rnd_stack_qremove(s, idx, &a), "%d");
+			cr_assert_eq(0, rnd_stack_qremove(s, idx, &a));
 			for (j = 0; j < 100; j++) {
 				/* Lazy and slow way to check, but on average it's
 				 * enough */
@@ -775,28 +762,28 @@ TEST t_qremove(void)
 					break;
 				}
 			}
-			ASSERT_EQ_FMT(1, found, "%d");
+			cr_assert_eq(1, found);
 		}
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));
 
 		s = rnd_stack_create(sizeof(struct data), 10);
-		ASSERT_NEQ(NULL, s);
+		cr_assert_not_null(s);
 		for (i = 0; i < 8; i++) {
-			ASSERT_EQ_FMT(0, rnd_stack_push(s, d + i), "%d");
+			cr_assert_eq(0, rnd_stack_push(s, d + i));
 		}
-		ASSERT_EQ_FMT(0, rnd_stack_qremove(s, 3, &a), "%d");
-		ASSERT_EQ_FMT(0, data_cmp(d + 4, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_get(s, 3, &a), "%d");
-		ASSERT_EQ_FMT(0, data_cmp(d + 3, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_qremove(s, 0, &a), "%d");
-		ASSERT_EQ_FMT(0, data_cmp(d + 6, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_get(s, 0, &a), "%d");
-		ASSERT_EQ_FMT(0, data_cmp(d + 5, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_qremove(s, 3, &a), "%d");
-		ASSERT_EQ_FMT(0, data_cmp(d + 2, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+		cr_assert_eq(0, rnd_stack_qremove(s, 3, &a));
+		cr_assert_eq(0, data_cmp(d + 4, &a));
+		cr_assert_eq(0, rnd_stack_get(s, 3, &a));
+		cr_assert_eq(0, data_cmp(d + 3, &a));
+		cr_assert_eq(0, rnd_stack_qremove(s, 0, &a));
+		cr_assert_eq(0, data_cmp(d + 6, &a));
+		cr_assert_eq(0, rnd_stack_get(s, 0, &a));
+		cr_assert_eq(0, data_cmp(d + 5, &a));
+		cr_assert_eq(0, rnd_stack_qremove(s, 3, &a));
+		cr_assert_eq(0, data_cmp(d + 2, &a));
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));
 		for (i = 0; i < 100; i++) {
-			ASSERT_EQ_FMT(0, data_dtor(d + i), "%d");
+			cr_assert_eq(0, data_dtor(d + i));
 		}
 	}
 
@@ -812,27 +799,27 @@ TEST t_qremove(void)
 		T a = (V), z = 0;                                                  \
 		T d[100];                                                          \
 		s = rnd_stack_create(sizeof(T), 1000);                             \
-		ASSERT_NEQ(NULL, s);                                               \
-		ASSERT_EQ_FMT(z, F1(s, 0), M);                                     \
-		ASSERT_EQ_FMT(0, F2(s, a), "%d");                                  \
-		ASSERT_EQ_FMT(z, F1(NULL, 0), M);                                  \
-		ASSERT_EQ_FMT(z, F1(s, 1), M);                                     \
-		ASSERT_EQ_FMT(1LU, (unsigned long)s->size, "%lu");                 \
-		ASSERT_EQ_FMT(a, F1(s, 0), M);                                     \
-		ASSERT_EQ_FMT(0LU, (unsigned long)s->size, "%lu");                 \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                \
+		cr_assert_not_null(s);                                             \
+		cr_assert_eq(z, F1(s, 0), M);                                      \
+		cr_assert_eq(0, F2(s, a));                                         \
+		cr_assert_eq(z, F1(NULL, 0), M);                                   \
+		cr_assert_eq(z, F1(s, 1), M);                                      \
+		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");                  \
+		cr_assert_eq(a, F1(s, 0), M);                                      \
+		cr_assert_eq(0LU, (unsigned long)s->size, "%lu");                  \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));                       \
                                                                                    \
 		s = rnd_stack_create(sizeof(T), 100);                              \
-		ASSERT_NEQ(NULL, s);                                               \
+		cr_assert_not_null(s);                                             \
 		for (i = 0; i < 100; i++) {                                        \
 			d[i] = (V);                                                \
-			ASSERT_EQ_FMT(0, F2(s, d[i]), "%d");                       \
+			cr_assert_eq(0, F2(s, d[i]));                              \
 		}                                                                  \
 		for (i = 0; i < 100; i++) {                                        \
 			T a;                                                       \
 			size_t idx = IRANGE(0, s->size - 1), j;                    \
 			int found = 0;                                             \
-			ASSERT_NEQ(0, (a = F1(s, idx)));                           \
+			cr_assert_neq(0, (a = F1(s, idx)));                        \
 			for (j = 0; j < 100; j++) {                                \
 				/* Lazy and slow way to check, but on average it's
 				 * enough */                                       \
@@ -841,27 +828,27 @@ TEST t_qremove(void)
 					break;                                     \
 				}                                                  \
 			}                                                          \
-			ASSERT_EQ_FMT(1, found, "%d");                             \
+			cr_assert_eq(1, found);                                    \
 		}                                                                  \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));                       \
                                                                                    \
 		s = rnd_stack_create(sizeof(T), 10);                               \
-		ASSERT_NEQ(NULL, s);                                               \
+		cr_assert_not_null(s);                                             \
 		for (i = 0; i < 8; i++) {                                          \
-			ASSERT_EQ_FMT(0, F2(s, d[i]), "%d");                       \
+			cr_assert_eq(0, F2(s, d[i]));                              \
 		}                                                                  \
-		ASSERT_EQ_FMT(d[4], F1(s, 3), M);                                  \
-		ASSERT_EQ_FMT(d[3], F3(s, 3), M);                                  \
-		ASSERT_EQ_FMT(d[6], F1(s, 0), M);                                  \
-		ASSERT_EQ_FMT(d[5], F3(s, 0), M);                                  \
-		ASSERT_EQ_FMT(d[2], F1(s, 3), M);                                  \
-		ASSERT_EQ_FMT(d[1], F3(s, 3), M);                                  \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                \
+		cr_assert_eq(d[4], F1(s, 3), M);                                   \
+		cr_assert_eq(d[3], F3(s, 3), M);                                   \
+		cr_assert_eq(d[6], F1(s, 0), M);                                   \
+		cr_assert_eq(d[5], F3(s, 0), M);                                   \
+		cr_assert_eq(d[2], F1(s, 3), M);                                   \
+		cr_assert_eq(d[1], F3(s, 3), M);                                   \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));                       \
 		s = rnd_stack_create(sizeof(T) + 1, 1000);                         \
-		ASSERT_NEQ(NULL, s);                                               \
+		cr_assert_not_null(s);                                             \
 		s->size = 1;                                                       \
-		ASSERT_EQ_FMT(z, F1(s, 0), M);                                     \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");                \
+		cr_assert_eq(z, F1(s, 0), M);                                      \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));                       \
 	} while (0)
 	test(char          , rnd_stack_qremovec , rnd_stack_pushc , rnd_stack_getc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , rnd_stack_qremoves , rnd_stack_pushs , rnd_stack_gets , IRANGE(1, SHRT_MAX) , "%hd");
@@ -876,10 +863,9 @@ TEST t_qremove(void)
 	test(double        , rnd_stack_qremoved , rnd_stack_pushd , rnd_stack_getd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , rnd_stack_qremoveld, rnd_stack_pushld, rnd_stack_getld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
-	PASS();
 }
 
-TEST t_get(void)
+Test(stack, get)
 {
 	struct rnd_stack *s;
 
@@ -888,28 +874,28 @@ TEST t_get(void)
 		int a = 0;
 		struct data d[1000];
 		s = rnd_stack_create(sizeof(int), 1000);
-		ASSERT_NEQ(NULL, s);
-		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_get(s, 0, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_pushi(s, 10), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_get(NULL, 0, &a), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_get(s, 0, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_get(NULL, 0, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_get(s, 1, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_get(s, 0, &a), "%d");
-		ASSERT_EQ_FMT(10, a, "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+		cr_assert_not_null(s);
+		cr_assert_eq(RND_EINDEX, rnd_stack_get(s, 0, &a));
+		cr_assert_eq(0, rnd_stack_pushi(s, 10));
+		cr_assert_eq(RND_EINVAL, rnd_stack_get(NULL, 0, &a));
+		cr_assert_eq(RND_EINVAL, rnd_stack_get(s, 0, NULL));
+		cr_assert_eq(RND_EINVAL, rnd_stack_get(NULL, 0, NULL));
+		cr_assert_eq(RND_EINDEX, rnd_stack_get(s, 1, &a));
+		cr_assert_eq(0, rnd_stack_get(s, 0, &a));
+		cr_assert_eq(10, a);
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));
 		s = rnd_stack_create(sizeof(struct data), 1000);
-		ASSERT_NEQ(NULL, s);
+		cr_assert_not_null(s);
 		for (i = 0; i < 1000; i++) {
-			ASSERT_EQ_FMT(0, data_init(d + i), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_push(s, d + i), "%d");
+			cr_assert_eq(0, data_init(d + i));
+			cr_assert_eq(0, rnd_stack_push(s, d + i));
 		}
 		for (i = 0; i < 1000; i++) {
 			struct data a;
-			ASSERT_EQ_FMT(0, rnd_stack_get(s, i, &a), "%d");
-			ASSERT_EQ_FMT(0, data_cmp(&a, d + 999 - i), "%d");
+			cr_assert_eq(0, rnd_stack_get(s, i, &a));
+			cr_assert_eq(0, data_cmp(&a, d + 999 - i));
 		}
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, data_dtor), "%d");
+		cr_assert_eq(0, rnd_stack_destroy(s, data_dtor));
 	}
 
 	/* Suffixed form
@@ -919,28 +905,28 @@ TEST t_get(void)
 	 * V  - random value snippet
 	 * M  - printf format string
 	 */
-#define test(T, F1, F2, V, M) do {                                  \
-		unsigned i;                                         \
-		T a = (V), z = 0;                                   \
-		T d[1000];                                          \
-		s = rnd_stack_create(sizeof(T), 1000);              \
-		ASSERT_NEQ(NULL, s);                                \
-		ASSERT_EQ_FMT(z, F1(s, 0), M);                      \
-		ASSERT_EQ_FMT(0, F2(s, a), "%d");                   \
-		ASSERT_EQ_FMT(z, F1(NULL, 0), M);                   \
-		ASSERT_EQ_FMT(z, F1(s, 1), M);                      \
-		ASSERT_EQ_FMT(a, F1(s, 0), M);                      \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d"); \
-		s = rnd_stack_create(sizeof(T), 1000);              \
-		ASSERT_NEQ(NULL, s);                                \
-		for (i = 0; i < 1000; i++) {                        \
-			d[i] = (V);                                 \
-			ASSERT_EQ_FMT(0, F2(s, d[i]), "%d");        \
-		}                                                   \
-		for (i = 0; i < 1000; i++) {                        \
-			ASSERT_EQ_FMT(d[999 - i], F1(s, i), M);     \
-		}                                                   \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d"); \
+#define test(T, F1, F2, V, M) do {                             \
+		unsigned i;                                    \
+		T a = (V), z = 0;                              \
+		T d[1000];                                     \
+		s = rnd_stack_create(sizeof(T), 1000);         \
+		cr_assert_not_null(s);                         \
+		cr_assert_eq(z, F1(s, 0), M);                  \
+		cr_assert_eq(0, F2(s, a));                     \
+		cr_assert_eq(z, F1(NULL, 0), M);               \
+		cr_assert_eq(z, F1(s, 1), M);                  \
+		cr_assert_eq(a, F1(s, 0), M);                  \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));   \
+		s = rnd_stack_create(sizeof(T), 1000);         \
+		cr_assert_not_null(s);                         \
+		for (i = 0; i < 1000; i++) {                   \
+			d[i] = (V);                            \
+			cr_assert_eq(0, F2(s, d[i]));          \
+		}                                              \
+		for (i = 0; i < 1000; i++) {                   \
+			cr_assert_eq(d[999 - i], F1(s, i), M); \
+		}                                              \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));   \
 	} while (0)
 	test(char          , rnd_stack_getc , rnd_stack_pushc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , rnd_stack_gets , rnd_stack_pushs , IRANGE(1, SHRT_MAX) , "%hd");
@@ -955,10 +941,9 @@ TEST t_get(void)
 	test(double        , rnd_stack_getd , rnd_stack_pushd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , rnd_stack_getld, rnd_stack_pushld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
-	PASS();
 }
 
-TEST t_set(void)
+Test(stack, set)
 {
 	struct rnd_stack *s;
 
@@ -966,33 +951,33 @@ TEST t_set(void)
 		unsigned i;
 		int a = 1;
 		s = rnd_stack_create(sizeof(int), 1000);
-		ASSERT_NEQ(NULL, s);
-		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_set(s, 0, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_pushi(s, 10), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_set(NULL, 0, &a), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_set(s, 0, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_set(NULL, 0, NULL), "%d");
-		ASSERT_EQ_FMT(RND_EINDEX, rnd_stack_set(s, 1, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_set(s, 0, &a), "%d");
-		ASSERT_EQ_FMT(a, rnd_stack_geti(s, 0), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+		cr_assert_not_null(s);
+		cr_assert_eq(RND_EINDEX, rnd_stack_set(s, 0, &a));
+		cr_assert_eq(0, rnd_stack_pushi(s, 10));
+		cr_assert_eq(RND_EINVAL, rnd_stack_set(NULL, 0, &a));
+		cr_assert_eq(RND_EINVAL, rnd_stack_set(s, 0, NULL));
+		cr_assert_eq(RND_EINVAL, rnd_stack_set(NULL, 0, NULL));
+		cr_assert_eq(RND_EINDEX, rnd_stack_set(s, 1, &a));
+		cr_assert_eq(0, rnd_stack_set(s, 0, &a));
+		cr_assert_eq(a, rnd_stack_geti(s, 0));
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));
 		s = rnd_stack_create(sizeof(struct data), 1000);
-		ASSERT_NEQ(NULL, s);
+		cr_assert_not_null(s);
 		for (i = 0; i < 1000; i++) {
 			struct data d;
-			ASSERT_EQ_FMT(0, data_init(&d), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_push(s, &d), "%d");
+			cr_assert_eq(0, data_init(&d));
+			cr_assert_eq(0, rnd_stack_push(s, &d));
 		}
 		for (i = 0; i < 1000; i++) {
 			struct data a, b;
-			ASSERT_EQ_FMT(0, data_init(&b), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_get(s, i, &a), "%d");
-			ASSERT_EQ_FMT(0, data_dtor(&a), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_set(s, i, &b), "%d");
-			ASSERT_EQ_FMT(0, rnd_stack_get(s, i, &a), "%d");
-			ASSERT_EQ_FMT(0, data_cmp(&a, &b), "%d");
+			cr_assert_eq(0, data_init(&b));
+			cr_assert_eq(0, rnd_stack_get(s, i, &a));
+			cr_assert_eq(0, data_dtor(&a));
+			cr_assert_eq(0, rnd_stack_set(s, i, &b));
+			cr_assert_eq(0, rnd_stack_get(s, i, &a));
+			cr_assert_eq(0, data_cmp(&a, &b));
 		}
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, data_dtor), "%d");
+		cr_assert_eq(0, rnd_stack_destroy(s, data_dtor));
 	}
 
 	/* Suffixed form
@@ -1003,32 +988,32 @@ TEST t_set(void)
 	 * V  - random value snippet
 	 * M  - printf format string
 	 */
-#define test(T, F1, F2, F3, V, M) do {                              \
-		unsigned i;                                         \
-		T a = (V);                                          \
-		s = rnd_stack_create(sizeof(T), 1000);              \
-		ASSERT_NEQ(NULL, s);                                \
-		ASSERT_EQ_FMT(RND_EINDEX, F1(s, 0, a), "%d");       \
-		ASSERT_EQ_FMT(0, F2(s, (V)), "%d");                 \
-		ASSERT_EQ_FMT(RND_EINVAL, F1(NULL, 0, a), "%d");    \
-		ASSERT_EQ_FMT(RND_EINDEX, F1(s, 1, a), "%d");       \
-		ASSERT_EQ_FMT(0, F1(s, 0, a), "%d");                \
-		ASSERT_EQ_FMT(a, F3(s, 0), M);                      \
-		ASSERT_EQ_FMT(0, rnd_stack_clear(s, NULL), "%d");   \
-		for (i = 0; i < 1000; i++) {                        \
-			ASSERT_EQ_FMT(0, F2(s, (V)), "%d");         \
-		}                                                   \
-		for (i = 0; i < 1000; i++) {                        \
-			T b = (V);                                  \
-			ASSERT_EQ_FMT(0, F1(s, i, b), "%d");        \
-			ASSERT_EQ_FMT(b, F3(s, i), M);              \
-		}                                                   \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d"); \
-		s = rnd_stack_create(sizeof(T) + 1, 1000);          \
-		ASSERT_NEQ(NULL, s);                                \
-		s->size = 1;                                        \
-		ASSERT_EQ_FMT(RND_EILLEGAL, F1(s, 0, (V)), "%d");   \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d"); \
+#define test(T, F1, F2, F3, V, M) do {                       \
+		unsigned i;                                  \
+		T a = (V);                                   \
+		s = rnd_stack_create(sizeof(T), 1000);       \
+		cr_assert_not_null(s);                       \
+		cr_assert_eq(RND_EINDEX, F1(s, 0, a));       \
+		cr_assert_eq(0, F2(s, (V)));                 \
+		cr_assert_eq(RND_EINVAL, F1(NULL, 0, a));    \
+		cr_assert_eq(RND_EINDEX, F1(s, 1, a));       \
+		cr_assert_eq(0, F1(s, 0, a));                \
+		cr_assert_eq(a, F3(s, 0), M);                \
+		cr_assert_eq(0, rnd_stack_clear(s, NULL));   \
+		for (i = 0; i < 1000; i++) {                 \
+			cr_assert_eq(0, F2(s, (V)));         \
+		}                                            \
+		for (i = 0; i < 1000; i++) {                 \
+			T b = (V);                           \
+			cr_assert_eq(0, F1(s, i, b));        \
+			cr_assert_eq(b, F3(s, i), M);        \
+		}                                            \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL)); \
+		s = rnd_stack_create(sizeof(T) + 1, 1000);   \
+		cr_assert_not_null(s);                       \
+		s->size = 1;                                 \
+		cr_assert_eq(RND_EILLEGAL, F1(s, 0, (V)));   \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL)); \
 	} while (0)
 	test(char          , rnd_stack_setc , rnd_stack_pushc , rnd_stack_getc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , rnd_stack_sets , rnd_stack_pushs , rnd_stack_gets , IRANGE(1, SHRT_MAX) , "%hd");
@@ -1043,21 +1028,20 @@ TEST t_set(void)
 	test(double        , rnd_stack_setd , rnd_stack_pushd , rnd_stack_getd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , rnd_stack_setld, rnd_stack_pushld, rnd_stack_getld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
-	PASS();
 }
 
-TEST t_print(void)
+Test(stack, print)
 {
 	struct rnd_stack *s;
 
 	{ /* Generic form */
 		double a = 4.5, b = -3.14;
 		s = rnd_stack_create(sizeof(double), 30);
-		ASSERT_EQ_FMT(0, rnd_stack_push(s, &a), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_push(s, &b), "%d");
-		ASSERT_EQ_FMT(RND_EINVAL, rnd_stack_print(NULL), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_print(s), "%d");
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d");
+		cr_assert_eq(0, rnd_stack_push(s, &a));
+		cr_assert_eq(0, rnd_stack_push(s, &b));
+		cr_assert_eq(RND_EINVAL, rnd_stack_print(NULL));
+		cr_assert_eq(0, rnd_stack_print(s));
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL));
 	}
 
 	/* Suffixed form
@@ -1067,18 +1051,18 @@ TEST t_print(void)
 	 * A  - 1st value
 	 * B  - 2nd value
 	 */
-#define test(T, F1, F2, A, B)                                       \
-	do {                                                        \
-		T a = A, b = B;                                     \
-		s = rnd_stack_create(sizeof(T), 30);                \
-		ASSERT_EQ_FMT(0, F1(s, a), "%d");                   \
-		ASSERT_EQ_FMT(0, F1(s, b), "%d");                   \
-		ASSERT_EQ_FMT(RND_EINVAL, F2(NULL), "%d");          \
-		ASSERT_EQ_FMT(0, F2(s), "%d");                      \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d"); \
-		s = rnd_stack_create(sizeof(T) + 1, 30);            \
-		ASSERT_EQ_FMT(RND_EILLEGAL, F2(s), "%d");           \
-		ASSERT_EQ_FMT(0, rnd_stack_destroy(s, NULL), "%d"); \
+#define test(T, F1, F2, A, B)                                \
+	do {                                                 \
+		T a = A, b = B;                              \
+		s = rnd_stack_create(sizeof(T), 30);         \
+		cr_assert_eq(0, F1(s, a));                   \
+		cr_assert_eq(0, F1(s, b));                   \
+		cr_assert_eq(RND_EINVAL, F2(NULL));          \
+		cr_assert_eq(0, F2(s));                      \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL)); \
+		s = rnd_stack_create(sizeof(T) + 1, 30);     \
+		cr_assert_eq(RND_EILLEGAL, F2(s));           \
+		cr_assert_eq(0, rnd_stack_destroy(s, NULL)); \
 	} while(0)
 
 	test(char          , rnd_stack_pushc , rnd_stack_printc , 'A', 'B');
@@ -1093,34 +1077,4 @@ TEST t_print(void)
 	test(float         , rnd_stack_pushf , rnd_stack_printf , FLT_MIN, FLT_MAX);
 	test(double        , rnd_stack_pushd , rnd_stack_printd , DBL_MIN, DBL_MAX);
 	test(long double   , rnd_stack_pushld, rnd_stack_printld, LDBL_MIN, LDBL_MAX);
-
-	PASS();
-}
-
-SUITE(stack) {
-	RUN_TEST(t_create);
-	RUN_TEST(t_destroy);
-	RUN_TEST(t_push);
-	RUN_TEST(t_peek);
-	RUN_TEST(t_pop);
-	RUN_TEST(t_clear);
-	RUN_TEST(t_foreach);
-	RUN_TEST(t_copy);
-	RUN_TEST(t_insert);
-	RUN_TEST(t_qinsert);
-	RUN_TEST(t_remove);
-	RUN_TEST(t_qremove);
-	RUN_TEST(t_get);
-	RUN_TEST(t_set);
-	RUN_TEST(t_print);
-}
-
-int main(int argc, char **argv)
-{
-	GREATEST_MAIN_BEGIN();
-
-	srand(time(NULL));
-	RUN_SUITE(stack);
-
-	GREATEST_MAIN_END();
 }
