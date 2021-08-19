@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include "rnd_errcodes.h"
+#include "rnd_modes.h"
 
 struct rnd_stack {
 	void  *data;

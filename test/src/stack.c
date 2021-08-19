@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <time.h>
-#include "../../src/rnd.h"
+#include "../../src/rnd_stack.h"
 #include "test_struct.h"
 #include <criterion/criterion.h>
 #include <limits.h>
