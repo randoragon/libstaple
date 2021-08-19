@@ -3,12 +3,12 @@
 `rnd` is a general-purpose library implementing common data structures in pure
 ANSI C without any external dependencies besides the C standard library.
 
-## Supported Data Structures
+## Available Modules
 
 - stack
 - queue
 
-## Pending Implementations
+## Pending Modules
 
 - deque,
 - bitarray,
@@ -16,61 +16,83 @@ ANSI C without any external dependencies besides the C standard library.
 - linked list,
 - 2D/3D matrix,
 - priority queue,
-- avl tree, rbtree
+- avl tree,
+- rbtree
 
-## Installation
+## Quick Example
 
-On a Linux system with `make`, simply clone the repo and run the following (if
-necessary, as root):
+Here's a program that creates a stack of integers, pushes a few numbers, prints
+the top of the stack, then pops and returns it.
 
-	make install
+```c
+#include <stdio.h>
+#include <rnd.h>
 
-To uninstall, run
+int main(void)
+{
+	struct rnd_stack *s;
+	int ret;
+	s = rnd_stack_create(sizeof(int), 10);
 
-	make uninstall
+	rnd_stack_pushi(s, 10);
+	rnd_stack_pushi(s, 4);
+	rnd_stack_pushi(s, 8);
+	printf("top of the stack is %d\n", rnd_stack_peeki(s));
+	ret = rnd_stack_popi(s);
 
-By default, the files will be copied to `/usr/local/lib`, `/usr/local/include`
-and `/usr/local/share/man`. If you want them (un)installed directly at
-`/usr` (or somewhere else),
-override the `PREFIX` variable:
+	rnd_stack_destroy(s, NULL);
+	return ret;
+}
+```
 
-	make   install PREFIX=/usr
-	make uninstall PREFIX=/usr
+## Library Design Overview
 
-The Makefile produces two library files, `librnd.so` and `librnd.a`. The former
-is a dynamically linked library, the latter is static.
+### Simplicity
 
-## Library Design
+- pure C89
+- no magic macros
+- no typedefs
 
-1. The library should be as flexible as reasonably possible, while remaining
-   very intuitive to the user.
-2. No typedefs, because explicit `struct` notation is preferred for clarity (the
-   user will add their own typedefs if they want).
-3. Documentation as man pages, because it's a format Unix developers are
-   familiar with, doesn't require heavy machinery to work with, and has
-   extremely fast and offline access time.
-4. Comments in code are kept to a minimum, because good code speaks for itself,
-   and long explanations in comments are hard to maintain and cripple
-   readability.
-5. Library can be compiled for release and debug code separately, release code
-   does less error checking and therefore is faster.
-6. Sometimes error checking is sacrificed in favor of convenience, but only in
-   cases where errors can only result from library misuse (e.g. popping from an
-   empty stack).
+### Convenience
 
-### Generic Data vs. Primitives
+- super easy integration with primitive types
+- man pages for every module and function
+- built-in print functions for every structure
 
-Every major function for inserting, removing, getting and setting elements is
-available in 2 forms:
+### Flexibility
 
-- **generic form** with `void*` - allows you to store any structure
-- **suffixed form** for all major primitive types
+- can handle generic data behind void pointers
+- all data structures have implementations for arbitrary insertion/removal
+  get/set functions (if feasible), even if the structure is not optimized for
+  it. Some libraries will implement e.g. the stack with only push/peek/pop
+  operations and not bother with insertion, removal and lookup at arbitrary
+  indices. `librnd` gives you full control out-of-the-box, because even if in
+  99% of cases you will only push/pop from the top of the stack, once in a while
+  you need that pinpoint insert, even at the cost of performance.
+- no opaque types - you are free to extend the library, if needed
 
-Example:
+### Reliability
 
-- `rnd_stack_push()` - reads from a `void*`, generic
-- `rnd_stack_pushi()` - pass immediate `int` value
-- `rnd_stack_pushus()` - pass immediate `unsigned short` value
+- complete type safety
+- unit testing with [criterion](https://github.com/Snaipe/Criterion)
+- runtime errors reported on stderr (can be disabled) and with return codes
+
+## Handling Generic Data vs. Primitives
+
+Every function that operates on structure elements (e.g. push, pop, insert,
+etc.) is available in 2 forms:
+
+- **generic form** for `void*` - allows storing any data (pass-by-reference)
+- **suffixed form** - a faster way to work with primitive types only
+  (pass-by-value)
+
+Examples:
+
+```c
+rnd_stack_push(s, &data); /* reads from a (void*) */
+rnd_stack_pushi(s, -6);   /* pass-by-value (int) */
+rnd_stack_pushus(s, 3);   /* pass-by-value (unsigned short) */
+```
 
 Here's a full table of suffixes, although all you need to remember is to use the
 first letters of your target type:
@@ -95,7 +117,46 @@ none | any (`void*`)
 it is not defined by the standard whether or not `char` alone is signed or
 unsigned.
 
-This division into generic and suffixed form introduces a **lot** of redundancy
-and inflation to the code base, but I believe it's worthwhile to spend 3 times
-longer writing a library that you're going to use for a long time, even if it
-constitutes only a small speed improvement.
+This division into generic and suffixed form without using macro functions
+introduces a **lot** of redundancy and inflation to the code base and resulting
+library size, which is a conscious choice on my part. **This library does not aim
+to be small in size**. It prioritizes simplicity, convenience and flexibility.
+
+## Installation
+
+On a Linux system with `make`, simply clone the repo and run the following (if
+necessary, as root):
+
+	make install
+
+To uninstall, run
+
+	make uninstall
+
+By default, the files will be copied to `/usr/local/lib`, `/usr/local/include`
+and `/usr/local/share/man`. If you want them (un)installed directly at
+`/usr` (or somewhere else),
+override the `PREFIX` variable:
+
+	make   install PREFIX=/usr
+	make uninstall PREFIX=/usr
+
+The Makefile produces two library files, `librnd.so` and `librnd.a`. The former
+is a dynamically linked library, the latter is static.
+
+## Unit Testing
+
+All test units are stored in `test/src`. If you wish to run the tests, you will
+need [criterion](https://github.com/Snaipe/Criterion).
+
+To execute all tests for a single module `XYZ`, run
+
+	make clean test_XYZ
+
+(for example `make clean test_stack`). To execute all tests for all
+modules, run
+
+	make clean test
+
+If any test fails on a release commit, please open an issue on GitHub or send me
+an email: <randoragongamedev@gmail.com>
