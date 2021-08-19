@@ -12,6 +12,14 @@
 #endif
 #define SIZE_MAX 65535LU
 
+void setup(void)
+{
+	if (!rnd_is_debug())
+		cr_log_error("librnd is not running in debug mode");
+}
+
+TestSuite(stack, .init=setup);
+
 Test(stack, create)
 {
 	struct rnd_stack *s;
