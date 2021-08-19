@@ -1,44 +1,44 @@
 # Modify these 3 numbers to bump librnd version
-VERSION_MAJOR = 1
-VERSION_MINOR = 0
-VERSION_PATCH = 1
-VERSION_STR   = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
+VERSION_MAJOR := 1
+VERSION_MINOR := 0
+VERSION_PATCH := 1
+VERSION_STR   := $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
 
 # Last version modification date (YYYY-MM-DD)
-DATE = 2021-08-08
+DATE := 2021-08-08
 
 # Compilation / Linking
-CC = cc
-LINKER = cc
-VFLAGS =  -DVERSION_MAJOR=$(VERSION_MAJOR) -DVERSION_MINOR=$(VERSION_MINOR)
-VFLAGS += -DVERSION_PATCH=$(VERSION_PATCH) -DVERSION_STR="$(VERSION_STR)"
-CFLAGS = -fpic $(VFLAGS) -std=c89 -Wall -Wextra -pedantic -Werror -Werror=vla
-LDFLAGS = -shared
-CTESTFLAGS = -std=c99 -Wall -Wextra -pedantic -Werror=vla -g -Og
-LDTESTFLAGS = -L. -Wl,-Bstatic -lrnd -Wl,-Bdynamic -lcriterion
+CC          := cc
+LINKER      := cc
+VFLAGS      := -DVERSION_MAJOR=$(VERSION_MAJOR) -DVERSION_MINOR=$(VERSION_MINOR)
+VFLAGS      += -DVERSION_PATCH=$(VERSION_PATCH) -DVERSION_STR="$(VERSION_STR)"
+CFLAGS      := -fpic $(VFLAGS) -std=c89 -Wall -Wextra -pedantic -Werror -Werror=vla
+LDFLAGS     := -shared
+CTESTFLAGS  := -std=c99 -Wall -Wextra -pedantic -Werror=vla -g -Og
+LDTESTFLAGS := -L. -Wl,-Bstatic -lrnd -Wl,-Bdynamic -lcriterion
 
 # Directories
-SRCDIR = src
-OBJDIR = obj
-MANDIR = man
-TESTDIR = test
+SRCDIR  := src
+OBJDIR  := obj
+MANDIR  := man
+TESTDIR := test
 
 # Source and object files (including SRCDIR)
 SRCS := $(wildcard $(SRCDIR)/*.c)
 OBJS := $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(SRCS:.c=.o))
 
 # Header and man page files (relative to MANDIR)
-INCLUDES := $(notdir $(wildcard $(SRCDIR)/rnd*.h))
+INCLUDES  := $(notdir $(wildcard $(SRCDIR)/rnd*.h))
 MANPAGES3 := $(patsubst $(MANDIR)/%,%,$(shell find "$(MANDIR)" -type f -name '*.3'))
 MANPAGES7 := $(patsubst $(MANDIR)/%,%,$(shell find "$(MANDIR)" -type f -name '*.7'))
 
 # Main library file
-TARGET = librnd
+TARGET := librnd
 
 # Output paths
-DESTDIR =
-PREFIX = /usr/local
-MANPREFIX = $(PREFIX)/share/man
+DESTDIR   :=
+PREFIX    := /usr/local
+MANPREFIX := $(PREFIX)/share/man
 
 .PHONY: directories static shared all main clean debug profile install uninstall test test-stack
 
