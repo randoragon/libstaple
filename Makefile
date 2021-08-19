@@ -17,6 +17,9 @@ LDFLAGS     := -shared
 CTESTFLAGS  := -std=c99 -Wall -Wextra -pedantic -Werror=vla -g -Og
 LDTESTFLAGS := -L. -Wl,-Bstatic -lrnd -Wl,-Bdynamic -lcriterion
 
+# List of all library module names
+MODULES := stack queue
+
 # Directories
 SRCDIR  := src
 OBJDIR  := obj
@@ -40,8 +43,8 @@ DESTDIR   :=
 PREFIX    := /usr/local
 MANPREFIX := $(PREFIX)/share/man
 
-.PHONY: directories static shared all main clean debug profile install uninstall test test-stack
-
+.PHONY: directories static shared all main clean debug profile install uninstall test
+.SECONDARY: # Disable removal of intermediate files
 
 ##################################################################################################
 ##################################################################################################
@@ -52,7 +55,7 @@ all: directories static shared
 
 # Creates directories for all build processes
 directories:
-	mkdir -p $(SRCDIR) $(OBJDIR) $(TESTDIR) $(TESTDIR)/$(SRCDIR) $(TESTDIR)/$(OBJDIR) $(TESTDIR)/bin
+	mkdir -p -- $(SRCDIR) $(OBJDIR) $(TESTDIR) $(TESTDIR)/$(SRCDIR) $(TESTDIR)/$(OBJDIR) $(TESTDIR)/bin
 
 # Builds a shared library file
 shared: $(OBJS)
@@ -72,9 +75,8 @@ $(TESTDIR)/$(OBJDIR)/%.o: $(TESTDIR)/$(SRCDIR)/%.c
 
 # Removes all object and output files
 clean:
-	$(RM) $(OBJS)
-	$(RM) $(TESTDIR)/$(OBJDIR)/*
-	$(RM) $(TARGET).so $(TARGET).a
+	$(RM) -- $(OBJS)
+	$(RM) -- $(TARGET).so $(TARGET).a
 
 # Rebuilds the library with debug symbols and RND_DEBUG defined
 debug: CFLAGS += -g -Og -DRND_DEBUG
@@ -110,26 +112,20 @@ uninstall:
 # Runs all testing units
 #     To check if overflow protection is working,
 #     set SIZE_MAX to 65535 to reduce memory footprint.
-test: test-stack test-queue
+test: $(addprefix test_,$(MODULES))
 
-test-stack: CFLAGS += -DRND_QUIET -DSIZE_MAX=65535
-test-stack: debug test/obj/test_struct.o test/obj/stack.o
-	$(LINKER) "test/obj/test_struct.o" "test/obj/stack.o" $(LDTESTFLAGS) -o $(TESTDIR)/bin/stack
-	@tput setaf 4 ; printf "\n##########" ; tput setaf 3
-	@printf "[ STACK ]"
-	@tput setaf 4 ; printf "##########\n\n" ; tput setaf 7
-	valgrind ./test/bin/stack
-	@tput setaf 4 ; printf "\n###########" ; tput setaf 3
-	@printf "[ END ]"
-	@tput setaf 4 ; printf "###########\n\n" ; tput setaf 7
+test_clean:
+	$(RM) -- $(TESTDIR)/$(OBJDIR)/*
+	$(RM) -- $(TESTDIR)/bin/*
 
-test-queue: CFLAGS += -DRND_QUIET -DSIZE_MAX=65535
-test-queue: debug test/obj/test_struct.o test/obj/queue.o
-	$(LINKER) "test/obj/test_struct.o" "test/obj/queue.o" $(LDTESTFLAGS) -o $(TESTDIR)/bin/queue
+test_%: CFLAGS += -DRND_QUIET -DSIZE_MAX=65535
+test_%: debug test/obj/test_struct.o test/obj/%.o
+	@echo $(MODULES)
+	$(LINKER) "test/obj/test_struct.o" "test/obj/$*.o" $(LDTESTFLAGS) -o $(TESTDIR)/bin/$*
 	@tput setaf 4 ; printf "\n##########" ; tput setaf 3
-	@printf "[ QUEUE ]"
+	@printf "[ $* ]"
 	@tput setaf 4 ; printf "##########\n\n" ; tput setaf 7
-	valgrind ./test/bin/queue
+	valgrind ./test/bin/$*
 	@tput setaf 4 ; printf "\n###########" ; tput setaf 3
 	@printf "[ END ]"
 	@tput setaf 4 ; printf "###########\n\n" ; tput setaf 7
