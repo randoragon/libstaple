@@ -1,0 +1,32 @@
+.TH RND_IS_QUIET 3 DATE "librnd-VERSION"
+.SH NAME
+rnd_is_quiet \- check if the library has been compiled with quiet mode
+.SH SYNOPSIS
+.ad l
+#include <rnd.h>
+.sp
+int
+.BR rnd_is_quiet (void)
+.sp
+Link with \fI-lrnd\fP.
+.ad
+.SH DESCRIPTION
+The
+.BR rnd_is_quiet ()
+function can be used at runtime to determine whether the rnd library has been
+compiled with quiet mode or not.
+.SH RETURN VALUE
+The
+.BR rnd_is_quiet ()
+function shall return 1 if quiet mode is active and 0 otherwise.
+.SH ERRORS
+.P
+The
+.BR rnd_is_quiet ()
+function shall never fail.
+.SH CONFORMING TO
+See
+.BR librnd (7).
+.SH SEE ALSO
+.ad l
+.BR librnd (7)

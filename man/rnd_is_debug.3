@@ -1,0 +1,32 @@
+.TH RND_IS_DEBUG 3 DATE "librnd-VERSION"
+.SH NAME
+rnd_is_debug \- check if the library has been compiled with debug mode
+.SH SYNOPSIS
+.ad l
+#include <rnd.h>
+.sp
+int
+.BR rnd_is_debug (void)
+.sp
+Link with \fI-lrnd\fP.
+.ad
+.SH DESCRIPTION
+The
+.BR rnd_is_debug ()
+function can be used at runtime to determine whether the rnd library has been
+compiled with debug mode or not.
+.SH RETURN VALUE
+The
+.BR rnd_is_debug ()
+function shall return 1 if debug mode is active and 0 otherwise.
+.SH ERRORS
+.P
+The
+.BR rnd_is_debug ()
+function shall never fail.
+.SH CONFORMING TO
+See
+.BR librnd (7).
+.SH SEE ALSO
+.ad l
+.BR librnd (7)

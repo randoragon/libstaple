@@ -96,6 +96,10 @@ return more error codes.
 When debug mode is disabled, only the vital errors are checked, such as memory
 allocations and integer overflows. To find out which errors are checked with and
 without debug mode for a particular function, refer to its man page.
+.P
+Debug mode state can be determined during runtime with the
+.BR rnd_is_debug (3)
+function.
 .SS Quiet Mode
 To enable quiet mode, recompile the library with
 .B RND_QUIET
@@ -103,6 +107,10 @@ defined (default: off).
 .P
 Quiet mode suppresses all debug output. By default, all functions aside from
 returning error codes also print short error messages and warnings.
+.P
+Quiet mode state can be determined during runtime with the
+.BR rnd_is_quiet (3)
+function.
 .SS Abort Mode
 To enable abort mode, recompile the library with
 .B RND_ABORT
@@ -115,6 +123,10 @@ after having printed the error message (unless
 was defined).
 This functionality is useful for writing simple programs that shouldn't need to
 bother with error checking.
+.P
+Abort mode state can be determined during runtime with the
+.BR rnd_is_abort (3)
+function.
 .SH CONFORMING TO
 The entirety of
 .B librnd
@@ -151,4 +163,7 @@ GitHub
 .SH SEE ALSO
 .ad l
 .BR rnd_stack (7) ,
-.BR rnd_queue (7)
+.BR rnd_queue (7) ,
+.BR rnd_is_debug (3) ,
+.BR rnd_is_quiet (3) ,
+.BR rnd_is_abort (3)
