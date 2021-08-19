@@ -1,11 +1,11 @@
 # Modify these 3 numbers to bump librnd version
-VERSION_MAJOR := 1
+VERSION_MAJOR := 2
 VERSION_MINOR := 0
-VERSION_PATCH := 1
+VERSION_PATCH := 0
 VERSION_STR   := $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
 
 # Last version modification date (YYYY-MM-DD)
-DATE := 2021-08-08
+DATE := 2021-08-19
 
 # Compilation / Linking
 CC          := cc
