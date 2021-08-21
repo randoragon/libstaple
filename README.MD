@@ -10,6 +10,10 @@ C89 without any external dependencies besides the C standard library.
 
 ## Pending Modules
 
+The list might grow/shrink and implementations need not follow in any particular
+order. I work on these (among other things) in my spare time, so expect either
+slow development, or sudden bursts of productivity separated by hiatuses.
+
 - deque,
 - bitarray,
 - hashmap,
