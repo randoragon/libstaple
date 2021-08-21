@@ -1,0 +1,190 @@
+.TH SP_QUEUE_SET 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_queue_set, sp_queue_setc, sp_queue_sets, sp_queue_seti, sp_queue_setl,
+sp_queue_setsc, sp_queue_setuc, sp_queue_setus, sp_queue_setui,
+sp_queue_setul, sp_queue_setf, sp_queue_setd, sp_queue_setld \- set the
+value of an arbitrary element in a queue
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+int
+.BR sp_queue_set "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+void
+.RI * val )
+.br
+int
+.BR sp_queue_setc "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+char
+.IR val )
+.br
+int
+.BR sp_queue_sets "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+short
+.IR val )
+.br
+int
+.BR sp_queue_seti "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+int
+.IR val )
+.br
+int
+.BR sp_queue_setl "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+long
+.IR val )
+.br
+int
+.BR sp_queue_setsc "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+signed char
+.IR val )
+.br
+int
+.BR sp_queue_setuc "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned char
+.IR val )
+.br
+int
+.BR sp_queue_setus "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned short
+.IR val )
+.br
+int
+.BR sp_queue_setui "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned int
+.IR val )
+.br
+int
+.BR sp_queue_setul "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned long
+.IR val )
+.br
+int
+.BR sp_queue_setf "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+float
+.IR val )
+.br
+int
+.BR sp_queue_setd "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+double
+.IR val )
+.br
+int
+.BR sp_queue_setld "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+long double
+.IR val )
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+.P
+The functions in the
+.BR sp_queue_set ()
+family are used to set the value of an arbitrary element in a queue. The
+previous value is overwritten and non-recoverable.
+.P
+.I queue
+is the queue.
+.P
+.I idx
+is the index of the element that shall be overwritten.
+.P
+.I val
+is the new value for the element at position
+.IR idx .
+.SS Generic Form
+.I val
+must be a void pointer to the first byte of the new value. The source and
+destination blocks must not overlap in memory. The number of bytes to copy is
+equal to
+.IR queue "'s " elem_size
+field.
+.SS Suffixed Form
+.I val
+is passed directly in the function argument.
+.SH RETURN VALUE
+.P
+If successful, the functions in the
+.BR sp_queue_set ()
+family shall return 0. Otherwise, they shall return a code indicating the
+error.
+.SH ERRORS
+The functions in the
+.BR sp_queue_set ()
+family shall fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+.I queue
+is a null pointer (debug mode only).
+.IP \fBSP_EINDEX\fP 1.5i
+.I idx
+out of range (debug mode only).
+.SS Generic Form
+.IP \fBSP_EINVAL\fP 1.5i
+.I val
+is a null pointer (debug mode only).
+.SS Suffixed Form
+.IP \fBSP_EILLEGAL\fP 1.5i
+.IR queue "'s " elem_size
+does not match the size of the
+.I val
+argument (debug mode only).
+.SH CONFORMING TO
+See
+.BR libstaple (7).
+.SH SEE ALSO
+.ad l
+.BR libstaple (7),
+.BR sp_queue (7),
+.BR sp_queue_create (3),
+.BR sp_queue_destroy (3),
+.BR sp_queue_clear (3),
+.BR sp_queue_copy (3),
+.BR sp_queue_foreach (3),
+.BR sp_queue_push (3),
+.BR sp_queue_insert (3),
+.BR sp_queue_qinsert (3),
+.BR sp_queue_peek (3),
+.BR sp_queue_pop (3),
+.BR sp_queue_remove (3),
+.BR sp_queue_qremove (3),
+.BR sp_queue_get (3),
+.BR sp_queue_print (3)
+

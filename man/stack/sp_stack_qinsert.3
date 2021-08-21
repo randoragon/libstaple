@@ -1,0 +1,191 @@
+.TH SP_STACK_QINSERT 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_stack_qinsert, sp_stack_qinsertc, sp_stack_qinserts,
+sp_stack_qinserti, sp_stack_qinsertl, sp_stack_qinsertsc,
+sp_stack_qinsertuc, sp_stack_qinsertus, sp_stack_qinsertui,
+sp_stack_qinsertul, sp_stack_qinsertf, sp_stack_qinsertd,
+sp_stack_qinsertld \- quickly insert an element at any position of a stack
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+int
+.BR sp_stack_qinsert "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+const void
+.RI * elem )
+.br
+int
+.BR sp_stack_qinsertc "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+char
+.IR elem )
+.br
+int
+.BR sp_stack_qinserts "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+short
+.IR elem )
+.br
+int
+.BR sp_stack_qinserti "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+int
+.IR elem )
+.br
+int
+.BR sp_stack_qinsertl "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+long
+.IR elem )
+.br
+int
+.BR sp_stack_qinsertsc "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+signed char
+.IR elem )
+.br
+int
+.BR sp_stack_qinsertuc "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+unsigned char
+.IR elem )
+.br
+int
+.BR sp_stack_qinsertus "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+unsigned short
+.IR elem )
+.br
+int
+.BR sp_stack_qinsertui "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+unsigned int
+.IR elem )
+.br
+int
+.BR sp_stack_qinsertul "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+unsigned long
+.IR elem )
+.br
+int
+.BR sp_stack_qinsertf "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+float
+.IR elem )
+.br
+int
+.BR sp_stack_qinsertd "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+double
+.IR elem )
+.br
+int
+.BR sp_stack_qinsertld "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+long double
+.IR elem )
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+See
+.BR sp_stack_insert (3).
+.P
+The functions in the
+.BR sp_stack_qinsert ()
+family operate in constant time, which is achievable by changing the order of
+the elements upon insertion.
+.SH EXAMPLES
+To explain how the
+.BR sp_stack_insert ()
+and
+.BR sp_stack_qinsert ()
+families differ, consider the following initial stack (elements listed
+from bottom to top):
+.IP
+.B 1 2 3 4 _ _ _
+.P
+Now, let us investigate what happens when we try to insert the number
+.B 5
+at position
+.IR 2 .
+.P
+The functions in the
+.BR sp_stack_insert ()
+family would move
+.BR 3 " and " 4
+upwards, and insert
+.B 5
+without altering the order:
+.IP (1)
+.B 1 2 _ 3 4 _ _
+.br
+\h'6n'^ ^
+.IP (2)
+.B 1 2 5 3 4 _ _
+.br
+\h'4n'^
+.P
+On the contrary, the functions in the
+.BR sp_stack_qinsert ()
+family achieve the goal faster by moving the element "in the way" (in this case
+.BR 3 )
+to the top of the stack:
+.IP (1)
+.B 1 2 _ 4 3 _ _
+.br
+\h'8n'^
+.IP (2)
+.B 1 2 5 4 3 _ _
+.br
+\h'4n'^
+.P
+The second approach guarantees constant time, but does not preserve the order of
+the elements.
+.SH SEE ALSO
+.ad l
+.BR libstaple (7),
+.BR sp_stack (7),
+.BR sp_stack_create (3),
+.BR sp_stack_destroy (3),
+.BR sp_stack_clear (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
+.BR sp_stack_push (3),
+.BR sp_stack_insert (3),
+.BR sp_stack_peek (3),
+.BR sp_stack_pop (3),
+.BR sp_stack_remove (3),
+.BR sp_stack_qremove (3),
+.BR sp_stack_get (3),
+.BR sp_stack_set (3),
+.BR sp_stack_print (3)
+

@@ -1,0 +1,78 @@
+.TH SP_STACK_CREATE 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_stack_create \- initialize a stack
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+struct sp_stack
+.RB * sp_stack_create (size_t
+.IR elem_size ,
+size_t
+.IR capacity )
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+The
+.BR sp_stack_create ()
+function allocates and initializes a new stack, returning its address.
+.P
+.I elem_size
+denotes the size of a single element. This allows the user to store any kind of
+data, by setting
+.I elem_size
+to
+.BR sizeof ( data ).
+.I elem_size
+cannot be changed during the lifespan of a stack.
+.P
+.I capacity
+denotes the initial number of elements that can be stored on the stack without
+allocating more memory.
+.I capacity
+shall be dynamically increased whenever more space is needed.
+.SH RETURN VALUE
+If successful, the
+.BR sp_stack_create ()
+function shall return a valid pointer to the created stack. Otherwise, it shall
+return
+.BR NULL .
+.SH ERRORS
+The
+.BR sp_stack_create ()
+function shall fail if:
+.IP (1) 1.5i
+The buffer size
+.RI ( elem_size "\ *\ " capacity )
+exceeds
+.IR SIZE_MAX .
+.IP (2) 1.5i
+Memory allocation failed.
+.IP (3) 1.5i
+Either
+.I elem_size
+or
+.I capacity
+is 0 (debug mode only).
+.SH CONFORMING TO
+See
+.BR libstaple (7).
+.SH SEE ALSO
+.ad l
+.BR libstaple (7),
+.BR sp_stack (7),
+.BR sp_stack_destroy (3),
+.BR sp_stack_clear (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
+.BR sp_stack_push (3),
+.BR sp_stack_insert (3),
+.BR sp_stack_qinsert (3),
+.BR sp_stack_peek (3),
+.BR sp_stack_pop (3),
+.BR sp_stack_remove (3),
+.BR sp_stack_qremove (3),
+.BR sp_stack_get (3),
+.BR sp_stack_set (3),
+.BR sp_stack_print (3)

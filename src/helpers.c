@@ -13,10 +13,10 @@ void stderr_printf(const char *fmt, ...)
 	va_end(ap);
 }
 
-int rnd_buf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size)
+int sp_buf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size)
 {
 	if (size == *capacity) {
-		if (!rnd_size_try_add(*capacity, *capacity)) {
+		if (!sp_size_try_add(*capacity, *capacity)) {
 			*capacity *= 2;
 		} else if (size < SIZE_MAX / elem_size) {
 			*capacity = SIZE_MAX / elem_size;
@@ -33,7 +33,7 @@ int rnd_buf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size)
 	return 0;
 }
 
-/* Same as rnd_buf_fit, but for ring buffers.
+/* Same as sp_buf_fit, but for ring buffers.
  * Example (numbers denote order of insertion):
  * 	(1)	4 5 1 2 3
  * 	we start with a queue of capacity 5. Suppose we want to insert 6. First,
@@ -44,16 +44,16 @@ int rnd_buf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size)
  * 	(3)	_ _ 1 2 3 4 5 _ _ _
  * 	then, the ring buffer can be used as normal:
  * 	(4)	_ _ 1 2 3 4 5 6 _ _
- * Return values are identical to rnd_buf_fit.
+ * Return values are identical to sp_buf_fit.
  */
-int rnd_ringbuf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size, void **head, void **tail)
+int sp_ringbuf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size, void **head, void **tail)
 {
 	if (size == *capacity) {
 		const size_t head_offset = *(char*)head - *(char*)buf;
 		void *dest;
 
 		int error;
-		if ((error = rnd_buf_fit(buf, size, capacity, elem_size)))
+		if ((error = sp_buf_fit(buf, size, capacity, elem_size)))
 			return error;
 
 		*head = (char*)(*buf) + head_offset;
@@ -64,7 +64,7 @@ int rnd_ringbuf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size,
 	return 0;
 }
 
-int rnd_foomap(void *buf, size_t size, size_t elem_size, int (*foo)(void*))
+int sp_foomap(void *buf, size_t size, size_t elem_size, int (*foo)(void*))
 {
 	const void *const end = (char*)buf + size * elem_size;
 	char *p = buf;
@@ -79,7 +79,7 @@ int rnd_foomap(void *buf, size_t size, size_t elem_size, int (*foo)(void*))
 	return 0;
 }
 
-int rnd_size_try_add(size_t size, size_t amount)
+int sp_size_try_add(size_t size, size_t amount)
 {
 	if (size > SIZE_MAX - amount) {
 		error(("size_t overflow detected, unable to increment by %lu", (unsigned long)amount));
@@ -88,7 +88,7 @@ int rnd_size_try_add(size_t size, size_t amount)
 	return 0;
 }
 
-void rnd_ringbuf_incr(void **ptr, void *buf, size_t capacity, size_t elem_size)
+void sp_ringbuf_incr(void **ptr, void *buf, size_t capacity, size_t elem_size)
 {
 	if (*ptr == (char*)buf + (capacity - 1) * elem_size)
 		*ptr = buf;
@@ -96,7 +96,7 @@ void rnd_ringbuf_incr(void **ptr, void *buf, size_t capacity, size_t elem_size)
 		*ptr = (char*)(*ptr) + elem_size;
 }
 
-void rnd_ringbuf_decr(void **ptr, void *buf, size_t capacity, size_t elem_size)
+void sp_ringbuf_decr(void **ptr, void *buf, size_t capacity, size_t elem_size)
 {
 	if (*ptr == buf)
 		*ptr = (char*)buf + (capacity - 1) * elem_size;
@@ -108,7 +108,7 @@ void rnd_ringbuf_decr(void **ptr, void *buf, size_t capacity, size_t elem_size)
  * specific index is by looping, but this function calculates it faster.
  * index 0 gives head, index size-1 gives tail.
  */
-void *rnd_ringbuf_get(size_t idx, const void *buf, size_t capacity, size_t elem_size, const void *head)
+void *sp_ringbuf_get(size_t idx, const void *buf, size_t capacity, size_t elem_size, const void *head)
 {
 	const char *const buf_end = (char*)buf + (capacity - 1) * elem_size;
 	const size_t no_elements_ahead = 1 + (buf_end - (char*)head) / elem_size;
@@ -121,7 +121,7 @@ void *rnd_ringbuf_get(size_t idx, const void *buf, size_t capacity, size_t elem_
 /* Insert an element into a ring buffer. The buffer must already have sufficient
  * capacity. Indexing starts from left to right, valid index values are in range
  * <0;size>. */
-void rnd_ringbuf_insert(const void *elem, size_t idx, void *buf, size_t *size, size_t capacity, size_t elem_size, void **head, void **tail)
+void sp_ringbuf_insert(const void *elem, size_t idx, void *buf, size_t *size, size_t capacity, size_t elem_size, void **head, void **tail)
 {
 	void *s, *d;
 	size_t i;
@@ -133,24 +133,24 @@ void rnd_ringbuf_insert(const void *elem, size_t idx, void *buf, size_t *size, s
 	if (*size != 0) {
 		if (idx < *size / 2) {
 			s = *head;
-			rnd_ringbuf_decr(head, buf, capacity, elem_size);
+			sp_ringbuf_decr(head, buf, capacity, elem_size);
 			d = *head;
 			i = 0;
 			while (i != idx) {
 				memcpy(d, s, elem_size);
 				d = s;
-				rnd_ringbuf_incr(&s, buf, capacity, elem_size);
+				sp_ringbuf_incr(&s, buf, capacity, elem_size);
 				++i;
 			}
 		} else {
 			s = *tail;
-			rnd_ringbuf_incr(tail, buf, capacity, elem_size);
+			sp_ringbuf_incr(tail, buf, capacity, elem_size);
 			d = *tail;
 			i = *size;
 			while (i != idx) {
 				memcpy(d, s, elem_size);
 				d = s;
-				rnd_ringbuf_decr(&s, buf, capacity, elem_size);
+				sp_ringbuf_decr(&s, buf, capacity, elem_size);
 				--i;
 			}
 		}
@@ -164,7 +164,7 @@ void rnd_ringbuf_insert(const void *elem, size_t idx, void *buf, size_t *size, s
 /* Remove an element from a ring buffer. Indexing starts from left to right,
  * valid index values are in range <0;size>.
  */
-void rnd_ringbuf_remove(size_t idx, void *buf, size_t *size, size_t capacity, size_t elem_size, void **head, void **tail)
+void sp_ringbuf_remove(size_t idx, void *buf, size_t *size, size_t capacity, size_t elem_size, void **head, void **tail)
 {
 	void *s, *d;
 	/* The gap from the removed element splits the original buffer into 2
@@ -174,25 +174,25 @@ void rnd_ringbuf_remove(size_t idx, void *buf, size_t *size, size_t capacity, si
 	 */
 	if (*size != 1) {
 		if (idx < *size / 2) {
-			s = d = rnd_ringbuf_get(idx, buf, capacity, elem_size, *head);
-			rnd_ringbuf_decr(&s, buf, capacity, elem_size);
+			s = d = sp_ringbuf_get(idx, buf, capacity, elem_size, *head);
+			sp_ringbuf_decr(&s, buf, capacity, elem_size);
 			while (idx != 0) {
 				memcpy(d, s, elem_size);
 				d = s;
-				rnd_ringbuf_decr(&s, buf, capacity, elem_size);
+				sp_ringbuf_decr(&s, buf, capacity, elem_size);
 				--idx;
 			}
-			rnd_ringbuf_incr(head, buf, capacity, elem_size);
+			sp_ringbuf_incr(head, buf, capacity, elem_size);
 		} else {
-			s = d = rnd_ringbuf_get(idx, buf, capacity, elem_size, *head);
-			rnd_ringbuf_incr(&s, buf, capacity, elem_size);
+			s = d = sp_ringbuf_get(idx, buf, capacity, elem_size, *head);
+			sp_ringbuf_incr(&s, buf, capacity, elem_size);
 			while (idx != *size - 1) {
 				memcpy(d, s, elem_size);
 				d = s;
-				rnd_ringbuf_incr(&s, buf, capacity, elem_size);
+				sp_ringbuf_incr(&s, buf, capacity, elem_size);
 				++idx;
 			}
-			rnd_ringbuf_decr(tail, buf, capacity, elem_size);
+			sp_ringbuf_decr(tail, buf, capacity, elem_size);
 		}
 	}
 	--(*size);

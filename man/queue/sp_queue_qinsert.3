@@ -1,0 +1,190 @@
+.TH SP_QUEUE_QINSERT 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_queue_qinsert, sp_queue_qinsertc, sp_queue_qinserts,
+sp_queue_qinserti, sp_queue_qinsertl, sp_queue_qinsertsc,
+sp_queue_qinsertuc, sp_queue_qinsertus, sp_queue_qinsertui,
+sp_queue_qinsertul, sp_queue_qinsertf, sp_queue_qinsertd,
+sp_queue_qinsertld \- quickly insert an element at any position of a queue
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+int
+.BR sp_queue_qinsert "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+const void
+.RI * elem )
+.br
+int
+.BR sp_queue_qinsertc "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+char
+.IR elem )
+.br
+int
+.BR sp_queue_qinserts "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+short
+.IR elem )
+.br
+int
+.BR sp_queue_qinserti "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+int
+.IR elem )
+.br
+int
+.BR sp_queue_qinsertl "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+long
+.IR elem )
+.br
+int
+.BR sp_queue_qinsertsc "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+signed char
+.IR elem )
+.br
+int
+.BR sp_queue_qinsertuc "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned char
+.IR elem )
+.br
+int
+.BR sp_queue_qinsertus "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned short
+.IR elem )
+.br
+int
+.BR sp_queue_qinsertui "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned int
+.IR elem )
+.br
+int
+.BR sp_queue_qinsertul "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned long
+.IR elem )
+.br
+int
+.BR sp_queue_qinsertf "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+float
+.IR elem )
+.br
+int
+.BR sp_queue_qinsertd "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+double
+.IR elem )
+.br
+int
+.BR sp_queue_qinsertld "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+long double
+.IR elem )
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+See
+.BR sp_queue_insert (3).
+.P
+The functions in the
+.BR sp_queue_qinsert ()
+family operate in constant time, which is achievable by changing the order of
+the elements upon insertion.
+.SH EXAMPLES
+To explain how the
+.BR sp_queue_insert ()
+and
+.BR sp_queue_qinsert ()
+families differ, consider the following initial queue (from head to tail):
+.IP
+.B 1 2 3 4 _ _ _
+.P
+Now, let us investigate what happens when we try to insert the number
+.B 5
+at position
+.IR 2 .
+.P
+The functions in the
+.BR sp_queue_insert ()
+family would move
+.BR 3 " and " 4
+backwards, and insert
+.B 5
+without altering the order:
+.IP (1)
+.B 1 2 _ 3 4 _ _
+.br
+\h'6n'^ ^
+.IP (2)
+.B 1 2 5 3 4 _ _
+.br
+\h'4n'^
+.P
+On the contrary, the functions in the
+.BR sp_queue_qinsert ()
+family achieve the goal faster by moving the element "in the way" (in this case
+.BR 3 )
+to the back of the queue:
+.IP (1)
+.B 1 2 _ 4 3 _ _
+.br
+\h'8n'^
+.IP (2)
+.B 1 2 5 4 3 _ _
+.br
+\h'4n'^
+.P
+The second approach guarantees constant time, but does not preserve the order of
+the elements.
+.SH SEE ALSO
+.ad l
+.BR libstaple (7),
+.BR sp_queue (7),
+.BR sp_queue_create (3),
+.BR sp_queue_destroy (3),
+.BR sp_queue_clear (3),
+.BR sp_queue_copy (3),
+.BR sp_queue_foreach (3),
+.BR sp_queue_push (3),
+.BR sp_queue_insert (3),
+.BR sp_queue_peek (3),
+.BR sp_queue_pop (3),
+.BR sp_queue_remove (3),
+.BR sp_queue_qremove (3),
+.BR sp_queue_get (3),
+.BR sp_queue_set (3),
+.BR sp_queue_print (3)
+

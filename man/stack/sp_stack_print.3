@@ -1,0 +1,111 @@
+.TH SP_STACK_PRINT 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_stack_printt, sp_stack_printtc, sp_stack_printts, sp_stack_printti,
+sp_stack_printtl, sp_stack_printtsc, sp_stack_printtuc, sp_stack_printtus,
+sp_stack_printtui, sp_stack_printtul, sp_stack_printtf, sp_stack_printtd,
+sp_stack_printld \- print contents of a stack
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+int
+.BR sp_stack_print "(struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printc "(struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_prints "(struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printi "(struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printl "(struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printsc "(struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printuc "(struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printus "(struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printui "(struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printul "(struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printf "(struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printd "(struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printld "(struct sp_stack"
+.RI * stack )
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+.P
+The functions in the
+.BR sp_stack_print ()
+family are used to print useful information about a stack, and are
+provided for debugging purposes.
+.P
+.I stack
+is the stack that shall be printed.
+.SH RETURN VALUE
+.P
+If successful, the functions in the
+.BR sp_stack_print ()
+family shall return 0. Otherwise, they shall return a code indicating the
+error.
+.SH ERRORS
+The functions in the
+.BR sp_stack_print ()
+family shall fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+.I stack
+is a null pointer (debug mode only).
+.SS Suffixed Form
+.IP \fBSP_EILLEGAL\fP 1.5i
+.IR stack "'s " elem_size
+does not match the size of the function's return type (debug mode only).
+.SH CONFORMING TO
+See
+.BR libstaple (7).
+.SH SEE ALSO
+.ad l
+.BR libstaple (7),
+.BR sp_stack (7),
+.BR sp_stack_create (3),
+.BR sp_stack_destroy (3),
+.BR sp_stack_clear (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
+.BR sp_stack_push (3),
+.BR sp_stack_insert (3),
+.BR sp_stack_qinsert (3),
+.BR sp_stack_peek (3),
+.BR sp_stack_pop (3),
+.BR sp_stack_remove (3),
+.BR sp_stack_qremove (3),
+.BR sp_stack_get (3),
+.BR sp_stack_set (3)

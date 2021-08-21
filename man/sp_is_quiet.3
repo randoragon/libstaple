@@ -1,0 +1,32 @@
+.TH SP_IS_QUIET 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_is_quiet \- check if the library has been compiled with quiet mode
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+int
+.BR sp_is_quiet (void)
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+The
+.BR sp_is_quiet ()
+function can be used at runtime to determine whether the staple library has been
+compiled with quiet mode or not.
+.SH RETURN VALUE
+The
+.BR sp_is_quiet ()
+function shall return 1 if quiet mode is active and 0 otherwise.
+.SH ERRORS
+.P
+The
+.BR sp_is_quiet ()
+function shall never fail.
+.SH CONFORMING TO
+See
+.BR libstaple (7).
+.SH SEE ALSO
+.ad l
+.BR libstaple (7)

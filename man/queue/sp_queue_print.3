@@ -1,0 +1,111 @@
+.TH SP_QUEUE_PRINT 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_queue_print, sp_queue_printc, sp_queue_prints, sp_queue_printi,
+sp_queue_printl, sp_queue_printsc, sp_queue_printuc, sp_queue_printus,
+sp_queue_printui, sp_queue_printul, sp_queue_printf, sp_queue_printd,
+sp_queue_printld \- print contents of a queue
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+int
+.BR sp_queue_print "(struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printc "(struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_prints "(struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printi "(struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printl "(struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printsc "(struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printuc "(struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printus "(struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printui "(struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printul "(struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printf "(struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printd "(struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printld "(struct sp_queue"
+.RI * queue )
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+.P
+The functions in the
+.BR sp_queue_print ()
+family are used to print useful information about a queue, and are
+provided for debugging purposes.
+.P
+.I queue
+is the queue that shall be printed.
+.SH RETURN VALUE
+.P
+If successful, the functions in the
+.BR sp_queue_print ()
+family shall return 0. Otherwise, they shall return a code indicating the
+error.
+.SH ERRORS
+The functions in the
+.BR sp_queue_print ()
+family shall fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+.I queue
+is a null pointer (debug mode only).
+.SS Suffixed Form
+.IP \fBSP_EILLEGAL\fP 1.5i
+.IR queue "'s " elem_size
+does not match the size of the function's return type (debug mode only).
+.SH CONFORMING TO
+See
+.BR libstaple (7).
+.SH SEE ALSO
+.ad l
+.BR libstaple (7),
+.BR sp_queue (7),
+.BR sp_queue_create (3),
+.BR sp_queue_destroy (3),
+.BR sp_queue_clear (3),
+.BR sp_queue_copy (3),
+.BR sp_queue_foreach (3),
+.BR sp_queue_push (3),
+.BR sp_queue_insert (3),
+.BR sp_queue_qinsert (3),
+.BR sp_queue_peek (3),
+.BR sp_queue_pop (3),
+.BR sp_queue_remove (3),
+.BR sp_queue_qremove (3),
+.BR sp_queue_get (3),
+.BR sp_queue_set (3)

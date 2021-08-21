@@ -1,0 +1,192 @@
+.TH SP_QUEUE_GET 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_queue_get, sp_queue_getc, sp_queue_gets, sp_queue_geti, sp_queue_getl,
+sp_queue_getsc, sp_queue_getuc, sp_queue_getus, sp_queue_getui,
+sp_queue_getul, sp_queue_getf, sp_queue_getd, sp_queue_getld \- look up
+arbitrary element in a queue
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+int
+.BR sp_queue_get "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+void
+.RI * output )
+.br
+char
+.BR sp_queue_getc "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+short
+.BR sp_queue_gets "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+int
+.BR sp_queue_geti "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+long
+.BR sp_queue_getl "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+signed char
+.BR sp_queue_getsc "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+unsigned char
+.BR sp_queue_getuc "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+unsigned short
+.BR sp_queue_getus "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+unsigned int
+.BR sp_queue_getui "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+unsigned long
+.BR sp_queue_getul "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+float
+.BR sp_queue_getf "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+double
+.BR sp_queue_getd "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+long double
+.BR sp_queue_getld "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+.P
+The functions in the
+.BR sp_queue_get ()
+family are used to look up the value of an arbitrary element in a queue. The
+looked up element remains on the queue.
+.P
+.I queue
+is the queue.
+.P
+.I idx
+is the index of the element to look up. Indices start from 0 and extend
+to the rear \(em 0 is the front element, 1 is the element behind it, and so on.
+.br
+.I idx
+must be smaller than
+.IR queue "'s " size .
+.SS Generic Form
+.I output
+is the start of an adequately-sized block of memory the element shall be copied
+into.
+.I output
+must not overlap in memory with the element.
+.SH RETURN VALUE
+.SS Generic Form
+If successful, the
+.BR sp_queue_get ()
+function shall return 0. Otherwise, it shall return a code indicating the
+error.
+.SS Suffixed Form
+If successful, the suffixed
+.BR sp_queue_get ()
+functions shall return the value of the element at \fIidx\fP. Otherwise, they shall
+return 0.
+.SH ERRORS
+.SS Generic Form
+The
+.BR sp_queue_get ()
+function shall fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+Either
+.IR queue " or " output
+are null pointers (debug mode only).
+.IP \fBSP_EINDEX\fP 1.5i
+.I idx
+out of range (debug mode only).
+.SS Suffixed Form
+The suffixed
+.BR sp_queue_get ()
+functions shall fail if:
+.IP 0 1.5i
+.I queue
+is a null pointer (debug mode only).
+.IP 0 1.5i
+.I idx
+out of range (debug mode only).
+.IP 0 1.5i
+.IR queue "'s " elem_size
+does not match the size of the function's return type (debug mode only).
+.P
+Note that 0 can also be a successful return value, since it is a number that can
+be stored on the queue, like any other.
+.SH NOTES
+Functions of the suffixed form do not provide an unambiguous error-detecting
+interface with return codes. This design choice was made for 2 reasons:
+.IP (1)
+It is very convenient to have these functions return the value of the element
+directly.
+.sp -1
+.IP (2)
+The only errors that can occur are such resulting from library misuse by the
+end-user, and not caused by external factors such as insufficient memory, etc.
+This makes these errors far less important to report.
+.P
+This means there is a guaranteed runtime uncertainty whenever a suffixed
+function returns 0. However, the functions shall still print error messages when
+appropriate, so failures can be told apart from successes by the presence or
+absence of those (quiet mode needs to be disabled).
+.SH CONFORMING TO
+See
+.BR libstaple (7).
+.SH SEE ALSO
+.ad l
+.BR libstaple (7),
+.BR sp_queue (7),
+.BR sp_queue_create (3),
+.BR sp_queue_destroy (3),
+.BR sp_queue_clear (3),
+.BR sp_queue_copy (3),
+.BR sp_queue_foreach (3),
+.BR sp_queue_push (3),
+.BR sp_queue_insert (3),
+.BR sp_queue_qinsert (3),
+.BR sp_queue_peek (3),
+.BR sp_queue_pop (3),
+.BR sp_queue_remove (3),
+.BR sp_queue_qremove (3),
+.BR sp_queue_set (3),
+.BR sp_queue_print (3)
+

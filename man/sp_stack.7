@@ -1,0 +1,74 @@
+.TH SP_STACK 7 DATE "libstaple-VERSION"
+.SH NAME
+sp_stack \- staple library implementation of the stack
+.SH DESCRIPTION
+.P
+This manual describes the implementation of the
+.B sp_stack
+structure, as provided by the staple library.
+.P
+.B sp_stack
+is a
+.IR transparent
+type. It is encouraged that the user extends the functionality provided by
+default library functions, if there is need to do so.
+.SS Internal Structure
+.IP
+.ad l
+.nf
+struct sp_stack {
+	void  *data;
+	size_t elem_size;
+	size_t size;
+	size_t capacity;
+};
+.fi
+.ad
+.P
+.IP \fIdata\fP 12n
+the beginning of a contiguous array of elements. The first array element
+corresponds to the bottom of the stack, and the last to the top.
+.IP \fIelem_size\fP
+the size (in bytes) of a single stack element. This value is set once
+during initialization, and must not be changed.
+.IP \fIsize\fP
+the number of elements on the stack.
+.IP \fIcapacity\fP
+the current maximum number of elements possible to store on the
+.I data
+buffer. This value is automatically doubled during insertion operations, if
+there is not enough room for a new element.
+.P
+Refer to
+.BR libstaple (7)
+source code for more details.
+.SH CONFORMING TO
+See
+.BR libstaple (7).
+.SH BUGS
+The size of the
+.I data
+buffer is capped at
+.BR SIZE_MAX .
+In consequence, the product
+.RI ( capacity " * " elem_size )
+also cannot exceed
+.BR SIZE_MAX .
+.SH SEE ALSO
+.ad l
+.BR libstaple (7)
+.BR sp_stack_create (3),
+.BR sp_stack_destroy (3),
+.BR sp_stack_clear (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
+.BR sp_stack_push (3),
+.BR sp_stack_insert (3),
+.BR sp_stack_qinsert (3),
+.BR sp_stack_peek (3),
+.BR sp_stack_pop (3),
+.BR sp_stack_remove (3),
+.BR sp_stack_qremove (3),
+.BR sp_stack_get (3),
+.BR sp_stack_set (3),
+.BR sp_stack_print (3)

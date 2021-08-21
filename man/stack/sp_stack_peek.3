@@ -1,0 +1,159 @@
+.TH SP_STACK_PEEK 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_stack_peek, sp_stack_peekc, sp_stack_peeks, sp_stack_peeki,
+sp_stack_peekl, sp_stack_peeksc, sp_stack_peekuc, sp_stack_peekus,
+sp_stack_peekui, sp_stack_peekul, sp_stack_peekf, sp_stack_peekd,
+sp_stack_peekld \- look up the top element of a stack
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+int
+.BR sp_stack_peek "(const struct sp_stack"
+.RI * stack ,
+void
+.RI * output )
+.br
+char
+.BR sp_stack_peekc "(const struct sp_stack"
+.RI * stack )
+.br
+short
+.BR sp_stack_peeks "(const struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_peeki "(const struct sp_stack"
+.RI * stack )
+.br
+long
+.BR sp_stack_peekl "(const struct sp_stack"
+.RI * stack )
+.br
+signed char
+.BR sp_stack_peeksc "(const struct sp_stack"
+.RI * stack )
+.br
+unsigned char
+.BR sp_stack_peekuc "(const struct sp_stack"
+.RI * stack )
+.br
+unsigned short
+.BR sp_stack_peekus "(const struct sp_stack"
+.RI * stack )
+.br
+unsigned int
+.BR sp_stack_peekui "(const struct sp_stack"
+.RI * stack )
+.br
+unsigned long
+.BR sp_stack_peekul "(const struct sp_stack"
+.RI * stack )
+.br
+float
+.BR sp_stack_peekf "(const struct sp_stack"
+.RI * stack )
+.br
+double
+.BR sp_stack_peekd "(const struct sp_stack"
+.RI * stack )
+.br
+long double
+.BR sp_stack_peekld "(const struct sp_stack"
+.RI * stack )
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+The functions in the
+.BR sp_stack_peek ()
+family are used to peek at the element sitting at the top of the stack. The
+looked up element remains on the stack. Attempting to peek at an empty stack
+yields undefined behavior.
+.P
+.I stack
+is the stack.
+.SS Generic Form
+.P
+.I output
+is the start of an adequately-sized block of memory the peeked element shall
+be copied into.
+.I output
+must not overlap in memory with the peeked element.
+.SH RETURN VALUE
+.SS Generic Form
+If successful, the
+.BR sp_stack_peek ()
+function shall return 0. Otherwise, it shall return a code indicating the
+error.
+.SS Suffixed Form
+If successful, the suffixed
+.BR sp_stack_peek ()
+functions shall return the value of the peeked element. Otherwise, they shall
+return 0.
+.SH ERRORS
+.SS Generic Form
+The
+.BR sp_stack_peek ()
+function shall fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+Either
+.IR stack " or " output
+are null pointers (debug mode only).
+.IP \fBSP_EILLEGAL\fP 1.5i
+.I stack
+is empty (debug mode only).
+.SS Suffixed Form
+The suffixed
+.BR sp_stack_peek ()
+functions shall fail if:
+.IP 0 1.5i
+.I stack
+is a null pointer (debug mode only).
+.IP 0 1.5i
+.I stack
+is empty (debug mode only).
+.IP 0 1.5i
+.IR stack "'s " elem_size
+does not match the size of the function's return type (debug mode only).
+.P
+Note that 0 can also be a successful return value, since it is a number that can
+be stored on the stack, like any other.
+.SH CONFORMING TO
+See
+.BR libstaple (7).
+.SH NOTES
+Functions of the suffixed form do not provide an unambiguous error-detecting
+interface with return codes. This design choice was made for 2 reasons:
+.IP (1)
+It is very convenient to have these functions return the value of the element
+directly.
+.sp -1
+.IP (2)
+The only errors that can occur are such resulting from library misuse by the
+end-user, and not caused by external factors such as insufficient memory, etc.
+This makes these errors far less important to report.
+.P
+This means there is a guaranteed runtime uncertainty whenever a suffixed
+function returns 0. However, the functions shall still print error messages when
+appropriate, so failures can be told apart from successes by the presence or
+absence of those (quiet mode needs to be disabled).
+.SH SEE ALSO
+.ad l
+.BR libstaple (7),
+.BR sp_stack (7),
+.BR sp_stack_create (3),
+.BR sp_stack_destroy (3),
+.BR sp_stack_clear (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
+.BR sp_stack_push (3),
+.BR sp_stack_insert (3),
+.BR sp_stack_qinsert (3),
+.BR sp_stack_pop (3),
+.BR sp_stack_remove (3),
+.BR sp_stack_qremove (3),
+.BR sp_stack_get (3),
+.BR sp_stack_set (3),
+.BR sp_stack_print (3)
+

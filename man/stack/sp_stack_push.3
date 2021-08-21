@@ -1,0 +1,171 @@
+.TH SP_STACK_PUSH 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_stack_push, sp_stack_pushc, sp_stack_pushs, sp_stack_pushi,
+sp_stack_pushl, sp_stack_pushsc, sp_stack_pushuc, sp_stack_pushus,
+sp_stack_pushui, sp_stack_pushul, sp_stack_pushf, sp_stack_pushd,
+sp_stack_pushld \- push a new element onto a stack
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+int
+.BR sp_stack_push "(struct sp_stack"
+.RI * stack ,
+const void
+.RI * elem )
+.br
+int
+.BR sp_stack_pushc "(struct sp_stack"
+.RI * stack ,
+char
+.IR elem )
+.br
+int
+.BR sp_stack_pushs "(struct sp_stack"
+.RI * stack ,
+short
+.IR elem )
+.br
+int
+.BR sp_stack_pushi "(struct sp_stack"
+.RI * stack ,
+int
+.IR elem )
+.br
+int
+.BR sp_stack_pushl "(struct sp_stack"
+.RI * stack ,
+long
+.IR elem )
+.br
+int
+.BR sp_stack_pushsc "(struct sp_stack"
+.RI * stack ,
+signed char
+.IR elem )
+.br
+int
+.BR sp_stack_pushuc "(struct sp_stack"
+.RI * stack ,
+unsigned char
+.IR elem )
+.br
+int
+.BR sp_stack_pushus "(struct sp_stack"
+.RI * stack ,
+unsigned short
+.IR elem )
+.br
+int
+.BR sp_stack_pushui "(struct sp_stack"
+.RI * stack ,
+unsigned int
+.IR elem )
+.br
+int
+.BR sp_stack_pushul "(struct sp_stack"
+.RI * stack ,
+unsigned long
+.IR elem )
+.br
+int
+.BR sp_stack_pushf "(struct sp_stack"
+.RI * stack ,
+float
+.IR elem )
+.br
+int
+.BR sp_stack_pushd "(struct sp_stack"
+.RI * stack ,
+double
+.IR elem )
+.br
+int
+.BR sp_stack_pushld "(struct sp_stack"
+.RI * stack ,
+long double
+.IR elem )
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+The functions in the
+.BR sp_stack_push ()
+family are used to push a new element onto a stack. The element's size must
+match the stack's
+.I elem_size
+field, so it is illegal to, for example, create a stack with
+.I elem_size
+equal to 4, and then use it with the
+.BR sp_stack_pushc ()
+function.
+.P
+.I stack
+is the stack that shall be pushed onto.
+.P
+.I
+elem
+is the element to be pushed.
+.SS Generic Form
+.I elem
+must be a void pointer to the first byte of the element that shall be pushed.
+The number of bytes to copy is equal to
+.IR stack "'s " elem_size
+field.
+.SS Suffixed Form
+.I elem
+is passed directly in the function argument.
+.SH RETURN VALUE
+If successful, the functions in the
+.BR sp_stack_push ()
+family shall return 0. Otherwise, they shall return a code indicating the
+error.
+.SH ERRORS
+The functions in the
+.BR sp_stack_push ()
+family shall fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+.I stack
+is a null pointer (debug mode only).
+.IP \fBSP_ERANGE\fP 1.5i
+Maximum buffer size exceeded. See BUGS in
+.BR sp_stack (7).
+.IP \fBSP_ENOMEM\fP 1.5i
+Memory allocation failed.
+.SS Generic Form
+The
+.BR sp_stack_push ()
+function shall fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+.I elem
+is a null pointer (debug mode only).
+.SS Suffixed Form
+The suffixed
+.BR sp_stack_push ()
+functions shall fail if:
+.IP \fBSP_EILLEGAL\fP 1.5i
+.IR stack "'s " elem_size
+does not match the size of the
+.I elem
+argument (debug mode only).
+.SH CONFORMING TO
+See
+.BR libstaple (7).
+.SH SEE ALSO
+.ad l
+.BR libstaple (7),
+.BR sp_stack (7),
+.BR sp_stack_create (3),
+.BR sp_stack_destroy (3),
+.BR sp_stack_clear (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
+.BR sp_stack_insert (3),
+.BR sp_stack_qinsert (3),
+.BR sp_stack_peek (3),
+.BR sp_stack_pop (3),
+.BR sp_stack_remove (3),
+.BR sp_stack_qremove (3),
+.BR sp_stack_get (3),
+.BR sp_stack_set (3),
+.BR sp_stack_print (3)

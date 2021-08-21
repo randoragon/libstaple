@@ -1,0 +1,80 @@
+.TH SP_STACK_DESTROY 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_stack_destroy \- destroy a stack
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+int sp_stack_destroy(struct sp_stack
+.RI * stack ,
+int
+.RI (* dtor )(void*))
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+The
+.BR sp_stack_destroy ()
+function
+frees all memory comprising a stack. Accessing the memory after destruction is
+undefined behavior, but the same
+.I stack
+variable can be safely reused to create a new stack.
+.P
+The
+.BR sp_stack_destroy ()
+function shall first call
+.BR sp_stack_clear ()
+to free all memory attributed to the contents of
+.IR stack ,
+and finally the memory of the container itself is freed.
+.P
+.I stack
+is a pointer to the stack that shall be freed.
+.P
+.I dtor
+is transparently passed to the
+.BR sp_stack_clear ()
+function. See
+.BR sp_stack_clear (3).
+.SH RETURN VALUE
+If successful, the
+.BR sp_stack_destroy ()
+function shall return 0. Otherwise, it shall
+return a code indicating the error.
+.SH ERRORS
+The
+.BR sp_stack_destroy ()
+function shall fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+.I stack
+is a null pointer (debug mode only).
+.IP \fBSP_EHANDLER\fP 1.5i
+.I dtor
+returned non-0 for some stack element.
+.SH CONFORMING TO
+See
+.BR libstaple (7).
+.SH EXAMPLES
+An example demonstrating the use of the
+.I dtor
+function can be found in
+.BR sp_stack_clear (3).
+.SH SEE ALSO
+.ad l
+.BR libstaple (7),
+.BR sp_stack (7),
+.BR sp_stack_create (3),
+.BR sp_stack_clear (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
+.BR sp_stack_push (3),
+.BR sp_stack_insert (3),
+.BR sp_stack_qinsert (3),
+.BR sp_stack_peek (3),
+.BR sp_stack_pop (3),
+.BR sp_stack_remove (3),
+.BR sp_stack_qremove (3),
+.BR sp_stack_get (3),
+.BR sp_stack_set (3),
+.BR sp_stack_print (3)

@@ -1,0 +1,74 @@
+.TH SP_STACK_FOREACH 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_stack_foreach \- run a function for each stack element
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+int
+.BR sp_stack_foreach "(struct sp_stack"
+.RI * stack ,
+int
+.RI (* func ")(void*, size_t))"
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+The
+.BR sp_stack_foreach ()
+function intakes a pointer to a function, then iterates through all stack
+elements in no particular order, and runs that function for each one.
+.P
+.I stack
+is a pointer to the stack.
+.P
+.I func
+is the pointer to a function. The function must be implemented in such
+a way that the first argument
+.RB ( void* )
+is the address to the current element, and the second
+.RB ( size_t )
+is the index of the current element (index 0 corresponds to the top of the
+stack, 1 is the element below it and so on).
+.P
+The function pointed to by
+.I func
+must return 0 for success, and anything else for failure. In debug mode, the
+caught error code (if any) is printed on stderr.
+.SH RETURN VALUE
+If successful, the
+.BR sp_stack_foreach ()
+function shall return 0. Otherwise, it shall return a code indicating the
+error.
+.SH ERRORS
+The
+.BR sp_stack_foreach ()
+function shall fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+Either
+.IR stack " or " func
+are null pointers (debug mode only).
+.IP \fBSP_EHANDLER\fP 1.5i
+.I func
+returned non-0 for some stack element.
+.SH CONFORMING TO
+See
+.BR libstaple (7).
+.SH SEE ALSO
+.ad l
+.BR libstaple (7),
+.BR sp_stack (7),
+.BR sp_stack_create (3),
+.BR sp_stack_destroy (3),
+.BR sp_stack_clear (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_push (3),
+.BR sp_stack_insert (3),
+.BR sp_stack_qinsert (3),
+.BR sp_stack_peek (3),
+.BR sp_stack_pop (3),
+.BR sp_stack_remove (3),
+.BR sp_stack_qremove (3),
+.BR sp_stack_get (3),
+.BR sp_stack_set (3),
+.BR sp_stack_print (3)

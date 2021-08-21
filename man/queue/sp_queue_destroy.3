@@ -1,0 +1,80 @@
+.TH SP_QUEUE_DESTROY 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_queue_destroy \- destroy a queue
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+int sp_queue_destroy(struct sp_queue
+.RI * queue ,
+int
+.RI (* dtor )(void*))
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+The
+.BR sp_queue_destroy ()
+function frees all memory comprising a queue. Accessing the memory after
+destruction is undefined behavior, but the same
+.I queue
+variable can be safely reused to create a new queue.
+.P
+The
+.BR sp_queue_destroy ()
+function shall first call
+.BR sp_queue_clear ()
+to free all memory attributed to the contents of
+.IR queue ,
+and finally the memory of the container itself
+is freed.
+.P
+.I queue
+is a pointer to the queue that shall be freed.
+.P
+.I dtor
+is transparently passed to the
+.BR sp_queue_clear ()
+function. See
+.BR sp_queue_clear (3).
+.SH RETURN VALUE
+If successful, the
+.BR sp_queue_destroy ()
+function shall return 0. Otherwise, it shall
+return a code indicating the error.
+.SH ERRORS
+The
+.BR sp_queue_destroy ()
+function shall fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+.I queue
+is a null pointer (debug mode only).
+.IP \fBSP_EHANDLER\fP 1.5i
+.I dtor
+returned non-0 for some queue element.
+.SH CONFORMING TO
+See
+.BR libstaple (7).
+.SH EXAMPLES
+An example for how to use the
+.I dtor
+function can be found in
+.BR sp_queue_clear (3).
+.SH SEE ALSO
+.ad l
+.BR libstaple (7),
+.BR sp_queue (7),
+.BR sp_queue_create (3),
+.BR sp_queue_clear (3),
+.BR sp_queue_copy (3),
+.BR sp_queue_foreach (3),
+.BR sp_queue_push (3),
+.BR sp_queue_insert (3),
+.BR sp_queue_qinsert (3),
+.BR sp_queue_peek (3),
+.BR sp_queue_pop (3),
+.BR sp_queue_remove (3),
+.BR sp_queue_qremove (3),
+.BR sp_queue_get (3),
+.BR sp_queue_set (3),
+.BR sp_queue_print (3)

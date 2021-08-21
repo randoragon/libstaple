@@ -1,11 +1,11 @@
-.TH RND_## 7 DATE "librnd-VERSION"
+.TH SP_## 7 DATE "libstaple-VERSION"
 .SH NAME
-foo \- rnd library implementation of the ##
+foo \- staple library implementation of the ##
 .SH DESCRIPTION
 .P
 This manual describes the implementation of the
 .B foo
-structure, as provided by the rnd library.
+structure, as provided by the staple library.
 .P
 .B foo
 is a
@@ -26,11 +26,11 @@ default library functions, if there is need to do so.
 .IP \fI##\fP
 .P
 Refer to
-.BR librnd (7)
+.BR libstaple (7)
 source code for more details.
 .SH CONFORMING TO
 See
-.BR librnd (7).
+.BR libstaple (7).
 .SH SEE ALSO
 .ad l
-.BR librnd (7)
+.BR libstaple (7)

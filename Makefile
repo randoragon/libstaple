@@ -1,4 +1,4 @@
-# Modify these 3 numbers to bump librnd version
+# Modify these 3 numbers to bump libstaple version
 VERSION_MAJOR := 2
 VERSION_MINOR := 0
 VERSION_PATCH := 0
@@ -15,7 +15,7 @@ VFLAGS      += -DVERSION_PATCH=$(VERSION_PATCH) -DVERSION_STR="$(VERSION_STR)"
 CFLAGS      := -fpic $(VFLAGS) -std=c89 -Wall -Wextra -pedantic -Werror -Werror=vla
 LDFLAGS     := -shared
 CTESTFLAGS  := -std=c99 -Wall -Wextra -pedantic -Werror=vla -g -Og
-LDTESTFLAGS := -L. -Wl,-Bstatic -lrnd -Wl,-Bdynamic -lcriterion
+LDTESTFLAGS := -L. -Wl,-Bstatic -lstaple -Wl,-Bdynamic -lcriterion
 
 # List of all library module names
 MODULES := stack queue
@@ -31,12 +31,12 @@ SRCS := $(wildcard $(SRCDIR)/*.c)
 OBJS := $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(SRCS:.c=.o))
 
 # Header and man page files (relative to MANDIR)
-INCLUDES  := $(notdir $(wildcard $(SRCDIR)/rnd*.h))
+INCLUDES  := $(notdir $(wildcard $(SRCDIR)/staple*.h))
 MANPAGES3 := $(patsubst $(MANDIR)/%,%,$(shell find "$(MANDIR)" -type f -name '*.3'))
 MANPAGES7 := $(patsubst $(MANDIR)/%,%,$(shell find "$(MANDIR)" -type f -name '*.7'))
 
 # Main library file
-TARGET := librnd
+TARGET := libstaple
 
 # Output paths
 DESTDIR   :=
@@ -78,8 +78,8 @@ clean:
 	$(RM) -- $(OBJS)
 	$(RM) -- $(TARGET).so $(TARGET).a
 
-# Rebuilds the library with debug symbols and RND_DEBUG defined
-debug: CFLAGS += -g -Og -DRND_DEBUG
+# Rebuilds the library with debug symbols and STAPLE_DEBUG defined
+debug: CFLAGS += -g -Og -DSTAPLE_DEBUG
 debug: all
 
 # Builds and installs the library
@@ -118,7 +118,7 @@ test_clean:
 	$(RM) -- $(TESTDIR)/$(OBJDIR)/*
 	$(RM) -- $(TESTDIR)/bin/*
 
-test_%: CFLAGS += -DRND_QUIET -DSIZE_MAX=65535
+test_%: CFLAGS += -DSTAPLE_QUIET -DSIZE_MAX=65535
 test_%: debug test/obj/test_struct.o test/obj/%.o
 	@echo $(MODULES)
 	$(LINKER) "test/obj/test_struct.o" "test/obj/$*.o" $(LDTESTFLAGS) -o $(TESTDIR)/bin/$*

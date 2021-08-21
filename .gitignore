@@ -1,6 +1,6 @@
 Session.vim
-librnd.so
-librnd.a
+libstaple.so
+libstaple.a
 obj
 test/bin
 test/obj

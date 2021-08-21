@@ -1,0 +1,207 @@
+.TH SP_STACK_INSERT 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_stack_insert, sp_stack_insertc, sp_stack_inserts, sp_stack_inserti,
+sp_stack_insertl, sp_stack_insertsc, sp_stack_insertuc, sp_stack_insertus,
+sp_stack_insertui, sp_stack_insertul, sp_stack_insertf, sp_stack_insertd,
+sp_stack_insertld \- insert an element at any position of a stack
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+int
+.BR sp_stack_insert "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+const void
+.RI * elem )
+.br
+int
+.BR sp_stack_insertc "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+char
+.IR elem )
+.br
+int
+.BR sp_stack_inserts "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+short
+.IR elem )
+.br
+int
+.BR sp_stack_inserti "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+int
+.IR elem )
+.br
+int
+.BR sp_stack_insertl "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+long
+.IR elem )
+.br
+int
+.BR sp_stack_insertsc "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+signed char
+.IR elem )
+.br
+int
+.BR sp_stack_insertuc "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+unsigned char
+.IR elem )
+.br
+int
+.BR sp_stack_insertus "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+unsigned short
+.IR elem )
+.br
+int
+.BR sp_stack_insertui "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+unsigned int
+.IR elem )
+.br
+int
+.BR sp_stack_insertul "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+unsigned long
+.IR elem )
+.br
+int
+.BR sp_stack_insertf "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+float
+.IR elem )
+.br
+int
+.BR sp_stack_insertd "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+double
+.IR elem )
+.br
+int
+.BR sp_stack_insertld "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+long double
+.IR elem )
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+The functions in the
+.BR sp_stack_insert ()
+family are used to insert elements at any position of a stack. The order of
+elements above and below the newly inserted element shall be preserved.
+.P
+.I stack
+is the stack that shall be inserted into.
+.P
+.I idx
+is the index at which the new element will be placed. Indices start from 0 and
+extend downwards \(em 0 is the top element, 1 is the element below it, and so
+on.
+.br
+Inserting at position \fBn\fP requires \fBn\fP elements to be moved in memory.
+Inserting at 0 has the same effect as
+.BR sp_stack_push (3).
+.br
+.I idx
+cannot be larger than
+.IR stack "'s " size .
+.P
+.I elem
+is the element to be inserted.
+.SS Generic Form
+.I elem
+must be a void pointer to the first byte of the element that shall be inserted.
+The number of bytes to copy is equal to
+.IR stack "'s " elem_size
+field.
+.SS Suffixed Form
+.I elem
+is passed directly in the function argument.
+.SH RETURN VALUE
+If successful, the functions in the
+.BR sp_stack_insert ()
+family shall return 0. Otherwise, they shall return a code indicating the
+error.
+.SH ERRORS
+The functions in the
+.BR sp_stack_insert ()
+family shall fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+.I stack
+is a null pointer (debug mode only).
+.IP \fBSP_EINDEX\fP 1.5i
+.I idx
+out of range (debug mode only).
+.IP \fBSP_ERANGE\fP 1.5i
+Maximum buffer size exceeded. See BUGS in
+.BR sp_stack (7).
+.IP \fBSP_ENOMEM\fP 1.5i
+Memory allocation failed.
+.SS Generic Form
+The
+.BR sp_stack_insert ()
+function shall fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+.I elem
+is a null pointer (debug mode only).
+.SS Suffixed Form
+The suffixed
+.BR sp_stack_insert ()
+functions shall fail if:
+.IP \fBSP_EILLEGAL\fP 1.5i
+.IR stack "'s " elem_size
+does not match the size of the
+.I elem
+argument (debug mode only).
+.SH CONFORMING TO
+See
+.BR libstaple (7).
+.SH SEE ALSO
+.ad l
+.BR libstaple (7),
+.BR sp_stack (7),
+.BR sp_stack_create (3),
+.BR sp_stack_destroy (3),
+.BR sp_stack_clear (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
+.BR sp_stack_push (3),
+.BR sp_stack_qinsert (3),
+.BR sp_stack_peek (3),
+.BR sp_stack_pop (3),
+.BR sp_stack_remove (3),
+.BR sp_stack_qremove (3),
+.BR sp_stack_get (3),
+.BR sp_stack_set (3),
+.BR sp_stack_print (3)
+

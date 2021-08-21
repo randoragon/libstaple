@@ -1,7 +1,7 @@
-# the rnd library
+# Staple - easy data structures in C
 
-`rnd` is a general-purpose library implementing common data structures in pure
-ANSI C without any external dependencies besides the C standard library.
+Staple is a general-purpose library implementing common data structures in pure
+C89 without any external dependencies besides the C standard library.
 
 ## Available Modules
 
@@ -26,21 +26,21 @@ the top of the stack, then pops and returns it.
 
 ```c
 #include <stdio.h>
-#include <rnd.h>
+#include <staple.h>
 
 int main(void)
 {
-	struct rnd_stack *s;
+	struct sp_stack *s;
 	int ret;
-	s = rnd_stack_create(sizeof(int), 10);
+	s = sp_stack_create(sizeof(int), 10);
 
-	rnd_stack_pushi(s, 10);
-	rnd_stack_pushi(s, 4);
-	rnd_stack_pushi(s, 8);
-	printf("top of the stack is %d\n", rnd_stack_peeki(s));
-	ret = rnd_stack_popi(s);
+	sp_stack_pushi(s, 10);
+	sp_stack_pushi(s, 4);
+	sp_stack_pushi(s, 8);
+	printf("top of the stack is %d\n", sp_stack_peeki(s));
+	ret = sp_stack_popi(s);
 
-	rnd_stack_destroy(s, NULL);
+	sp_stack_destroy(s, NULL);
 	return ret;
 }
 ```
@@ -66,7 +66,7 @@ int main(void)
   get/set functions (if feasible), even if the structure is not optimized for
   it. Some libraries will implement e.g. the stack with only push/peek/pop
   operations and not bother with insertion, removal and lookup at arbitrary
-  indices. `librnd` gives you full control out-of-the-box, because even if in
+  indices. Staple gives you full control out-of-the-box, because even if in
   99% of cases you will only push/pop from the top of the stack, once in a while
   you need that pinpoint insert, even at the cost of performance.
 - no opaque types - you are free to extend the library, if needed
@@ -89,9 +89,9 @@ etc.) is available in 2 forms:
 Examples:
 
 ```c
-rnd_stack_push(s, &data); /* reads from a (void*) */
-rnd_stack_pushi(s, -6);   /* pass-by-value (int) */
-rnd_stack_pushus(s, 3);   /* pass-by-value (unsigned short) */
+sp_stack_push(s, &data); /* reads from a (void*) */
+sp_stack_pushi(s, -6);   /* pass-by-value (int) */
+sp_stack_pushus(s, 3);   /* pass-by-value (unsigned short) */
 ```
 
 Here's a full table of suffixes, although all you need to remember is to use the
@@ -141,7 +141,7 @@ override the `PREFIX` variable:
 	make   install PREFIX=/usr
 	make uninstall PREFIX=/usr
 
-The Makefile produces two library files, `librnd.so` and `librnd.a`. The former
+The Makefile produces two library files, `libstaple.so` and `libstaple.a`. The former
 is a dynamically linked library, the latter is static.
 
 ## Unit Testing

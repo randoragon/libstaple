@@ -1,0 +1,159 @@
+.TH SP_QUEUE_PEEK 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_queue_peek, sp_queue_peekc, sp_queue_peeks, sp_queue_peeki,
+sp_queue_peekl, sp_queue_peeksc, sp_queue_peekuc, sp_queue_peekus,
+sp_queue_peekui, sp_queue_peekul, sp_queue_peekf, sp_queue_peekd,
+sp_queue_peekld \- look up the front element of a queue
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+int
+.BR sp_queue_peek "(const struct sp_queue"
+.RI * queue ,
+void
+.RI * output )
+.br
+char
+.BR sp_queue_peekc "(const struct sp_queue"
+.RI * queue )
+.br
+short
+.BR sp_queue_peeks "(const struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_peeki "(const struct sp_queue"
+.RI * queue )
+.br
+long
+.BR sp_queue_peekl "(const struct sp_queue"
+.RI * queue )
+.br
+signed char
+.BR sp_queue_peeksc "(const struct sp_queue"
+.RI * queue )
+.br
+unsigned char
+.BR sp_queue_peekuc "(const struct sp_queue"
+.RI * queue )
+.br
+unsigned short
+.BR sp_queue_peekus "(const struct sp_queue"
+.RI * queue )
+.br
+unsigned int
+.BR sp_queue_peekui "(const struct sp_queue"
+.RI * queue )
+.br
+unsigned long
+.BR sp_queue_peekul "(const struct sp_queue"
+.RI * queue )
+.br
+float
+.BR sp_queue_peekf "(const struct sp_queue"
+.RI * queue )
+.br
+double
+.BR sp_queue_peekd "(const struct sp_queue"
+.RI * queue )
+.br
+long double
+.BR sp_queue_peekld "(const struct sp_queue"
+.RI * queue )
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+The functions in the
+.BR sp_queue_peek ()
+family are used to peek at the element at the front of the queue. The
+looked up element remains on the queue. Attempting to peek at an empty queue
+yields undefined behavior.
+.P
+.I queue
+is the queue.
+.SS Generic Form
+.P
+.I output
+is the start of an adequately-sized block of memory the peeked element shall
+be copied into.
+.I output
+must not overlap in memory with the peeked element.
+.SH RETURN VALUE
+.SS Generic Form
+If successful, the
+.BR sp_queue_peek ()
+function shall return 0. Otherwise, it shall return a code indicating the
+error.
+.SS Suffixed Form
+If successful, the suffixed
+.BR sp_queue_peek ()
+functions shall return the value of the peeked element. Otherwise, they shall
+return 0.
+.SH ERRORS
+.SS Generic Form
+The
+.BR sp_queue_peek ()
+function shall fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+Either
+.IR queue " or " output
+are null pointers (debug mode only).
+.IP \fBSP_EILLEGAL\fP 1.5i
+.I queue
+is empty (debug mode only).
+.SS Suffixed Form
+The suffixed
+.BR sp_queue_peek ()
+functions shall fail if:
+.IP 0 1.5i
+.I queue
+is a null pointer (debug mode only).
+.IP 0 1.5i
+.I queue
+is empty (debug mode only).
+.IP 0 1.5i
+.IR queue "'s " elem_size
+does not match the size of the function's return type (debug mode only).
+.P
+Note that 0 can also be a successful return value, since it is a number that can
+be stored on the queue, like any other.
+.SH CONFORMING TO
+See
+.BR libstaple (7).
+.SH NOTES
+Functions of the suffixed form do not provide an unambiguous error-detecting
+interface with return codes. This design choice was made for 2 reasons:
+.IP (1)
+It is very convenient to have these functions return the value of the element
+directly.
+.sp -1
+.IP (2)
+The only errors that can occur are such resulting from library misuse by the
+end-user, and not caused by external factors such as insufficient memory, etc.
+This makes these errors far less important to report.
+.P
+This means there is a guaranteed runtime uncertainty whenever a suffixed
+function returns 0. However, the functions shall still print error messages when
+appropriate, so failures can be told apart from successes by the presence or
+absence of those (quiet mode needs to be disabled).
+.SH SEE ALSO
+.ad l
+.BR libstaple (7),
+.BR sp_queue (7),
+.BR sp_queue_create (3),
+.BR sp_queue_destroy (3),
+.BR sp_queue_clear (3),
+.BR sp_queue_copy (3),
+.BR sp_queue_foreach (3),
+.BR sp_queue_push (3),
+.BR sp_queue_insert (3),
+.BR sp_queue_qinsert (3),
+.BR sp_queue_pop (3),
+.BR sp_queue_remove (3),
+.BR sp_queue_qremove (3),
+.BR sp_queue_get (3),
+.BR sp_queue_set (3),
+.BR sp_queue_print (3)
+
