@@ -128,6 +128,8 @@ to be small in size**. It prioritizes simplicity, convenience and flexibility.
 
 ## Installation
 
+AUR: [libstaple](https://aur.archlinux.org/packages/libstaple/)
+
 On a Linux system with `make`, simply clone the repo and run the following (if
 necessary, as root):
 
