@@ -7,6 +7,9 @@ VERSION_STR   := $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
 # Last version modification date (YYYY-MM-DD)
 DATE := 2021-08-21
 
+# Main library file
+TARGET := libstaple
+
 # Compilation / Linking
 CC          := cc
 LINKER      := cc
@@ -15,7 +18,7 @@ VFLAGS      += -DVERSION_PATCH=$(VERSION_PATCH) -DVERSION_STR="$(VERSION_STR)"
 CFLAGS      := -fpic $(VFLAGS) -std=c89 -Wall -Wextra -pedantic -Werror -Werror=vla
 LDFLAGS     := -shared
 CTESTFLAGS  := -std=c99 -Wall -Wextra -pedantic -Werror=vla -g -Og
-LDTESTFLAGS := -L. -Wl,-Bstatic -lstaple -Wl,-Bdynamic -lcriterion
+LDTESTFLAGS := -L. -l:./$(TARGET).so -lcriterion
 
 # List of all library module names
 MODULES := stack queue
@@ -34,9 +37,6 @@ OBJS := $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(SRCS:.c=.o))
 INCLUDES  := $(notdir $(wildcard $(SRCDIR)/staple*.h))
 MANPAGES3 := $(patsubst $(MANDIR)/%,%,$(shell find "$(MANDIR)" -type f -name '*.3'))
 MANPAGES7 := $(patsubst $(MANDIR)/%,%,$(shell find "$(MANDIR)" -type f -name '*.7'))
-
-# Main library file
-TARGET := libstaple
 
 # Output paths
 DESTDIR   :=
