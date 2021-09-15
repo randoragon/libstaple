@@ -84,11 +84,11 @@ Test(stack, push)
 		cr_assert_eq(SP_EINVAL, sp_stack_push(s, NULL));
 		cr_assert_eq(SP_EINVAL, sp_stack_push(NULL, &d));
 		cr_assert_eq(SP_EINVAL, sp_stack_push(NULL, NULL));
-		cr_assert_eq(0LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(0LU, (unsigned long)s->size);
 		cr_assert_eq(0, sp_stack_push(s, &d));
-		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(1LU, (unsigned long)s->size);
 		cr_assert_eq(0, sp_stack_push(s, &d));
-		cr_assert_eq(2LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(2LU, (unsigned long)s->size);
 		cr_assert_eq(0, sp_stack_clear(s, NULL));
 		for (i = 0; i < SIZE_MAX / sizeof(struct data); i++) {
 			struct data a, b;
@@ -109,28 +109,28 @@ Test(stack, push)
 	 * V  - random value snippet
 	 * M  - printf format string
 	 */
-#define test(T, F1, F2, V, M) do {                                \
-		unsigned i;                                       \
-		s = sp_stack_create(sizeof(T), 1000);            \
-		cr_assert_not_null(s);                            \
-		cr_assert_eq(SP_EINVAL, F1(NULL, (V)));          \
-		cr_assert_eq(0LU, (unsigned long)s->size, "%lu"); \
-		cr_assert_eq(0, F1(s, (V)));                      \
-		cr_assert_eq(1LU, (unsigned long)s->size, "%lu"); \
-		cr_assert_eq(0, F1(s, (V)));                      \
-		cr_assert_eq(2LU, (unsigned long)s->size, "%lu"); \
-		cr_assert_eq(0, sp_stack_clear(s, NULL));        \
-		for (i = 0; i < SIZE_MAX / sizeof(T); i++) {      \
-			T a = (V);                                \
-			cr_assert_eq(0, F1(s, a));                \
-			cr_assert_eq(a, F2(s, 0), M);             \
-		}                                                 \
-		cr_assert_eq(SP_ERANGE, F1(s, (V)));             \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));      \
-		s = sp_stack_create(sizeof(T) + 1, 1);           \
-		cr_assert_not_null(s);                            \
-		cr_assert_eq(SP_EILLEGAL, F1(s, (V)));           \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));      \
+#define test(T, F1, F2, V, M) do {                           \
+		unsigned i;                                  \
+		s = sp_stack_create(sizeof(T), 1000);        \
+		cr_assert_not_null(s);                       \
+		cr_assert_eq(SP_EINVAL, F1(NULL, (V)));      \
+		cr_assert_eq(0LU, (unsigned long)s->size);   \
+		cr_assert_eq(0, F1(s, (V)));                 \
+		cr_assert_eq(1LU, (unsigned long)s->size);   \
+		cr_assert_eq(0, F1(s, (V)));                 \
+		cr_assert_eq(2LU, (unsigned long)s->size);   \
+		cr_assert_eq(0, sp_stack_clear(s, NULL));    \
+		for (i = 0; i < SIZE_MAX / sizeof(T); i++) { \
+			T a = (V);                           \
+			cr_assert_eq(0, F1(s, a));           \
+			cr_assert_eq(a, F2(s, 0));           \
+		}                                            \
+		cr_assert_eq(SP_ERANGE, F1(s, (V)));         \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));  \
+		s = sp_stack_create(sizeof(T) + 1, 1);       \
+		cr_assert_not_null(s);                       \
+		cr_assert_eq(SP_EILLEGAL, F1(s, (V)));       \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));  \
 	} while (0)
 	test(char          , sp_stack_pushc , sp_stack_getc , IRANGE(CHAR_MIN , CHAR_MAX) , "%hd");
 	test(short         , sp_stack_pushs , sp_stack_gets , IRANGE(SHRT_MIN , SHRT_MAX) , "%hd");
@@ -173,19 +173,19 @@ Test(stack, peek)
 	 * V  - random value snippet
 	 * M  - printf format string
 	 */
-#define test(T, F1, F2, V, M) do {                           \
-		T a = (V), z = 0;                            \
+#define test(T, F1, F2, V, M) do {                          \
+		T a = (V), z = 0;                           \
 		s = sp_stack_create(sizeof(T), 2);          \
-		cr_assert_not_null(s);                       \
-		cr_assert_eq(z, F1(s), M);                   \
-		cr_assert_eq(z, F1(NULL), M);                \
-		cr_assert_eq(0, F2(s, a));                   \
-		cr_assert_eq(a, F1(s), M);                   \
+		cr_assert_not_null(s);                      \
+		cr_assert_eq(z, F1(s));                     \
+		cr_assert_eq(z, F1(NULL));                  \
+		cr_assert_eq(0, F2(s, a));                  \
+		cr_assert_eq(a, F1(s));                     \
 		cr_assert_eq(0, sp_stack_destroy(s, NULL)); \
 		s = sp_stack_create(sizeof(T) + 1, 1);      \
-		cr_assert_not_null(s);                       \
-		s->size = 1;                                 \
-		cr_assert_eq(z, F1(s), M);                   \
+		cr_assert_not_null(s);                      \
+		s->size = 1;                                \
+		cr_assert_eq(z, F1(s));                     \
 		cr_assert_eq(0, sp_stack_destroy(s, NULL)); \
 	} while (0)
 	test(char          , sp_stack_peekc , sp_stack_pushc , IRANGE(1, CHAR_MAX) , "%hd");
@@ -215,9 +215,9 @@ Test(stack, pop)
 		cr_assert_eq(SP_EINVAL, sp_stack_pop(NULL, NULL));
 		data_init(&a);
 		cr_assert_eq(0, sp_stack_push(s, &a));
-		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(1LU, (unsigned long)s->size);
 		cr_assert_eq(0, sp_stack_pop(s, &b));
-		cr_assert_eq(0LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(0LU, (unsigned long)s->size);
 		cr_assert_eq(0, data_cmp(&a, &b));
 		cr_assert_eq(0, sp_stack_destroy(s, NULL));
 		cr_assert_eq(0, data_dtor(&b));
@@ -230,22 +230,22 @@ Test(stack, pop)
 	 * V  - random value snippet
 	 * M  - printf format string
 	 */
-#define test(T, F1, F2, V, M) do {                                \
-		T a = (V), z = 0;                                 \
-		s = sp_stack_create(sizeof(T), 2);               \
-		cr_assert_not_null(s);                            \
-		cr_assert_eq(z, F1(s), M);                        \
-		cr_assert_eq(z, F1(NULL), M);                     \
-		cr_assert_eq(0, F2(s, a));                        \
-		cr_assert_eq(1LU, (unsigned long)s->size, "%lu"); \
-		cr_assert_eq(a, F1(s), M);                        \
-		cr_assert_eq(0LU, (unsigned long)s->size, "%lu"); \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));      \
-		s = sp_stack_create(sizeof(T) + 1, 1);           \
-		cr_assert_not_null(s);                            \
-		s->size = 1;                                      \
-		cr_assert_eq(z, F1(s), M);                        \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));      \
+#define test(T, F1, F2, V, M) do {                          \
+		T a = (V), z = 0;                           \
+		s = sp_stack_create(sizeof(T), 2);          \
+		cr_assert_not_null(s);                      \
+		cr_assert_eq(z, F1(s));                     \
+		cr_assert_eq(z, F1(NULL));                  \
+		cr_assert_eq(0, F2(s, a));                  \
+		cr_assert_eq(1LU, (unsigned long)s->size);  \
+		cr_assert_eq(a, F1(s));                     \
+		cr_assert_eq(0LU, (unsigned long)s->size);  \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL)); \
+		s = sp_stack_create(sizeof(T) + 1, 1);      \
+		cr_assert_not_null(s);                      \
+		s->size = 1;                                \
+		cr_assert_eq(z, F1(s));                     \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL)); \
 	} while (0)
 	test(char          , sp_stack_popc , sp_stack_pushc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , sp_stack_pops , sp_stack_pushs , IRANGE(1, SHRT_MAX) , "%hd");
@@ -270,7 +270,7 @@ Test(stack, clear)
 	cr_assert_not_null(s);
 	cr_assert_eq(SP_EINVAL, sp_stack_clear(NULL, NULL));
 	cr_assert_eq(0, sp_stack_clear(s, NULL));
-	cr_assert_eq(0LU, (unsigned long)s->size, "%lu");
+	cr_assert_eq(0LU, (unsigned long)s->size);
 	cr_assert_eq(0, sp_stack_destroy(s, NULL));
 	s = sp_stack_create(sizeof(struct data), 1000);
 	for (i = 0; i < 1000; i++) {
@@ -280,7 +280,7 @@ Test(stack, clear)
 	}
 	cr_assert_eq(SP_EHANDLER, sp_stack_clear(s, data_dtor_bad));
 	cr_assert_eq(0, sp_stack_clear(s, data_dtor));
-	cr_assert_eq(0LU, (unsigned long)s->size, "%lu");
+	cr_assert_eq(0LU, (unsigned long)s->size);
 	cr_assert_eq(0, sp_stack_destroy(s, NULL));
 }
 
@@ -317,17 +317,17 @@ Test(stack, copy)
 	cr_assert_eq(SP_EINVAL, sp_stack_copy(p, NULL, NULL));
 	cr_assert_eq(SP_EINVAL, sp_stack_copy(NULL, NULL, NULL));
 	cr_assert_eq(0, sp_stack_copy(s, p, NULL));
-	cr_assert_eq((unsigned long)p->size, (unsigned long)s->size, "%lu");
-	cr_assert_eq((unsigned long)p->elem_size, (unsigned long)s->elem_size, "%lu");
+	cr_assert_eq((unsigned long)p->size, (unsigned long)s->size);
+	cr_assert_eq((unsigned long)p->elem_size, (unsigned long)s->elem_size);
 	cr_assert_eq(0, sp_stack_copy(p, s, NULL));
-	cr_assert_eq((unsigned long)p->size, (unsigned long)s->size, "%lu");
-	cr_assert_eq((unsigned long)p->elem_size, (unsigned long)s->elem_size, "%lu");
+	cr_assert_eq((unsigned long)p->size, (unsigned long)s->size);
+	cr_assert_eq((unsigned long)p->elem_size, (unsigned long)s->elem_size);
 	for (i = 0; i < 1000; i++) {
 		cr_assert_eq(0, sp_stack_pushi(s, FRANGE(INT_MIN, INT_MAX)));
 	}
 	cr_assert_eq(0, sp_stack_copy(p, s, NULL));
-	cr_assert_eq((unsigned long)p->size, (unsigned long)s->size, "%lu");
-	cr_assert_eq((unsigned long)p->elem_size, (unsigned long)s->elem_size, "%lu");
+	cr_assert_eq((unsigned long)p->size, (unsigned long)s->size);
+	cr_assert_eq((unsigned long)p->elem_size, (unsigned long)s->elem_size);
 	for (i = 0; i < 1000; i++) {
 		int a, b;
 		a = sp_stack_geti(s, i);
@@ -344,8 +344,8 @@ Test(stack, copy)
 	}
 	cr_assert_eq(SP_EHANDLER, sp_stack_copy(p, s, data_cpy_bad));
 	cr_assert_eq(0, sp_stack_copy(p, s, data_cpy));
-	cr_assert_eq((unsigned long)p->size, (unsigned long)s->size, "%lu");
-	cr_assert_eq((unsigned long)p->elem_size, (unsigned long)s->elem_size, "%lu");
+	cr_assert_eq((unsigned long)p->size, (unsigned long)s->size);
+	cr_assert_eq((unsigned long)p->elem_size, (unsigned long)s->elem_size);
 	for (i = 0; i < 1000; i++) {
 		struct data a, b;
 		cr_assert_eq(0, sp_stack_get(s, i, &a));
@@ -371,7 +371,7 @@ Test(stack, insert)
 		cr_assert_eq(SP_EINVAL, sp_stack_insert(NULL, 0, NULL));
 		cr_assert_eq(SP_EINDEX, sp_stack_insert(s, 1, &a));
 		cr_assert_eq(0, sp_stack_insert(s, 0, &a));
-		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(1LU, (unsigned long)s->size);
 		cr_assert_eq(10, sp_stack_geti(s, 0));
 		cr_assert_eq(0, sp_stack_destroy(s, NULL));
 
@@ -382,7 +382,7 @@ Test(stack, insert)
 			size_t idx = IRANGE(0, i);
 			cr_assert_eq(0, data_init(d + i));
 			cr_assert_eq(0, sp_stack_insert(s, idx, d + i));
-			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size, "%lu");
+			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size);
 			cr_assert_eq(0, sp_stack_get(s, idx, &a));
 			cr_assert_eq(0, data_cmp(&a, d + i));
 		}
@@ -409,7 +409,7 @@ Test(stack, insert)
 			cr_assert_eq(0, sp_stack_insert(s, 3, d + 6));
 			cr_assert_eq(0, sp_stack_peek(s, &a));
 			cr_assert_eq(0, data_cmp(&a, d));
-			cr_assert_eq(7LU, (unsigned long)s->size, "%lu");
+			cr_assert_eq(7LU, (unsigned long)s->size);
 			cr_assert_eq(0, sp_stack_destroy(s, data_dtor));
 		}
 	}
@@ -421,49 +421,49 @@ Test(stack, insert)
 	 * V  - random value snippet
 	 * M  - printf format string
 	 */
-#define test(T, F1, F2, V, M) do {                                                         \
-		T a = (V);                                                                 \
-		T d[1000];                                                                 \
-		s = sp_stack_create(sizeof(T), 1000);                                     \
-		cr_assert_not_null(s);                                                     \
-		cr_assert_eq(SP_EINVAL, F1(NULL, 0, a));                                  \
-		cr_assert_eq(SP_EINDEX, F1(s, 1, a));                                     \
-		cr_assert_eq(0, F1(s, 0, a));                                              \
-		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");                          \
-		cr_assert_eq(a, F2(s, 0), M);                                              \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));                               \
-                                                                                           \
-		s = sp_stack_create(sizeof(T), 1000);                                     \
-		cr_assert_not_null(s);                                                     \
-		for (i = 0; i < 1000; i++) {                                               \
-			size_t idx = IRANGE(0, i);                                         \
-			d[i] = (V);                                                        \
-			cr_assert_eq(0, F1(s, idx, d[i]));                                 \
-			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size, "%lu"); \
-			cr_assert_eq(d[i], F2(s, idx), M);                                 \
-		}                                                                          \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));                               \
-                                                                                           \
-		s = sp_stack_create(sizeof(T), 10);                                       \
-		cr_assert_not_null(s);                                                     \
-		for (i = 0; i < 5; i++) {                                                  \
-			d[i] = (V);                                                        \
-			cr_assert_eq(0, F1(s, i, d[i]));                                   \
-		}                                                                          \
-		for (i = 0; i < 5; i++) {                                                  \
-			cr_assert_eq(d[i], F2(s, i), M);                                   \
-		}                                                                          \
-		d[5] = (V);                                                                \
-		cr_assert_eq(0, F1(s, 1, d[5]));                                           \
-		cr_assert_eq(d[0], F2(s, 0), M);                                           \
-		d[6] = (V);                                                                \
-		cr_assert_eq(0, F1(s, 3, d[6]));                                           \
-		cr_assert_eq(d[0], F2(s, 0), M);                                           \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));                               \
-		s = sp_stack_create(sizeof(T) + 1, 1000);                                 \
-		cr_assert_not_null(s);                                                     \
-		cr_assert_eq(SP_EILLEGAL, F1(s, 0, (V)));                                 \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));                               \
+#define test(T, F1, F2, V, M) do {                                                          \
+		T a = (V);                                                                  \
+		T d[1000];                                                                  \
+		s = sp_stack_create(sizeof(T), 1000);                                       \
+		cr_assert_not_null(s);                                                      \
+		cr_assert_eq(SP_EINVAL, F1(NULL, 0, a));                                    \
+		cr_assert_eq(SP_EINDEX, F1(s, 1, a));                                       \
+		cr_assert_eq(0, F1(s, 0, a));                                               \
+		cr_assert_eq(1LU, (unsigned long)s->size);                                  \
+		cr_assert_eq(a, F2(s, 0));                                                  \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));                                 \
+                                                                                            \
+		s = sp_stack_create(sizeof(T), 1000);                                       \
+		cr_assert_not_null(s);                                                      \
+		for (i = 0; i < 1000; i++) {                                                \
+			size_t idx = IRANGE(0, i);                                          \
+			d[i] = (V);                                                         \
+			cr_assert_eq(0, F1(s, idx, d[i]));                                  \
+			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size);         \
+			cr_assert_eq(d[i], F2(s, idx));                                     \
+		}                                                                           \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));                                 \
+                                                                                            \
+		s = sp_stack_create(sizeof(T), 10);                                         \
+		cr_assert_not_null(s);                                                      \
+		for (i = 0; i < 5; i++) {                                                   \
+			d[i] = (V);                                                         \
+			cr_assert_eq(0, F1(s, i, d[i]));                                    \
+		}                                                                           \
+		for (i = 0; i < 5; i++) {                                                   \
+			cr_assert_eq(d[i], F2(s, i));                                       \
+		}                                                                           \
+		d[5] = (V);                                                                 \
+		cr_assert_eq(0, F1(s, 1, d[5]));                                            \
+		cr_assert_eq(d[0], F2(s, 0));                                               \
+		d[6] = (V);                                                                 \
+		cr_assert_eq(0, F1(s, 3, d[6]));                                            \
+		cr_assert_eq(d[0], F2(s, 0));                                               \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));                                 \
+		s = sp_stack_create(sizeof(T) + 1, 1000);                                   \
+		cr_assert_not_null(s);                                                      \
+		cr_assert_eq(SP_EILLEGAL, F1(s, 0, (V)));                                   \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));                                 \
 	} while (0)
 	test(char          , sp_stack_insertc , sp_stack_getc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , sp_stack_inserts , sp_stack_gets , IRANGE(1, SHRT_MAX) , "%hd");
@@ -495,7 +495,7 @@ Test(stack, qinsert)
 		cr_assert_eq(SP_EINVAL, sp_stack_qinsert(NULL, 0, NULL));
 		cr_assert_eq(SP_EINDEX, sp_stack_qinsert(s, 1, &a));
 		cr_assert_eq(0, sp_stack_qinsert(s, 0, &a));
-		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(1LU, (unsigned long)s->size);
 		cr_assert_eq(10, sp_stack_geti(s, 0));
 		cr_assert_eq(0, sp_stack_destroy(s, NULL));
 
@@ -506,7 +506,7 @@ Test(stack, qinsert)
 			size_t idx = IRANGE(0, i);
 			cr_assert_eq(0, data_init(d + i));
 			cr_assert_eq(0, sp_stack_qinsert(s, idx, d + i));
-			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size, "%lu");
+			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size);
 			cr_assert_eq(0, sp_stack_get(s, idx, &a));
 			cr_assert_eq(0, data_cmp(&a, d + i));
 		}
@@ -533,7 +533,7 @@ Test(stack, qinsert)
 			cr_assert_eq(0, sp_stack_qinsert(s, 3, d + 6));
 			cr_assert_eq(0, sp_stack_peek(s, &a));
 			cr_assert_eq(0, data_cmp(&a, d + 2));
-			cr_assert_eq(7LU, (unsigned long)s->size, "%lu");
+			cr_assert_eq(7LU, (unsigned long)s->size);
 			cr_assert_eq(0, sp_stack_destroy(s, data_dtor));
 		}
 	}
@@ -545,49 +545,49 @@ Test(stack, qinsert)
 	 * V  - random value snippet
 	 * M  - printf format string
 	 */
-#define test(T, F1, F2, V, M) do {                                                         \
-		T a = (V);                                                                 \
-		T d[1000];                                                                 \
-		s = sp_stack_create(sizeof(T), 1000);                                     \
-		cr_assert_not_null(s);                                                     \
-		cr_assert_eq(SP_EINVAL, F1(NULL, 0, a));                                  \
-		cr_assert_eq(SP_EINDEX, F1(s, 1, a));                                     \
-		cr_assert_eq(0, F1(s, 0, a));                                              \
-		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");                          \
-		cr_assert_eq(a, F2(s, 0), M);                                              \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));                               \
-                                                                                           \
-		s = sp_stack_create(sizeof(T), 1000);                                     \
-		cr_assert_not_null(s);                                                     \
-		for (i = 0; i < 1000; i++) {                                               \
-			size_t idx = IRANGE(0, i);                                         \
-			d[i] = (V);                                                        \
-			cr_assert_eq(0, F1(s, idx, d[i]));                                 \
-			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size, "%lu"); \
-			cr_assert_eq(d[i], F2(s, idx), M);                                 \
-		}                                                                          \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));                               \
-                                                                                           \
-		s = sp_stack_create(sizeof(T), 10);                                       \
-		cr_assert_not_null(s);                                                     \
-		for (i = 0; i < 5; i++) {                                                  \
-			d[i] = (V);                                                        \
-			cr_assert_eq(0, F1(s, i, d[i]));                                   \
-		}                                                                          \
-		for (i = 0; i < 5; i++) {                                                  \
-			cr_assert_eq(d[(8 - i) % 5], F2(s, i), M);                         \
-		}                                                                          \
-		d[5] = (V);                                                                \
-		cr_assert_eq(0, F1(s, 1, d[5]));                                           \
-		cr_assert_eq(d[3], F2(s, 0), M);                                           \
-		d[6] = (V);                                                                \
-		cr_assert_eq(0, F1(s, 3, d[6]));                                           \
-		cr_assert_eq(d[2], F2(s, 0), M);                                           \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));                               \
-		s = sp_stack_create(sizeof(T) + 1, 1000);                                 \
-		cr_assert_not_null(s);                                                     \
-		cr_assert_eq(SP_EILLEGAL, F1(s, 0, (V)));                                 \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));                               \
+#define test(T, F1, F2, V, M) do {                                                          \
+		T a = (V);                                                                  \
+		T d[1000];                                                                  \
+		s = sp_stack_create(sizeof(T), 1000);                                       \
+		cr_assert_not_null(s);                                                      \
+		cr_assert_eq(SP_EINVAL, F1(NULL, 0, a));                                    \
+		cr_assert_eq(SP_EINDEX, F1(s, 1, a));                                       \
+		cr_assert_eq(0, F1(s, 0, a));                                               \
+		cr_assert_eq(1LU, (unsigned long)s->size);                                  \
+		cr_assert_eq(a, F2(s, 0));                                                  \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));                                 \
+                                                                                            \
+		s = sp_stack_create(sizeof(T), 1000);                                       \
+		cr_assert_not_null(s);                                                      \
+		for (i = 0; i < 1000; i++) {                                                \
+			size_t idx = IRANGE(0, i);                                          \
+			d[i] = (V);                                                         \
+			cr_assert_eq(0, F1(s, idx, d[i]));                                  \
+			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size);         \
+			cr_assert_eq(d[i], F2(s, idx));                                     \
+		}                                                                           \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));                                 \
+                                                                                            \
+		s = sp_stack_create(sizeof(T), 10);                                         \
+		cr_assert_not_null(s);                                                      \
+		for (i = 0; i < 5; i++) {                                                   \
+			d[i] = (V);                                                         \
+			cr_assert_eq(0, F1(s, i, d[i]));                                    \
+		}                                                                           \
+		for (i = 0; i < 5; i++) {                                                   \
+			cr_assert_eq(d[(8 - i) % 5], F2(s, i));                             \
+		}                                                                           \
+		d[5] = (V);                                                                 \
+		cr_assert_eq(0, F1(s, 1, d[5]));                                            \
+		cr_assert_eq(d[3], F2(s, 0));                                               \
+		d[6] = (V);                                                                 \
+		cr_assert_eq(0, F1(s, 3, d[6]));                                            \
+		cr_assert_eq(d[2], F2(s, 0));                                               \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));                                 \
+		s = sp_stack_create(sizeof(T) + 1, 1000);                                   \
+		cr_assert_not_null(s);                                                      \
+		cr_assert_eq(SP_EILLEGAL, F1(s, 0, (V)));                                   \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));                                 \
 	} while (0)
 	test(char          , sp_stack_qinsertc , sp_stack_getc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , sp_stack_qinserts , sp_stack_gets , IRANGE(1, SHRT_MAX) , "%hd");
@@ -620,9 +620,9 @@ Test(stack, remove)
 		cr_assert_eq(SP_EINVAL, sp_stack_remove(NULL, 0, &a));
 		cr_assert_eq(SP_EINVAL, sp_stack_remove(NULL, 0, NULL));
 		cr_assert_eq(SP_EINDEX, sp_stack_remove(s, 1, &a));
-		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(1LU, (unsigned long)s->size);
 		cr_assert_eq(0, sp_stack_remove(s, 0, NULL));
-		cr_assert_eq(0LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(0LU, (unsigned long)s->size);
 		cr_assert_eq(0, sp_stack_destroy(s, NULL));
 		cr_assert_eq(0, data_dtor(&a));
 
@@ -656,13 +656,13 @@ Test(stack, remove)
 		}
 		cr_assert_eq(0, sp_stack_remove(s, 3, &a));
 		cr_assert_eq(0, data_cmp(d + 4, &a));
-		cr_assert_eq(7LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(7LU, (unsigned long)s->size);
 		cr_assert_eq(0, sp_stack_remove(s, 0, &a));
 		cr_assert_eq(0, data_cmp(d + 7, &a));
-		cr_assert_eq(6LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(6LU, (unsigned long)s->size);
 		cr_assert_eq(0, sp_stack_remove(s, 3, &a));
 		cr_assert_eq(0, data_cmp(d + 2, &a));
-		cr_assert_eq(5LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(5LU, (unsigned long)s->size);
 		cr_assert_eq(0, sp_stack_destroy(s, NULL));
 		for (i = 0; i < 100; i++) {
 			cr_assert_eq(0, data_dtor(d + i));
@@ -676,60 +676,60 @@ Test(stack, remove)
 	 * V  - random value snippet
 	 * M  - printf format string
 	 */
-#define test(T, F1, F2, V, M) do {                                                 \
-		T a = (V), z = 0;                                                  \
-		T d[100];                                                          \
-		s = sp_stack_create(sizeof(T), 1000);                             \
-		cr_assert_not_null(s);                                             \
-		cr_assert_eq(z, F1(s, 0), M);                                      \
-		cr_assert_eq(0, F2(s, a));                                         \
-		cr_assert_eq(z, F1(NULL, 0), M);                                   \
-		cr_assert_eq(z, F1(s, 1), M);                                      \
-		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");                  \
-		cr_assert_eq(a, F1(s, 0), M);                                      \
-		cr_assert_eq(0LU, (unsigned long)s->size, "%lu");                  \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));                       \
-                                                                                   \
-		s = sp_stack_create(sizeof(T), 100);                              \
-		cr_assert_not_null(s);                                             \
-		for (i = 0; i < 100; i++) {                                        \
-			d[i] = (V);                                                \
-			cr_assert_eq(0, F2(s, d[i]));                              \
-		}                                                                  \
-		for (i = 0; i < 100; i++) {                                        \
-			T a;                                                       \
-			size_t idx = IRANGE(0, s->size - 1), j;                    \
-			int found = 0;                                             \
-			cr_assert_neq(0, (a = F1(s, idx)));                        \
-			for (j = 0; j < 100; j++) {                                \
+#define test(T, F1, F2, V, M) do {                                                  \
+		T a = (V), z = 0;                                                   \
+		T d[100];                                                           \
+		s = sp_stack_create(sizeof(T), 1000);                               \
+		cr_assert_not_null(s);                                              \
+		cr_assert_eq(z, F1(s, 0));                                          \
+		cr_assert_eq(0, F2(s, a));                                          \
+		cr_assert_eq(z, F1(NULL, 0));                                       \
+		cr_assert_eq(z, F1(s, 1));                                          \
+		cr_assert_eq(1LU, (unsigned long)s->size);                          \
+		cr_assert_eq(a, F1(s, 0));                                          \
+		cr_assert_eq(0LU, (unsigned long)s->size);                          \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));                         \
+                                                                                    \
+		s = sp_stack_create(sizeof(T), 100);                                \
+		cr_assert_not_null(s);                                              \
+		for (i = 0; i < 100; i++) {                                         \
+			d[i] = (V);                                                 \
+			cr_assert_eq(0, F2(s, d[i]));                               \
+		}                                                                   \
+		for (i = 0; i < 100; i++) {                                         \
+			T a;                                                        \
+			size_t idx = IRANGE(0, s->size - 1), j;                     \
+			int found = 0;                                              \
+			cr_assert_neq(0, (a = F1(s, idx)));                         \
+			for (j = 0; j < 100; j++) {                                 \
 				/* Lazy and slow way to check, but on average it's
-				 * enough */                                       \
-				if (a == d[j]) {                                   \
-					found = 1;                                 \
-					break;                                     \
-				}                                                  \
-			}                                                          \
-			cr_assert_eq(1, found);                                    \
-		}                                                                  \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));                       \
-                                                                                   \
-		s = sp_stack_create(sizeof(T), 10);                               \
-		cr_assert_not_null(s);                                             \
-		for (i = 0; i < 8; i++) {                                          \
-			cr_assert_eq(0, F2(s, d[i]));                              \
-		}                                                                  \
-		cr_assert_eq(d[4], F1(s, 3), M);                                   \
-		cr_assert_eq(7LU, (unsigned long)s->size, "%lu");                  \
-		cr_assert_eq(d[7], F1(s, 0), M);                                   \
-		cr_assert_eq(6LU, (unsigned long)s->size, "%lu");                  \
-		cr_assert_eq(d[2], F1(s, 3), M);                                   \
-		cr_assert_eq(5LU, (unsigned long)s->size, "%lu");                  \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));                       \
-		s = sp_stack_create(sizeof(T) + 1, 1000);                         \
-		cr_assert_not_null(s);                                             \
-		s->size = 1;                                                       \
-		cr_assert_eq(z, F1(s, 0), M);                                      \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));                       \
+				 * enough */                                        \
+				if (a == d[j]) {                                    \
+					found = 1;                                  \
+					break;                                      \
+				}                                                   \
+			}                                                           \
+			cr_assert_eq(1, found);                                     \
+		}                                                                   \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));                         \
+                                                                                    \
+		s = sp_stack_create(sizeof(T), 10);                                 \
+		cr_assert_not_null(s);                                              \
+		for (i = 0; i < 8; i++) {                                           \
+			cr_assert_eq(0, F2(s, d[i]));                               \
+		}                                                                   \
+		cr_assert_eq(d[4], F1(s, 3));                                       \
+		cr_assert_eq(7LU, (unsigned long)s->size);                          \
+		cr_assert_eq(d[7], F1(s, 0));                                       \
+		cr_assert_eq(6LU, (unsigned long)s->size);                          \
+		cr_assert_eq(d[2], F1(s, 3));                                       \
+		cr_assert_eq(5LU, (unsigned long)s->size);                          \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));                         \
+		s = sp_stack_create(sizeof(T) + 1, 1000);                           \
+		cr_assert_not_null(s);                                              \
+		s->size = 1;                                                        \
+		cr_assert_eq(z, F1(s, 0));                                          \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));                         \
 	} while (0)
 	test(char          , sp_stack_removec , sp_stack_pushc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , sp_stack_removes , sp_stack_pushs , IRANGE(1, SHRT_MAX) , "%hd");
@@ -762,9 +762,9 @@ Test(stack, qremove)
 		cr_assert_eq(SP_EINVAL, sp_stack_qremove(NULL, 0, &a));
 		cr_assert_eq(SP_EINVAL, sp_stack_qremove(NULL, 0, NULL));
 		cr_assert_eq(SP_EINDEX, sp_stack_qremove(s, 1, &a));
-		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(1LU, (unsigned long)s->size);
 		cr_assert_eq(0, sp_stack_qremove(s, 0, NULL));
-		cr_assert_eq(0LU, (unsigned long)s->size, "%lu");
+		cr_assert_eq(0LU, (unsigned long)s->size);
 		cr_assert_eq(0, sp_stack_destroy(s, NULL));
 		cr_assert_eq(0, data_dtor(&a));
 
@@ -820,60 +820,60 @@ Test(stack, qremove)
 	 * V  - random value snippet
 	 * M  - printf format string
 	 */
-#define test(T, F1, F2, F3, V, M) do {                                             \
-		T a = (V), z = 0;                                                  \
-		T d[100];                                                          \
-		s = sp_stack_create(sizeof(T), 1000);                             \
-		cr_assert_not_null(s);                                             \
-		cr_assert_eq(z, F1(s, 0), M);                                      \
-		cr_assert_eq(0, F2(s, a));                                         \
-		cr_assert_eq(z, F1(NULL, 0), M);                                   \
-		cr_assert_eq(z, F1(s, 1), M);                                      \
-		cr_assert_eq(1LU, (unsigned long)s->size, "%lu");                  \
-		cr_assert_eq(a, F1(s, 0), M);                                      \
-		cr_assert_eq(0LU, (unsigned long)s->size, "%lu");                  \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));                       \
-                                                                                   \
-		s = sp_stack_create(sizeof(T), 100);                              \
-		cr_assert_not_null(s);                                             \
-		for (i = 0; i < 100; i++) {                                        \
-			d[i] = (V);                                                \
-			cr_assert_eq(0, F2(s, d[i]));                              \
-		}                                                                  \
-		for (i = 0; i < 100; i++) {                                        \
-			T a;                                                       \
-			size_t idx = IRANGE(0, s->size - 1), j;                    \
-			int found = 0;                                             \
-			cr_assert_neq(0, (a = F1(s, idx)));                        \
-			for (j = 0; j < 100; j++) {                                \
+#define test(T, F1, F2, F3, V, M) do {                                              \
+		T a = (V), z = 0;                                                   \
+		T d[100];                                                           \
+		s = sp_stack_create(sizeof(T), 1000);                               \
+		cr_assert_not_null(s);                                              \
+		cr_assert_eq(z, F1(s, 0));                                          \
+		cr_assert_eq(0, F2(s, a));                                          \
+		cr_assert_eq(z, F1(NULL, 0));                                       \
+		cr_assert_eq(z, F1(s, 1));                                          \
+		cr_assert_eq(1LU, (unsigned long)s->size);                          \
+		cr_assert_eq(a, F1(s, 0));                                          \
+		cr_assert_eq(0LU, (unsigned long)s->size);                          \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));                         \
+                                                                                    \
+		s = sp_stack_create(sizeof(T), 100);                                \
+		cr_assert_not_null(s);                                              \
+		for (i = 0; i < 100; i++) {                                         \
+			d[i] = (V);                                                 \
+			cr_assert_eq(0, F2(s, d[i]));                               \
+		}                                                                   \
+		for (i = 0; i < 100; i++) {                                         \
+			T a;                                                        \
+			size_t idx = IRANGE(0, s->size - 1), j;                     \
+			int found = 0;                                              \
+			cr_assert_neq(0, (a = F1(s, idx)));                         \
+			for (j = 0; j < 100; j++) {                                 \
 				/* Lazy and slow way to check, but on average it's
-				 * enough */                                       \
-				if (a == d[j]) {                                   \
-					found = 1;                                 \
-					break;                                     \
-				}                                                  \
-			}                                                          \
-			cr_assert_eq(1, found);                                    \
-		}                                                                  \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));                       \
-                                                                                   \
-		s = sp_stack_create(sizeof(T), 10);                               \
-		cr_assert_not_null(s);                                             \
-		for (i = 0; i < 8; i++) {                                          \
-			cr_assert_eq(0, F2(s, d[i]));                              \
-		}                                                                  \
-		cr_assert_eq(d[4], F1(s, 3), M);                                   \
-		cr_assert_eq(d[3], F3(s, 3), M);                                   \
-		cr_assert_eq(d[6], F1(s, 0), M);                                   \
-		cr_assert_eq(d[5], F3(s, 0), M);                                   \
-		cr_assert_eq(d[2], F1(s, 3), M);                                   \
-		cr_assert_eq(d[1], F3(s, 3), M);                                   \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));                       \
-		s = sp_stack_create(sizeof(T) + 1, 1000);                         \
-		cr_assert_not_null(s);                                             \
-		s->size = 1;                                                       \
-		cr_assert_eq(z, F1(s, 0), M);                                      \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));                       \
+				 * enough */                                        \
+				if (a == d[j]) {                                    \
+					found = 1;                                  \
+					break;                                      \
+				}                                                   \
+			}                                                           \
+			cr_assert_eq(1, found);                                     \
+		}                                                                   \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));                         \
+                                                                                    \
+		s = sp_stack_create(sizeof(T), 10);                                 \
+		cr_assert_not_null(s);                                              \
+		for (i = 0; i < 8; i++) {                                           \
+			cr_assert_eq(0, F2(s, d[i]));                               \
+		}                                                                   \
+		cr_assert_eq(d[4], F1(s, 3));                                       \
+		cr_assert_eq(d[3], F3(s, 3));                                       \
+		cr_assert_eq(d[6], F1(s, 0));                                       \
+		cr_assert_eq(d[5], F3(s, 0));                                       \
+		cr_assert_eq(d[2], F1(s, 3));                                       \
+		cr_assert_eq(d[1], F3(s, 3));                                       \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));                         \
+		s = sp_stack_create(sizeof(T) + 1, 1000);                           \
+		cr_assert_not_null(s);                                              \
+		s->size = 1;                                                        \
+		cr_assert_eq(z, F1(s, 0));                                          \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));                         \
 	} while (0)
 	test(char          , sp_stack_qremovec , sp_stack_pushc , sp_stack_getc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , sp_stack_qremoves , sp_stack_pushs , sp_stack_gets , IRANGE(1, SHRT_MAX) , "%hd");
@@ -934,24 +934,24 @@ Test(stack, get)
 		unsigned i;                                    \
 		T a = (V), z = 0;                              \
 		T d[1000];                                     \
-		s = sp_stack_create(sizeof(T), 1000);         \
+		s = sp_stack_create(sizeof(T), 1000);          \
 		cr_assert_not_null(s);                         \
-		cr_assert_eq(z, F1(s, 0), M);                  \
+		cr_assert_eq(z, F1(s, 0));                     \
 		cr_assert_eq(0, F2(s, a));                     \
-		cr_assert_eq(z, F1(NULL, 0), M);               \
-		cr_assert_eq(z, F1(s, 1), M);                  \
-		cr_assert_eq(a, F1(s, 0), M);                  \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));   \
-		s = sp_stack_create(sizeof(T), 1000);         \
+		cr_assert_eq(z, F1(NULL, 0));                  \
+		cr_assert_eq(z, F1(s, 1));                     \
+		cr_assert_eq(a, F1(s, 0));                     \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));    \
+		s = sp_stack_create(sizeof(T), 1000);          \
 		cr_assert_not_null(s);                         \
 		for (i = 0; i < 1000; i++) {                   \
 			d[i] = (V);                            \
 			cr_assert_eq(0, F2(s, d[i]));          \
 		}                                              \
 		for (i = 0; i < 1000; i++) {                   \
-			cr_assert_eq(d[999 - i], F1(s, i), M); \
+			cr_assert_eq(d[999 - i], F1(s, i));    \
 		}                                              \
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));   \
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));    \
 	} while (0)
 	test(char          , sp_stack_getc , sp_stack_pushc , IRANGE(1, CHAR_MAX) , "%hd");
 	test(short         , sp_stack_gets , sp_stack_pushs , IRANGE(1, SHRT_MAX) , "%hd");
@@ -1013,30 +1013,30 @@ Test(stack, set)
 	 * V  - random value snippet
 	 * M  - printf format string
 	 */
-#define test(T, F1, F2, F3, V, M) do {                       \
-		unsigned i;                                  \
-		T a = (V);                                   \
+#define test(T, F1, F2, F3, V, M) do {                      \
+		unsigned i;                                 \
+		T a = (V);                                  \
 		s = sp_stack_create(sizeof(T), 1000);       \
-		cr_assert_not_null(s);                       \
+		cr_assert_not_null(s);                      \
 		cr_assert_eq(SP_EINDEX, F1(s, 0, a));       \
-		cr_assert_eq(0, F2(s, (V)));                 \
+		cr_assert_eq(0, F2(s, (V)));                \
 		cr_assert_eq(SP_EINVAL, F1(NULL, 0, a));    \
 		cr_assert_eq(SP_EINDEX, F1(s, 1, a));       \
-		cr_assert_eq(0, F1(s, 0, a));                \
-		cr_assert_eq(a, F3(s, 0), M);                \
+		cr_assert_eq(0, F1(s, 0, a));               \
+		cr_assert_eq(a, F3(s, 0));                  \
 		cr_assert_eq(0, sp_stack_clear(s, NULL));   \
-		for (i = 0; i < 1000; i++) {                 \
-			cr_assert_eq(0, F2(s, (V)));         \
-		}                                            \
-		for (i = 0; i < 1000; i++) {                 \
-			T b = (V);                           \
-			cr_assert_eq(0, F1(s, i, b));        \
-			cr_assert_eq(b, F3(s, i), M);        \
-		}                                            \
+		for (i = 0; i < 1000; i++) {                \
+			cr_assert_eq(0, F2(s, (V)));        \
+		}                                           \
+		for (i = 0; i < 1000; i++) {                \
+			T b = (V);                          \
+			cr_assert_eq(0, F1(s, i, b));       \
+			cr_assert_eq(b, F3(s, i));          \
+		}                                           \
 		cr_assert_eq(0, sp_stack_destroy(s, NULL)); \
 		s = sp_stack_create(sizeof(T) + 1, 1000);   \
-		cr_assert_not_null(s);                       \
-		s->size = 1;                                 \
+		cr_assert_not_null(s);                      \
+		s->size = 1;                                \
 		cr_assert_eq(SP_EILLEGAL, F1(s, 0, (V)));   \
 		cr_assert_eq(0, sp_stack_destroy(s, NULL)); \
 	} while (0)
@@ -1076,14 +1076,14 @@ Test(stack, print)
 	 * A  - 1st value
 	 * B  - 2nd value
 	 */
-#define test(T, F1, F2, A, B)                                \
-	do {                                                 \
-		T a = A, b = B;                              \
+#define test(T, F1, F2, A, B)                               \
+	do {                                                \
+		T a = A, b = B;                             \
 		s = sp_stack_create(sizeof(T), 30);         \
-		cr_assert_eq(0, F1(s, a));                   \
-		cr_assert_eq(0, F1(s, b));                   \
+		cr_assert_eq(0, F1(s, a));                  \
+		cr_assert_eq(0, F1(s, b));                  \
 		cr_assert_eq(SP_EINVAL, F2(NULL));          \
-		cr_assert_eq(0, F2(s));                      \
+		cr_assert_eq(0, F2(s));                     \
 		cr_assert_eq(0, sp_stack_destroy(s, NULL)); \
 		s = sp_stack_create(sizeof(T) + 1, 30);     \
 		cr_assert_eq(SP_EILLEGAL, F2(s));           \
