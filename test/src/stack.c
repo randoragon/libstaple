@@ -22,6 +22,7 @@
 #include <criterion/criterion.h>
 #include <limits.h>
 #include <float.h>
+#include <string.h>
 
 /* Make testing for size overflow feasible */
 #ifdef SIZE_MAX
@@ -145,6 +146,60 @@ Test(stack, push)
 	test(double        , sp_stack_pushd , sp_stack_getd , FRANGE(DBL_MIN  , DBL_MAX)  , "%f");
 	test(long double   , sp_stack_pushld, sp_stack_getld, FRANGE(LDBL_MIN , LDBL_MAX) , "%Lf");
 #undef test
+
+	{ /* Suffixed form - strings */
+		unsigned i;
+		s = sp_stack_create(sizeof(char*), 1000);
+		cr_assert_not_null(s);
+		cr_assert_eq(SP_EINVAL, sp_stack_pushstr(s, NULL));
+		cr_assert_eq(SP_EINVAL, sp_stack_pushstr(NULL, "test"));
+		cr_assert_eq(0LU, (unsigned long)s->size);
+		cr_assert_eq(0, sp_stack_pushstr(s, "test"));
+		cr_assert_eq(1LU, (unsigned long)s->size);
+		cr_assert_eq(0, sp_stack_pushstr(s, "another test"));
+		cr_assert_eq(2LU, (unsigned long)s->size);
+		cr_assert_eq(0, sp_stack_clear(s, sp_free));
+		for (i = 0; i < SIZE_MAX / sizeof(char*); i++) {
+			cr_assert_eq(0, sp_stack_pushstr(s, "yet another test"));
+			cr_assert_eq(0, strcmp("yet another test", sp_stack_getstr(s, 0)));
+		}
+		cr_assert_eq(SP_ERANGE, sp_stack_pushstr(s, "size_t overflow"));
+		cr_assert_eq(0, sp_stack_clear(s, sp_free));
+		char too_long[SIZE_MAX];
+		for (i = 0; i < SIZE_MAX; i++)
+			too_long[i] = 'a';
+		too_long[SIZE_MAX] = '\0';
+		cr_assert_eq(SP_ERANGE, sp_stack_pushstr(s, too_long));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+		s = sp_stack_create(sizeof(char*) + 1, 1);
+		cr_assert_not_null(s);
+		cr_assert_eq(SP_EILLEGAL, sp_stack_pushstr(s, "incompatible elem_size"));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		/* substrings (strn) */
+		s = sp_stack_create(sizeof(char*), 1000);
+		cr_assert_not_null(s);
+		cr_assert_eq(SP_EINVAL, sp_stack_pushstrn(s, NULL, 0));
+		cr_assert_eq(SP_EINVAL, sp_stack_pushstrn(NULL, "test", 2));
+		cr_assert_eq(0LU, (unsigned long)s->size);
+		cr_assert_eq(0, sp_stack_pushstrn(s, "test", 2));
+		cr_assert_eq(1LU, (unsigned long)s->size);
+		cr_assert_eq(0, sp_stack_pushstrn(s, "another test", 7));
+		cr_assert_eq(2LU, (unsigned long)s->size);
+		cr_assert_eq(0, sp_stack_clear(s, sp_free));
+		for (i = 0; i < SIZE_MAX / sizeof(char*); i++) {
+			cr_assert_eq(0, sp_stack_pushstrn(s, "yet another test", 3));
+			cr_assert_eq(0, strcmp("yet", sp_stack_getstr(s, 0)));
+		}
+		cr_assert_eq(SP_ERANGE, sp_stack_pushstrn(s, "size_t overflow", 6));
+		cr_assert_eq(0, sp_stack_clear(s, sp_free));
+		cr_assert_eq(SP_ERANGE, sp_stack_pushstrn(s, "too long", SIZE_MAX));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+		s = sp_stack_create(sizeof(char*) + 1, 1);
+		cr_assert_not_null(s);
+		cr_assert_eq(SP_EILLEGAL, sp_stack_pushstrn(s, "incompatible elem_size", 12));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+	}
 }
 
 Test(stack, peek)
@@ -201,6 +256,22 @@ Test(stack, peek)
 	test(double        , sp_stack_peekd , sp_stack_pushd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , sp_stack_peekld, sp_stack_pushld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
+
+	{ /* Suffixed form - strings */
+		const char *a = "testing";
+		s = sp_stack_create(sizeof(char*), 2);
+		cr_assert_not_null(s);
+		cr_assert_eq(0, sp_stack_peekstr(s));
+		cr_assert_eq(0, sp_stack_peekstr(NULL));
+		cr_assert_eq(0, sp_stack_pushstr(s, a));
+		cr_assert_eq(0, strcmp(a, sp_stack_peekstr(s)));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+		s = sp_stack_create(sizeof(char*) + 1, 1);
+		cr_assert_not_null(s);
+		s->size = 1;
+		cr_assert_eq(0, sp_stack_peekstr(s));
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));
+	}
 }
 
 Test(stack, pop)
@@ -260,6 +331,24 @@ Test(stack, pop)
 	test(double        , sp_stack_popd , sp_stack_pushd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , sp_stack_popld, sp_stack_pushld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
+
+	{ /* Suffixed form - strings */
+		const char *a = "test string";
+		s = sp_stack_create(sizeof(char*), 2);
+		cr_assert_not_null(s);
+		cr_assert_eq(NULL, sp_stack_popstr(s));
+		cr_assert_eq(NULL, sp_stack_popstr(NULL));
+		cr_assert_eq(0, sp_stack_pushstr(s, a));
+		cr_assert_eq(1LU, (unsigned long)s->size);
+		cr_assert_eq(0, strcmp(a, sp_stack_popstr(s)));
+		cr_assert_eq(0LU, (unsigned long)s->size);
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+		s = sp_stack_create(sizeof(char*) + 1, 1);
+		cr_assert_not_null(s);
+		s->size = 1;
+		cr_assert_eq(NULL, sp_stack_popstr(s));
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));
+	}
 }
 
 Test(stack, clear)
@@ -478,6 +567,116 @@ Test(stack, insert)
 	test(double        , sp_stack_insertd , sp_stack_getd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , sp_stack_insertld, sp_stack_getld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
+
+	{ /* Suffixed form - strings */
+		char a[25] = " test string";
+		char d[1000][25];
+		s = sp_stack_create(sizeof(char*), 1000);
+		cr_assert_not_null(s);
+		cr_assert_eq(SP_EINVAL, sp_stack_insertstr(NULL, 0, a));
+		cr_assert_eq(SP_EINVAL, sp_stack_insertstr(s, 0, NULL));
+		cr_assert_eq(SP_EINDEX, sp_stack_insertstr(s, 1, a));
+		cr_assert_eq(0, sp_stack_insertstr(s, 0, a));
+		cr_assert_eq(1LU, (unsigned long)s->size);
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 1000);
+		cr_assert_not_null(s);
+		for (i = 0; i < 1000; i++) {
+			size_t idx = IRANGE(0, i);
+			a[0] = IRANGE(' ', '~');
+			strcpy(d[i], a);
+			cr_assert_eq(0, sp_stack_insertstr(s, idx, d[i]));
+			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size);
+			cr_assert_eq(0, strcmp(d[i], sp_stack_getstr(s, idx)));
+		}
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 1000);
+		for (i = 0; i < SIZE_MAX / sizeof(char*); i++) {
+			cr_assert_eq(0, sp_stack_insertstr(s, 0, a));
+			cr_assert_eq(0, strcmp(a, sp_stack_getstr(s, 0)));
+		}
+		cr_assert_eq(SP_ERANGE, sp_stack_insertstr(s, 0, a));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 1);
+		char too_long[SIZE_MAX];
+		for (i = 0; i < SIZE_MAX; i++)
+			too_long[i] = 'a';
+		too_long[SIZE_MAX] = '\0';
+		cr_assert_eq(SP_ERANGE, sp_stack_insertstr(s, 0, too_long));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 10);
+		cr_assert_not_null(s);
+		for (i = 0; i < 5; i++)
+			cr_assert_eq(0, sp_stack_insertstr(s, i, d[i]));
+		for (i = 0; i < 5; i++)
+			cr_assert_eq(0, strcmp(d[i], sp_stack_getstr(s, i)));
+		cr_assert_eq(0, sp_stack_insertstr(s, 1, d[5]));
+		cr_assert_eq(0, strcmp(d[0], sp_stack_getstr(s, 0)));
+		cr_assert_eq(0, sp_stack_insertstr(s, 3, d[6]));
+		cr_assert_eq(0, strcmp(d[0], sp_stack_getstr(s, 0)));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+		s = sp_stack_create(sizeof(char*) + 1, 1000);
+		cr_assert_not_null(s);
+		cr_assert_eq(SP_EILLEGAL, sp_stack_insertstr(s, 0, "test string"));
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));
+
+		/* substrings (strn) */
+		s = sp_stack_create(sizeof(char*), 1000);
+		cr_assert_not_null(s);
+		cr_assert_eq(SP_EINVAL, sp_stack_insertstrn(NULL, 0, "test string", 5));
+		cr_assert_eq(SP_EINVAL, sp_stack_insertstrn(s, 0, NULL, 5));
+		cr_assert_eq(SP_EINDEX, sp_stack_insertstrn(s, 1, "another test", 3));
+		cr_assert_eq(0, sp_stack_insertstrn(s, 0, "yet another test", 11));
+		cr_assert_eq(1LU, (unsigned long)s->size);
+		cr_assert_eq(0, sp_stack_insertstrn(s, 0, "one more", 3));
+		cr_assert_eq(2LU, (unsigned long)s->size);
+		cr_assert_eq(0, sp_stack_insertstrn(s, 0, "last test", 0));
+		cr_assert_eq(3LU, (unsigned long)s->size);
+		cr_assert_eq(0, strcmp("", sp_stack_getstr(s, 0)));
+		cr_assert_eq(0, strcmp("one", sp_stack_getstr(s, 1)));
+		cr_assert_eq(0, strcmp("yet another", sp_stack_getstr(s, 2)));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 1000);
+		cr_assert_not_null(s);
+		for (i = 0; i < 1000; i++) {
+			size_t idx = IRANGE(0, i);
+			a[0] = IRANGE(' ', '~');
+			strcpy(d[i], a);
+			cr_assert_eq(0, sp_stack_insertstrn(s, idx, d[i], 24));
+			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size);
+			cr_assert_eq(0, strcmp(d[i], sp_stack_getstr(s, idx)));
+		}
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 1000);
+		for (i = 0; i < SIZE_MAX / sizeof(char*); i++) {
+			cr_assert_eq(0, sp_stack_insertstrn(s, 0, "test", 3));
+			cr_assert_eq(0, strcmp("tes", sp_stack_getstr(s, 0)));
+		}
+		cr_assert_eq(SP_ERANGE, sp_stack_insertstrn(s, 0, "test", 3));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 10);
+		cr_assert_not_null(s);
+		for (i = 0; i < 5; i++)
+			cr_assert_eq(0, sp_stack_insertstrn(s, i, d[i], 24));
+		for (i = 0; i < 5; i++)
+			cr_assert_eq(0, strcmp(d[i], sp_stack_getstr(s, i)));
+		cr_assert_eq(0, sp_stack_insertstrn(s, 1, d[5], 24));
+		cr_assert_eq(0, strcmp(d[0], sp_stack_getstr(s, 0)));
+		cr_assert_eq(0, sp_stack_insertstrn(s, 3, d[6], 24));
+		cr_assert_eq(0, strcmp(d[0], sp_stack_getstr(s, 0)));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+		s = sp_stack_create(sizeof(char*) + 1, 1000);
+		cr_assert_not_null(s);
+		cr_assert_eq(SP_EILLEGAL, sp_stack_insertstrn(s, 0, "test string", 4));
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));
+	}
 }
 
 Test(stack, qinsert)
@@ -602,6 +801,117 @@ Test(stack, qinsert)
 	test(double        , sp_stack_qinsertd , sp_stack_getd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , sp_stack_qinsertld, sp_stack_getld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
+
+	{ /* Suffixed form - strings */
+		char a[25] = " test string";
+		char d[1000][25];
+		s = sp_stack_create(sizeof(char*), 1000);
+		cr_assert_not_null(s);
+		cr_assert_eq(SP_EINVAL, sp_stack_qinsertstr(NULL, 0, a));
+		cr_assert_eq(SP_EINVAL, sp_stack_qinsertstr(s, 0, NULL));
+		cr_assert_eq(SP_EINDEX, sp_stack_qinsertstr(s, 1, a));
+		cr_assert_eq(0, sp_stack_qinsertstr(s, 0, a));
+		cr_assert_eq(1LU, (unsigned long)s->size);
+		cr_assert_eq(0, strcmp(a, sp_stack_getstr(s, 0)));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 1000);
+		cr_assert_not_null(s);
+		for (i = 0; i < 1000; i++) {
+			size_t idx = IRANGE(0, i);
+			a[0] = IRANGE(' ', '~');
+			strcpy(d[i], a);
+			cr_assert_eq(0, sp_stack_qinsertstr(s, idx, d[i]));
+			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size);
+			cr_assert_eq(0, strcmp(d[i], sp_stack_getstr(s, idx)));
+		}
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 1000);
+		for (i = 0; i < SIZE_MAX / sizeof(char*); i++) {
+			cr_assert_eq(0, sp_stack_qinsertstr(s, 0, a));
+			cr_assert_eq(0, strcmp(a, sp_stack_getstr(s, 0)));
+		}
+		cr_assert_eq(SP_ERANGE, sp_stack_qinsertstr(s, 0, a));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 1);
+		char too_long[SIZE_MAX];
+		for (i = 0; i < SIZE_MAX; i++)
+			too_long[i] = 'a';
+		too_long[SIZE_MAX] = '\0';
+		cr_assert_eq(SP_ERANGE, sp_stack_qinsertstr(s, 0, too_long));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 10);
+		cr_assert_not_null(s);
+		for (i = 0; i < 5; i++)
+			cr_assert_eq(0, sp_stack_qinsertstr(s, i, d[i]));
+		for (i = 0; i < 5; i++)
+			cr_assert_eq(0, strcmp(d[(8 - i) % 5], sp_stack_getstr(s, i)));
+		cr_assert_eq(0, sp_stack_qinsertstr(s, 1, d[5]));
+		cr_assert_eq(0, strcmp(d[3], sp_stack_getstr(s, 0)));
+		cr_assert_eq(0, sp_stack_qinsertstr(s, 3, d[6]));
+		cr_assert_eq(0, strcmp(d[2], sp_stack_getstr(s, 0)));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+		s = sp_stack_create(sizeof(char*) + 1, 1000);
+		cr_assert_not_null(s);
+		cr_assert_eq(SP_EILLEGAL, sp_stack_qinsertstr(s, 0, a));
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));
+
+		/* substrings (strn) */
+		s = sp_stack_create(sizeof(char*), 1000);
+		cr_assert_not_null(s);
+		cr_assert_eq(SP_EINVAL, sp_stack_qinsertstrn(NULL, 0, "test string", 5));
+		cr_assert_eq(SP_EINVAL, sp_stack_qinsertstrn(s, 0, NULL, 5));
+		cr_assert_eq(SP_EINDEX, sp_stack_qinsertstrn(s, 1, "another test", 3));
+		cr_assert_eq(0, sp_stack_qinsertstrn(s, 0, "yet another test", 11));
+		cr_assert_eq(1LU, (unsigned long)s->size);
+		cr_assert_eq(0, sp_stack_qinsertstrn(s, 0, "one more", 3));
+		cr_assert_eq(2LU, (unsigned long)s->size);
+		cr_assert_eq(0, sp_stack_qinsertstrn(s, 0, "last test", 0));
+		cr_assert_eq(3LU, (unsigned long)s->size);
+		cr_assert_eq(0, strcmp("", sp_stack_getstr(s, 0)));
+		cr_assert_eq(0, strcmp("one", sp_stack_getstr(s, 1)));
+		cr_assert_eq(0, strcmp("yet another", sp_stack_getstr(s, 2)));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 1000);
+		cr_assert_not_null(s);
+		for (i = 0; i < 1000; i++) {
+			size_t idx = IRANGE(0, i);
+			a[0] = IRANGE(' ', '~');
+			strcpy(d[i], a);
+			cr_assert_eq(0, sp_stack_qinsertstrn(s, idx, d[i], 24));
+			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size);
+			cr_assert_eq(0, strcmp(d[i], sp_stack_getstr(s, idx)));
+		}
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 1000);
+		for (i = 0; i < SIZE_MAX / sizeof(char*); i++) {
+			cr_assert_eq(0, sp_stack_qinsertstrn(s, 0, "test", 3));
+			cr_assert_eq(0, strcmp("tes", sp_stack_getstr(s, 0)));
+		}
+		cr_assert_eq(SP_ERANGE, sp_stack_qinsertstrn(s, 0, "test", 3));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 10);
+		cr_assert_not_null(s);
+		for (i = 0; i < 5; i++)
+			cr_assert_eq(0, sp_stack_qinsertstrn(s, i, d[i], 24));
+		for (i = 0; i < 5; i++)
+			cr_assert_eq(0, strcmp(d[(8 - i) % 5], sp_stack_getstr(s, i)));
+		cr_assert_eq(0, sp_stack_qinsertstrn(s, 1, d[5], 24));
+		cr_assert_eq(0, strcmp(d[3], sp_stack_getstr(s, 0)));
+		cr_assert_eq(0, sp_stack_qinsertstrn(s, 3, d[6], 24));
+		cr_assert_eq(0, strcmp(d[2], sp_stack_getstr(s, 0)));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+		s = sp_stack_create(sizeof(char*) + 1, 1000);
+		cr_assert_not_null(s);
+		cr_assert_eq(SP_EILLEGAL, sp_stack_qinsertstrn(s, 0, "test string", 4));
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));
+	}
 }
 
 Test(stack, remove)
@@ -744,6 +1054,63 @@ Test(stack, remove)
 	test(double        , sp_stack_removed , sp_stack_pushd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , sp_stack_removeld, sp_stack_pushld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
+
+	{ /* Suffixed form - strings */
+		char a[25] = " test string";
+		char d[100][25];
+		s = sp_stack_create(sizeof(char*), 1000);
+		cr_assert_not_null(s);
+		cr_assert_eq(NULL, sp_stack_removestr(s, 0));
+		cr_assert_eq(0, sp_stack_pushstr(s, a));
+		cr_assert_eq(NULL, sp_stack_removestr(NULL, 0));
+		cr_assert_eq(NULL, sp_stack_removestr(s, 1));
+		cr_assert_eq(1LU, (unsigned long)s->size);
+		cr_assert_eq(0, strcmp(a, sp_stack_removestr(s, 0)));
+		cr_assert_eq(0LU, (unsigned long)s->size);
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 100);
+		cr_assert_not_null(s);
+		for (i = 0; i < 100; i++) {
+			a[0] = IRANGE(' ', '~');
+			strcpy(d[i], a);
+			cr_assert_eq(0, sp_stack_pushstr(s, d[i]));
+		}
+		for (i = 0; i < 100; i++) {
+			char *a;
+			size_t idx = IRANGE(0, s->size - 1), j;
+			int found = 0;
+			cr_assert_neq(NULL, (a = sp_stack_removestr(s, idx)));
+			for (j = 0; j < 100; j++) {
+				/* Lazy and slow way to check, but on average
+				 * it's enough */
+				if (strcmp(a, d[j]) == 0) {
+					found = 1;
+					break;
+				}
+			}
+			cr_assert_eq(1, found);
+			free(a);
+		}
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 10);
+		cr_assert_not_null(s);
+		for (i = 0; i < 8; i++)
+			cr_assert_eq(0, sp_stack_pushstr(s, d[i]));
+		cr_assert_eq(0, strcmp(d[4], sp_stack_removestr(s, 3)));
+		cr_assert_eq(7LU, (unsigned long)s->size);
+		cr_assert_eq(0, strcmp(d[7], sp_stack_removestr(s, 0)));
+		cr_assert_eq(6LU, (unsigned long)s->size);
+		cr_assert_eq(0, strcmp(d[2], sp_stack_removestr(s, 3)));
+		cr_assert_eq(5LU, (unsigned long)s->size);
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+		s = sp_stack_create(sizeof(char*) + 1, 1000);
+		cr_assert_not_null(s);
+		s->size = 1;
+		cr_assert_eq(NULL, sp_stack_removestr(s, 0));
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));
+	}
 }
 
 Test(stack, qremove)
@@ -888,6 +1255,64 @@ Test(stack, qremove)
 	test(double        , sp_stack_qremoved , sp_stack_pushd , sp_stack_getd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , sp_stack_qremoveld, sp_stack_pushld, sp_stack_getld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
+
+	{ /* Suffixed form - strings */
+		char a[25] = "test string";
+		char d[100][25];
+		s = sp_stack_create(sizeof(char*), 1000);
+		cr_assert_not_null(s);
+		cr_assert_eq(NULL, sp_stack_qremovestr(s, 0));
+		cr_assert_eq(0, sp_stack_pushstr(s, a));
+		cr_assert_eq(NULL, sp_stack_qremovestr(NULL, 0));
+		cr_assert_eq(NULL, sp_stack_qremovestr(s, 1));
+		cr_assert_eq(1LU, (unsigned long)s->size);
+		cr_assert_eq(0, strcmp(a, sp_stack_qremovestr(s, 0)));
+		cr_assert_eq(0LU, (unsigned long)s->size);
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));
+
+		s = sp_stack_create(sizeof(char*), 100);
+		cr_assert_not_null(s);
+		for (i = 0; i < 100; i++) {
+			a[0] = IRANGE(' ', '~');
+			strcpy(d[i], a);
+			cr_assert_eq(0, sp_stack_pushstr(s, d[i]));
+		}
+		for (i = 0; i < 100; i++) {
+			char *a;
+			size_t idx = IRANGE(0, s->size - 1), j;
+			int found = 0;
+			cr_assert_neq(NULL, (a = sp_stack_qremovestr(s, idx)));
+			for (j = 0; j < 100; j++) {
+				/* Lazy and slow way to check, but on average
+				 * it's enough */
+				if (strcmp(a, d[j]) == 0) {
+					found = 1;
+					break;
+				}
+			}
+			cr_assert_eq(1, found);
+			free(a);
+		}
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+
+		s = sp_stack_create(sizeof(char*), 10);
+		cr_assert_not_null(s);
+		for (i = 0; i < 8; i++) {
+			cr_assert_eq(0, sp_stack_pushstr(s, d[i]));
+		}
+		cr_assert_eq(0, strcmp(d[4], sp_stack_qremovestr(s, 3)));
+		cr_assert_eq(0, strcmp(d[3], sp_stack_getstr(s, 3)));
+		cr_assert_eq(0, strcmp(d[6], sp_stack_qremovestr(s, 0)));
+		cr_assert_eq(0, strcmp(d[5], sp_stack_getstr(s, 0)));
+		cr_assert_eq(0, strcmp(d[2], sp_stack_qremovestr(s, 3)));
+		cr_assert_eq(0, strcmp(d[1], sp_stack_getstr(s, 3)));
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+		s = sp_stack_create(sizeof(char*) + 1, 1000);
+		cr_assert_not_null(s);
+		s->size = 1;
+		cr_assert_eq(NULL, sp_stack_qremovestr(s, 0));
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));
+	}
 }
 
 Test(stack, get)
@@ -966,6 +1391,31 @@ Test(stack, get)
 	test(double        , sp_stack_getd , sp_stack_pushd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , sp_stack_getld, sp_stack_pushld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
+
+	{ /* Suffixed form - strings */
+		unsigned i;
+		char a[25] = " test string";
+		char d[1000][25];
+		s = sp_stack_create(sizeof(char*), 1000);
+		cr_assert_not_null(s);
+		cr_assert_eq(NULL, sp_stack_getstr(s, 0));
+		cr_assert_eq(0, sp_stack_pushstr(s, a));
+		cr_assert_eq(NULL, sp_stack_getstr(NULL, 0));
+		cr_assert_eq(NULL, sp_stack_getstr(s, 1));
+		cr_assert_eq(0, strcmp(a, sp_stack_getstr(s, 0)));
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));
+		s = sp_stack_create(sizeof(char*), 1000);
+		cr_assert_not_null(s);
+		for (i = 0; i < 1000; i++) {
+			a[0] = IRANGE(' ', '~');
+			strcpy(d[i], a);
+			cr_assert_eq(0, sp_stack_pushstr(s, d[i]));
+		}
+		for (i = 0; i < 1000; i++) {
+			cr_assert_eq(0, strcmp(d[999 - i], sp_stack_getstr(s, i)));
+		}
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+	}
 }
 
 Test(stack, set)
@@ -1053,6 +1503,57 @@ Test(stack, set)
 	test(double        , sp_stack_setd , sp_stack_pushd , sp_stack_getd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , sp_stack_setld, sp_stack_pushld, sp_stack_getld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
+
+	{ /* Suffixed form - strings */
+		unsigned i;
+		s = sp_stack_create(sizeof(char*), 1000);
+		cr_assert_not_null(s);
+		cr_assert_eq(SP_EINDEX, sp_stack_setstr(s, 0, "abc"));
+		cr_assert_eq(0, sp_stack_pushstr(s, "abc"));
+		cr_assert_eq(SP_EINVAL, sp_stack_setstr(NULL, 0, "def"));
+		cr_assert_eq(SP_EINDEX, sp_stack_setstr(s, 1, "def"));
+		cr_assert_eq(0, sp_stack_setstr(s, 0, "xyz"));
+		cr_assert_eq(0, strcmp("xyz", sp_stack_getstr(s, 0)));
+		cr_assert_eq(0, sp_stack_clear(s, sp_free));
+		for (i = 0; i < 1000; i++)
+			cr_assert_eq(0, sp_stack_pushstr(s, "test string"));
+		for (i = 0; i < 1000; i++) {
+			const char *b = "another string";
+			cr_assert_eq(0, sp_stack_setstr(s, i, b));
+			cr_assert_eq(0, strcmp(b, sp_stack_getstr(s, i)));
+		}
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+		s = sp_stack_create(sizeof(char*) + 1, 1000);
+		cr_assert_not_null(s);
+		s->size = 1;
+		cr_assert_eq(SP_EILLEGAL, sp_stack_setstr(s, 0, "test"));
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));
+
+		/* substrings (strn) */
+		s = sp_stack_create(sizeof(char*), 1000);
+		cr_assert_not_null(s);
+		cr_assert_eq(SP_EINDEX, sp_stack_setstrn(s, 0, "abcdef", 3));
+		cr_assert_eq(0, sp_stack_pushstr(s, "abc"));
+		cr_assert_eq(SP_EINVAL, sp_stack_setstrn(NULL, 0, "defghi", 3));
+		cr_assert_eq(SP_EINDEX, sp_stack_setstrn(s, 1, "defghi", 3));
+		cr_assert_eq(0, sp_stack_setstrn(s, 0, "xyzabc", 3));
+		cr_assert_eq(0, strcmp("xyz", sp_stack_getstr(s, 0)));
+		cr_assert_eq(0, sp_stack_setstrn(s, 0, "testing", 0));
+		cr_assert_eq(0, strcmp("", sp_stack_getstr(s, 0)));
+		cr_assert_eq(0, sp_stack_clear(s, sp_free));
+		for (i = 0; i < 1000; i++)
+			cr_assert_eq(0, sp_stack_pushstr(s, "test string"));
+		for (i = 0; i < 1000; i++) {
+			cr_assert_eq(0, sp_stack_setstrn(s, i, "another string", 7));
+			cr_assert_eq(0, strcmp("another", sp_stack_getstr(s, i)));
+		}
+		cr_assert_eq(0, sp_stack_destroy(s, sp_free));
+		s = sp_stack_create(sizeof(char*) + 1, 1000);
+		cr_assert_not_null(s);
+		s->size = 1;
+		cr_assert_eq(SP_EILLEGAL, sp_stack_setstrn(s, 0, "test", 0));
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));
+	}
 }
 
 Test(stack, print)
@@ -1102,4 +1603,17 @@ Test(stack, print)
 	test(float         , sp_stack_pushf , sp_stack_printf , FLT_MIN, FLT_MAX);
 	test(double        , sp_stack_pushd , sp_stack_printd , DBL_MIN, DBL_MAX);
 	test(long double   , sp_stack_pushld, sp_stack_printld, LDBL_MIN, LDBL_MAX);
+
+	{ /* Suffixed form - strings */
+		const char *a = "test string #1", *b = "test string #2";
+		s = sp_stack_create(sizeof(char*), 30);
+		cr_assert_eq(0, sp_stack_pushstr(s, a));
+		cr_assert_eq(0, sp_stack_pushstr(s, b));
+		cr_assert_eq(SP_EINVAL, sp_stack_printstr(NULL));
+		cr_assert_eq(0, sp_stack_printstr(s));
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));
+		s = sp_stack_create(sizeof(char*) + 1, 30);
+		cr_assert_eq(SP_EILLEGAL, sp_stack_printstr(s));
+		cr_assert_eq(0, sp_stack_destroy(s, NULL));
+	}
 }

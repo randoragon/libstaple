@@ -80,5 +80,6 @@ void  sp_ringbuf_decr(void **ptr, void *buf, size_t capacity, size_t elem_size);
 void *sp_ringbuf_get(size_t idx, const void *buf, size_t capacity, size_t elem_size, const void *head);
 void  sp_ringbuf_insert(const void *elem, size_t idx, void *buf, size_t *size, size_t capacity, size_t elem_size, void **head, void **tail);
 void  sp_ringbuf_remove(size_t idx, void *buf, size_t *size, size_t capacity, size_t elem_size, void **head, void **tail);
+size_t sp_strnlen(const char *s, size_t maxlen);
 
 #endif /* STAPLE_HELPERS_H */
