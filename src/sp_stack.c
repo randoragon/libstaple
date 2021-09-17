@@ -2978,7 +2978,7 @@ int sp_stack_setld(struct sp_stack *stack, size_t idx, long double val)
 }
 
 
-int sp_stack_print(struct sp_stack *stack)
+int sp_stack_print(const struct sp_stack *stack)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -2996,7 +2996,7 @@ int sp_stack_print(struct sp_stack *stack)
 	return 0;
 }
 
-int sp_stack_printc(struct sp_stack *stack)
+int sp_stack_printc(const struct sp_stack *stack)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3019,7 +3019,7 @@ int sp_stack_printc(struct sp_stack *stack)
 	return 0;
 }
 
-int sp_stack_prints(struct sp_stack *stack)
+int sp_stack_prints(const struct sp_stack *stack)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3042,7 +3042,7 @@ int sp_stack_prints(struct sp_stack *stack)
 	return 0;
 }
 
-int sp_stack_printi(struct sp_stack *stack)
+int sp_stack_printi(const struct sp_stack *stack)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3065,7 +3065,7 @@ int sp_stack_printi(struct sp_stack *stack)
 	return 0;
 }
 
-int sp_stack_printl(struct sp_stack *stack)
+int sp_stack_printl(const struct sp_stack *stack)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3088,7 +3088,7 @@ int sp_stack_printl(struct sp_stack *stack)
 	return 0;
 }
 
-int sp_stack_printsc(struct sp_stack *stack)
+int sp_stack_printsc(const struct sp_stack *stack)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3111,7 +3111,7 @@ int sp_stack_printsc(struct sp_stack *stack)
 	return 0;
 }
 
-int sp_stack_printuc(struct sp_stack *stack)
+int sp_stack_printuc(const struct sp_stack *stack)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3134,7 +3134,7 @@ int sp_stack_printuc(struct sp_stack *stack)
 	return 0;
 }
 
-int sp_stack_printus(struct sp_stack *stack)
+int sp_stack_printus(const struct sp_stack *stack)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3157,7 +3157,7 @@ int sp_stack_printus(struct sp_stack *stack)
 	return 0;
 }
 
-int sp_stack_printui(struct sp_stack *stack)
+int sp_stack_printui(const struct sp_stack *stack)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3180,7 +3180,7 @@ int sp_stack_printui(struct sp_stack *stack)
 	return 0;
 }
 
-int sp_stack_printul(struct sp_stack *stack)
+int sp_stack_printul(const struct sp_stack *stack)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3203,7 +3203,7 @@ int sp_stack_printul(struct sp_stack *stack)
 	return 0;
 }
 
-int sp_stack_printf(struct sp_stack *stack)
+int sp_stack_printf(const struct sp_stack *stack)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3226,7 +3226,7 @@ int sp_stack_printf(struct sp_stack *stack)
 	return 0;
 }
 
-int sp_stack_printd(struct sp_stack *stack)
+int sp_stack_printd(const struct sp_stack *stack)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3249,7 +3249,7 @@ int sp_stack_printd(struct sp_stack *stack)
 	return 0;
 }
 
-int sp_stack_printld(struct sp_stack *stack)
+int sp_stack_printld(const struct sp_stack *stack)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG

@@ -3020,7 +3020,7 @@ int sp_queue_setld(struct sp_queue *queue, size_t idx, long double val)
 }
 
 
-int sp_queue_print(struct sp_queue *queue)
+int sp_queue_print(const struct sp_queue *queue)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3038,7 +3038,7 @@ int sp_queue_print(struct sp_queue *queue)
 	return 0;
 }
 
-int sp_queue_printc(struct sp_queue *queue)
+int sp_queue_printc(const struct sp_queue *queue)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3061,7 +3061,7 @@ int sp_queue_printc(struct sp_queue *queue)
 	return 0;
 }
 
-int sp_queue_prints(struct sp_queue *queue)
+int sp_queue_prints(const struct sp_queue *queue)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3084,7 +3084,7 @@ int sp_queue_prints(struct sp_queue *queue)
 	return 0;
 }
 
-int sp_queue_printi(struct sp_queue *queue)
+int sp_queue_printi(const struct sp_queue *queue)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3107,7 +3107,7 @@ int sp_queue_printi(struct sp_queue *queue)
 	return 0;
 }
 
-int sp_queue_printl(struct sp_queue *queue)
+int sp_queue_printl(const struct sp_queue *queue)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3130,7 +3130,7 @@ int sp_queue_printl(struct sp_queue *queue)
 	return 0;
 }
 
-int sp_queue_printsc(struct sp_queue *queue)
+int sp_queue_printsc(const struct sp_queue *queue)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3153,7 +3153,7 @@ int sp_queue_printsc(struct sp_queue *queue)
 	return 0;
 }
 
-int sp_queue_printuc(struct sp_queue *queue)
+int sp_queue_printuc(const struct sp_queue *queue)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3176,7 +3176,7 @@ int sp_queue_printuc(struct sp_queue *queue)
 	return 0;
 }
 
-int sp_queue_printus(struct sp_queue *queue)
+int sp_queue_printus(const struct sp_queue *queue)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3199,7 +3199,7 @@ int sp_queue_printus(struct sp_queue *queue)
 	return 0;
 }
 
-int sp_queue_printui(struct sp_queue *queue)
+int sp_queue_printui(const struct sp_queue *queue)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3222,7 +3222,7 @@ int sp_queue_printui(struct sp_queue *queue)
 	return 0;
 }
 
-int sp_queue_printul(struct sp_queue *queue)
+int sp_queue_printul(const struct sp_queue *queue)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3245,7 +3245,7 @@ int sp_queue_printul(struct sp_queue *queue)
 	return 0;
 }
 
-int sp_queue_printf(struct sp_queue *queue)
+int sp_queue_printf(const struct sp_queue *queue)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3268,7 +3268,7 @@ int sp_queue_printf(struct sp_queue *queue)
 	return 0;
 }
 
-int sp_queue_printd(struct sp_queue *queue)
+int sp_queue_printd(const struct sp_queue *queue)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3291,7 +3291,7 @@ int sp_queue_printd(struct sp_queue *queue)
 	return 0;
 }
 
-int sp_queue_printld(struct sp_queue *queue)
+int sp_queue_printld(const struct sp_queue *queue)
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
