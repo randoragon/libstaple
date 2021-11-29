@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include "sp_errcodes.h"
 #include "sp_modes.h"
+#include "sp_utils.h"
 
 struct sp_stack {
 	void  *data;
