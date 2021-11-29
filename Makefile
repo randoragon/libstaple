@@ -34,7 +34,7 @@ SRCS := $(wildcard $(SRCDIR)/*.c)
 OBJS := $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(SRCS:.c=.o))
 
 # Header and man page files (relative to MANDIR)
-INCLUDES  := $(notdir $(wildcard $(SRCDIR)/staple*.h))
+INCLUDES  := $(notdir $(wildcard $(SRCDIR)/staple*.h $(SRCDIR)/sp_*.h))
 MANPAGES3 := $(patsubst $(MANDIR)/%,%,$(shell find "$(MANDIR)" -type f -name '*.3'))
 MANPAGES7 := $(patsubst $(MANDIR)/%,%,$(shell find "$(MANDIR)" -type f -name '*.7'))
 
