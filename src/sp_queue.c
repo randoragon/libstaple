@@ -488,6 +488,84 @@ int sp_queue_pushld(struct sp_queue *queue, long double elem)
 	return 0;
 }
 
+int sp_queue_pushstr(struct sp_queue *queue, const char *elem)
+{
+	char *buf;
+	size_t len;
+#ifdef STAPLE_DEBUG
+	if (queue == NULL) {
+		error(("queue is NULL"));
+		return SP_EINVAL;
+	}
+	if (elem == NULL) {
+		error(("elem is NULL"));
+		return SP_EINVAL;
+	}
+	if (queue->elem_size != sizeof(elem)) {
+		error(("queue->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(elem)));
+		return SP_EILLEGAL;
+	}
+#endif
+	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+		return SP_ERANGE;
+	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
+		return SP_ENOMEM;
+	len = sp_strnlen(elem, SIZE_MAX);
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	if (queue->size != 0)
+		sp_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		error(("malloc"));
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	*(char**)queue->tail = buf;
+	++queue->size;
+	return 0;
+}
+
+int sp_queue_pushstrn(struct sp_queue *queue, const char *elem, size_t len)
+{
+	char *buf;
+#ifdef STAPLE_DEBUG
+	if (queue == NULL) {
+		error(("queue is NULL"));
+		return SP_EINVAL;
+	}
+	if (elem == NULL) {
+		error(("elem is NULL"));
+		return SP_EINVAL;
+	}
+	if (queue->elem_size != sizeof(elem)) {
+		error(("queue->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(elem)));
+		return SP_EILLEGAL;
+	}
+#endif
+	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+		return SP_ERANGE;
+	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
+		return SP_ENOMEM;
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	if (queue->size != 0)
+		sp_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		error(("malloc"));
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	*(char**)queue->tail = buf;
+	++queue->size;
+	return 0;
+}
+
 
 int sp_queue_insert(struct sp_queue *queue, size_t idx, const void *elem)
 {
@@ -810,6 +888,86 @@ int sp_queue_insertld(struct sp_queue *queue, size_t idx, long double elem)
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;
 	sp_ringbuf_insert(&elem, idx, queue->data, &queue->size, queue->capacity, queue->elem_size, &queue->head, &queue->tail);
+	return 0;
+}
+
+int sp_queue_insertstr(struct sp_queue *queue, size_t idx, const char *elem)
+{
+	char *buf;
+	size_t len;
+#ifdef STAPLE_DEBUG
+	if (queue == NULL) {
+		error(("queue is NULL"));
+		return SP_EINVAL;
+	}
+	if (elem == NULL) {
+		error(("elem is NULL"));
+		return SP_EINVAL;
+	}
+	if (queue->elem_size != sizeof(elem)) {
+		error(("queue->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(elem)));
+		return SP_EILLEGAL;
+	}
+	if (idx > queue->size) {
+		error(("index out of range"));
+		return SP_EINDEX;
+	}
+#endif
+	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+		return SP_ERANGE;
+	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
+		return SP_ENOMEM;
+	len = sp_strnlen(elem, SIZE_MAX);
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		error(("malloc"));
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	sp_ringbuf_insert(&buf, idx, queue->data, &queue->size, queue->capacity, queue->elem_size, &queue->head, &queue->tail);
+	return 0;
+}
+
+int sp_queue_insertstrn(struct sp_queue *queue, size_t idx, const char *elem, size_t len)
+{
+	char *buf;
+#ifdef STAPLE_DEBUG
+	if (queue == NULL) {
+		error(("queue is NULL"));
+		return SP_EINVAL;
+	}
+	if (elem == NULL) {
+		error(("elem is NULL"));
+		return SP_EINVAL;
+	}
+	if (queue->elem_size != sizeof(elem)) {
+		error(("queue->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(elem)));
+		return SP_EILLEGAL;
+	}
+	if (idx > queue->size) {
+		error(("index out of range"));
+		return SP_EINDEX;
+	}
+#endif
+	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+		return SP_ERANGE;
+	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
+		return SP_ENOMEM;
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		error(("malloc"));
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	sp_ringbuf_insert(&buf, idx, queue->data, &queue->size, queue->capacity, queue->elem_size, &queue->head, &queue->tail);
 	return 0;
 }
 
@@ -1216,6 +1374,98 @@ int sp_queue_qinsertld(struct sp_queue *queue, size_t idx, long double elem)
 	return 0;
 }
 
+int sp_queue_qinsertstr(struct sp_queue *queue, size_t idx, const char *elem)
+{
+	char *p;
+	char *buf;
+	size_t len;
+#ifdef STAPLE_DEBUG
+	if (queue == NULL) {
+		error(("queue is NULL"));
+		return SP_EINVAL;
+	}
+	if (elem == NULL) {
+		error(("elem is NULL"));
+		return SP_EINVAL;
+	}
+	if (queue->elem_size != sizeof(elem)) {
+		error(("queue->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(elem)));
+		return SP_EILLEGAL;
+	}
+	if (idx > queue->size) {
+		error(("index out of range"));
+		return SP_EINDEX;
+	}
+#endif
+	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+		return SP_ERANGE;
+	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
+		return SP_ENOMEM;
+	len = sp_strnlen(elem, SIZE_MAX);
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	if (queue->size != 0)
+		sp_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		error(("malloc"));
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	p = sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
+	*(char**)queue->tail = *(char**)p;
+	*(char**)p = buf;
+	++queue->size;
+	return 0;
+}
+
+int sp_queue_qinsertstrn(struct sp_queue *queue, size_t idx, const char *elem, size_t len)
+{
+	char *p;
+	char *buf;
+#ifdef STAPLE_DEBUG
+	if (queue == NULL) {
+		error(("queue is NULL"));
+		return SP_EINVAL;
+	}
+	if (elem == NULL) {
+		error(("elem is NULL"));
+		return SP_EINVAL;
+	}
+	if (queue->elem_size != sizeof(elem)) {
+		error(("queue->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(elem)));
+		return SP_EILLEGAL;
+	}
+	if (idx > queue->size) {
+		error(("index out of range"));
+		return SP_EINDEX;
+	}
+#endif
+	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+		return SP_ERANGE;
+	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
+		return SP_ENOMEM;
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	if (queue->size != 0)
+		sp_ringbuf_incr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		error(("malloc"));
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	p = sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
+	*(char**)queue->tail = *(char**)p;
+	*(char**)p = buf;
+	++queue->size;
+	return 0;
+}
+
 
 int sp_queue_peek(const struct sp_queue *queue, void *output)
 {
@@ -1475,6 +1725,26 @@ long double sp_queue_peekld(const struct sp_queue *queue)
 	}
 #endif
 	return *(long double*)queue->head;
+}
+
+char *sp_queue_peekstr(const struct sp_queue *queue)
+{
+#ifdef STAPLE_DEBUG
+	if (queue == NULL) {
+		error(("queue is NULL"));
+		return NULL;
+	}
+	if (queue->elem_size != sizeof(char*)) {
+		error(("queue->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(char*)));
+		return NULL;
+	}
+	if (queue->size == 0) {
+		error(("queue is empty"));
+		return NULL;
+	}
+#endif
+	return *(char**)queue->head;
 }
 
 
@@ -1798,6 +2068,31 @@ long double sp_queue_popld(struct sp_queue *queue)
 	return ret;
 }
 
+char *sp_queue_popstr(struct sp_queue *queue)
+{
+	char *ret;
+#ifdef STAPLE_DEBUG
+	if (queue == NULL) {
+		error(("queue is NULL"));
+		return NULL;
+	}
+	if (queue->elem_size != sizeof(char*)) {
+		error(("queue->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(char*)));
+		return NULL;
+	}
+	if (queue->size == 0) {
+		error(("queue is empty"));
+		return NULL;
+	}
+#endif
+	ret = *(char**)queue->head;
+	if (queue->size != 1)
+		sp_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
+	--queue->size;
+	return ret;
+}
+
 
 int sp_queue_remove(struct sp_queue *queue, size_t idx, void *output)
 {
@@ -2091,6 +2386,31 @@ long double sp_queue_removeld(struct sp_queue *queue, size_t idx)
 	}
 #endif
 	ret = *(long double*)sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
+	sp_ringbuf_remove(idx, queue->data, &queue->size, queue->capacity, queue->elem_size, &queue->head, &queue->tail);
+	return ret;
+}
+
+char *sp_queue_removestr(struct sp_queue *queue, size_t idx)
+{
+	char *p;
+	char *ret;
+#ifdef STAPLE_DEBUG
+	if (queue == NULL) {
+		error(("queue is NULL"));
+		return NULL;
+	}
+	if (queue->elem_size != sizeof(char*)) {
+		error(("queue->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(char*)));
+		return NULL;
+	}
+	if (idx >= queue->size) {
+		error(("index out of range"));
+		return NULL;
+	}
+#endif
+	p = sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
+	ret = *(char**)p;
 	sp_ringbuf_remove(idx, queue->data, &queue->size, queue->capacity, queue->elem_size, &queue->head, &queue->tail);
 	return ret;
 }
@@ -2718,6 +3038,56 @@ long double sp_queue_getld(const struct sp_queue *queue, size_t idx)
 	return *(long double*)sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
 }
 
+char *sp_queue_qremovestr(struct sp_queue *queue, size_t idx)
+{
+	char *p;
+	char *ret;
+#ifdef STAPLE_DEBUG
+	if (queue == NULL) {
+		error(("queue is NULL"));
+		return NULL;
+	}
+	if (queue->elem_size != sizeof(char*)) {
+		error(("queue->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(char*)));
+		return NULL;
+	}
+	if (idx >= queue->size) {
+		error(("index out of range"));
+		return NULL;
+	}
+#endif
+	p = sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
+	ret = *(char**)p;
+	*(char**)p = *(char**)queue->tail;
+	if (queue->size != 1)
+		sp_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);
+	--queue->size;
+	return ret;
+}
+
+char *sp_queue_getstr(const struct sp_queue *queue, size_t idx)
+{
+	void *src;
+#ifdef STAPLE_DEBUG
+	if (queue == NULL) {
+		error(("queue is NULL"));
+		return NULL;
+	}
+	if (queue->elem_size != sizeof(char*)) {
+		error(("queue->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(char*)));
+		return NULL;
+	}
+	if (idx >= queue->size) {
+		error(("index out of range"));
+		return NULL;
+	}
+#endif
+	src = sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
+	return *(char**)src;
+}
+
 
 int sp_queue_set(struct sp_queue *queue, size_t idx, void *val)
 {
@@ -3017,6 +3387,84 @@ int sp_queue_setld(struct sp_queue *queue, size_t idx, long double val)
 	return 0;
 }
 
+int sp_queue_setstr(struct sp_queue *queue, size_t idx, const char *val)
+{
+	char *p;
+	char *buf;
+	size_t len;
+#ifdef STAPLE_DEBUG
+	if (queue == NULL) {
+		error(("queue is NULL"));
+		return SP_EINVAL;
+	}
+	if (val == NULL) {
+		error(("val is NULL"));
+		return SP_EINVAL;
+	}
+	if (queue->elem_size != sizeof(val)) {
+		error(("queue->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(val)));
+		return SP_EILLEGAL;
+	}
+	if (idx >= queue->size) {
+		error(("index out of range"));
+		return SP_EINDEX;
+	}
+#endif
+	p = sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
+	free(*(char**)p);
+	len = sp_strnlen(val, SIZE_MAX);
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*val));
+	if (buf == NULL) {
+		error(("malloc"));
+		return SP_ENOMEM;
+	}
+	memcpy(buf, val, len * sizeof(*val));
+	buf[len] = '\0';
+	*(char**)p = buf;
+	return 0;
+}
+
+int sp_queue_setstrn(struct sp_queue *queue, size_t idx, const char *val, size_t len)
+{
+	char *p;
+	char *buf;
+#ifdef STAPLE_DEBUG
+	if (queue == NULL) {
+		error(("queue is NULL"));
+		return SP_EINVAL;
+	}
+	if (val == NULL) {
+		error(("val is NULL"));
+		return SP_EINVAL;
+	}
+	if (queue->elem_size != sizeof(val)) {
+		error(("queue->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(val)));
+		return SP_EILLEGAL;
+	}
+	if (idx >= queue->size) {
+		error(("index out of range"));
+		return SP_EINDEX;
+	}
+#endif
+	p = sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
+	free(*(char**)p);
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*val));
+	if (buf == NULL) {
+		error(("malloc"));
+		return SP_ENOMEM;
+	}
+	memcpy(buf, val, len * sizeof(*val));
+	buf[len] = '\0';
+	*(char**)p = buf;
+	return 0;
+}
+
 
 int sp_queue_print(const struct sp_queue *queue)
 {
@@ -3308,6 +3756,29 @@ int sp_queue_printld(const struct sp_queue *queue)
 	for (i = 0; i < queue->size; i++) {
 		const long double elem = *(long double*)sp_ringbuf_get(i, queue->data, queue->capacity, queue->elem_size, queue->head);
 		printf("[%lu]\t%Lg\n", (unsigned long)i, elem);
+	}
+	return 0;
+}
+
+int sp_queue_printstr(const struct sp_queue *queue)
+{
+	size_t i;
+#ifdef STAPLE_DEBUG
+	if (queue == NULL) {
+		error(("queue is NULL"));
+		return SP_EINVAL;
+	}
+	if (queue->elem_size != sizeof(char*)) {
+		error(("queue->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)queue->elem_size, sizeof(char*)));
+		return SP_EILLEGAL;
+	}
+#endif
+	printf("sp_queue_printstr()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
+	for (i = 0; i < queue->size; i++) {
+		const char *const elem = *(char**)sp_ringbuf_get(i, queue->data, queue->capacity, queue->elem_size, queue->head);
+		printf("[%lu]\t%s\n", (unsigned long)i, elem);
 	}
 	return 0;
 }

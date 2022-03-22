@@ -152,6 +152,60 @@ Test(queue, push)
 	test(double        , sp_queue_pushd , sp_queue_getd , FRANGE(DBL_MIN  , DBL_MAX)  , "%f");
 	test(long double   , sp_queue_pushld, sp_queue_getld, FRANGE(LDBL_MIN , LDBL_MAX) , "%Lf");
 #undef test
+
+	{ /* Suffixed form - strings */
+		unsigned i;
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		cr_assert_eq(SP_EINVAL, sp_queue_pushstr(q, NULL));
+		cr_assert_eq(SP_EINVAL, sp_queue_pushstr(NULL, "test"));
+		cr_assert_eq(0LU, (unsigned long)q->size);
+		cr_assert_eq(0, sp_queue_pushstr(q, "test"));
+		cr_assert_eq(1LU, (unsigned long)q->size);
+		cr_assert_eq(0, sp_queue_pushstr(q, "another test"));
+		cr_assert_eq(2LU, (unsigned long)q->size);
+		cr_assert_eq(0, sp_queue_clear(q, sp_free));
+		for (i = 0; i < SIZE_MAX / sizeof(char*); i++) {
+			cr_assert_eq(0, sp_queue_pushstr(q, "yet another test"));
+			cr_assert_eq(0, strcmp("yet another test", sp_queue_getstr(q, 0)));
+		}
+		cr_assert_eq(SP_ERANGE, sp_queue_pushstr(q, "size_t overflow"));
+		cr_assert_eq(0, sp_queue_clear(q, sp_free));
+		char too_long[SIZE_MAX];
+		for (i = 0; i < SIZE_MAX; i++)
+			too_long[i] = 'a';
+		too_long[SIZE_MAX] = '\0';
+		cr_assert_eq(SP_ERANGE, sp_queue_pushstr(q, too_long));
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+		q = sp_queue_create(sizeof(char*) + 1, 1);
+		cr_assert_not_null(q);
+		cr_assert_eq(SP_EILLEGAL, sp_queue_pushstr(q, "incompatible elem_size"));
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		/* substrings (strn) */
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		cr_assert_eq(SP_EINVAL, sp_queue_pushstrn(q, NULL, 0));
+		cr_assert_eq(SP_EINVAL, sp_queue_pushstrn(NULL, "test", 2));
+		cr_assert_eq(0LU, (unsigned long)q->size);
+		cr_assert_eq(0, sp_queue_pushstrn(q, "test", 2));
+		cr_assert_eq(1LU, (unsigned long)q->size);
+		cr_assert_eq(0, sp_queue_pushstrn(q, "another test", 7));
+		cr_assert_eq(2LU, (unsigned long)q->size);
+		cr_assert_eq(0, sp_queue_clear(q, sp_free));
+		for (i = 0; i < SIZE_MAX / sizeof(char*); i++) {
+			cr_assert_eq(0, sp_queue_pushstrn(q, "yet another test", 3));
+			cr_assert_eq(0, strcmp("yet", sp_queue_getstr(q, 0)));
+		}
+		cr_assert_eq(SP_ERANGE, sp_queue_pushstrn(q, "size_t overflow", 6));
+		cr_assert_eq(0, sp_queue_clear(q, sp_free));
+		cr_assert_eq(SP_ERANGE, sp_queue_pushstrn(q, "too long", SIZE_MAX));
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+		q = sp_queue_create(sizeof(char*) + 1, 1);
+		cr_assert_not_null(q);
+		cr_assert_eq(SP_EILLEGAL, sp_queue_pushstrn(q, "incompatible elem_size", 12));
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+	}
 }
 
 Test(queue, peek)
@@ -483,6 +537,108 @@ Test(queue, insert)
 	test(double        , sp_queue_insertd , sp_queue_getd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , sp_queue_insertld, sp_queue_getld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
+
+	{ /* Suffixed form - strings */
+		char a[25] = " test string";
+		char d[1000][25];
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		cr_assert_eq(SP_EINVAL, sp_queue_insertstr(NULL, 0, a));
+		cr_assert_eq(SP_EINVAL, sp_queue_insertstr(q, 0, NULL));
+		cr_assert_eq(SP_EINDEX, sp_queue_insertstr(q, 1, a));
+		cr_assert_eq(0, sp_queue_insertstr(q, 0, a));
+		cr_assert_eq(1LU, (unsigned long)q->size);
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		for (i = 0; i < 1000; i++) {
+			size_t idx = IRANGE(0, i);
+			a[0] = IRANGE(' ', '~');
+			strcpy(d[i], a);
+			cr_assert_eq(0, sp_queue_insertstr(q, idx, d[i]));
+			cr_assert_eq((unsigned long)i + 1, (unsigned long)q->size);
+			cr_assert_eq(0, strcmp(d[i], sp_queue_getstr(q, idx)));
+		}
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		q = sp_queue_create(sizeof(char*), 1000);
+		for (i = 0; i < SIZE_MAX / sizeof(char*); i++) {
+			cr_assert_eq(0, sp_queue_insertstr(q, 0, a));
+			cr_assert_eq(0, strcmp(a, sp_queue_getstr(q, 0)));
+		}
+		cr_assert_eq(SP_ERANGE, sp_queue_insertstr(q, 0, a));
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		q = sp_queue_create(sizeof(char*), 1);
+		char too_long[SIZE_MAX];
+		for (i = 0; i < SIZE_MAX; i++)
+			too_long[i] = 'a';
+		too_long[SIZE_MAX] = '\0';
+		cr_assert_eq(SP_ERANGE, sp_queue_insertstr(q, 0, too_long));
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		q = sp_queue_create(sizeof(char*), 10);
+		cr_assert_not_null(q);
+		for (i = 0; i < 5; i++)
+			cr_assert_eq(0, sp_queue_insertstr(q, i, d[i]));
+		for (i = 0; i < 5; i++)
+			cr_assert_eq(0, strcmp(d[i], sp_queue_getstr(q, i)));
+		cr_assert_eq(0, sp_queue_insertstr(q, 1, d[5]));
+		cr_assert_eq(0, strcmp(d[0], sp_queue_getstr(q, 0)));
+		cr_assert_eq(0, sp_queue_insertstr(q, 3, d[6]));
+		cr_assert_eq(0, strcmp(d[0], sp_queue_getstr(q, 0)));
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+		q = sp_queue_create(sizeof(char*) + 1, 1000);
+		cr_assert_not_null(q);
+		cr_assert_eq(SP_EILLEGAL, sp_queue_insertstr(q, 0, "test string"));
+		cr_assert_eq(0, sp_queue_destroy(q, NULL));
+
+		/* substrings (strn) */
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		cr_assert_eq(SP_EINVAL, sp_queue_insertstrn(NULL, 0, "test string", 5));
+		cr_assert_eq(SP_EINVAL, sp_queue_insertstrn(q, 0, NULL, 5));
+		cr_assert_eq(SP_EINDEX, sp_queue_insertstrn(q, 1, "another test", 3));
+		cr_assert_eq(0, sp_queue_insertstrn(q, 0, "yet another test", 11));
+		cr_assert_eq(1LU, (unsigned long)q->size);
+		cr_assert_eq(0, sp_queue_insertstrn(q, 0, "one more", 3));
+		cr_assert_eq(2LU, (unsigned long)q->size);
+		cr_assert_eq(0, sp_queue_insertstrn(q, 0, "last test", 0));
+		cr_assert_eq(3LU, (unsigned long)q->size);
+		cr_assert_eq(0, strcmp("", sp_queue_getstr(q, 0)));
+		cr_assert_eq(0, strcmp("one", sp_queue_getstr(q, 1)));
+		cr_assert_eq(0, strcmp("yet another", sp_queue_getstr(q, 2)));
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		for (i = 0; i < 1000; i++) {
+			size_t idx = IRANGE(0, i);
+			a[0] = IRANGE(' ', '~');
+			strcpy(d[i], a);
+			cr_assert_eq(0, sp_queue_insertstrn(q, idx, d[i], 24));
+			cr_assert_eq((unsigned long)i + 1, (unsigned long)q->size);
+			cr_assert_eq(0, strcmp(d[i], sp_queue_getstr(q, idx)));
+		}
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		q = sp_queue_create(sizeof(char*), 10);
+		cr_assert_not_null(q);
+		for (i = 0; i < 5; i++)
+			cr_assert_eq(0, sp_queue_insertstrn(q, i, d[i], 24));
+		for (i = 0; i < 5; i++)
+			cr_assert_eq(0, strcmp(d[i], sp_queue_getstr(q, i)));
+		cr_assert_eq(0, sp_queue_insertstrn(q, 1, d[5], 24));
+		cr_assert_eq(0, strcmp(d[0], sp_queue_getstr(q, 0)));
+		cr_assert_eq(0, sp_queue_insertstrn(q, 3, d[6], 24));
+		cr_assert_eq(0, strcmp(d[0], sp_queue_getstr(q, 0)));
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+		q = sp_queue_create(sizeof(char*) + 1, 1000);
+		cr_assert_not_null(q);
+		cr_assert_eq(SP_EILLEGAL, sp_queue_insertstrn(q, 0, "test string", 4));
+		cr_assert_eq(0, sp_queue_destroy(q, NULL));
+	}
 }
 
 Test(queue, qinsert)
@@ -601,6 +757,119 @@ Test(queue, qinsert)
 	test(double        , sp_queue_qinsertd , sp_queue_getd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , sp_queue_qinsertld, sp_queue_getld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
+
+	{ /* Suffixed form - strings */
+		char a[25] = " test string";
+		char d[1000][25];
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		cr_assert_eq(SP_EINVAL, sp_queue_qinsertstr(NULL, 0, a));
+		cr_assert_eq(SP_EINVAL, sp_queue_qinsertstr(q, 0, NULL));
+		cr_assert_eq(SP_EINDEX, sp_queue_qinsertstr(q, 1, a));
+		cr_assert_eq(0, sp_queue_qinsertstr(q, 0, a));
+		cr_assert_eq(1LU, (unsigned long)q->size);
+		cr_assert_eq(0, strcmp(a, sp_queue_getstr(q, 0)));
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		for (i = 0; i < 1000; i++) {
+			size_t idx = IRANGE(0, i);
+			a[0] = IRANGE(' ', '~');
+			strcpy(d[i], a);
+			cr_assert_eq(0, sp_queue_qinsertstr(q, idx, d[i]));
+			cr_assert_eq((unsigned long)i + 1, (unsigned long)q->size);
+			cr_assert_eq(0, strcmp(d[i], sp_queue_getstr(q, idx)));
+		}
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		for (i = 0; i < SIZE_MAX / sizeof(char*); i++) {
+			cr_assert_eq(0, sp_queue_qinsertstr(q, 0, a));
+			cr_assert_eq(0, strcmp(a, sp_queue_getstr(q, 0)));
+		}
+		cr_assert_eq(SP_ERANGE, sp_queue_qinsertstr(q, 0, a));
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		q = sp_queue_create(sizeof(char*), 1);
+		cr_assert_not_null(q);
+		char too_long[SIZE_MAX];
+		for (i = 0; i < SIZE_MAX; i++)
+			too_long[i] = 'a';
+		too_long[SIZE_MAX] = '\0';
+		cr_assert_eq(SP_ERANGE, sp_queue_qinsertstr(q, 0, too_long));
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		q = sp_queue_create(sizeof(char*), 10);
+		cr_assert_not_null(q);
+		for (i = 0; i < 5; i++)
+			cr_assert_eq(0, sp_queue_qinsertstr(q, i, d[i]));
+		for (i = 0; i < 5; i++)
+			cr_assert_eq(0, strcmp(d[i], sp_queue_getstr(q, i)));
+		cr_assert_eq(0, sp_queue_qinsertstr(q, 1, d[5]));
+		cr_assert_eq(q->tail, (char*)q->data + 5 * q->elem_size);
+		cr_assert_eq(0, sp_queue_qinsertstr(q, 3, d[6]));
+		cr_assert_eq(q->tail, (char*)q->data + 6 * q->elem_size);
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+		q = sp_queue_create(sizeof(char*) + 1, 1000);
+		cr_assert_not_null(q);
+		cr_assert_eq(SP_EILLEGAL, sp_queue_qinsertstr(q, 0, a));
+		cr_assert_eq(0, sp_queue_destroy(q, NULL));
+
+		/* substrings (strn) */
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		cr_assert_eq(SP_EINVAL, sp_queue_qinsertstrn(NULL, 0, "test string", 5));
+		cr_assert_eq(SP_EINVAL, sp_queue_qinsertstrn(q, 0, NULL, 5));
+		cr_assert_eq(SP_EINDEX, sp_queue_qinsertstrn(q, 1, "another test", 3));
+		cr_assert_eq(0, sp_queue_qinsertstrn(q, 0, "yet another test", 11));
+		cr_assert_eq(1LU, (unsigned long)q->size);
+		cr_assert_eq(0, sp_queue_qinsertstrn(q, 0, "one more", 3));
+		cr_assert_eq(2LU, (unsigned long)q->size);
+		cr_assert_eq(0, sp_queue_qinsertstrn(q, 0, "last test", 0));
+		cr_assert_eq(3LU, (unsigned long)q->size);
+		cr_assert_eq(0, strcmp("", sp_queue_getstr(q, 0)));
+		cr_assert_eq(0, strcmp("yet another", sp_queue_getstr(q, 1)));
+		cr_assert_eq(0, strcmp("one", sp_queue_getstr(q, 2)));
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		for (i = 0; i < 1000; i++) {
+			size_t idx = IRANGE(0, i);
+			a[0] = IRANGE(' ', '~');
+			strcpy(d[i], a);
+			cr_assert_eq(0, sp_queue_qinsertstrn(q, idx, d[i], 24));
+			cr_assert_eq((unsigned long)i + 1, (unsigned long)q->size);
+			cr_assert_eq(0, strcmp(d[i], sp_queue_getstr(q, idx)));
+		}
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		q = sp_queue_create(sizeof(char*), 1000);
+		for (i = 0; i < SIZE_MAX / sizeof(char*); i++) {
+			cr_assert_eq(0, sp_queue_qinsertstrn(q, 0, "test", 3));
+			cr_assert_eq(0, strcmp("tes", sp_queue_getstr(q, 0)));
+		}
+		cr_assert_eq(SP_ERANGE, sp_queue_qinsertstrn(q, 0, "test", 3));
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		q = sp_queue_create(sizeof(char*), 10);
+		cr_assert_not_null(q);
+		for (i = 0; i < 5; i++)
+			cr_assert_eq(0, sp_queue_qinsertstrn(q, i, d[i], 24));
+		for (i = 0; i < 5; i++)
+			cr_assert_eq(0, strcmp(d[i], sp_queue_getstr(q, i)));
+		cr_assert_eq(0, sp_queue_qinsertstrn(q, 1, d[5], 24));
+		cr_assert_eq(q->tail, (char*)q->data + 5 * q->elem_size);
+		cr_assert_eq(0, sp_queue_qinsertstrn(q, 3, d[6], 24));
+		cr_assert_eq(q->tail, (char*)q->data + 6 * q->elem_size);
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+		q = sp_queue_create(sizeof(char*) + 1, 1000);
+		cr_assert_not_null(q);
+		cr_assert_eq(SP_EILLEGAL, sp_queue_qinsertstrn(q, 0, "test string", 4));
+		cr_assert_eq(0, sp_queue_destroy(q, NULL));
+	}
 }
 
 Test(queue, remove)
@@ -749,6 +1018,63 @@ Test(queue, remove)
 	test(double        , sp_queue_removed , sp_queue_pushd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , sp_queue_removeld, sp_queue_pushld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
+
+	{ /* Suffixed form - strings */
+		char a[25] = " test string";
+		char d[100][25];
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		cr_assert_eq(NULL, sp_queue_removestr(q, 0));
+		cr_assert_eq(0, sp_queue_pushstr(q, a));
+		cr_assert_eq(NULL, sp_queue_removestr(NULL, 0));
+		cr_assert_eq(NULL, sp_queue_removestr(q, 1));
+		cr_assert_eq(1LU, (unsigned long)q->size);
+		cr_assert_eq(0, strcmp(a, sp_queue_removestr(q, 0)));
+		cr_assert_eq(0LU, (unsigned long)q->size);
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		q = sp_queue_create(sizeof(char*), 100);
+		cr_assert_not_null(q);
+		for (i = 0; i < 100; i++) {
+			a[0] = IRANGE(' ', '~');
+			strcpy(d[i], a);
+			cr_assert_eq(0, sp_queue_pushstr(q, d[i]));
+		}
+		for (i = 0; i < 100; i++) {
+			char *a;
+			size_t idx = IRANGE(0, q->size - 1), j;
+			int found = 0;
+			cr_assert_neq(NULL, (a = sp_queue_removestr(q, idx)));
+			for (j = 0; j < 100; j++) {
+				/* Lazy and slow way to check, but on average
+				 * it's enough */
+				if (strcmp(a, d[j]) == 0) {
+					found = 1;
+					break;
+				}
+			}
+			cr_assert_eq(1, found);
+			free(a);
+		}
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		q = sp_queue_create(sizeof(char*), 10);
+		cr_assert_not_null(q);
+		for (i = 0; i < 8; i++)
+			cr_assert_eq(0, sp_queue_pushstr(q, d[i]));
+		cr_assert_eq(0, strcmp(d[3], sp_queue_removestr(q, 3)));
+		cr_assert_eq(q->head, (char*)q->data + q->elem_size);
+		cr_assert_eq(0, strcmp(d[0], sp_queue_removestr(q, 0)));
+		cr_assert_eq(q->head, (char*)q->data + 2 * q->elem_size);
+		cr_assert_eq(0, strcmp(d[5], sp_queue_removestr(q, 3)));
+		cr_assert_eq(q->tail, (char*)q->data + 6 * q->elem_size);
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+		q = sp_queue_create(sizeof(char*) + 1, 1000);
+		cr_assert_not_null(q);
+		q->size = 1;
+		cr_assert_eq(NULL, sp_queue_removestr(q, 0));
+		cr_assert_eq(0, sp_queue_destroy(q, NULL));
+	}
 }
 
 Test(queue, qremove)
@@ -901,6 +1227,65 @@ Test(queue, qremove)
 	test(double        , sp_queue_qremoved , sp_queue_pushd , sp_queue_getd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , sp_queue_qremoveld, sp_queue_pushld, sp_queue_getld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
+
+	{ /* Suffixed form - strings */
+		char a[25] = "test string";
+		char d[100][25];
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		cr_assert_eq(NULL, sp_queue_qremovestr(q, 0));
+		cr_assert_eq(0, sp_queue_pushstr(q, a));
+		cr_assert_eq(NULL, sp_queue_qremovestr(NULL, 0));
+		cr_assert_eq(NULL, sp_queue_qremovestr(q, 1));
+		cr_assert_eq(1LU, (unsigned long)q->size);
+		cr_assert_eq(0, strcmp(a, sp_queue_qremovestr(q, 0)));
+		cr_assert_eq(0LU, (unsigned long)q->size);
+		cr_assert_eq(0, sp_queue_destroy(q, NULL));
+
+		q = sp_queue_create(sizeof(char*), 100);
+		cr_assert_not_null(q);
+		for (i = 0; i < 100; i++) {
+			a[0] = IRANGE(' ', '~');
+			strcpy(d[i], a);
+			cr_assert_eq(0, sp_queue_pushstr(q, d[i]));
+		}
+		for (i = 0; i < 100; i++) {
+			char *a;
+			size_t idx = IRANGE(0, q->size - 1), j;
+			int found = 0;
+			cr_assert_neq(NULL, (a = sp_queue_qremovestr(q, idx)));
+			for (j = 0; j < 100; j++) {
+				/* Lazy and slow way to check, but on average
+				 * it'q enough */
+				if (strcmp(a, d[j]) == 0) {
+					found = 1;
+					break;
+				}
+			}
+			cr_assert_eq(1, found);
+			free(a);
+		}
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+
+		q = sp_queue_create(sizeof(char*), 10);
+		cr_assert_not_null(q);
+		for (i = 0; i < 8; i++) {
+			cr_assert_eq(0, sp_queue_pushstr(q, d[i]));
+		}
+		cr_assert_eq(0, strcmp(d[3], sp_queue_qremovestr(q, 3)));
+		cr_assert_eq(0, strcmp(d[7], sp_queue_getstr(q, 3)));
+		cr_assert_eq(0, strcmp(d[0], sp_queue_qremovestr(q, 0)));
+		cr_assert_eq(0, strcmp(d[6], sp_queue_getstr(q, 0)));
+		cr_assert_eq(0, strcmp(d[7], sp_queue_qremovestr(q, 3)));
+		cr_assert_eq(0, strcmp(d[5], sp_queue_getstr(q, 3)));
+		cr_assert_eq(q->tail, (char*)q->data + 4 * q->elem_size);
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+		q = sp_queue_create(sizeof(char*) + 1, 1000);
+		cr_assert_not_null(q);
+		q->size = 1;
+		cr_assert_eq(NULL, sp_queue_qremovestr(q, 0));
+		cr_assert_eq(0, sp_queue_destroy(q, NULL));
+	}
 }
 
 Test(queue, get)
@@ -979,6 +1364,31 @@ Test(queue, get)
 	test(double        , sp_queue_getd , sp_queue_pushd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , sp_queue_getld, sp_queue_pushld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
+
+	{ /* Suffixed form - strings */
+		unsigned i;
+		char a[25] = " test string";
+		char d[1000][25];
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		cr_assert_eq(NULL, sp_queue_getstr(q, 0));
+		cr_assert_eq(0, sp_queue_pushstr(q, a));
+		cr_assert_eq(NULL, sp_queue_getstr(NULL, 0));
+		cr_assert_eq(NULL, sp_queue_getstr(q, 1));
+		cr_assert_eq(0, strcmp(a, sp_queue_getstr(q, 0)));
+		cr_assert_eq(0, sp_queue_destroy(q, NULL));
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		for (i = 0; i < 1000; i++) {
+			a[0] = IRANGE(' ', '~');
+			strcpy(d[i], a);
+			cr_assert_eq(0, sp_queue_pushstr(q, d[i]));
+		}
+		for (i = 0; i < 1000; i++) {
+			cr_assert_eq(0, strcmp(d[i], sp_queue_getstr(q, i)));
+		}
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+	}
 }
 
 Test(queue, set)
@@ -1066,6 +1476,57 @@ Test(queue, set)
 	test(double        , sp_queue_setd , sp_queue_pushd , sp_queue_getd , FRANGE(1, DBL_MAX)  , "%f");
 	test(long double   , sp_queue_setld, sp_queue_pushld, sp_queue_getld, FRANGE(1, LDBL_MAX) , "%Lf");
 #undef test
+
+	{ /* Suffixed form - strings */
+		unsigned i;
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		cr_assert_eq(SP_EINDEX, sp_queue_setstr(q, 0, "abc"));
+		cr_assert_eq(0, sp_queue_pushstr(q, "abc"));
+		cr_assert_eq(SP_EINVAL, sp_queue_setstr(NULL, 0, "def"));
+		cr_assert_eq(SP_EINDEX, sp_queue_setstr(q, 1, "def"));
+		cr_assert_eq(0, sp_queue_setstr(q, 0, "xyz"));
+		cr_assert_eq(0, strcmp("xyz", sp_queue_getstr(q, 0)));
+		cr_assert_eq(0, sp_queue_clear(q, sp_free));
+		for (i = 0; i < 1000; i++)
+			cr_assert_eq(0, sp_queue_pushstr(q, "test string"));
+		for (i = 0; i < 1000; i++) {
+			const char *b = "another string";
+			cr_assert_eq(0, sp_queue_setstr(q, i, b));
+			cr_assert_eq(0, strcmp(b, sp_queue_getstr(q, i)));
+		}
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+		q = sp_queue_create(sizeof(char*) + 1, 1000);
+		cr_assert_not_null(q);
+		q->size = 1;
+		cr_assert_eq(SP_EILLEGAL, sp_queue_setstr(q, 0, "test"));
+		cr_assert_eq(0, sp_queue_destroy(q, NULL));
+
+		/* substrings (strn) */
+		q = sp_queue_create(sizeof(char*), 1000);
+		cr_assert_not_null(q);
+		cr_assert_eq(SP_EINDEX, sp_queue_setstrn(q, 0, "abcdef", 3));
+		cr_assert_eq(0, sp_queue_pushstr(q, "abc"));
+		cr_assert_eq(SP_EINVAL, sp_queue_setstrn(NULL, 0, "defghi", 3));
+		cr_assert_eq(SP_EINDEX, sp_queue_setstrn(q, 1, "defghi", 3));
+		cr_assert_eq(0, sp_queue_setstrn(q, 0, "xyzabc", 3));
+		cr_assert_eq(0, strcmp("xyz", sp_queue_getstr(q, 0)));
+		cr_assert_eq(0, sp_queue_setstrn(q, 0, "testing", 0));
+		cr_assert_eq(0, strcmp("", sp_queue_getstr(q, 0)));
+		cr_assert_eq(0, sp_queue_clear(q, sp_free));
+		for (i = 0; i < 1000; i++)
+			cr_assert_eq(0, sp_queue_pushstr(q, "test string"));
+		for (i = 0; i < 1000; i++) {
+			cr_assert_eq(0, sp_queue_setstrn(q, i, "another string", 7));
+			cr_assert_eq(0, strcmp("another", sp_queue_getstr(q, i)));
+		}
+		cr_assert_eq(0, sp_queue_destroy(q, sp_free));
+		q = sp_queue_create(sizeof(char*) + 1, 1000);
+		cr_assert_not_null(q);
+		q->size = 1;
+		cr_assert_eq(SP_EILLEGAL, sp_queue_setstrn(q, 0, "test", 0));
+		cr_assert_eq(0, sp_queue_destroy(q, NULL));
+	}
 }
 
 Test(queue, print)
@@ -1115,6 +1576,19 @@ Test(queue, print)
 	test(float         , sp_queue_pushf , sp_queue_printf , FLT_MIN, FLT_MAX);
 	test(double        , sp_queue_pushd , sp_queue_printd , DBL_MIN, DBL_MAX);
 	test(long double   , sp_queue_pushld, sp_queue_printld, LDBL_MIN, LDBL_MAX);
+
+	{ /* Suffixed form - strings */
+		const char *a = "test string #1", *b = "test string #2";
+		q = sp_queue_create(sizeof(char*), 30);
+		cr_assert_eq(0, sp_queue_pushstr(q, a));
+		cr_assert_eq(0, sp_queue_pushstr(q, b));
+		cr_assert_eq(SP_EINVAL, sp_queue_printstr(NULL));
+		cr_assert_eq(0, sp_queue_printstr(q));
+		cr_assert_eq(0, sp_queue_destroy(q, NULL));
+		q = sp_queue_create(sizeof(char*) + 1, 30);
+		cr_assert_eq(SP_EILLEGAL, sp_queue_printstr(q));
+		cr_assert_eq(0, sp_queue_destroy(q, NULL));
+	}
 }
 
 Test(queue, ringbuf_resize)
