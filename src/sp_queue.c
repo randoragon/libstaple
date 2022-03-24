@@ -67,7 +67,7 @@ int sp_queue_clear(struct sp_queue *queue, int (*dtor)(void*))
 		return SP_EINVAL;
 	}
 #endif
-	if (dtor != NULL) {
+	if (dtor != NULL)
 		while (queue->size != 0) {
 			int error;
 			if ((error = dtor(queue->head))) {
@@ -77,10 +77,8 @@ int sp_queue_clear(struct sp_queue *queue, int (*dtor)(void*))
 			sp_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
 			queue->size--;
 		}
-	} else {
-		queue->size = 0;
-		queue->head = queue->tail;
-	}
+	queue->size = 0;
+	queue->head = queue->tail;
 	return 0;
 }
 
