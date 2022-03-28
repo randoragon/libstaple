@@ -66,7 +66,7 @@ int sp_buf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size)
 int sp_ringbuf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size, void **head, void **tail)
 {
 	if (size == *capacity) {
-		const size_t head_offset = *(char*)head - *(char*)buf;
+		const size_t head_offset = *(char**)head - *(char**)buf;
 		void *dest;
 
 		int error;
