@@ -21,7 +21,8 @@ sp_queue_qinsert, sp_queue_qinsertc, sp_queue_qinserts,
 sp_queue_qinserti, sp_queue_qinsertl, sp_queue_qinsertsc,
 sp_queue_qinsertuc, sp_queue_qinsertus, sp_queue_qinsertui,
 sp_queue_qinsertul, sp_queue_qinsertf, sp_queue_qinsertd,
-sp_queue_qinsertld \- quickly insert an element at any position of a queue
+sp_queue_qinsertld, sp_queue_qinsertstr, sp_queue_qinsertstrn \- quickly insert
+an element at any position of a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -129,6 +130,24 @@ size_t
 .IR idx ,
 long double
 .IR elem )
+.br
+int
+.BR sp_queue_qinsertstr "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+const char
+.RI * elem )
+.br
+int
+.BR sp_queue_qinsertstrn "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+const char
+.RI * elem ,
+size_t
+.IR len )
 .sp
 Link with \fI-lstaple\fP.
 .ad

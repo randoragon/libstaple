@@ -19,8 +19,8 @@
 .SH NAME
 sp_queue_get, sp_queue_getc, sp_queue_gets, sp_queue_geti, sp_queue_getl,
 sp_queue_getsc, sp_queue_getuc, sp_queue_getus, sp_queue_getui,
-sp_queue_getul, sp_queue_getf, sp_queue_getd, sp_queue_getld \- look up
-arbitrary element in a queue
+sp_queue_getul, sp_queue_getf, sp_queue_getd, sp_queue_getld, sp_queue_getstr \-
+look up arbitrary element in a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -101,6 +101,12 @@ size_t
 .br
 long double
 .BR sp_queue_getld "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+char
+.RB * sp_queue_getstr "(const struct sp_queue"
 .RI * queue ,
 size_t
 .IR idx )

@@ -20,7 +20,7 @@
 sp_queue_print, sp_queue_printc, sp_queue_prints, sp_queue_printi,
 sp_queue_printl, sp_queue_printsc, sp_queue_printuc, sp_queue_printus,
 sp_queue_printui, sp_queue_printul, sp_queue_printf, sp_queue_printd,
-sp_queue_printld \- print contents of a queue
+sp_queue_printld, sp_queue_printstr \- print contents of a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -75,6 +75,10 @@ int
 .br
 int
 .BR sp_queue_printld "(const struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printstr "(const struct sp_queue"
 .RI * queue )
 .sp
 Link with \fI-lstaple\fP.

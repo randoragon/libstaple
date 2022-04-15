@@ -20,7 +20,8 @@
 sp_queue_remove, sp_queue_removec, sp_queue_removes, sp_queue_removei,
 sp_queue_removel, sp_queue_removesc, sp_queue_removeuc, sp_queue_removeus,
 sp_queue_removeui, sp_queue_removeul, sp_queue_removef, sp_queue_removed,
-sp_queue_removeld \- remove an element from any position of a queue
+sp_queue_removeld, sp_queue_removestr \- remove an element from any position of
+a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -101,6 +102,12 @@ size_t
 .br
 long double
 .BR sp_queue_removeld "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+char
+.RB * sp_queue_removeld "(struct sp_queue"
 .RI * queue ,
 size_t
 .IR idx )
