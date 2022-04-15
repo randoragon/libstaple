@@ -21,7 +21,8 @@ sp_stack_qinsert, sp_stack_qinsertc, sp_stack_qinserts,
 sp_stack_qinserti, sp_stack_qinsertl, sp_stack_qinsertsc,
 sp_stack_qinsertuc, sp_stack_qinsertus, sp_stack_qinsertui,
 sp_stack_qinsertul, sp_stack_qinsertf, sp_stack_qinsertd,
-sp_stack_qinsertld \- quickly insert an element at any position of a stack
+sp_stack_qinsertld, sp_stack_qinsertstr, sp_stack_qinsertstrn \- quickly insert
+an element at any position of a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -129,6 +130,24 @@ size_t
 .IR idx ,
 long double
 .IR elem )
+.br
+int
+.BR sp_stack_qinsertstr "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+const char
+.RI * elem )
+.br
+int
+.BR sp_stack_qinsertstrn "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+const char
+.RI * elem ,
+size_t
+.IR len )
 .sp
 Link with \fI-lstaple\fP.
 .ad

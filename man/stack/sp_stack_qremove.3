@@ -21,7 +21,8 @@ sp_stack_qremove, sp_stack_qremovec, sp_stack_qremoves,
 sp_stack_qremovei, sp_stack_qremovel, sp_stack_qremovesc,
 sp_stack_qremoveuc, sp_stack_qremoveus, sp_stack_qremoveui,
 sp_stack_qremoveul, sp_stack_qremovef, sp_stack_qremoved,
-sp_stack_qremoveld \- quickly remove an element from any position of a stack
+sp_stack_qremoveld, sp_stack_qremovestr \- quickly remove an element from any
+position of a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -102,6 +103,12 @@ size_t
 .br
 long double
 .BR sp_stack_qremoveld "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+char
+.RB * sp_stack_qremovestr "(struct sp_stack"
 .RI * stack ,
 size_t
 .IR idx )

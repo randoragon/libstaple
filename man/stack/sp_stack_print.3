@@ -20,7 +20,7 @@
 sp_stack_print, sp_stack_printc, sp_stack_prints, sp_stack_printi,
 sp_stack_printl, sp_stack_printsc, sp_stack_printuc, sp_stack_printus,
 sp_stack_printui, sp_stack_printul, sp_stack_printf, sp_stack_printd,
-sp_stack_prinld \- print contents of a stack
+sp_stack_printld, sp_stack_printstr \- print contents of a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -75,6 +75,10 @@ int
 .br
 int
 .BR sp_stack_printld "(const struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printstr "(const struct sp_stack"
 .RI * stack )
 .sp
 Link with \fI-lstaple\fP.
