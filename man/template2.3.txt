@@ -29,7 +29,9 @@ fooui,
 fooul,
 foof,
 food,
-foold \- ##
+foold,
+foostr,
+foostrn\- ##
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -85,6 +87,14 @@ foold \- ##
 ##
 .BR foold (##
 .IR ## )
+.br
+##
+.BR foostr (##
+.IR ## )
+.br
+##
+.BR foostrn (##
+.IR ## )
 .sp
 Link with \fI-lstaple\fP.
 .ad
@@ -127,4 +137,3 @@ See
 .BR sp_stack_get (3),
 .BR sp_stack_set (3),
 .BR sp_stack_print (3)
-
