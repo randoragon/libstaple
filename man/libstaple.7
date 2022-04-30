@@ -66,7 +66,7 @@ separate functions that allow using pass-by-value, which is often more
 convenient.
 .P
 Here is a full table of suffixes, although all you need to remember is to use
-the first letters of your target type:
+the first letters of your target type (except for strings):
 .TS
 box;
 rb|lb
@@ -87,6 +87,8 @@ uc 	unsigned char
 f 	float
 d 	double
 ld 	long double
+str	\fRstring (\fPchar*\fR)\fP
+strn	\fRsubstring (\fPchar*\fR)\fP
 .TE
 .P
 .B "signed char"
