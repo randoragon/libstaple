@@ -31,10 +31,10 @@ struct sp_stack {
 };
 
 struct sp_stack *sp_stack_create(size_t elem_size, size_t capacity);
-int               sp_stack_clear(struct sp_stack *stack, int (*dtor)(void*));
-int               sp_stack_destroy(struct sp_stack *stack, int (*dtor)(void*));
-int               sp_stack_copy(struct sp_stack *dest, const struct sp_stack *src, int (*cpy)(void*, const void*));
-int               sp_stack_foreach(struct sp_stack *stack, int (*func)(void*, size_t));
+int              sp_stack_clear(struct sp_stack *stack, int (*dtor)(void*));
+int              sp_stack_destroy(struct sp_stack *stack, int (*dtor)(void*));
+int              sp_stack_copy(struct sp_stack *dest, const struct sp_stack *src, int (*cpy)(void*, const void*));
+int              sp_stack_foreach(struct sp_stack *stack, int (*func)(void*, size_t));
 
 int sp_stack_push(struct sp_stack *stack, const void *elem);
 int sp_stack_pushc(struct sp_stack *stack, char elem);
