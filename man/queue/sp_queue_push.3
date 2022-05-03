@@ -20,7 +20,8 @@
 sp_queue_push, sp_queue_pushc, sp_queue_pushs, sp_queue_pushi,
 sp_queue_pushl, sp_queue_pushsc, sp_queue_pushuc, sp_queue_pushus,
 sp_queue_pushui, sp_queue_pushul, sp_queue_pushf, sp_queue_pushd,
-sp_queue_pushld \- push a new element to the back of a queue
+sp_queue_pushld, sp_queue_pushstr, sp_queue_pushstrn \- push
+a new element to the back of a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -102,6 +103,20 @@ int
 .RI * queue ,
 long double
 .IR elem )
+.br
+int
+.BR sp_queue_pushstr "(struct sp_queue"
+.RI * queue ,
+const char
+.RI * elem )
+.br
+int
+.BR sp_queue_pushstrn "(struct sp_queue"
+.RI * queue ,
+const char
+.RI * elem ,
+size_t
+.IR len )
 .sp
 Link with \fI-lstaple\fP.
 .ad
@@ -132,6 +147,25 @@ field.
 .SS Suffixed Form
 .I elem
 is passed directly in the function argument.
+.P
+The
+.BR sp_queue_pushstr ()
+function creates a copy of the string pointed to by
+.I elem
+and stores the new pointer on the queue. The string must fit in
+.I SIZE_MAX
+bytes, including the null terminator.
+.P
+The
+.BR sp_queue_pushstrn ()
+function is equivalent to
+.BR sp_queue_pushstr (),
+except it shall always copy exactly
+.I len
+bytes and append a null terminator at the end.
+.I len
+must be smaller than
+.IR SIZE_MAX .
 .SH RETURN VALUE
 If successful, the functions in the
 .BR sp_queue_push ()
@@ -165,6 +199,19 @@ functions shall fail if:
 does not match the size of the
 .I elem
 argument (debug mode only).
+.P
+The
+.BR sp_queue_pushstr ()
+and
+.BR sp_queue_pushstrn ()
+functions shall additionally fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+.I elem
+is a null pointer (debug mode only).
+.IP \fBSP_ERANGE\fP 1.5i
+string too long or
+.I len
+too large.
 .SH CONFORMING TO
 See
 .BR libstaple (7).

@@ -20,7 +20,8 @@
 sp_queue_insert, sp_queue_insertc, sp_queue_inserts, sp_queue_inserti,
 sp_queue_insertl, sp_queue_insertsc, sp_queue_insertuc, sp_queue_insertus,
 sp_queue_insertui, sp_queue_insertul, sp_queue_insertf, sp_queue_insertd,
-sp_queue_insertld \- insert an element at any position of a queue
+sp_queue_insertld, sp_queue_insertstr, sp_queue_insertstrn \- insert an element
+at any position of a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -128,6 +129,24 @@ size_t
 .IR idx ,
 long double
 .IR elem )
+.br
+int
+.BR sp_queue_insertstr "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+const char
+.RI * elem )
+.br
+int
+.BR sp_queue_insertstrn "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+const char
+.RI * elem ,
+size_t
+.IR len )
 .sp
 Link with \fI-lstaple\fP.
 .ad
@@ -164,6 +183,25 @@ field.
 .SS Suffixed Form
 .I elem
 is passed directly in the function argument.
+.P
+The
+.BR sp_queue_insertstr ()
+function creates a copy of the string pointed to by
+.I elem
+and stores the new pointer on the queue. The string must fit in
+.I SIZE_MAX
+bytes, including the null terminator.
+.P
+The
+.BR sp_queue_insertstrn ()
+function is equivalent to
+.BR sp_queue_insertstr (),
+except it shall always copy exactly
+.I len
+bytes and append a null terminator at the end.
+.I len
+must be smaller than
+.IR SIZE_MAX .
 .SH RETURN VALUE
 If successful, the functions in the
 .BR sp_queue_insert ()
@@ -200,6 +238,19 @@ functions shall fail if:
 does not match the size of the
 .I elem
 argument (debug mode only).
+.P
+The
+.BR sp_stack_insertstr ()
+and
+.BR sp_stack_insertstrn ()
+functions shall additionally fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+.I elem
+is a null pointer (debug mode only).
+.IP \fBSP_ERANGE\fP 1.5i
+string too long or
+.I len
+too large.
 .SH CONFORMING TO
 See
 .BR libstaple (7).
@@ -221,4 +272,3 @@ See
 .BR sp_queue_get (3),
 .BR sp_queue_set (3),
 .BR sp_queue_print (3)
-

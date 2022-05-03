@@ -443,6 +443,77 @@ int sp_stack_pushld(struct sp_stack *stack, long double elem)
 	return 0;
 }
 
+int sp_stack_pushstr(struct sp_stack *stack, const char *elem)
+{
+	char *buf;
+	size_t len;
+#ifdef STAPLE_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return SP_EINVAL;
+	}
+	if (elem == NULL) {
+		error(("elem is NULL"));
+		return SP_EINVAL;
+	}
+	if (stack->elem_size != sizeof(elem)) {
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
+		return SP_EILLEGAL;
+	}
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	len = sp_strnlen(elem, SIZE_MAX);
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		error(("malloc"));
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	((char**)stack->data)[stack->size++] = buf;
+	return 0;
+}
+
+int sp_stack_pushstrn(struct sp_stack *stack, const char *elem, size_t len)
+{
+	char *buf;
+#ifdef STAPLE_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return SP_EINVAL;
+	}
+	if (elem == NULL) {
+		error(("elem is NULL"));
+		return SP_EINVAL;
+	}
+	if (stack->elem_size != sizeof(elem)) {
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
+		return SP_EILLEGAL;
+	}
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		error(("malloc"));
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	((char**)stack->data)[stack->size++] = buf;
+	return 0;
+}
 
 int sp_stack_insert(struct sp_stack *stack, size_t idx, const void *elem)
 {
@@ -816,6 +887,94 @@ int sp_stack_insertld(struct sp_stack *stack, size_t idx, long double elem)
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
 	memmove(p + stack->elem_size, p, idx * stack->elem_size);
 	*(long double*)p = elem;
+	++stack->size;
+	return 0;
+}
+
+int sp_stack_insertstr(struct sp_stack *stack, size_t idx, const char *elem)
+{
+	char *p;
+	char *buf;
+	size_t len;
+#ifdef STAPLE_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return SP_EINVAL;
+	}
+	if (elem == NULL) {
+		error(("elem is NULL"));
+		return SP_EINVAL;
+	}
+	if (stack->elem_size != sizeof(elem)) {
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
+		return SP_EILLEGAL;
+	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return SP_EINDEX;
+	}
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	len = sp_strnlen(elem, SIZE_MAX);
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		error(("malloc"));
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	memmove(p + stack->elem_size, p, idx * stack->elem_size);
+	*(char**)p = buf;
+	++stack->size;
+	return 0;
+}
+
+int sp_stack_insertstrn(struct sp_stack *stack, size_t idx, const char *elem, size_t len)
+{
+	char *p;
+	char *buf;
+#ifdef STAPLE_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return SP_EINVAL;
+	}
+	if (elem == NULL) {
+		error(("elem is NULL"));
+		return SP_EINVAL;
+	}
+	if (stack->elem_size != sizeof(elem)) {
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
+		return SP_EILLEGAL;
+	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return SP_EINDEX;
+	}
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		error(("malloc"));
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	memmove(p + stack->elem_size, p, idx * stack->elem_size);
+	*(char**)p = buf;
 	++stack->size;
 	return 0;
 }
@@ -1210,6 +1369,96 @@ int sp_stack_qinsertld(struct sp_stack *stack, size_t idx, long double elem)
 	return 0;
 }
 
+int sp_stack_qinsertstr(struct sp_stack *stack, size_t idx, const char *elem)
+{
+	char *p, *q;
+	char *buf;
+	size_t len;
+#ifdef STAPLE_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return SP_EINVAL;
+	}
+	if (elem == NULL) {
+		error(("elem is NULL"));
+		return SP_EINVAL;
+	}
+	if (stack->elem_size != sizeof(elem)) {
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
+		return SP_EILLEGAL;
+	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return SP_EINDEX;
+	}
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	len = sp_strnlen(elem, SIZE_MAX);
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		error(("malloc"));
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	q = (char*)stack->data + stack->size * stack->elem_size;
+	*(char**)q = *(char**)p;
+	*(char**)p = buf;
+	++stack->size;
+	return 0;
+}
+
+int sp_stack_qinsertstrn(struct sp_stack *stack, size_t idx, const char *elem, size_t len)
+{
+	char *p, *q;
+	char *buf;
+#ifdef STAPLE_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return SP_EINVAL;
+	}
+	if (elem == NULL) {
+		error(("elem is NULL"));
+		return SP_EINVAL;
+	}
+	if (stack->elem_size != sizeof(elem)) {
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(elem)));
+		return SP_EILLEGAL;
+	}
+	if (idx > stack->size) {
+		error(("index out of range"));
+		return SP_EINDEX;
+	}
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		error(("malloc"));
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	q = (char*)stack->data + stack->size * stack->elem_size;
+	*(char**)q = *(char**)p;
+	*(char**)p = buf;
+	++stack->size;
+	return 0;
+}
+
 
 int sp_stack_peek(const struct sp_stack *stack, void *output)
 {
@@ -1473,6 +1722,26 @@ long double sp_stack_peekld(const struct sp_stack *stack)
 	return ((long double*)stack->data)[stack->size - 1];
 }
 
+char *sp_stack_peekstr(const struct sp_stack *stack)
+{
+#ifdef STAPLE_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return NULL;
+	}
+	if (stack->elem_size != sizeof(char*)) {
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(char*)));
+		return NULL;
+	}
+	if (stack->size == 0) {
+		error(("stack is empty"));
+		return NULL;
+	}
+#endif
+	return ((char**)stack->data)[stack->size - 1];
+}
+
 
 int sp_stack_pop(struct sp_stack *stack, void *output)
 {
@@ -1732,6 +2001,26 @@ long double sp_stack_popld(struct sp_stack *stack)
 	}
 #endif
 	return ((long double*)stack->data)[--stack->size];
+}
+
+char *sp_stack_popstr(struct sp_stack *stack)
+{
+#ifdef STAPLE_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return NULL;
+	}
+	if (stack->size == 0) {
+		error(("stack is empty"));
+		return NULL;
+	}
+	if (stack->elem_size != sizeof(char*)) {
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(char*)));
+		return NULL;
+	}
+#endif
+	return ((char**)stack->data)[--stack->size];
 }
 
 
@@ -2063,6 +2352,32 @@ long double sp_stack_removeld(struct sp_stack *stack, size_t idx)
 #endif
 	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 	ret = *(long double*)p;
+	memmove(p, p + stack->elem_size, idx * stack->elem_size);
+	--stack->size;
+	return ret;
+}
+
+char *sp_stack_removestr(struct sp_stack *stack, size_t idx)
+{
+	char *p;
+	char *ret;
+#ifdef STAPLE_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return NULL;
+	}
+	if (stack->elem_size != sizeof(char*)) {
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(char*)));
+		return NULL;
+	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
+		return NULL;
+	}
+#endif
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	ret = *(char**)p;
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;
 	return ret;
@@ -2415,6 +2730,33 @@ long double sp_stack_qremoveld(struct sp_stack *stack, size_t idx)
 	return ret;
 }
 
+char *sp_stack_qremovestr(struct sp_stack *stack, size_t idx)
+{
+	char *p, *q;
+	char *ret;
+#ifdef STAPLE_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return NULL;
+	}
+	if (stack->elem_size != sizeof(char*)) {
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(char*)));
+		return NULL;
+	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
+		return NULL;
+	}
+#endif
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	q = (char*)stack->data + (stack->size - 1) * stack->elem_size;
+	ret = *(char**)p;
+	*(char**)p = *(char**)q;
+	--stack->size;
+	return ret;
+}
+
 
 int sp_stack_get(const struct sp_stack *stack, size_t idx, void *output)
 {
@@ -2676,6 +3018,26 @@ long double sp_stack_getld(const struct sp_stack *stack, size_t idx)
 	}
 #endif
 	return ((long double*)stack->data)[stack->size - 1 - idx];
+}
+
+char *sp_stack_getstr(const struct sp_stack *stack, size_t idx)
+{
+#ifdef STAPLE_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return NULL;
+	}
+	if (stack->elem_size != sizeof(char*)) {
+		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(char*)));
+		return NULL;
+	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
+		return NULL;
+	}
+#endif
+	return ((char**)stack->data)[stack->size - 1 - idx];
 }
 
 
@@ -2977,6 +3339,84 @@ int sp_stack_setld(struct sp_stack *stack, size_t idx, long double val)
 	return 0;
 }
 
+int sp_stack_setstr(struct sp_stack *stack, size_t idx, const char *val)
+{
+	char *p;
+	char *buf;
+	size_t len;
+#ifdef STAPLE_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return SP_EINVAL;
+	}
+	if (val == NULL) {
+		error(("val is NULL"));
+		return SP_EINVAL;
+	}
+	if (stack->elem_size != sizeof(val)) {
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
+		return SP_EILLEGAL;
+	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
+		return SP_EINDEX;
+	}
+#endif
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	free(*(char**)p);
+	len = sp_strnlen(val, SIZE_MAX);
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*val));
+	if (buf == NULL) {
+		error(("malloc"));
+		return SP_ENOMEM;
+	}
+	memcpy(buf, val, len * sizeof(*val));
+	buf[len] = '\0';
+	*(char**)p = buf;
+	return 0;
+}
+
+int sp_stack_setstrn(struct sp_stack *stack, size_t idx, const char *val, size_t len)
+{
+	char *p;
+	char *buf;
+#ifdef STAPLE_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return SP_EINVAL;
+	}
+	if (val == NULL) {
+		error(("val is NULL"));
+		return SP_EINVAL;
+	}
+	if (stack->elem_size != sizeof(val)) {
+		error(("stack->elem_size is incompatible with val type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(val)));
+		return SP_EILLEGAL;
+	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
+		return SP_EINDEX;
+	}
+#endif
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	free(*(char**)p);
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*val));
+	if (buf == NULL) {
+		error(("malloc"));
+		return SP_ENOMEM;
+	}
+	memcpy(buf, val, len * sizeof(*val));
+	buf[len] = '\0';
+	*(char**)p = buf;
+	return 0;
+}
+
 
 int sp_stack_print(const struct sp_stack *stack)
 {
@@ -3268,6 +3708,29 @@ int sp_stack_printld(const struct sp_stack *stack)
 	for (i = stack->size; i-- > 0;) {
 		const long double elem = ((long double*)stack->data)[i];
 		printf("[%lu]\t%Lg\n", (unsigned long)stack->size - 1 - i, elem);
+	}
+	return 0;
+}
+
+int sp_stack_printstr(const struct sp_stack *stack)
+{
+	size_t i;
+#ifdef STAPLE_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return SP_EINVAL;
+	}
+	if (stack->elem_size != sizeof(char*)) {
+		error(("stack->elem_size is incompatible with function type (%lu != %lu)",
+					(unsigned long)stack->elem_size, sizeof(char*)));
+		return SP_EILLEGAL;
+	}
+#endif
+	printf("sp_stack_printstr()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
+	for (i = stack->size; i-- > 0;) {
+		const char *elem = ((char**)stack->data)[i];
+		printf("[%lu]\t%s\n", (unsigned long)stack->size - 1 - i, elem);
 	}
 	return 0;
 }

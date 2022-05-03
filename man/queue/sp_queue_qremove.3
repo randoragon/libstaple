@@ -21,7 +21,8 @@ sp_queue_qremove, sp_queue_qremovec, sp_queue_qremoves,
 sp_queue_qremovei, sp_queue_qremovel, sp_queue_qremovesc,
 sp_queue_qremoveuc, sp_queue_qremoveus, sp_queue_qremoveui,
 sp_queue_qremoveul, sp_queue_qremovef, sp_queue_qremoved,
-sp_queue_qremoveld \- quickly remove an element from any position of a queue
+sp_queue_qremoveld, sp_queue_qremovestr \- quickly remove an element from any
+position of a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -102,6 +103,12 @@ size_t
 .br
 long double
 .BR sp_queue_qremoveld "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+char
+.RB * sp_queue_qremovestr "(struct sp_queue"
 .RI * queue ,
 size_t
 .IR idx )

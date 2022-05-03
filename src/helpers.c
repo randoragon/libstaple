@@ -214,3 +214,10 @@ void sp_ringbuf_remove(size_t idx, void *buf, size_t *size, size_t capacity, siz
 	}
 	--(*size);
 }
+
+size_t sp_strnlen(const char *s, size_t maxlen)
+{
+	size_t i = 0;
+	for (; i < maxlen && s[i] != '\0'; i++);
+	return i;
+}

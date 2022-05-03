@@ -19,8 +19,9 @@
 .SH NAME
 sp_stack_set, sp_stack_setc, sp_stack_sets, sp_stack_seti, sp_stack_setl,
 sp_stack_setsc, sp_stack_setuc, sp_stack_setus, sp_stack_setui,
-sp_stack_setul, sp_stack_setf, sp_stack_setd, sp_stack_setld \- set the
-value of an arbitrary element in a stack
+sp_stack_setul, sp_stack_setf, sp_stack_setd, sp_stack_setld,
+sp_stack_setstr, sp_stack_setstrn \- set the value of an arbitrary element in a
+stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -128,6 +129,24 @@ size_t
 .IR idx ,
 long double
 .IR val )
+.br
+int
+.BR sp_stack_setstr "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+const char
+.RI * val )
+.br
+int
+.BR sp_stack_setstrn "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+const char
+.RI * val ,
+size_t
+.IR len )
 .sp
 Link with \fI-lstaple\fP.
 .ad
@@ -157,6 +176,25 @@ field.
 .SS Suffixed Form
 .I val
 is passed directly in the function argument.
+.P
+The
+.BR sp_stack_setstr ()
+function creates a copy of the string pointed to by
+.I val
+and stores the new pointer on the stack. The string must fit in
+.I SIZE_MAX
+bytes, including the null terminator.
+.P
+The
+.BR sp_stack_setstrn ()
+function is equivalent to
+.BR sp_stack_setstr (),
+except it shall always copy exactly
+.I len
+bytes and append a null terminator at the end.
+.I len
+must be smaller than
+.IR SIZE_MAX .
 .SH RETURN VALUE
 .P
 If successful, the functions in the
@@ -183,6 +221,21 @@ is a null pointer (debug mode only).
 does not match the size of the
 .I val
 argument (debug mode only).
+.P
+The
+.BR sp_stack_setstr ()
+and
+.BR sp_stack_setstrn ()
+functions shall additionally fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+.I val
+is a null pointer (debug mode only).
+.IP \fBSP_ERANGE\fP 1.5i
+string too long or
+.I len
+too large.
+.IP \fBSP_ENOMEM\fP 1.5i
+Memory allocation failed.
 .SH CONFORMING TO
 See
 .BR libstaple (7).
@@ -204,4 +257,3 @@ See
 .BR sp_stack_qremove (3),
 .BR sp_stack_get (3),
 .BR sp_stack_print (3)
-

@@ -20,7 +20,8 @@
 sp_stack_push, sp_stack_pushc, sp_stack_pushs, sp_stack_pushi,
 sp_stack_pushl, sp_stack_pushsc, sp_stack_pushuc, sp_stack_pushus,
 sp_stack_pushui, sp_stack_pushul, sp_stack_pushf, sp_stack_pushd,
-sp_stack_pushld \- push a new element onto a stack
+sp_stack_pushld, sp_stack_pushstr, sp_stack_pushstrn \- push a new element onto
+a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -102,6 +103,20 @@ int
 .RI * stack ,
 long double
 .IR elem )
+.br
+int
+.BR sp_stack_pushstr "(struct sp_stack"
+.RI * stack ,
+const char
+.RI * elem )
+.br
+int
+.BR sp_stack_pushstrn "(struct sp_stack"
+.RI * stack ,
+const char
+.RI * elem ,
+size_t
+.IR len )
 .sp
 Link with \fI-lstaple\fP.
 .ad
@@ -132,6 +147,25 @@ field.
 .SS Suffixed Form
 .I elem
 is passed directly in the function argument.
+.P
+The
+.BR sp_stack_pushstr ()
+function creates a copy of the string pointed to by
+.I elem
+and stores the new pointer on the stack. The string must fit in
+.I SIZE_MAX
+bytes, including the null terminator.
+.P
+The
+.BR sp_stack_pushstrn ()
+function is equivalent to
+.BR sp_stack_pushstr (),
+except it shall always copy exactly
+.I len
+bytes and append a null terminator at the end.
+.I len
+must be smaller than
+.IR SIZE_MAX .
 .SH RETURN VALUE
 If successful, the functions in the
 .BR sp_stack_push ()
@@ -165,6 +199,19 @@ functions shall fail if:
 does not match the size of the
 .I elem
 argument (debug mode only).
+.P
+The
+.BR sp_stack_pushstr ()
+and
+.BR sp_stack_pushstrn ()
+functions shall additionally fail if:
+.IP \fBSP_EINVAL\fP 1.5i
+.I elem
+is a null pointer (debug mode only).
+.IP \fBSP_ERANGE\fP 1.5i
+string too long or
+.I len
+too large.
 .SH CONFORMING TO
 See
 .BR libstaple (7).

@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include "sp_errcodes.h"
 #include "sp_modes.h"
+#include "sp_utils.h"
 
 struct sp_stack {
 	void  *data;
@@ -48,6 +49,8 @@ int sp_stack_pushul(struct sp_stack *stack, unsigned long elem);
 int sp_stack_pushf(struct sp_stack *stack, float elem);
 int sp_stack_pushd(struct sp_stack *stack, double elem);
 int sp_stack_pushld(struct sp_stack *stack, long double elem);
+int sp_stack_pushstr(struct sp_stack *stack, const char *elem);
+int sp_stack_pushstrn(struct sp_stack *stack, const char *elem, size_t len);
 
 int sp_stack_insert(struct sp_stack *stack, size_t idx, const void *elem);
 int sp_stack_insertc(struct sp_stack *stack, size_t idx, char elem);
@@ -62,6 +65,8 @@ int sp_stack_insertul(struct sp_stack *stack, size_t idx, unsigned long elem);
 int sp_stack_insertf(struct sp_stack *stack, size_t idx, float elem);
 int sp_stack_insertd(struct sp_stack *stack, size_t idx, double elem);
 int sp_stack_insertld(struct sp_stack *stack, size_t idx, long double elem);
+int sp_stack_insertstr(struct sp_stack *stack, size_t idx, const char *elem);
+int sp_stack_insertstrn(struct sp_stack *stack, size_t idx, const char *elem, size_t len);
 
 int sp_stack_qinsert(struct sp_stack *stack, size_t idx, const void *elem);
 int sp_stack_qinsertc(struct sp_stack *stack, size_t idx, char elem);
@@ -76,6 +81,8 @@ int sp_stack_qinsertul(struct sp_stack *stack, size_t idx, unsigned long elem);
 int sp_stack_qinsertf(struct sp_stack *stack, size_t idx, float elem);
 int sp_stack_qinsertd(struct sp_stack *stack, size_t idx, double elem);
 int sp_stack_qinsertld(struct sp_stack *stack, size_t idx, long double elem);
+int sp_stack_qinsertstr(struct sp_stack *stack, size_t idx, const char *elem);
+int sp_stack_qinsertstrn(struct sp_stack *stack, size_t idx, const char *elem, size_t len);
 
 int            sp_stack_peek(const struct sp_stack *stack, void *output);
 char           sp_stack_peekc(const struct sp_stack *stack);
@@ -90,6 +97,7 @@ unsigned long  sp_stack_peekul(const struct sp_stack *stack);
 float          sp_stack_peekf(const struct sp_stack *stack);
 double         sp_stack_peekd(const struct sp_stack *stack);
 long double    sp_stack_peekld(const struct sp_stack *stack);
+char          *sp_stack_peekstr(const struct sp_stack *stack);
 
 int            sp_stack_pop(struct sp_stack *stack, void *output);
 char           sp_stack_popc(struct sp_stack *stack);
@@ -104,6 +112,7 @@ unsigned long  sp_stack_popul(struct sp_stack *stack);
 float          sp_stack_popf(struct sp_stack *stack);
 double         sp_stack_popd(struct sp_stack *stack);
 long double    sp_stack_popld(struct sp_stack *stack);
+char          *sp_stack_popstr(struct sp_stack *stack);
 
 int            sp_stack_remove(struct sp_stack *stack, size_t idx, void *output);
 char           sp_stack_removec(struct sp_stack *stack, size_t idx);
@@ -118,6 +127,7 @@ unsigned long  sp_stack_removeul(struct sp_stack *stack, size_t idx);
 float          sp_stack_removef(struct sp_stack *stack, size_t idx);
 double         sp_stack_removed(struct sp_stack *stack, size_t idx);
 long double    sp_stack_removeld(struct sp_stack *stack, size_t idx);
+char          *sp_stack_removestr(struct sp_stack *stack, size_t idx);
 
 int            sp_stack_qremove(struct sp_stack *stack, size_t idx, void *output);
 char           sp_stack_qremovec(struct sp_stack *stack, size_t idx);
@@ -132,6 +142,7 @@ unsigned long  sp_stack_qremoveul(struct sp_stack *stack, size_t idx);
 float          sp_stack_qremovef(struct sp_stack *stack, size_t idx);
 double         sp_stack_qremoved(struct sp_stack *stack, size_t idx);
 long double    sp_stack_qremoveld(struct sp_stack *stack, size_t idx);
+char          *sp_stack_qremovestr(struct sp_stack *stack, size_t idx);
 
 int            sp_stack_get(const struct sp_stack *stack, size_t idx, void *output);
 char           sp_stack_getc(const struct sp_stack *stack, size_t idx);
@@ -146,6 +157,7 @@ unsigned long  sp_stack_getul(const struct sp_stack *stack, size_t idx);
 float          sp_stack_getf(const struct sp_stack *stack, size_t idx);
 double         sp_stack_getd(const struct sp_stack *stack, size_t idx);
 long double    sp_stack_getld(const struct sp_stack *stack, size_t idx);
+char          *sp_stack_getstr(const struct sp_stack *stack, size_t idx);
 
 int sp_stack_set(struct sp_stack *stack, size_t idx, void *val);
 int sp_stack_setc(struct sp_stack *stack, size_t idx, char val);
@@ -161,6 +173,7 @@ int sp_stack_setf(struct sp_stack *stack, size_t idx, float val);
 int sp_stack_setd(struct sp_stack *stack, size_t idx, double val);
 int sp_stack_setld(struct sp_stack *stack, size_t idx, long double val);
 int sp_stack_setstr(struct sp_stack *stack, size_t idx, const char *val);
+int sp_stack_setstrn(struct sp_stack *stack, size_t idx, const char *val, size_t len);
 
 int sp_stack_print(const struct sp_stack *stack);
 int sp_stack_printc(const struct sp_stack *stack);

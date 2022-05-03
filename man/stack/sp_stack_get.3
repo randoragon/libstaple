@@ -19,8 +19,8 @@
 .SH NAME
 sp_stack_get, sp_stack_getc, sp_stack_gets, sp_stack_geti, sp_stack_getl,
 sp_stack_getsc, sp_stack_getuc, sp_stack_getus, sp_stack_getui,
-sp_stack_getul, sp_stack_getf, sp_stack_getd, sp_stack_getld \- look up
-arbitrary element in a stack
+sp_stack_getul, sp_stack_getf, sp_stack_getd, sp_stack_getld, sp_stack_getstr \-
+look up arbitrary element in a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -101,6 +101,12 @@ size_t
 .br
 long double
 .BR sp_stack_getld "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+char
+.RB * sp_stack_getstr "(const struct sp_stack"
 .RI * stack ,
 size_t
 .IR idx )

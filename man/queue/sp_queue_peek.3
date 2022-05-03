@@ -20,7 +20,7 @@
 sp_queue_peek, sp_queue_peekc, sp_queue_peeks, sp_queue_peeki,
 sp_queue_peekl, sp_queue_peeksc, sp_queue_peekuc, sp_queue_peekus,
 sp_queue_peekui, sp_queue_peekul, sp_queue_peekf, sp_queue_peekd,
-sp_queue_peekld \- look up the front element of a queue
+sp_queue_peekld, sp_queue_peekstr \- look up the front element of a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -77,6 +77,10 @@ double
 .br
 long double
 .BR sp_queue_peekld "(const struct sp_queue"
+.RI * queue )
+.br
+char
+.RB * sp_queue_peekstr "(const struct sp_queue"
 .RI * queue )
 .sp
 Link with \fI-lstaple\fP.

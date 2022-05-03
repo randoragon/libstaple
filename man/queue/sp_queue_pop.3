@@ -19,8 +19,8 @@
 .SH NAME
 sp_queue_pop, sp_queue_popc, sp_queue_pops, sp_queue_popi, sp_queue_popl,
 sp_queue_popsc, sp_queue_popuc, sp_queue_popus, sp_queue_popui,
-sp_queue_popul, sp_queue_popf, sp_queue_popd, sp_queue_popld \- remove and
-retrieve the front element of a queue
+sp_queue_popul, sp_queue_popf, sp_queue_popd, sp_queue_popld,
+sp_queue_popstr \- remove and retrieve the front element of a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -78,6 +78,10 @@ double
 long double
 .BR sp_queue_popld "(struct sp_queue"
 .RI * queue )
+.br
+char
+.RB * sp_queue_popstr "(struct sp_queue"
+.RI * queue )
 .sp
 Link with \fI-lstaple\fP.
 .ad
@@ -97,6 +101,14 @@ copied into.
 must not overlap in memory with the popped element.
 .B NULL
 can be passed to skip this functionality.
+.SS Suffixed Form
+.P
+The
+.BR sp_queue_popstr ()
+function returns a pointer to the memory block containing the popped string.
+The user must manually
+.BR free (3)
+the block, otherwise the memory will leak!
 .SH RETURN VALUE
 .SS Generic Form
 If successful, the

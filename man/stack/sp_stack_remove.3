@@ -20,7 +20,8 @@
 sp_stack_remove, sp_stack_removec, sp_stack_removes, sp_stack_removei,
 sp_stack_removel, sp_stack_removesc, sp_stack_removeuc, sp_stack_removeus,
 sp_stack_removeui, sp_stack_removeul, sp_stack_removef, sp_stack_removed,
-sp_stack_removeld \- remove an element from any position of a stack
+sp_stack_removeld, sp_stack_removestr \- remove an element from any
+position of a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -101,6 +102,12 @@ size_t
 .br
 long double
 .BR sp_stack_removeld "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+char
+.RB * sp_stack_removestr "(struct sp_stack"
 .RI * stack ,
 size_t
 .IR idx )

@@ -20,7 +20,7 @@
 sp_stack_peek, sp_stack_peekc, sp_stack_peeks, sp_stack_peeki,
 sp_stack_peekl, sp_stack_peeksc, sp_stack_peekuc, sp_stack_peekus,
 sp_stack_peekui, sp_stack_peekul, sp_stack_peekf, sp_stack_peekd,
-sp_stack_peekld \- look up the top element of a stack
+sp_stack_peekld, sp_stack_peekstr \- look up the top element of a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -77,6 +77,10 @@ double
 .br
 long double
 .BR sp_stack_peekld "(const struct sp_stack"
+.RI * stack )
+.br
+char
+.RB * sp_stack_peekstr "(const struct sp_stack"
 .RI * stack )
 .sp
 Link with \fI-lstaple\fP.
