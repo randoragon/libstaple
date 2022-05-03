@@ -165,7 +165,7 @@ int sp_queue_foreach(struct sp_queue *queue, int (*func)(void*, size_t))
 #endif
 	p = queue->head;
 	i = 0;
-	while (p != queue->tail) {
+	while (i != queue->size) {
 		int err;
 		if ((err = func(p, i))) {
 			warn(("external func function returned %d (non-0)", err));
