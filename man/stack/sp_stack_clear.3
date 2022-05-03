@@ -68,6 +68,15 @@ returned non-0 for some stack element.
 .SH CONFORMING TO
 See
 .BR libstaple (7).
+.SH NOTES
+When clearing a stack of strings (populated using the suffixed
+.B str
+or
+.B strn
+functions), it is necessary to free the string memory blocks with a destructor
+function. For convenience, the library offers
+.BR sp_free (3),
+which is specifically suited for this purpose.
 .SH EXAMPLES
 This is an example of how to use the
 .I dtor
@@ -118,4 +127,5 @@ int main()
 .BR sp_stack_qremove (3),
 .BR sp_stack_get (3),
 .BR sp_stack_set (3),
-.BR sp_stack_print (3)
+.BR sp_stack_print (3),
+.BR sp_free (3)

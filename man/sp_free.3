@@ -1,0 +1,127 @@
+.\"  Staple - A general-purpose data structure library in pure C89.
+.\"  Copyright (C) 2021  Randoragon
+.\" 
+.\"  This library is free software; you can redistribute it and/or
+.\"  modify it under the terms of the GNU Lesser General Public
+.\"  License as published by the Free Software Foundation;
+.\"  version 2.1 of the License.
+.\" 
+.\"  This library is distributed in the hope that it will be useful,
+.\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+.\"  Lesser General Public License for more details.
+.\" 
+.\"  You should have received a copy of the GNU Lesser General Public
+.\"  License along with this library; if not, write to the Free Software
+.\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+.\"--------------------------------------------------------------------------------
+.TH SP_FREE 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_free \- a convenience destructor function for string and
+buffer-like elements
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+int
+.BR sp_free (void
+.RI * addr )
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+.P
+The
+.BR sp_free ()
+function exists for the sole purpose of being passed as the
+.I dtor
+argument in other library functions.
+.br
+It is specifically geared towards freeing strings, but it works on
+any buffer-like data. It simply calls
+.BR free (3)
+on the element behind the
+.I addr
+pointer.
+.P
+.I addr
+is the address of the pointer to the data. See
+.B NOTES
+for more details.
+.P
+The
+.BR sp_free ()
+function is implemented as follows (excluding debug checks):
+.IP
+.ad l
+.nf
+int sp_free(void *addr)
+{
+	free(*(void**)addr);
+	return 0;
+}
+.fi
+.ad
+.SH RETURN VALUE
+.P
+If successful, the
+.BR sp_free ()
+function shall return 0. Otherwise, it shall return a code indicating the
+error.
+.SH ERRORS
+The
+.BR sp_free ()
+function shall fail if:
+.IP \fB1\fP 1.5i
+.I addr
+is a null pointer (debug mode only)
+.IP \fB2\fP 1.5i
+.I addr
+points to a null pointer (debug mode only)
+.SH CONFORMING TO
+See
+.BR libstaple (7).
+.SH NOTES
+.I addr
+is the address of the pointer to the data. That means in order to free the
+data, a single dereference is required to access the "true" pointer, as can be
+seen in the implementation.
+.br
+The reason for this additional layer is, buffer-like data does not have
+constant width, which means pointers to buffers must be stored in data
+structures instead.
+.SH EXAMPLES
+Below is the canonical use case of
+.BR sp_free (),
+demonstrated on a stack of strings.
+.br
+Using a memory-checker tool such as
+.BR valgrind ,
+one can compare summaries of the below program with and without the
+.BR sp_free ()
+function to see that in the latter case exactly 45 bytes in 3 blocks are lost.
+.SS Program source
+.ad l
+.nf
+#include <staple.h>
+
+int main()
+{
+	struct sp_stack *stack;
+	
+	stack = sp_stack_create(sizeof(char*), 15);
+
+	sp_stack_pushstr(stack, "test string #1");
+	sp_stack_pushstr(stack, "test string #2");
+	sp_stack_pushstr(stack, "test string #3");
+
+	sp_stack_destroy(stack, sp_free);
+	/* using NULL instead of sp_free leaks memory */
+
+	return 0;
+}
+.fi
+.ad
+.SH SEE ALSO
+.ad l
+.BR libstaple (7)
