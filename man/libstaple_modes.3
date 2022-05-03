@@ -15,32 +15,42 @@
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
-.TH SP_IS_DEBUG 3 DATE "libstaple-VERSION"
+.TH LIBSTAPLE_MODES 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_is_debug \- check if the library has been compiled with debug mode
+sp_is_debug, sp_is_quiet, sp_is_abort \- check Staple library modes at runtime
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
 .sp
 int
 .BR sp_is_debug (void)
+.br
+int
+.BR sp_is_quiet (void)
+.br
+int
+.BR sp_is_abort (void)
 .sp
 Link with \fI-lstaple\fP.
 .ad
 .SH DESCRIPTION
-The
-.BR sp_is_debug ()
-function can be used at runtime to determine whether the staple library has been
-compiled with debug mode or not.
+The functions in this family can be used at runtime to determine whether the
+.B Staple
+library has been compiled with a certain mode enabled.
 .SH RETURN VALUE
 The
 .BR sp_is_debug ()
 function shall return 1 if debug mode is active and 0 otherwise.
-.SH ERRORS
 .P
 The
-.BR sp_is_debug ()
-function shall never fail.
+.BR sp_is_quiet ()
+function shall return 1 if quiet mode is active and 0 otherwise.
+.P
+The
+.BR sp_is_abort ()
+function shall return 1 if abort mode is active and 0 otherwise.
+.SH ERRORS
+These functions shall never fail.
 .SH CONFORMING TO
 See
 .BR libstaple (7).
