@@ -99,7 +99,7 @@ sp_stack_pushus(s, 3);   /* pass-by-value (unsigned short) */
 ```
 
 Here's a full table of suffixes, although all you need to remember is to use the
-first letters of your target type:
+first letters of your target type (except for strings):
 
 suffix | type
 ---: | :---
@@ -116,6 +116,8 @@ none | any (`void*`)
 `f` | `float`
 `d` | `double`
 `ld` | `long double`
+`str` | string (`char*`)
+`strn` | substring (`char*`)
 
 `signed char` is the only explicitly signed type available, due to the fact that
 it is not defined by the standard whether or not `char` alone is signed or
