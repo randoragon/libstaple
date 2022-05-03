@@ -22,6 +22,10 @@
 #ifndef STAPLE_UTILS_H
 #define STAPLE_UTILS_H
 
+int sp_is_debug(void);
+int sp_is_quiet(void);
+int sp_is_abort(void);
+
 int sp_free(void *addr);
 
 #endif /* STAPLE_UTILS_H */
