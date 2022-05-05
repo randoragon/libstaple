@@ -150,10 +150,9 @@ If successful, the
 function shall return 0. Otherwise, it shall return a code indicating the
 error.
 .SS Suffixed Form
-If successful, the suffixed
+The suffixed
 .BR sp_queue_remove ()
-functions shall return the value of the removed element. Otherwise, they shall
-return 0.
+functions shall return the value of the removed element.
 .SH ERRORS
 .SS Generic Form
 The
@@ -179,24 +178,31 @@ out of range (debug mode only).
 .IR queue "'s " elem_size
 does not match the size of the function's return type (debug mode only).
 .P
-Note that 0 can also be a successful return value, since it is a number that can
-be stored on the queue, like any other.
+(the
+.BR sp_queue_removestr ()
+function returns
+.B NULL
+instead of 0)
 .SH NOTES
-Functions of the suffixed form do not provide an unambiguous error-detecting
-interface with return codes. This design choice was made for 2 reasons:
+In debug mode, functions of the suffixed form do not provide an unambiguous
+error-detecting interface with return codes. Returning 0 should be considered
+more so a fallback mechanism, since it doesn't imply that an error occurred.
+.P
+This means there is a guaranteed runtime uncertainty whenever a suffixed
+function in debug mode returns 0. However, the functions shall still print
+error messages when appropriate, so failures can be told apart from successes
+by the presence or absence of those (quiet mode needs to be disabled).
+.P
+At first, this ambiguity might seem strange and unacceptable. However, it is
+justified in two ways:
 .IP (1)
 It is very convenient to have these functions return the value of the element
 directly.
 .sp -1
 .IP (2)
 The only errors that can occur are such resulting from library misuse by the
-end-user, and not caused by external factors such as insufficient memory, etc.
-This makes these errors far less important to report.
-.P
-This means there is a guaranteed runtime uncertainty whenever a suffixed
-function returns 0. However, the functions shall still print error messages when
-appropriate, so failures can be told apart from successes by the presence or
-absence of those (quiet mode needs to be disabled).
+end-user, and not caused by uncontrollable factors such as insufficient memory,
+etc. Program logic itself should guarantee safety from these errors.
 .SH CONFORMING TO
 See
 .BR libstaple (7).
