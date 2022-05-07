@@ -83,7 +83,7 @@ int sp_stack_qinsertld(struct sp_stack *stack, size_t idx, long double elem);
 int sp_stack_qinsertstr(struct sp_stack *stack, size_t idx, const char *elem);
 int sp_stack_qinsertstrn(struct sp_stack *stack, size_t idx, const char *elem, size_t len);
 
-int            sp_stack_peek(const struct sp_stack *stack, void *output);
+void          *sp_stack_peek(const struct sp_stack *stack);
 char           sp_stack_peekc(const struct sp_stack *stack);
 short          sp_stack_peeks(const struct sp_stack *stack);
 int            sp_stack_peeki(const struct sp_stack *stack);
@@ -143,7 +143,7 @@ double         sp_stack_qremoved(struct sp_stack *stack, size_t idx);
 long double    sp_stack_qremoveld(struct sp_stack *stack, size_t idx);
 char          *sp_stack_qremovestr(struct sp_stack *stack, size_t idx);
 
-int            sp_stack_get(const struct sp_stack *stack, size_t idx, void *output);
+void          *sp_stack_get(const struct sp_stack *stack, size_t idx);
 char           sp_stack_getc(const struct sp_stack *stack, size_t idx);
 short          sp_stack_gets(const struct sp_stack *stack, size_t idx);
 int            sp_stack_geti(const struct sp_stack *stack, size_t idx);

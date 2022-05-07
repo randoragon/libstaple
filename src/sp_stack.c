@@ -1460,26 +1460,19 @@ int sp_stack_qinsertstrn(struct sp_stack *stack, size_t idx, const char *elem, s
 }
 
 
-int sp_stack_peek(const struct sp_stack *stack, void *output)
+void *sp_stack_peek(const struct sp_stack *stack)
 {
-	const void *src;
 #ifdef STAPLE_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return SP_EINVAL;
-	}
-	if (output == NULL) {
-		error(("output is NULL"));
-		return SP_EINVAL;
+		return NULL;
 	}
 	if (stack->size == 0) {
 		error(("stack is empty"));
-		return SP_EILLEGAL;
+		return NULL;
 	}
 #endif
-	src = (char*)stack->data + (stack->size - 1) * stack->elem_size;
-	memcpy(output, src, stack->elem_size);
-	return 0;
+	return (char*)stack->data + (stack->size - 1) * stack->elem_size;
 }
 
 char sp_stack_peekc(const struct sp_stack *stack)
@@ -2758,26 +2751,19 @@ char *sp_stack_qremovestr(struct sp_stack *stack, size_t idx)
 }
 
 
-int sp_stack_get(const struct sp_stack *stack, size_t idx, void *output)
+void *sp_stack_get(const struct sp_stack *stack, size_t idx)
 {
-	const void *src;
 #ifdef STAPLE_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
-		return SP_EINVAL;
-	}
-	if (output == NULL) {
-		error(("output is NULL"));
-		return SP_EINVAL;
+		return NULL;
 	}
 	if (idx >= stack->size) {
 		error(("index out of range"));
-		return SP_EINDEX;
+		return NULL;
 	}
 #endif
-	src = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
-	memcpy(output, src, stack->elem_size);
-	return 0;
+	return (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
 }
 
 char sp_stack_getc(const struct sp_stack *stack, size_t idx)

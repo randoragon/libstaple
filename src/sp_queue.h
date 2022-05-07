@@ -85,7 +85,7 @@ int sp_queue_qinsertld(struct sp_queue *queue, size_t idx, long double elem);
 int sp_queue_qinsertstr(struct sp_queue *queue, size_t idx, const char *elem);
 int sp_queue_qinsertstrn(struct sp_queue *queue, size_t idx, const char *elem, size_t len);
 
-int            sp_queue_peek(const struct sp_queue *queue, void *output);
+void          *sp_queue_peek(const struct sp_queue *queue);
 char           sp_queue_peekc(const struct sp_queue *queue);
 short          sp_queue_peeks(const struct sp_queue *queue);
 int            sp_queue_peeki(const struct sp_queue *queue);
@@ -145,7 +145,7 @@ double         sp_queue_qremoved(struct sp_queue *queue, size_t idx);
 long double    sp_queue_qremoveld(struct sp_queue *queue, size_t idx);
 char          *sp_queue_qremovestr(struct sp_queue *queue, size_t idx);
 
-int            sp_queue_get(const struct sp_queue *queue, size_t idx, void *output);
+void          *sp_queue_get(const struct sp_queue *queue, size_t idx);
 char           sp_queue_getc(const struct sp_queue *queue, size_t idx);
 short          sp_queue_gets(const struct sp_queue *queue, size_t idx);
 int            sp_queue_geti(const struct sp_queue *queue, size_t idx);

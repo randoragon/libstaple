@@ -95,7 +95,7 @@ Test(stack, push)
 			struct data a, b;
 			cr_assert_eq(0, data_init(&a));
 			cr_assert_eq(0, sp_stack_push(s, &a));
-			cr_assert_eq(0, sp_stack_get(s, 0, &b));
+			b = *(struct data*)sp_stack_get(s, 0);
 			cr_assert_eq(0, data_cmp(&a, &b));
 		}
 		cr_assert_eq(SP_ERANGE, sp_stack_push(s, &d));
@@ -210,13 +210,11 @@ Test(stack, peek)
 		struct data a, b;
 		s = sp_stack_create(sizeof(struct data), 2);
 		cr_assert_not_null(s);
-		cr_assert_eq(SP_EILLEGAL, sp_stack_peek(s, &b));
-		cr_assert_eq(SP_EINVAL, sp_stack_peek(s, NULL));
-		cr_assert_eq(SP_EINVAL, sp_stack_peek(NULL, &b));
-		cr_assert_eq(SP_EINVAL, sp_stack_peek(NULL, NULL));
+		cr_assert_eq(0, sp_stack_peek(s));
+		cr_assert_eq(0, sp_stack_peek(NULL));
 		data_init(&a);
 		cr_assert_eq(0, sp_stack_push(s, &a));
-		cr_assert_eq(0, sp_stack_peek(s, &b));
+		b = *(struct data*)sp_stack_peek(s);
 		cr_assert_eq(0, data_cmp(&a, &b));
 		cr_assert_eq(0, sp_stack_destroy(s, data_dtor));
 	}
@@ -437,8 +435,8 @@ Test(stack, copy)
 	cr_assert_eq((unsigned long)p->elem_size, (unsigned long)s->elem_size);
 	for (i = 0; i < 1000; i++) {
 		struct data a, b;
-		cr_assert_eq(0, sp_stack_get(s, i, &a));
-		cr_assert_eq(0, sp_stack_get(p, i, &b));
+		a = *(struct data*)sp_stack_get(s, i);
+		b = *(struct data*)sp_stack_get(p, i);
 		cr_assert_eq(0, data_cmp(&a, &b));
 	}
 	cr_assert_eq(0, sp_stack_destroy(s, data_dtor));
@@ -472,7 +470,7 @@ Test(stack, insert)
 			cr_assert_eq(0, data_init(d + i));
 			cr_assert_eq(0, sp_stack_insert(s, idx, d + i));
 			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size);
-			cr_assert_eq(0, sp_stack_get(s, idx, &a));
+			a = *(struct data*)sp_stack_get(s, idx);
 			cr_assert_eq(0, data_cmp(&a, d + i));
 		}
 		cr_assert_eq(0, sp_stack_destroy(s, data_dtor));
@@ -485,18 +483,18 @@ Test(stack, insert)
 		}
 		for (i = 0; i < 5; i++) {
 			struct data a;
-			cr_assert_eq(0, sp_stack_get(s, i, &a));
+			a = *(struct data*)sp_stack_get(s, i);
 			cr_assert_eq(0, data_cmp(&a, d + i));
 		}
 		{
 			struct data a;
 			cr_assert_eq(0, data_init(d + 5));
 			cr_assert_eq(0, sp_stack_insert(s, 1, d + 5));
-			cr_assert_eq(0, sp_stack_peek(s, &a));
+			a = *(struct data*)sp_stack_peek(s);
 			cr_assert_eq(0, data_cmp(&a, d));
 			cr_assert_eq(0, data_init(d + 6));
 			cr_assert_eq(0, sp_stack_insert(s, 3, d + 6));
-			cr_assert_eq(0, sp_stack_peek(s, &a));
+			a = *(struct data*)sp_stack_peek(s);
 			cr_assert_eq(0, data_cmp(&a, d));
 			cr_assert_eq(7LU, (unsigned long)s->size);
 			cr_assert_eq(0, sp_stack_destroy(s, data_dtor));
@@ -706,7 +704,7 @@ Test(stack, qinsert)
 			cr_assert_eq(0, data_init(d + i));
 			cr_assert_eq(0, sp_stack_qinsert(s, idx, d + i));
 			cr_assert_eq((unsigned long)i + 1, (unsigned long)s->size);
-			cr_assert_eq(0, sp_stack_get(s, idx, &a));
+			a = *(struct data*)sp_stack_get(s, idx);
 			cr_assert_eq(0, data_cmp(&a, d + i));
 		}
 		cr_assert_eq(0, sp_stack_destroy(s, data_dtor));
@@ -719,18 +717,18 @@ Test(stack, qinsert)
 		}
 		for (i = 0; i < 5; i++) {
 			struct data a;
-			cr_assert_eq(0, sp_stack_get(s, i, &a));
+			a = *(struct data*)sp_stack_get(s, i);
 			cr_assert_eq(0, data_cmp(&a, d + (8 - i) % 5));
 		}
 		{
 			struct data a;
 			cr_assert_eq(0, data_init(d + 5));
 			cr_assert_eq(0, sp_stack_qinsert(s, 1, d + 5));
-			cr_assert_eq(0, sp_stack_peek(s, &a));
+			a = *(struct data*)sp_stack_peek(s);
 			cr_assert_eq(0, data_cmp(&a, d + 3));
 			cr_assert_eq(0, data_init(d + 6));
 			cr_assert_eq(0, sp_stack_qinsert(s, 3, d + 6));
-			cr_assert_eq(0, sp_stack_peek(s, &a));
+			a = *(struct data*)sp_stack_peek(s);
 			cr_assert_eq(0, data_cmp(&a, d + 2));
 			cr_assert_eq(7LU, (unsigned long)s->size);
 			cr_assert_eq(0, sp_stack_destroy(s, data_dtor));
@@ -1165,11 +1163,11 @@ Test(stack, qremove)
 		}
 		cr_assert_eq(0, sp_stack_qremove(s, 3, &a));
 		cr_assert_eq(0, data_cmp(d + 4, &a));
-		cr_assert_eq(0, sp_stack_get(s, 3, &a));
+		a = *(struct data*)sp_stack_get(s, 3);
 		cr_assert_eq(0, data_cmp(d + 3, &a));
 		cr_assert_eq(0, sp_stack_qremove(s, 0, &a));
 		cr_assert_eq(0, data_cmp(d + 6, &a));
-		cr_assert_eq(0, sp_stack_get(s, 0, &a));
+		a = *(struct data*)sp_stack_get(s, 0);
 		cr_assert_eq(0, data_cmp(d + 5, &a));
 		cr_assert_eq(0, sp_stack_qremove(s, 3, &a));
 		cr_assert_eq(0, data_cmp(d + 2, &a));
@@ -1325,13 +1323,11 @@ Test(stack, get)
 		struct data d[1000];
 		s = sp_stack_create(sizeof(int), 1000);
 		cr_assert_not_null(s);
-		cr_assert_eq(SP_EINDEX, sp_stack_get(s, 0, &a));
+		cr_assert_null(sp_stack_get(s, 0));
 		cr_assert_eq(0, sp_stack_pushi(s, 10));
-		cr_assert_eq(SP_EINVAL, sp_stack_get(NULL, 0, &a));
-		cr_assert_eq(SP_EINVAL, sp_stack_get(s, 0, NULL));
-		cr_assert_eq(SP_EINVAL, sp_stack_get(NULL, 0, NULL));
-		cr_assert_eq(SP_EINDEX, sp_stack_get(s, 1, &a));
-		cr_assert_eq(0, sp_stack_get(s, 0, &a));
+		cr_assert_null(sp_stack_get(NULL, 0));
+		cr_assert_null(sp_stack_get(s, 1));
+		a = *(int*)sp_stack_get(s, 0);
 		cr_assert_eq(10, a);
 		cr_assert_eq(0, sp_stack_destroy(s, NULL));
 		s = sp_stack_create(sizeof(struct data), 1000);
@@ -1342,7 +1338,7 @@ Test(stack, get)
 		}
 		for (i = 0; i < 1000; i++) {
 			struct data a;
-			cr_assert_eq(0, sp_stack_get(s, i, &a));
+			a = *(struct data*)sp_stack_get(s, i);
 			cr_assert_eq(0, data_cmp(&a, d + 999 - i));
 		}
 		cr_assert_eq(0, sp_stack_destroy(s, data_dtor));
@@ -1446,10 +1442,10 @@ Test(stack, set)
 		for (i = 0; i < 1000; i++) {
 			struct data a, b;
 			cr_assert_eq(0, data_init(&b));
-			cr_assert_eq(0, sp_stack_get(s, i, &a));
+			a = *(struct data*)sp_stack_get(s, i);
 			cr_assert_eq(0, data_dtor(&a));
 			cr_assert_eq(0, sp_stack_set(s, i, &b));
-			cr_assert_eq(0, sp_stack_get(s, i, &a));
+			a = *(struct data*)sp_stack_get(s, i);
 			cr_assert_eq(0, data_cmp(&a, &b));
 		}
 		cr_assert_eq(0, sp_stack_destroy(s, data_dtor));

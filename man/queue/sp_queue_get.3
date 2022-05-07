@@ -25,13 +25,11 @@ look up arbitrary element in a queue
 .ad l
 #include <staple.h>
 .sp
-int
-.BR sp_queue_get "(const struct sp_queue"
+void
+.RB * sp_queue_get "(const struct sp_queue"
 .RI * queue ,
 size_t
-.IR idx ,
-void
-.RI * output )
+.IR idx )
 .br
 char
 .BR sp_queue_getc "(const struct sp_queue"
@@ -124,24 +122,47 @@ looked up element remains on the queue.
 is the queue.
 .P
 .I idx
-is the index of the element to look up. Indices start from 0 and extend
-to the rear \(em 0 is the front element, 1 is the element behind it, and so on.
+is the index of the element. Indices start from 0 and extend to the rear \(em 0
+is the front element, 1 is the element behind it, and so on.
 .br
 .I idx
 must be smaller than
 .IR queue "'s " size .
 .SS Generic Form
-.I output
-is the start of an adequately-sized block of memory the element shall be copied
-into.
-.I output
-must not overlap in memory with the element.
+The
+.BR sp_queue_get ()
+function behaves slightly differently from all other functions in the family. It
+is used to access the \fBaddress\fP, not value, of an arbitrary element in a
+queue. This is necessary, because value cannot be inferred from arbitrary data.
+.P
+The
+.BR sp_queue_get ()
+function has another, very important use case. It pairs up well with all kinds
+of functions which intake a pointer to write something into it, e.g.
+.BR scanf (3).
+In those cases, it may be faster to pass the direct location, rather than
+using a proxy variable/buffer. For example, code like:
+.sp
+.ad l
+.nf
+	int val;
+	scanf("%d", &val);
+	sp_queue_seti(queue, idx, val);
+.sp
+.ad
+.fi
+can be simplified to:
+.sp
+.ad l
+.nf
+	scanf("%d", (int*)sp_queue_get(queue, idx));
+.ad
+.fi
 .SH RETURN VALUE
 .SS Generic Form
-If successful, the
+The
 .BR sp_queue_get ()
-function shall return 0. Otherwise, it shall return a code indicating the
-error.
+function shall return the address of the element at \fIidx\fP.
 .SS Suffixed Form
 The suffixed
 .BR sp_queue_get ()
@@ -151,11 +172,11 @@ functions shall return the value of the element at \fIidx\fP.
 The
 .BR sp_queue_get ()
 function shall fail if:
-.IP \fBSP_EINVAL\fP 1.5i
+.IP \fBNULL\fP 1.5i
 Either
 .IR queue " or " output
 are null pointers (debug mode only).
-.IP \fBSP_EINDEX\fP 1.5i
+.IP \fBNULL\fP 1.5i
 .I idx
 out of range (debug mode only).
 .SS Suffixed Form
@@ -178,14 +199,16 @@ function returns
 .B NULL
 instead of 0)
 .SH NOTES
-In debug mode, functions of the suffixed form do not provide an unambiguous
-error-detecting interface with return codes. Returning 0 should be considered
-more so a fallback mechanism, since it doesn't imply that an error occurred.
+In debug mode, functions of the suffixed form (except
+.BR sp_queue_getstr ())
+do not provide an unambiguous error-detecting interface with return codes.
+Returning 0 should be considered more so a fallback mechanism, since it doesn't
+imply that an error has occurred.
 .P
-This means there is a guaranteed runtime uncertainty whenever a suffixed
-function in debug mode returns 0. However, the functions shall still print
-error messages when appropriate, so failures can be told apart from successes
-by the presence or absence of those (quiet mode needs to be disabled).
+This means there is a guaranteed runtime uncertainty whenever one of these
+functions in debug mode returns 0. However, the functions shall still print
+error messages when appropriate, so failures can be told apart from successes by
+the presence or absence of those (quiet mode needs to be disabled).
 .P
 At first, this ambiguity might seem strange and unacceptable. However, it is
 justified in two ways:

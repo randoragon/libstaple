@@ -1467,24 +1467,19 @@ int sp_queue_qinsertstrn(struct sp_queue *queue, size_t idx, const char *elem, s
 }
 
 
-int sp_queue_peek(const struct sp_queue *queue, void *output)
+void *sp_queue_peek(const struct sp_queue *queue)
 {
 #ifdef STAPLE_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
-		return SP_EINVAL;
-	}
-	if (output == NULL) {
-		error(("output is NULL"));
-		return SP_EINVAL;
+		return NULL;
 	}
 	if (queue->size == 0) {
 		error(("queue is empty"));
-		return SP_EILLEGAL;
+		return NULL;
 	}
 #endif
-	memcpy(output, queue->head, queue->elem_size);
-	return 0;
+	return queue->head;
 }
 
 char sp_queue_peekc(const struct sp_queue *queue)
@@ -2776,26 +2771,19 @@ long double sp_queue_qremoveld(struct sp_queue *queue, size_t idx)
 }
 
 
-int sp_queue_get(const struct sp_queue *queue, size_t idx, void *output)
+void *sp_queue_get(const struct sp_queue *queue, size_t idx)
 {
-	const void *src;
 #ifdef STAPLE_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
-		return SP_EINVAL;
-	}
-	if (output == NULL) {
-		error(("output is NULL"));
-		return SP_EINVAL;
+		return NULL;
 	}
 	if (idx >= queue->size) {
 		error(("index out of range"));
-		return SP_EINDEX;
+		return NULL;
 	}
 #endif
-	src = sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
-	memcpy(output, src, queue->elem_size);
-	return 0;
+	return sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
 }
 
 char sp_queue_getc(const struct sp_queue *queue, size_t idx)
