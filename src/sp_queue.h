@@ -160,8 +160,6 @@ double         sp_queue_getd(const struct sp_queue *queue, size_t idx);
 long double    sp_queue_getld(const struct sp_queue *queue, size_t idx);
 char          *sp_queue_getstr(const struct sp_queue *queue, size_t idx);
 
-void          *sp_queue_getptr(const struct sp_queue *queue, size_t idx);
-
 int sp_queue_set(struct sp_queue *queue, size_t idx, void *val);
 int sp_queue_setc(struct sp_queue *queue, size_t idx, char val);
 int sp_queue_sets(struct sp_queue *queue, size_t idx, short val);

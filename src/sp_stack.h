@@ -158,8 +158,6 @@ double         sp_stack_getd(const struct sp_stack *stack, size_t idx);
 long double    sp_stack_getld(const struct sp_stack *stack, size_t idx);
 char          *sp_stack_getstr(const struct sp_stack *stack, size_t idx);
 
-void          *sp_stack_getptr(const struct sp_stack *stack, size_t idx);
-
 int sp_stack_set(struct sp_stack *stack, size_t idx, void *val);
 int sp_stack_setc(struct sp_stack *stack, size_t idx, char val);
 int sp_stack_sets(struct sp_stack *stack, size_t idx, short val);
