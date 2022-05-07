@@ -185,14 +185,16 @@ function returns
 .B NULL
 instead of 0)
 .SH NOTES
-In debug mode, functions of the suffixed form do not provide an unambiguous
-error-detecting interface with return codes. Returning 0 should be considered
-more so a fallback mechanism, since it doesn't imply that an error occurred.
+In debug mode, functions of the suffixed form (except
+.BR sp_stack_removestr ())
+do not provide an unambiguous error-detecting interface with return codes.
+Returning 0 should be considered more so a fallback mechanism, since it doesn't
+imply that an error has occurred.
 .P
-This means there is a guaranteed runtime uncertainty whenever a suffixed
-function in debug mode returns 0. However, the functions shall still print
-error messages when appropriate, so failures can be told apart from successes
-by the presence or absence of those (quiet mode needs to be disabled).
+This means there is a guaranteed runtime uncertainty whenever one of these
+functions in debug mode returns 0. However, the functions shall still print
+error messages when appropriate, so failures can be told apart from successes by
+the presence or absence of those (quiet mode needs to be disabled).
 .P
 At first, this ambiguity might seem strange and unacceptable. However, it is
 justified in two ways:
