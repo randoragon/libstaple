@@ -3089,6 +3089,22 @@ char *sp_queue_getstr(const struct sp_queue *queue, size_t idx)
 }
 
 
+void *sp_queue_getptr(const struct sp_queue *queue, size_t idx)
+{
+#ifdef STAPLE_DEBUG
+	if (queue == NULL) {
+		error(("queue is NULL"));
+		return NULL;
+	}
+	if (idx >= queue->size) {
+		error(("index out of range"));
+		return NULL;
+	}
+#endif
+	return sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
+}
+
+
 int sp_queue_set(struct sp_queue *queue, size_t idx, void *val)
 {
 	char *p;

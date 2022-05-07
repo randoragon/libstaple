@@ -1,77 +1,78 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
-.TH SP_STACK_CREATE 3 DATE "libstaple-VERSION"
+.TH SP_STACK_GETPTR 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_stack_create \- initialize a stack
+sp_stack_getptr \- get the address of an arbitrary element in a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
 .sp
-struct sp_stack
-.RB * sp_stack_create (size_t
-.IR elem_size ,
+void
+.RB * sp_stack_getptr "(const struct sp_stack"
+.RI * stack ,
 size_t
-.IR capacity )
+.IR idx )
 .sp
 Link with \fI-lstaple\fP.
 .ad
 .SH DESCRIPTION
+.P
 The
-.BR sp_stack_create ()
-function allocates and initializes a new stack, returning its address.
+.BR sp_stack_getptr ()
+function is used to directly access the address of an arbitrary element in a
+stack.
 .P
-.I elem_size
-denotes the size of a single element. This allows the user to store any kind of
-data, by setting
-.I elem_size
-to
-.BR sizeof ( data ).
-.I elem_size
-cannot be changed during the lifespan of a stack.
+The intended use case is when some library function intakes a pointer and writes
+something to that location, e.g.
+.BR scanf (3).
+In such instances, it may be faster to pass the direct location, rather than
+using a proxy variable/buffer.
 .P
-.I capacity
-denotes the initial number of elements that can be stored on the stack without
-allocating more memory.
-.I capacity
-shall be dynamically increased whenever more space is needed.
+.I stack
+is the stack.
+.P
+.I idx
+is the index of the element. Indices start from 0 and extend downwards \(em 0 is
+the top element, 1 is the element below it, and so on.
+.br
+.I idx
+must be smaller than
+.IR stack "'s " size .
 .SH RETURN VALUE
-If successful, the
-.BR sp_stack_create ()
-function shall return a valid pointer to the created stack. Otherwise, it shall
-return
-.BR NULL .
+The
+.BR sp_stack_getptr ()
+function shall return the address of the element at \fIidx\fP.
+.P
+The returned address points to some location on
+.IR stack 's
+.I data
+buffer. As such, it should be used with care not to break the internal
+structure.
 .SH ERRORS
 The
-.BR sp_stack_create ()
+.BR sp_stack_getptr ()
 function shall fail if:
-.IP (1) 1.5i
-The buffer size
-.RI ( elem_size "\ *\ " capacity )
-exceeds
-.IR SIZE_MAX .
-.IP (2) 1.5i
-Memory allocation failed.
-.IP (3) 1.5i
-Either
-.I elem_size
-or
-.I capacity
-is 0 (debug mode only).
+.IP \fBNULL\fP 1.5i
+.IR stack
+is a null pointer (debug mode only).
+.IP \fBNULL\fP 1.5i
+.I idx
+out of range (debug mode only).
 .SH CONFORMING TO
 See
 .BR libstaple (7).
@@ -79,6 +80,7 @@ See
 .ad l
 .BR libstaple (7),
 .BR sp_stack (7),
+.BR sp_stack_create (3),
 .BR sp_stack_destroy (3),
 .BR sp_stack_clear (3),
 .BR sp_stack_copy (3),
@@ -91,6 +93,5 @@ See
 .BR sp_stack_remove (3),
 .BR sp_stack_qremove (3),
 .BR sp_stack_get (3),
-.BR sp_stack_getptr (3),
 .BR sp_stack_set (3),
 .BR sp_stack_print (3)

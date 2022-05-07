@@ -1418,6 +1418,23 @@ Test(stack, get)
 	}
 }
 
+Test(stack, getptr)
+{
+	struct sp_stack *s;
+	int i;
+
+	s = sp_stack_create(sizeof(int), 100);
+	cr_assert_not_null(s);
+	cr_assert_null(sp_stack_getptr(NULL, 0));
+	cr_assert_null(sp_stack_getptr(s, 0));
+	for (i = 100; i-- > 0;)
+		cr_assert_eq(0, sp_stack_pushi(s, i));
+	for (i = 0; i < 100; i++)
+		cr_assert_eq(sp_stack_geti(s, i), *(int*)sp_stack_getptr(s, i));
+
+	sp_stack_destroy(s, NULL);
+}
+
 Test(stack, set)
 {
 	struct sp_stack *s;

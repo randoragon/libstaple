@@ -3041,6 +3041,22 @@ char *sp_stack_getstr(const struct sp_stack *stack, size_t idx)
 }
 
 
+void *sp_stack_getptr(const struct sp_stack *stack, size_t idx)
+{
+#ifdef STAPLE_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return NULL;
+	}
+	if (idx >= stack->size) {
+		error(("index out of range"));
+		return NULL;
+	}
+#endif
+	return (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+}
+
+
 int sp_stack_set(struct sp_stack *stack, size_t idx, void *val)
 {
 	char *p;

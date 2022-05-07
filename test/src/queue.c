@@ -1391,6 +1391,23 @@ Test(queue, get)
 	}
 }
 
+Test(queue, getptr)
+{
+	struct sp_queue *q;
+	int i;
+
+	q = sp_queue_create(sizeof(int), 100);
+	cr_assert_not_null(q);
+	cr_assert_null(sp_queue_getptr(NULL, 0));
+	cr_assert_null(sp_queue_getptr(q, 0));
+	for (i = 0; i < 100; i++)
+		cr_assert_eq(0, sp_queue_pushi(q, i));
+	for (i = 0; i < 100; i++)
+		cr_assert_eq(sp_queue_geti(q, i), *(int*)sp_queue_getptr(q, i));
+
+	sp_queue_destroy(q, NULL);
+}
+
 Test(queue, set)
 {
 	struct sp_queue *q;
