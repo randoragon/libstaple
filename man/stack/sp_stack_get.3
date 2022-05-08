@@ -219,6 +219,13 @@ directly.
 The only errors that can occur are such resulting from library misuse by the
 end-user, and not caused by uncontrollable factors such as insufficient memory,
 etc. Program logic itself should guarantee safety from these errors.
+.P
+It is worth noting that the
+.BR sp_stack_getstr ()
+function does not create a copy of the string, which means any attempt to
+modify the string will affect the stack. Likewise, the pointer will become
+invalid if the stack gets destroyed (with a destructor function like
+.BR sp_free (3)).
 .SH CONFORMING TO
 See
 .BR libstaple (7).
