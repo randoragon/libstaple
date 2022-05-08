@@ -135,7 +135,7 @@ AUR: [libstaple](https://aur.archlinux.org/packages/libstaple/)
 On a Linux system with `make`, simply clone the repo and run the following (if
 necessary, as root):
 
-	make install
+	make clean install
 
 To uninstall, run
 
@@ -151,6 +151,11 @@ override the `PREFIX` variable:
 
 The Makefile produces two library files, `libstaple.so` and `libstaple.a`. The former
 is a dynamically linked library, the latter is static.
+
+The library can be compiled with various optional modes (refer to the
+**libstaple**(7) man page for descriptions of each):
+
+	make clean install DEBUG=1 QUIET=1 ABORT=1
 
 ## Unit Testing
 

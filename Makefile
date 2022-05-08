@@ -16,6 +16,9 @@ LINKER      := cc
 VFLAGS      := -DVERSION_MAJOR=$(VERSION_MAJOR) -DVERSION_MINOR=$(VERSION_MINOR)
 VFLAGS      += -DVERSION_PATCH=$(VERSION_PATCH) -DVERSION_STR="$(VERSION_STR)"
 CFLAGS      := -fpic $(VFLAGS) -std=c89 -Wall -Wextra -pedantic -Werror -Werror=vla
+CFLAGS      += $(if $(filter 1,$(DEBUG)),-DSTAPLE_DEBUG -g -Og,-O3)
+CFLAGS      += $(if $(filter 1,$(QUIET)),-DSTAPLE_QUIET)
+CFLAGS      += $(if $(filter 1,$(ABORT)),-DSTAPLE_ABORT)
 LDFLAGS     := -shared
 CTESTFLAGS  := -std=c99 -Wall -Wextra -pedantic -Werror=vla -g -Og
 LDTESTFLAGS := -L. -l:./$(TARGET).so -lcriterion
@@ -43,7 +46,7 @@ DESTDIR   :=
 PREFIX    := /usr/local
 MANPREFIX := $(PREFIX)/share/man
 
-.PHONY: directories static shared all main clean debug profile install uninstall test
+.PHONY: directories static shared all main clean profile install uninstall test
 .SECONDARY: # Disable removal of intermediate files
 
 ##################################################################################################
@@ -78,13 +81,8 @@ clean:
 	$(RM) -- $(OBJS)
 	$(RM) -- $(TARGET).so $(TARGET).a
 
-# Rebuilds the library with debug symbols and STAPLE_DEBUG defined
-debug: CFLAGS += -g -Og -DSTAPLE_DEBUG
-debug: all
-
 # Builds and installs the library
-install: CFLAGS += -O3
-install: clean all
+install: all
 	@echo Creating directories...
 	@mkdir -p -- $(DESTDIR)$(PREFIX)/lib $(DESTDIR)$(PREFIX)/include $(DESTDIR)$(MANPREFIX)/man3 $(DESTDIR)$(MANPREFIX)/man7
 	@echo Installing library files...
@@ -118,8 +116,8 @@ test_clean:
 	$(RM) -- $(TESTDIR)/$(OBJDIR)/*
 	$(RM) -- $(TESTDIR)/bin/*
 
-test_%: CFLAGS += -DSTAPLE_QUIET -DSIZE_MAX=65535
-test_%: debug test/obj/test_struct.o test/obj/%.o
+test_%: CFLAGS += -DSTAPLE_DEBUG -DSTAPLE_QUIET -DSIZE_MAX=65535
+test_%: all test/obj/test_struct.o test/obj/%.o
 	@echo $(MODULES)
 	$(LINKER) "test/obj/test_struct.o" "test/obj/$*.o" $(LDTESTFLAGS) -o $(TESTDIR)/bin/$*
 	@tput setaf 4 ; printf "\n##########" ; tput setaf 3
