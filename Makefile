@@ -31,10 +31,14 @@ SRCDIR  := src
 OBJDIR  := obj
 MANDIR  := man
 TESTDIR := test
+SRCSUBDIRS := . $(MODULES)
 
 # Source and object files (including SRCDIR)
-SRCS := $(wildcard $(SRCDIR)/*.c)
-OBJS := $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(SRCS:.c=.o))
+SRCDIRS := $(foreach dir, $(SRCSUBDIRS), $(addprefix $(SRCDIR)/, $(dir)))
+OBJDIRS := $(foreach dir, $(SRCSUBDIRS), $(addprefix $(OBJDIR)/, $(dir)))
+SRCS    := $(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.c))
+#SRCS := $(wildcard $(SRCDIR)/*.c)
+OBJS    := $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(SRCS:.c=.o))
 
 # Header and man page files (relative to MANDIR)
 INCLUDES  := $(notdir $(wildcard $(SRCDIR)/staple*.h $(SRCDIR)/sp_*.h))
