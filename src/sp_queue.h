@@ -176,7 +176,7 @@ int sp_queue_setld(struct sp_queue *queue, size_t idx, long double val);
 int sp_queue_setstr(struct sp_queue *queue, size_t idx, const char *val);
 int sp_queue_setstrn(struct sp_queue *queue, size_t idx, const char *val, size_t len);
 
-int sp_queue_print(const struct sp_queue *queue);
+int sp_queue_print(const struct sp_queue *queue, int (*func)(const void*));
 int sp_queue_printc(const struct sp_queue *queue);
 int sp_queue_prints(const struct sp_queue *queue);
 int sp_queue_printi(const struct sp_queue *queue);

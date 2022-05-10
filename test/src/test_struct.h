@@ -53,4 +53,8 @@ int data_mutate(void *d, size_t idx);
 int data_mutate_bad(void *d, size_t idx);
 int data_verify(void *d, size_t idx);
 
+/* For testing generic "print" functions. */
+int data_print(const void *d);
+int data_print_bad(const void *d);
+
 #endif /* TEST_STRUCT_H */

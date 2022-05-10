@@ -3404,7 +3404,7 @@ int sp_stack_setstrn(struct sp_stack *stack, size_t idx, const char *val, size_t
 }
 
 
-int sp_stack_print(const struct sp_stack *stack)
+int sp_stack_print(const struct sp_stack *stack, int (*func)(const void*))
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3415,10 +3415,21 @@ int sp_stack_print(const struct sp_stack *stack)
 #endif
 	printf("sp_stack_print()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
 		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
-	for (i = stack->size; i-- > 0;) {
-		const void *const elem = (char*)stack->data + i * stack->elem_size;
-		printf("[%lu]\t%p\n", (unsigned long)stack->size - 1 - i, elem);
-	}
+	if (func == NULL)
+		for (i = stack->size; i-- > 0;) {
+			const void *const elem = (char*)stack->data + i * stack->elem_size;
+			printf("[%lu]\t%p\n", (unsigned long)stack->size - 1 - i, elem);
+		}
+	else
+		for (i = stack->size; i-- > 0;) {
+			const void *const elem = (char*)stack->data + i * stack->elem_size;
+			int err;
+			printf("[%lu]\t", (unsigned long)stack->size - 1 - i);
+			if ((err = func(elem)) != 0) {
+				error(("external function handler returned %d (non-0)", err));
+				return SP_EHANDLER;
+			}
+		}
 	return 0;
 }
 

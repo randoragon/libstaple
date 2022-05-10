@@ -1557,13 +1557,17 @@ Test(stack, print)
 	struct sp_stack *s;
 
 	{ /* Generic form */
-		double a = 4.5, b = -3.14;
-		s = sp_stack_create(sizeof(double), 30);
+		struct data a, b;
+		cr_assert_eq(0, data_init(&a));
+		cr_assert_eq(0, data_init(&b));
+		s = sp_stack_create(sizeof(struct data), 30);
 		cr_assert_eq(0, sp_stack_push(s, &a));
 		cr_assert_eq(0, sp_stack_push(s, &b));
-		cr_assert_eq(SP_EINVAL, sp_stack_print(NULL));
-		cr_assert_eq(0, sp_stack_print(s));
-		cr_assert_eq(0, sp_stack_destroy(s, NULL));
+		cr_assert_eq(SP_EINVAL, sp_stack_print(NULL, NULL));
+		cr_assert_eq(SP_EHANDLER, sp_stack_print(s, data_print_bad));
+		cr_assert_eq(0, sp_stack_print(s, NULL));
+		cr_assert_eq(0, sp_stack_print(s, data_print));
+		cr_assert_eq(0, sp_stack_destroy(s, data_dtor));
 	}
 
 	/* Suffixed form

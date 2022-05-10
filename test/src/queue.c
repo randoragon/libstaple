@@ -1530,13 +1530,17 @@ Test(queue, print)
 	struct sp_queue *q;
 
 	{ /* Generic form */
-		double a = 4.5, b = -3.14;
-		q = sp_queue_create(sizeof(double), 30);
+		struct data a, b;
+		cr_assert_eq(0, data_init(&a));
+		cr_assert_eq(0, data_init(&b));
+		q = sp_queue_create(sizeof(struct data), 30);
 		cr_assert_eq(0, sp_queue_push(q, &a));
 		cr_assert_eq(0, sp_queue_push(q, &b));
-		cr_assert_eq(SP_EINVAL, sp_queue_print(NULL));
-		cr_assert_eq(0, sp_queue_print(q));
-		cr_assert_eq(0, sp_queue_destroy(q, NULL));
+		cr_assert_eq(SP_EINVAL, sp_queue_print(NULL, NULL));
+		cr_assert_eq(SP_EHANDLER, sp_queue_print(q, data_print_bad));
+		cr_assert_eq(0, sp_queue_print(q, NULL));
+		cr_assert_eq(0, sp_queue_print(q, data_print));
+		cr_assert_eq(0, sp_queue_destroy(q, data_dtor));
 	}
 
 	/* Suffixed form

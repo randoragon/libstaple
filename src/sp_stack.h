@@ -174,7 +174,7 @@ int sp_stack_setld(struct sp_stack *stack, size_t idx, long double val);
 int sp_stack_setstr(struct sp_stack *stack, size_t idx, const char *val);
 int sp_stack_setstrn(struct sp_stack *stack, size_t idx, const char *val, size_t len);
 
-int sp_stack_print(const struct sp_stack *stack);
+int sp_stack_print(const struct sp_stack *stack, int (*func)(const void*));
 int sp_stack_printc(const struct sp_stack *stack);
 int sp_stack_prints(const struct sp_stack *stack);
 int sp_stack_printi(const struct sp_stack *stack);

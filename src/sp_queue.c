@@ -3454,7 +3454,7 @@ int sp_queue_setstrn(struct sp_queue *queue, size_t idx, const char *val, size_t
 }
 
 
-int sp_queue_print(const struct sp_queue *queue)
+int sp_queue_print(const struct sp_queue *queue, int (*func)(const void*))
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
@@ -3465,10 +3465,21 @@ int sp_queue_print(const struct sp_queue *queue)
 #endif
 	printf("sp_queue_print()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
 		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
-	for (i = 0; i < queue->size; i++) {
-		const void *const elem = sp_ringbuf_get(i, queue->data, queue->capacity, queue->elem_size, queue->head);
-		printf("[%lu]\t%p\n", (unsigned long)i, elem);
-	}
+	if (func == NULL)
+		for (i = 0; i < queue->size; i++) {
+			const void *const elem = sp_ringbuf_get(i, queue->data, queue->capacity, queue->elem_size, queue->head);
+			printf("[%lu]\t%p\n", (unsigned long)i, elem);
+		}
+	else
+		for (i = 0; i < queue->size; i++) {
+			const void *const elem = sp_ringbuf_get(i, queue->data, queue->capacity, queue->elem_size, queue->head);
+			int err;
+			printf("[%lu]\t", (unsigned long)i);
+			if ((err = func(elem)) != 0) {
+				error(("external function handler returned %d (non-0)", err));
+				return SP_EHANDLER;
+			}
+		}
 	return 0;
 }
 

@@ -121,3 +121,15 @@ int data_verify(void *d, size_t idx)
 	const struct data *p = d;
 	return !(p->id == idx % 16 + p->age + p->name[0] * p->surname[0]);
 }
+
+int data_print(const void *d)
+{
+	const struct data *p = d;
+	printf("id %d, %s %s, age %d\n", p->id, p->name, p->surname, p->age);
+	return 0;
+}
+
+int data_print_bad(const void *d)
+{
+	return 1;
+}
