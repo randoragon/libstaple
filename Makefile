@@ -37,7 +37,6 @@ SRCSUBDIRS := . $(MODULES)
 SRCDIRS := $(foreach dir, $(SRCSUBDIRS), $(addprefix $(SRCDIR)/, $(dir)))
 OBJDIRS := $(foreach dir, $(SRCSUBDIRS), $(addprefix $(OBJDIR)/, $(dir)))
 SRCS    := $(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.c))
-#SRCS := $(wildcard $(SRCDIR)/*.c)
 OBJS    := $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(SRCS:.c=.o))
 
 # Header and man page files (relative to MANDIR)
@@ -62,7 +61,8 @@ all: directories static shared
 
 # Creates directories for all build processes
 directories:
-	mkdir -p -- $(SRCDIR) $(OBJDIR) $(TESTDIR) $(TESTDIR)/$(SRCDIR) $(TESTDIR)/$(OBJDIR) $(TESTDIR)/bin
+	mkdir -p -- $(SRCDIRS) $(OBJDIRS) $(TESTDIR)
+	mkdir -p -- $(TESTDIR)/$(SRCDIR) $(TESTDIR)/$(OBJDIR) $(TESTDIR)/bin
 
 # Builds a shared library file
 shared: $(OBJS)

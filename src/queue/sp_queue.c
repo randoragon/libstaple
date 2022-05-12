@@ -15,9 +15,9 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#include "sp_queue.h"
-#include "helpers.h"
-#include "sp_errcodes.h"
+#include "../sp_queue.h"
+#include "../helpers.h"
+#include "../sp_errcodes.h"
 #include <string.h>
 
 struct sp_queue *sp_queue_create(size_t elem_size, size_t capacity)
