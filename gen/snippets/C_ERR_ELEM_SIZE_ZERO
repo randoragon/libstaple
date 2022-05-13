@@ -1,0 +1,4 @@
+if (elem_size == 0) {
+	error(("elem_size cannot be 0"));
+	return NULL;
+}

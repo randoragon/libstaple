@@ -1,0 +1,4 @@
+if ($1$ == NULL) {
+	error(("$1$ is NULL"));
+	return $2$;
+}
