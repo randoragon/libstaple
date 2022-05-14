@@ -8,10 +8,13 @@
 SRCDIR      = '../src/'
 SNIPPETDIR  = 'snippets/'
 TEMPLATEDIR = 'templates/'
-INPUT_FILES = arg
 HEADER_TEXT = io.open(SNIPPETDIR..'C_LICENSE_HEADER', 'r'):read('a')
 
-SUFFIXES = {
+-- List of file paths to templates, relative to TEMPLATEDIR
+INPUT_FILES = arg[1] and arg or { 'stack', 'queue' }
+
+-- Suffixed forms to generate
+PARAMS = {
 	{ TYPE='char'          , SUFFIX='c' , FMT_STR="%%hd\\t'%%c'", FMT_ARGS='elem, elem' },
 	{ TYPE='short'         , SUFFIX='s' , FMT_STR='%%hd'        , FMT_ARGS='elem'       },
 	{ TYPE='int'           , SUFFIX='i' , FMT_STR='%%d'         , FMT_ARGS='elem'       },
@@ -38,40 +41,14 @@ local function tcopy(table)
 	return ret
 end
 
--- Expands parameter tables into lists of combinations.
--- For example, the call:
---     combine_params { A={0,1}, B='ham', C={'oh', 'hi', 'mark'} }
--- would produce something like:
---     {
---       {A=0, B='ham', C='oh'},
---       {A=0, B='ham', C='hi'},
---       {A=0, B='ham', C='mark'},
---       {A=1, B='ham', C='oh'},
---       {A=1, B='ham', C='hi'},
---       {A=1, B='ham', C='mark'}
---     }
-function combine_params(params, prefix, lastkey)
-	local key, val = next(params, lastkey)
-	if key == nil then
-		return {prefix}
+local function tequal(t1, t2)
+	for k, v in pairs(t1) do
+		if t2[k] ~= v then return false end
 	end
-
-	-- expand current key
-	local ret = {}
-	if type(val) ~= 'table' then
-		ret[1] = tcopy(prefix) or {}
-		ret[1][key] = val
-		ret = combine_params(params, ret[1], key)
-	else
-		for _, elem in ipairs(val) do
-			ret[#ret + 1] = tcopy(prefix) or {}
-			ret[#ret][key] = elem
-			local new = combine_params(params, ret[#ret], key)
-			table.move(new, 1, #new, #ret, ret)
-		end
+	for k, v in pairs(t2) do
+		if t1[k] ~= v then return false end
 	end
-
-	return ret
+	return true
 end
 
 -- Generates C source file(s) from the template format.
@@ -79,11 +56,6 @@ end
 -- params must contain key-value pairs that match the format strings inside
 -- the input template file.
 local function generate(fpath_in, params)
-
-	-- params by convention must contain at least this, because it is used for
-	-- constructing output file paths
-	assert(params['MODULE'], 'key "MODULE" not found in params')
-	assert(params['SUFFIX'], 'key "SUFFIX" not found in params')
 
 	local include_lines = {}
 	local default_includes = {}
@@ -160,9 +132,40 @@ local function generate(fpath_in, params)
 
 			-- End of file block detected
 			elseif line:match('^/%*F}%s*%*/') then
-				-- Generate a new file for each combination of params
-				for _, p in ipairs(combine_params(params)) do
+				-- Find parameters relevant to the buffer, then filter out the
+				-- irrelevant ones to avoid regenerating the same source file
+				-- several times
+				local param_in_buf = {} -- just for caching
+				local filtered_params = {}
+				for _, i in ipairs(params) do
+					filtered = {}
+					for k, v in pairs(i) do
+						if param_in_buf[k] == nil then
+							param_in_buf[k] = not not buf:match('%$'..k..'%$')
+						end
+						if param_in_buf[k] then
+							filtered[k] = v
+						end
+					end
+
+					-- If the filtered row is not yet on the list, add it
+					local already_in = false
+					for _, j in ipairs(filtered_params) do
+						if tequal(filtered, j) then
+							already_in = true
+							break
+						end
+					end
+					if not already_in then
+						filtered_params[#filtered_params + 1] = filtered
+					end
+				end
+
+				-- Generate a new file for each set of params
+				for i = 1, #filtered_params do
+					local p = filtered_params[i]
 					local text = buf
+
 
 					-- Expand inline parameters: $PARAM$
 					for k, v in pairs(p) do
@@ -171,11 +174,9 @@ local function generate(fpath_in, params)
 					assert(not text:match('%$[%w_]+%$'), 'unmatched param in text:\n'..text)
 
 					-- Extract file path from function name
-					if fpath_out == nil then
-						local fname = text:match('[^%w_]+([%w_]+)%(')
-						if fname then
-							fpath_out = SRCDIR..params['MODULE']..'/'..fname..'.c'
-						end
+					local fname = text:match('[^%w_]+([%w_]+)%(')
+					if fname then
+						fpath_out = SRCDIR..params[i].MODULE..'/'..fname..'.c'
 					end
 					assert(fpath_out, 'undetected function name in text:\n'..text)
 
@@ -195,9 +196,11 @@ local function generate(fpath_in, params)
 	end
 end
 
-for i,file in ipairs(INPUT_FILES) do
-	for _, params in ipairs(SUFFIXES) do
-		params.MODULE = file
-		generate(TEMPLATEDIR..file, params)
+-- Generate source files
+for i, file in ipairs(INPUT_FILES) do
+	-- Add MODULE parameter to PARAMS
+	for _, i in ipairs(PARAMS) do
+		i.MODULE = file
 	end
+	generate(TEMPLATEDIR..file, PARAMS)
 end
