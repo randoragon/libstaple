@@ -12,20 +12,19 @@ INPUT_FILES = arg
 HEADER_TEXT = io.open(SNIPPETDIR..'C_LICENSE_HEADER', 'r'):read('a')
 
 SUFFIXES = {
-	c    = 'char',
-	s    = 'short',
-	i    = 'int',
-	l    = 'long',
-	uc   = 'unsigned char',
-	sc   = 'signed char',
-	us   = 'unsigned short',
-	ui   = 'unsigned int',
-	ul   = 'unsigned long',
-	f    = 'float',
-	d    = 'double',
-	ld   = 'long double',
-	str  = 'char *',
-	strn = 'char *'
+	{ TYPE='char'          , SUFFIX='c' , FMT_STR="%%hd\\t'%%c'", FMT_ARGS='elem, elem' },
+	{ TYPE='short'         , SUFFIX='s' , FMT_STR='%%hd'        , FMT_ARGS='elem'       },
+	{ TYPE='int'           , SUFFIX='i' , FMT_STR='%%d'         , FMT_ARGS='elem'       },
+	{ TYPE='long'          , SUFFIX='l' , FMT_STR='%%ld'        , FMT_ARGS='elem'       },
+	{ TYPE='unsigned char' , SUFFIX='uc', FMT_STR="%%hd\\t'%%c'", FMT_ARGS='elem, elem' },
+	{ TYPE='signed char'   , SUFFIX='sc', FMT_STR="%%hd\\t'%%c'", FMT_ARGS='elem, elem' },
+	{ TYPE='unsigned short', SUFFIX='us', FMT_STR='%%hu'        , FMT_ARGS='elem'       },
+	{ TYPE='unsigned int'  , SUFFIX='ui', FMT_STR='%%u'         , FMT_ARGS='elem'       },
+	{ TYPE='unsigned long' , SUFFIX='ul', FMT_STR='%%lu'        , FMT_ARGS='elem'       },
+	{ TYPE='float'         , SUFFIX='f' , FMT_STR='%%g'         , FMT_ARGS='elem'       },
+	{ TYPE='double'        , SUFFIX='d' , FMT_STR='%%g'         , FMT_ARGS='elem'       },
+	{ TYPE='long double'   , SUFFIX='ld', FMT_STR='%%Lg'        , FMT_ARGS='elem'       },
+	-- str and strn suffixed functions are implemented manually
 }
 
 local function tcopy(table)
@@ -197,12 +196,8 @@ local function generate(fpath_in, params)
 end
 
 for i,file in ipairs(INPUT_FILES) do
-	for s, t in pairs(SUFFIXES) do
-		params = {
-			MODULE = file,
-			SUFFIX = s,
-			TYPE   = t
-		}
+	for _, params in ipairs(SUFFIXES) do
+		params.MODULE = file
 		generate(TEMPLATEDIR..file, params)
 	end
 end

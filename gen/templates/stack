@@ -1,4 +1,4 @@
-/* vim: syntax=c */
+/* vim: ft=c foldmethod=syntax */
 #include "../sp_stack.h"
 #include "../helpers.h"
 #include "../sp_errcodes.h"
@@ -865,8 +865,8 @@ int sp_stack_print$SUFFIX$(const struct sp_stack *stack)
 	printf("sp_stack_print$SUFFIX$()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
 		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
-		const short elem = ((short*)stack->data)[i];
-		printf("[%lu]\t%hd\n", (unsigned long)stack->size - 1 - i, elem);
+		const $TYPE$ elem = (($TYPE$*)stack->data)[i];
+		printf("[%lu]\t$FMT_STR$\n", (unsigned long)stack->size - 1 - i, $FMT_ARGS$);
 	}
 	return 0;
 }
