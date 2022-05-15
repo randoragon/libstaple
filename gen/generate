@@ -1,0 +1,43 @@
+#!/usr/bin/env lua
+
+-- This program generates the C source files from a rudimentary template format.
+-- This was necessary, because the C preprocessor does not offer support for
+-- advanced file splitting.
+
+DIRNAME = arg[0]:match('(.*/)')
+
+require(DIRNAME..'luaparser')
+
+-- GLOBAL CONFIGURATION
+SRCDIR      = DIRNAME..'../src/'
+SNIPPETDIR  = DIRNAME..'snippets/'
+TEMPLATEDIR = DIRNAME..'templates/'
+HEADER_TEXT = DIRNAME..io.open(SNIPPETDIR..'C_LICENSE_HEADER', 'r'):read('a')
+TEMPLATES   = arg[1] and arg or { 'stack', 'queue' }
+
+psets = ParamSetList:new{
+	{ TYPE='char'          , SUFFIX='c' , FMT_STR="%%hd\\t'%%c'", FMT_ARGS='elem, elem' },
+	{ TYPE='short'         , SUFFIX='s' , FMT_STR='%%hd'        , FMT_ARGS='elem'       },
+	{ TYPE='int'           , SUFFIX='i' , FMT_STR='%%d'         , FMT_ARGS='elem'       },
+	{ TYPE='long'          , SUFFIX='l' , FMT_STR='%%ld'        , FMT_ARGS='elem'       },
+	{ TYPE='unsigned char' , SUFFIX='uc', FMT_STR="%%hd\\t'%%c'", FMT_ARGS='elem, elem' },
+	{ TYPE='signed char'   , SUFFIX='sc', FMT_STR="%%hd\\t'%%c'", FMT_ARGS='elem, elem' },
+	{ TYPE='unsigned short', SUFFIX='us', FMT_STR='%%hu'        , FMT_ARGS='elem'       },
+	{ TYPE='unsigned int'  , SUFFIX='ui', FMT_STR='%%u'         , FMT_ARGS='elem'       },
+	{ TYPE='unsigned long' , SUFFIX='ul', FMT_STR='%%lu'        , FMT_ARGS='elem'       },
+	{ TYPE='float'         , SUFFIX='f' , FMT_STR='%%g'         , FMT_ARGS='elem'       },
+	{ TYPE='double'        , SUFFIX='d' , FMT_STR='%%g'         , FMT_ARGS='elem'       },
+	{ TYPE='long double'   , SUFFIX='ld', FMT_STR='%%Lg'        , FMT_ARGS='elem'       },
+	-- str and strn suffixed functions are implemented separately
+}
+
+-- Generate source files for every template
+for _, template in ipairs(TEMPLATES) do
+	-- By convention, add a MODULE parameter, which is needed for output
+	-- filenames.
+	for pset in psets:iter() do
+		pset:set('MODULE', template)
+	end
+
+	generate(TEMPLATEDIR..template, psets)
+end
