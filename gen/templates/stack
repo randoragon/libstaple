@@ -1,4 +1,4 @@
-/* vim: ft=c foldmethod=syntax */
+/* vim: set ft=c fdm=syntax: */
 #include "../sp_stack.h"
 #include "../helpers.h"
 #include "../sp_errcodes.h"
