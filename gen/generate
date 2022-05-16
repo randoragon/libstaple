@@ -12,7 +12,7 @@ require(DIRNAME..'luaparser')
 SRCDIR      = DIRNAME..'../src/'
 SNIPPETDIR  = DIRNAME..'snippets/'
 TEMPLATEDIR = DIRNAME..'templates/'
-HEADER_TEXT = DIRNAME..io.open(SNIPPETDIR..'C_LICENSE_HEADER', 'r'):read('a')
+HEADER_TEXT = io.open(SNIPPETDIR..'C_LICENSE_HEADER', 'r'):read('a')
 TEMPLATES   = arg[1] and arg or { 'stack', 'queue' }
 
 psets = ParamSetList:new{
