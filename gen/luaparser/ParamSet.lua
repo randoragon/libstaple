@@ -1,10 +1,14 @@
 ParamSet = {
-	dict = {}
+	dict = {},
+	stdc = 'C89'
 }
 
 -- Create a new parameter set.
-function ParamSet:new(params)
-	local o = { dict = params or {} }
+function ParamSet:new(params, stdc)
+	local o = {
+		dict = params or {},
+		stdc = stdc or 'C89'
+	}
 	setmetatable(o, self)
 	self.__index = self
 	return o
@@ -31,8 +35,8 @@ function ParamSet:hash()
 	local strings = {}
 
 	local function kv2str(key, value)
-		assert(type(key)   == 'string', 'key must be a string')
-		assert(type(value) == 'string', 'value must be a string')
+		assert(type(key)   == 'string', 'key must be a string, not: '..type(key))
+		assert(type(value) == 'string', 'value must be a string, not: '..type(value))
 		assert(not key:match('[^%w_]'), 'invalid param name: '..key)
 		assert(not key:match('[@]'),    'key/separator collision: '..key)
 		assert(not value:match('%$'),   'invalid param value: '..value)
@@ -69,7 +73,7 @@ end
 function ParamSet:print()
 	io.write('ParamSet '..tostring(self)..' { ')
 	for k, v in pairs(self.dict) do
-		io.write(k..'="'..v..'" ')
+		io.write(k..'='..v..' ')
 	end
 	print('}')
 end

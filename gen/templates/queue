@@ -1,9 +1,6 @@
 /* vim: set ft=c fdm=syntax: */
 #include "../sp_queue.h"
 #include "../helpers.h"
-#include "../sp_errcodes.h"
-#include <string.h>
-/*I 1,2 */
 
 /*F{*/
 struct sp_queue *sp_queue_create(size_t elem_size, size_t capacity)
@@ -40,7 +37,8 @@ struct sp_queue *sp_queue_create(size_t elem_size, size_t capacity)
 }
 /*F}*/
 
-/*F{ 3*/
+/*F{*/
+#include "../sp_errcodes.h"
 int sp_queue_clear(struct sp_queue *queue, int (*dtor)(void*))
 {
 #ifdef STAPLE_DEBUG
@@ -62,7 +60,8 @@ int sp_queue_clear(struct sp_queue *queue, int (*dtor)(void*))
 }
 /*F}*/
 
-/*F{ 3*/
+/*F{*/
+#include "../sp_errcodes.h"
 int sp_queue_destroy(struct sp_queue *queue, int (*dtor)(void*))
 {
 	int error;
@@ -77,7 +76,9 @@ int sp_queue_destroy(struct sp_queue *queue, int (*dtor)(void*))
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_copy(struct sp_queue *dest, const struct sp_queue *src, int (*cpy)(void*, const void*))
 {
 #ifdef STAPLE_DEBUG
@@ -124,7 +125,8 @@ int sp_queue_copy(struct sp_queue *dest, const struct sp_queue *src, int (*cpy)(
 }
 /*F}*/
 
-/*F{ 3*/
+/*F{*/
+#include "../sp_errcodes.h"
 int sp_queue_foreach(struct sp_queue *queue, int (*func)(void*, size_t))
 {
 	size_t i;
@@ -148,7 +150,9 @@ int sp_queue_foreach(struct sp_queue *queue, int (*func)(void*, size_t))
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_push(struct sp_queue *queue, const void *elem)
 {
 #ifdef STAPLE_DEBUG
@@ -167,7 +171,8 @@ int sp_queue_push(struct sp_queue *queue, const void *elem)
 }
 /*F}*/
 
-/*F{ 3*/
+/*F{*/
+#include "../sp_errcodes.h"
 int sp_queue_push$SUFFIX$(struct sp_queue *queue, $TYPE$ elem)
 {
 #ifdef STAPLE_DEBUG
@@ -186,7 +191,9 @@ int sp_queue_push$SUFFIX$(struct sp_queue *queue, $TYPE$ elem)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_pushstr(struct sp_queue *queue, const char *elem)
 {
 	char *buf;
@@ -218,7 +225,9 @@ int sp_queue_pushstr(struct sp_queue *queue, const char *elem)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_pushstrn(struct sp_queue *queue, const char *elem, size_t len)
 {
 	char *buf;
@@ -248,7 +257,9 @@ int sp_queue_pushstrn(struct sp_queue *queue, const char *elem, size_t len)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_insert(struct sp_queue *queue, size_t idx, const void *elem)
 {
 #ifdef STAPLE_DEBUG
@@ -268,7 +279,9 @@ int sp_queue_insert(struct sp_queue *queue, size_t idx, const void *elem)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_insert$SUFFIX$(struct sp_queue *queue, size_t idx, $TYPE$ elem)
 {
 #ifdef STAPLE_DEBUG
@@ -288,7 +301,9 @@ int sp_queue_insert$SUFFIX$(struct sp_queue *queue, size_t idx, $TYPE$ elem)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_insertstr(struct sp_queue *queue, size_t idx, const char *elem)
 {
 	char *buf;
@@ -321,7 +336,9 @@ int sp_queue_insertstr(struct sp_queue *queue, size_t idx, const char *elem)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_insertstrn(struct sp_queue *queue, size_t idx, const char *elem, size_t len)
 {
 	char *buf;
@@ -353,7 +370,9 @@ int sp_queue_insertstrn(struct sp_queue *queue, size_t idx, const char *elem, si
 /*F}*/
 
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_qinsert(struct sp_queue *queue, size_t idx, const void *elem)
 {
 	char *p;
@@ -379,7 +398,9 @@ int sp_queue_qinsert(struct sp_queue *queue, size_t idx, const void *elem)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_qinsert$SUFFIX$(struct sp_queue *queue, size_t idx, $TYPE$ elem)
 {
 	char *p;
@@ -405,7 +426,9 @@ int sp_queue_qinsert$SUFFIX$(struct sp_queue *queue, size_t idx, $TYPE$ elem)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_qinsertstr(struct sp_queue *queue, size_t idx, const char *elem)
 {
 	char *p;
@@ -444,7 +467,9 @@ int sp_queue_qinsertstr(struct sp_queue *queue, size_t idx, const char *elem)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_qinsertstrn(struct sp_queue *queue, size_t idx, const char *elem, size_t len)
 {
 	char *p;
@@ -527,7 +552,9 @@ char *sp_queue_peekstr(const struct sp_queue *queue)
 /*F}*/
 
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_pop(struct sp_queue *queue, void *output)
 {
 #ifdef STAPLE_DEBUG
@@ -587,7 +614,9 @@ char *sp_queue_popstr(struct sp_queue *queue)
 /*F}*/
 
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_remove(struct sp_queue *queue, size_t idx, void *output)
 {
 	char *p;
@@ -645,7 +674,9 @@ char *sp_queue_removestr(struct sp_queue *queue, size_t idx)
 /*F}*/
 
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_qremove(struct sp_queue *queue, size_t idx, void *output)
 {
 	char *p;
@@ -761,7 +792,9 @@ char *sp_queue_getstr(const struct sp_queue *queue, size_t idx)
 /*F}*/
 
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_set(struct sp_queue *queue, size_t idx, void *val)
 {
 	char *p;
@@ -779,7 +812,8 @@ int sp_queue_set(struct sp_queue *queue, size_t idx, void *val)
 }
 /*F}*/
 
-/*F{ 3*/
+/*F{*/
+#include "../sp_errcodes.h"
 int sp_queue_set$SUFFIX$(struct sp_queue *queue, size_t idx, $TYPE$ val)
 {
 	char *p;
@@ -797,7 +831,9 @@ int sp_queue_set$SUFFIX$(struct sp_queue *queue, size_t idx, $TYPE$ val)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_setstr(struct sp_queue *queue, size_t idx, const char *val)
 {
 	char *p;
@@ -829,7 +865,9 @@ int sp_queue_setstr(struct sp_queue *queue, size_t idx, const char *val)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_queue_setstrn(struct sp_queue *queue, size_t idx, const char *val, size_t len)
 {
 	char *p;
@@ -860,7 +898,8 @@ int sp_queue_setstrn(struct sp_queue *queue, size_t idx, const char *val, size_t
 /*F}*/
 
 
-/*F{ 3*/
+/*F{*/
+#include "../sp_errcodes.h"
 int sp_queue_print(const struct sp_queue *queue)
 {
 	size_t i;
@@ -877,7 +916,8 @@ int sp_queue_print(const struct sp_queue *queue)
 }
 /*F}*/
 
-/*F{ 3*/
+/*F{*/
+#include "../sp_errcodes.h"
 int sp_queue_print$SUFFIX$(const struct sp_queue *queue)
 {
 	size_t i;
@@ -889,13 +929,14 @@ int sp_queue_print$SUFFIX$(const struct sp_queue *queue)
 		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
 	for (i = 0; i < queue->size; i++) {
 		const $TYPE$ elem = *($TYPE$*)sp_ringbuf_get(i, queue->data, queue->capacity, queue->elem_size, queue->head);
-		printf("[%lu]\t$FMT_STR$\n", (unsigned long)i, $FMT_ARGS$);
+		printf("[%lu]\t"$FMT_STR$"\n", (unsigned long)i, $FMT_ARGS$);
 	}
 	return 0;
 }
 /*F}*/
 
-/*F{ 3*/
+/*F{*/
+#include "../sp_errcodes.h"
 int sp_queue_printstr(const struct sp_queue *queue)
 {
 	size_t i;

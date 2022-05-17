@@ -15,29 +15,38 @@ TEMPLATEDIR = DIRNAME..'templates/'
 HEADER_TEXT = io.open(SNIPPETDIR..'C_LICENSE_HEADER', 'r'):read('a')
 TEMPLATES   = arg[1] and arg or { 'stack', 'queue' }
 
-psets = ParamSetList:new{
-	{ TYPE='char'          , SUFFIX='c' , FMT_STR="%%hd\\t'%%c'", FMT_ARGS='elem, elem' },
-	{ TYPE='short'         , SUFFIX='s' , FMT_STR='%%hd'        , FMT_ARGS='elem'       },
-	{ TYPE='int'           , SUFFIX='i' , FMT_STR='%%d'         , FMT_ARGS='elem'       },
-	{ TYPE='long'          , SUFFIX='l' , FMT_STR='%%ld'        , FMT_ARGS='elem'       },
-	{ TYPE='unsigned char' , SUFFIX='uc', FMT_STR="%%hd\\t'%%c'", FMT_ARGS='elem, elem' },
-	{ TYPE='signed char'   , SUFFIX='sc', FMT_STR="%%hd\\t'%%c'", FMT_ARGS='elem, elem' },
-	{ TYPE='unsigned short', SUFFIX='us', FMT_STR='%%hu'        , FMT_ARGS='elem'       },
-	{ TYPE='unsigned int'  , SUFFIX='ui', FMT_STR='%%u'         , FMT_ARGS='elem'       },
-	{ TYPE='unsigned long' , SUFFIX='ul', FMT_STR='%%lu'        , FMT_ARGS='elem'       },
-	{ TYPE='float'         , SUFFIX='f' , FMT_STR='%%g'         , FMT_ARGS='elem'       },
-	{ TYPE='double'        , SUFFIX='d' , FMT_STR='%%g'         , FMT_ARGS='elem'       },
-	{ TYPE='long double'   , SUFFIX='ld', FMT_STR='%%Lg'        , FMT_ARGS='elem'       },
-	-- str and strn suffixed functions are implemented separately
+-- You can define the suffixed functions to generate here
+pconf = ParamConfig:new{
+	C89 = {
+		{ TYPE='char'          , SUFFIX='c' , FMT=[["%hd\\t'%c'"]] },
+		{ TYPE='short'         , SUFFIX='s' , FMT=[["%hd"]]         },
+		{ TYPE='int'           , SUFFIX='i' , FMT=[["%d"]]          },
+		{ TYPE='long'          , SUFFIX='l' , FMT=[["%ld"]]         },
+		{ TYPE='unsigned char' , SUFFIX='uc', FMT=[["%hd\\t'%c'"]] },
+		{ TYPE='signed char'   , SUFFIX='sc', FMT=[["%hd\\t'%c'"]] },
+		{ TYPE='unsigned short', SUFFIX='us', FMT=[["%hu"]]         },
+		{ TYPE='unsigned int'  , SUFFIX='ui', FMT=[["%u"]]          },
+		{ TYPE='unsigned long' , SUFFIX='ul', FMT=[["%lu"]]         },
+		{ TYPE='float'         , SUFFIX='f' , FMT=[["%g"]]          },
+		{ TYPE='double'        , SUFFIX='d' , FMT=[["%g"]]          },
+		{ TYPE='long double'   , SUFFIX='ld', FMT=[["%Lg"]]         },
+		{ TYPE='long double'   , SUFFIX='ld', FMT=[["%Lg"]]         },
+		-- str and strn suffixed functions are implemented separately
+	},
+
+	C99 = {
+		INCLUDE = 'stdint.h,inttypes.h',
+		{ TYPE='uint32_t', SUFFIX='u32', FMT=[["%"PRIu32]] },
+	}
 }
 
 -- Generate source files for every template
 for _, template in ipairs(TEMPLATES) do
 	-- By convention, add a MODULE parameter, which is needed for output
 	-- filenames.
-	for pset in psets:iter() do
+	for pset in pconf:iter() do
 		pset:set('MODULE', template)
 	end
 
-	generate(TEMPLATEDIR..template, psets)
+	generate(TEMPLATEDIR..template, pconf)
 end

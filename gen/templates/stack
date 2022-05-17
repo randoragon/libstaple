@@ -1,9 +1,6 @@
 /* vim: set ft=c fdm=syntax: */
 #include "../sp_stack.h"
 #include "../helpers.h"
-#include "../sp_errcodes.h"
-#include <string.h>
-/*I 1,2 */
 
 /*F{*/
 struct sp_stack *sp_stack_create(size_t elem_size, size_t capacity)
@@ -39,7 +36,8 @@ struct sp_stack *sp_stack_create(size_t elem_size, size_t capacity)
 }
 /*F}*/
 
-/*F{ 3*/
+/*F{*/
+#include "../sp_errcodes.h"
 int sp_stack_clear(struct sp_stack *stack, int (*dtor)(void*))
 {
 #ifdef STAPLE_DEBUG
@@ -62,7 +60,7 @@ int sp_stack_clear(struct sp_stack *stack, int (*dtor)(void*))
 }
 /*F}*/
 
-/*F{ 3*/
+/*F{*/
 int sp_stack_destroy(struct sp_stack *stack, int (*dtor)(void*))
 {
 	int error;
@@ -77,7 +75,9 @@ int sp_stack_destroy(struct sp_stack *stack, int (*dtor)(void*))
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_copy(struct sp_stack *dest, const struct sp_stack *src, int (*cpy)(void*, const void*))
 {
 	char *s, *d;
@@ -122,7 +122,8 @@ int sp_stack_copy(struct sp_stack *dest, const struct sp_stack *src, int (*cpy)(
 }
 /*F}*/
 
-/*F{ 3*/
+/*F{*/
+#include "../sp_errcodes.h"
 int sp_stack_foreach(struct sp_stack *stack, int (*func)(void*, size_t))
 {
 	size_t i;
@@ -141,7 +142,9 @@ int sp_stack_foreach(struct sp_stack *stack, int (*func)(void*, size_t))
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_push(struct sp_stack *stack, const void *elem)
 {
 #ifdef STAPLE_DEBUG
@@ -156,7 +159,8 @@ int sp_stack_push(struct sp_stack *stack, const void *elem)
 }
 /*F}*/
 
-/*F{ 3*/
+/*F{*/
+#include "../sp_errcodes.h"
 int sp_stack_push$SUFFIX$(struct sp_stack *stack, $TYPE$ elem)
 {
 #ifdef STAPLE_DEBUG
@@ -171,7 +175,9 @@ int sp_stack_push$SUFFIX$(struct sp_stack *stack, $TYPE$ elem)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_pushstr(struct sp_stack *stack, const char *elem)
 {
 	char *buf;
@@ -199,7 +205,9 @@ int sp_stack_pushstr(struct sp_stack *stack, const char *elem)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_pushstrn(struct sp_stack *stack, const char *elem, size_t len)
 {
 	char *buf;
@@ -226,7 +234,9 @@ int sp_stack_pushstrn(struct sp_stack *stack, const char *elem, size_t len)
 /*F}*/
 
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_insert(struct sp_stack *stack, size_t idx, const void *elem)
 {
 	char *p;
@@ -249,7 +259,9 @@ int sp_stack_insert(struct sp_stack *stack, size_t idx, const void *elem)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_insert$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ elem)
 {
 	char *p;
@@ -272,7 +284,9 @@ int sp_stack_insert$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ elem)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_insertstr(struct sp_stack *stack, size_t idx, const char *elem)
 {
 	char *p;
@@ -309,7 +323,9 @@ int sp_stack_insertstr(struct sp_stack *stack, size_t idx, const char *elem)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_insertstrn(struct sp_stack *stack, size_t idx, const char *elem, size_t len)
 {
 	char *p;
@@ -345,7 +361,9 @@ int sp_stack_insertstrn(struct sp_stack *stack, size_t idx, const char *elem, si
 /*F}*/
 
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_qinsert(struct sp_stack *stack, size_t idx, const void *elem)
 {
 	char *p, *q;
@@ -369,7 +387,8 @@ int sp_stack_qinsert(struct sp_stack *stack, size_t idx, const void *elem)
 }
 /*F}*/
 
-/*F{ 3*/
+/*F{*/
+#include "../sp_errcodes.h"
 int sp_stack_qinsert$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ elem)
 {
 	char *p, *q;
@@ -394,7 +413,9 @@ int sp_stack_qinsert$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ elem)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_qinsertstr(struct sp_stack *stack, size_t idx, const char *elem)
 {
 	char *p, *q;
@@ -432,7 +453,9 @@ int sp_stack_qinsertstr(struct sp_stack *stack, size_t idx, const char *elem)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_qinsertstrn(struct sp_stack *stack, size_t idx, const char *elem, size_t len)
 {
 	char *p, *q;
@@ -514,7 +537,9 @@ char *sp_stack_peekstr(const struct sp_stack *stack)
 /*F}*/
 
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_pop(struct sp_stack *stack, void *output)
 {
 	const void *src;
@@ -564,7 +589,9 @@ char *sp_stack_popstr(struct sp_stack *stack)
 /*F}*/
 
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_remove(struct sp_stack *stack, size_t idx, void *output)
 {
 	char *p;
@@ -584,7 +611,8 @@ int sp_stack_remove(struct sp_stack *stack, size_t idx, void *output)
 }
 /*F}*/
 
-/*F{ 4*/
+/*F{*/
+#include <string.h>
 $TYPE$ sp_stack_remove$SUFFIX$(struct sp_stack *stack, size_t idx)
 {
 	char *p;
@@ -605,7 +633,8 @@ $TYPE$ sp_stack_remove$SUFFIX$(struct sp_stack *stack, size_t idx)
 }
 /*F}*/
 
-/*F{ 4*/
+/*F{*/
+#include <string.h>
 char *sp_stack_removestr(struct sp_stack *stack, size_t idx)
 {
 	char *p;
@@ -627,7 +656,9 @@ char *sp_stack_removestr(struct sp_stack *stack, size_t idx)
 /*F}*/
 
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_qremove(struct sp_stack *stack, size_t idx, void *output)
 {
 	char *p, *q;
@@ -738,7 +769,9 @@ char *sp_stack_getstr(const struct sp_stack *stack, size_t idx)
 /*F}*/
 
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_set(struct sp_stack *stack, size_t idx, void *val)
 {
 	char *p;
@@ -756,7 +789,8 @@ int sp_stack_set(struct sp_stack *stack, size_t idx, void *val)
 }
 /*F}*/
 
-/*F{ 3*/
+/*F{*/
+#include "../sp_errcodes.h"
 int sp_stack_set$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ val)
 {
 	char *p;
@@ -774,7 +808,9 @@ int sp_stack_set$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ val)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_setstr(struct sp_stack *stack, size_t idx, const char *val)
 {
 	char *p;
@@ -806,7 +842,9 @@ int sp_stack_setstr(struct sp_stack *stack, size_t idx, const char *val)
 }
 /*F}*/
 
-/*F{ 3,4*/
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
 int sp_stack_setstrn(struct sp_stack *stack, size_t idx, const char *val, size_t len)
 {
 	char *p;
@@ -837,7 +875,8 @@ int sp_stack_setstrn(struct sp_stack *stack, size_t idx, const char *val, size_t
 /*F}*/
 
 
-/*F{ 3*/
+/*F{*/
+#include "../sp_errcodes.h"
 int sp_stack_print(const struct sp_stack *stack)
 {
 	size_t i;
@@ -854,7 +893,8 @@ int sp_stack_print(const struct sp_stack *stack)
 }
 /*F}*/
 
-/*F{ 3*/
+/*F{*/
+#include "../sp_errcodes.h"
 int sp_stack_print$SUFFIX$(const struct sp_stack *stack)
 {
 	size_t i;
@@ -866,13 +906,14 @@ int sp_stack_print$SUFFIX$(const struct sp_stack *stack)
 		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const $TYPE$ elem = (($TYPE$*)stack->data)[i];
-		printf("[%lu]\t$FMT_STR$\n", (unsigned long)stack->size - 1 - i, $FMT_ARGS$);
+		printf("[%lu]\t"$FMT_STR$"\n", (unsigned long)stack->size - 1 - i, $FMT_ARGS$);
 	}
 	return 0;
 }
 /*F}*/
 
-/*F{ 3*/
+/*F{*/
+#include "../sp_errcodes.h"
 int sp_stack_printstr(const struct sp_stack *stack)
 {
 	size_t i;
