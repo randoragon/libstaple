@@ -128,6 +128,7 @@ int sp_stack_foreach(struct sp_stack *stack, int (*func)(void*, size_t))
 {
 	size_t i;
 #ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_NULLPTR func SP_EINVAL */
 #endif
 	for (i = 0; i < stack->size; i++) {
@@ -148,6 +149,7 @@ int sp_stack_foreach(struct sp_stack *stack, int (*func)(void*, size_t))
 int sp_stack_push(struct sp_stack *stack, const void *elem)
 {
 #ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
 #endif
 	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
@@ -164,6 +166,7 @@ int sp_stack_push(struct sp_stack *stack, const void *elem)
 int sp_stack_push$SUFFIX$(struct sp_stack *stack, $TYPE$ elem)
 {
 #ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
 #endif
 	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
@@ -183,6 +186,7 @@ int sp_stack_pushstr(struct sp_stack *stack, const char *elem)
 	char *buf;
 	size_t len;
 #ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
 	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
 #endif
@@ -212,6 +216,7 @@ int sp_stack_pushstrn(struct sp_stack *stack, const char *elem, size_t len)
 {
 	char *buf;
 #ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
 	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
 #endif
@@ -241,6 +246,7 @@ int sp_stack_insert(struct sp_stack *stack, size_t idx, const void *elem)
 {
 	char *p;
 #ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
 	if (idx > stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
@@ -266,6 +272,7 @@ int sp_stack_insert$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ elem)
 {
 	char *p;
 #ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
 	if (idx > stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
