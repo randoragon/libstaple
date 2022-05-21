@@ -5,6 +5,7 @@ Block = {
 	header     = nil, -- file header (typically license notice)
 	includes   = nil, -- list of include strings
 	body       = {},  -- block contents (typically function definition)
+	params     = nil  -- cache for Block:filter_paramsets()
 }
 
 local STDC_VALUES = {
@@ -17,21 +18,68 @@ local STDC_VALUES = {
 -- Constructs a new block object out of its raw textual form.
 function Block:new(header, includes, body)
 	local o = {
-		header     = header,
-		includes   = includes,
-		body       = body,
+		header   = header,
+		includes = includes,
+		body     = body,
+		params   = {}
 	}
 	setmetatable(o, self)
 	self.__index = self
+
+	-- Cache all parameters that occur within the block
+	for _, line in ipairs(o.body) do
+		for param in line:gmatch('%$([%w_]*)%$') do
+			o.params[param] = true
+		end
+	end
+	
 	return o
+end
+
+-- Given a list of paramsets, cross-references each set with Block.params and
+-- returns a maximally compacted, sufficient "subset" of the input list. This
+-- allows Block:write_expand() to avoid creating the same files multiple times.
+function Block:filter_paramconf(pconf)
+
+	-- Populate filtered_set with filtered ParamSet hashes
+	local filtered = {}
+	for pset in pconf:iter() do
+		local filtered_pset = ParamSet:new(nil, pset.stdc, pset.includes)
+		for k, v in pset:iter() do
+			if self.params[k] then
+				filtered_pset:set(k, v)
+			end
+		end
+		if #filtered_pset ~= 0 then
+			filtered[filtered_pset:hash()] = filtered_pset
+		end
+	end
+
+	-- Convert filtered set to a filtered list of paramsets
+	local filtered_pconf = ParamConfig:new()
+	for _, filtered_pset in pairs(filtered) do
+		filtered_pconf:add(filtered_pset)
+	end
+
+	return filtered_pconf
 end
 
 -- Given a list of paramsets, creates files by expanding block parameters in
 -- accordance with each paramset.
-function Block:write_expand(pconf)
-	local already_expanded = {}
+function Block:write_expand(output_path, pconf)
 
-	for pset in pconf:iter() do
+	-- Filtering paramsets should guarantee that each paramset will
+	-- correspond to exactly 1 output file
+	local filtered_pconf = self:filter_paramconf(pconf)
+	local fpath
+
+	-- If no parameters are needed for this block, guarantee that it will
+	-- still export once by adding an empty paramset
+	if #filtered_pconf == 0 then
+		filtered_pconf:add(ParamSet:new())
+	end
+
+	for pset in filtered_pconf:iter() do
 		local body = {table.unpack(self.body)}
 		local fpath = nil
 
@@ -46,10 +94,7 @@ function Block:write_expand(pconf)
 			if not fpath then
 				local fname = body[i]:match('[^%w_]+([%w_]+)%(')
 				if fname then
-					fpath = SRCDIR..pset:get('MODULE')..'/'..fname..'.c'
-					if already_expanded[fpath] then
-						goto skip_file
-					end
+					fpath = output_path..'/'..fname..'.c'
 				end
 			end
 		end
@@ -64,7 +109,6 @@ function Block:write_expand(pconf)
 
 		-- If the standard isn't C89, surround with #if directive
 		if pset.stdc ~= 'C89' then
-
 			local val = STDC_VALUES[pset.stdc]
 			fout:write('#if defined(__STDC_VERSION__) && '..
 			           '(__STDC_VERSION__ >= '..val..')\n')
@@ -96,8 +140,6 @@ function Block:write_expand(pconf)
 		end
 
 		fout:close()
-		already_expanded[fpath] = true
-		::skip_file::
 	end
 end
 

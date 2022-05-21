@@ -19,34 +19,28 @@ TEMPLATES   = arg[1] and arg or { 'stack', 'queue' }
 pconf = ParamConfig:new{
 	C89 = {
 		{ TYPE='char'          , SUFFIX='c' , FMT=[["%hd\\t'%c'"]] },
-		{ TYPE='short'         , SUFFIX='s' , FMT=[["%hd"]]         },
-		{ TYPE='int'           , SUFFIX='i' , FMT=[["%d"]]          },
-		{ TYPE='long'          , SUFFIX='l' , FMT=[["%ld"]]         },
-		{ TYPE='unsigned char' , SUFFIX='uc', FMT=[["%hd\\t'%c'"]] },
+		{ TYPE='short'         , SUFFIX='s' , FMT=[["%hd"]]        },
+		{ TYPE='int'           , SUFFIX='i' , FMT=[["%d"]]         },
+		{ TYPE='long'          , SUFFIX='l' , FMT=[["%ld"]]        },
 		{ TYPE='signed char'   , SUFFIX='sc', FMT=[["%hd\\t'%c'"]] },
-		{ TYPE='unsigned short', SUFFIX='us', FMT=[["%hu"]]         },
-		{ TYPE='unsigned int'  , SUFFIX='ui', FMT=[["%u"]]          },
-		{ TYPE='unsigned long' , SUFFIX='ul', FMT=[["%lu"]]         },
-		{ TYPE='float'         , SUFFIX='f' , FMT=[["%g"]]          },
-		{ TYPE='double'        , SUFFIX='d' , FMT=[["%g"]]          },
-		{ TYPE='long double'   , SUFFIX='ld', FMT=[["%Lg"]]         },
-		{ TYPE='long double'   , SUFFIX='ld', FMT=[["%Lg"]]         },
+		{ TYPE='unsigned char' , SUFFIX='uc', FMT=[["%hd\\t'%c'"]] },
+		{ TYPE='unsigned short', SUFFIX='us', FMT=[["%hu"]]        },
+		{ TYPE='unsigned int'  , SUFFIX='ui', FMT=[["%u"]]         },
+		{ TYPE='unsigned long' , SUFFIX='ul', FMT=[["%lu"]]        },
+		{ TYPE='float'         , SUFFIX='f' , FMT=[["%g"]]         },
+		{ TYPE='double'        , SUFFIX='d' , FMT=[["%g"]]         },
+		{ TYPE='long double'   , SUFFIX='ld', FMT=[["%Lg"]]        },
 		-- str and strn suffixed functions are implemented separately
 	},
 
 	C99 = {
-		INCLUDE = 'stdint.h,inttypes.h',
+		INCLUDE = { 'stdint.h', 'inttypes.h' },
 		{ TYPE='uint32_t', SUFFIX='u32', FMT=[["%"PRIu32]] },
 	}
 }
 
 -- Generate source files for every template
 for _, template in ipairs(TEMPLATES) do
-	-- By convention, add a MODULE parameter, which is needed for output
-	-- filenames.
-	for pset in pconf:iter() do
-		pset:set('MODULE', template)
-	end
 
-	generate(TEMPLATEDIR..template, pconf)
+	generate(SRCDIR..template, TEMPLATEDIR..template, pconf)
 end

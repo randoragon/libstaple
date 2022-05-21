@@ -1,33 +1,42 @@
 ParamSet = {
-	dict = {},
-	stdc = 'C89'
+	params   = {},
+	stdc     = 'C89',
+	includes = {}
 }
 
 -- Create a new parameter set.
-function ParamSet:new(params, stdc)
+function ParamSet:new(params, stdc, includes)
 	local o = {
-		dict = params or {},
-		stdc = stdc or 'C89'
+		params   = params   or {},
+		stdc     = stdc     or 'C89',
+		includes = includes or {}
 	}
 	setmetatable(o, self)
 	self.__index = self
+	self.__len = function()
+		local count = 0
+		for _ in pairs(o.params) do
+			count = count + 1
+		end
+		return count
+	end
 	return o
 end
 
 -- Sets the value of a parameter. If the parameter does not exist, it is added
 -- to the set.
 function ParamSet:set(key, value)
-	self.dict[key] = value
+	self.params[key] = value
 end
 
 -- Returns the value of a parameter.
 function ParamSet:get(key)
-	return self.dict[key]
+	return self.params[key]
 end
 
 -- Returns generic for loop iterator
 function ParamSet:iter()
-	return pairs(self.dict)
+	return pairs(self.params)
 end
 
 -- Returns a string hash of the parameter dictionary.
@@ -44,36 +53,27 @@ function ParamSet:hash()
 		return key..'$'..value
 	end
 
-	for k, v in pairs(self.dict) do
+	for k, v in pairs(self.params) do
 		strings[#strings + 1] = kv2str(k, v)
 	end
 	table.sort(strings)
 	return table.concat(strings, '@')
 end
 
--- Inverse of ParamSet:hash()
-function ParamSet.unhash(hash)
-	local dict = {}
-
-	local function str2kv(str)
-		key, value = str:match('(.*)%$(.*)')
-		assert(key,   'str2kv failed on "'..str..'" (key)')
-		assert(value, 'kvr2kv failed on "'..str..'" (value)')
-		return key, value
-	end
-
-	for str in hash:gmatch('[^@]*') do
-		local k, v = str2kv(str)
-		dict[k] = v
-	end
-	return ParamSet:new(dict)
-end
-
 -- For debugging
 function ParamSet:print()
-	io.write('ParamSet '..tostring(self)..' { ')
-	for k, v in pairs(self.dict) do
+	print('ParamSet '..tostring(self))
+	print('\tstdc:     '..self.stdc)
+
+	io.write('\tincludes: { ')
+	for _, v in ipairs(self.includes) do
+		io.write(v..' ')
+	end
+	print(' }')
+
+	io.write('\tparams:   { ')
+	for k, v in pairs(self.params) do
 		io.write(k..'='..v..' ')
 	end
-	print('}')
+	print(' }')
 end

@@ -31,7 +31,7 @@ end
 -- pconf is a ParamConfig object containing a list of ParamSets. Each ParamSet
 -- should contain key-value pairs corresponding to the parameters inside the
 -- input template file.
-function generate(template_path, pconf)
+function generate(output_path, template_path, pconf)
 
 	local base_includes = {}
 	local inside_block = false
@@ -71,7 +71,7 @@ function generate(template_path, pconf)
 			-- End of block reached
 			if line:match('^/%*F}%s*%*/') then
 				local block = Block:new(HEADER_TEXT, includes, body)
-				block:write_expand(pconf)
+				block:write_expand(output_path, pconf)
 				inside_block = false
 				goto continue
 			end

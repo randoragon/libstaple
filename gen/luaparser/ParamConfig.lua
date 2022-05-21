@@ -11,6 +11,7 @@ function ParamConfig:new(data)
 	}
 	setmetatable(o, self)
 	self.__index = self
+	self.__len = function() return #o.psets end
 	if data then
 		for stdc, ptable in pairs(data) do
 			o:read_ptable(ptable, stdc)
@@ -20,23 +21,8 @@ function ParamConfig:new(data)
 end
 
 function ParamConfig:read_ptable(ptable, stdc)
-	-- Collect "loose" global parameters
-	local global_params = {}
-	for k, v in pairs(ptable) do
-		if type(k) == 'string' then
-			global_params[k] = v
-		end
-	end
-
 	-- Parse parameter dicts into ParamSets
 	for _, params in ipairs(ptable) do
-		-- Add global parameters, unless overridden
-		for k, v in pairs(global_params) do
-			if not params[k] then
-				params[k] = v
-			end
-		end
-
 		-- By convention, split FMT param into FMT_STR and FMT_ARGS.
 		-- This allows the data table to be more clean and concise.
 		if params.FMT then
@@ -49,7 +35,17 @@ function ParamConfig:read_ptable(ptable, stdc)
 			params.FMT      = nil
 		end
 
-		self.psets[#self.psets + 1] = ParamSet:new(params, stdc)
+		-- By convention, the INCLUDE param is a list of header file
+		-- names which should be included. This param can be defined
+		-- specifically for each pset, or globally for all of them (or
+		-- both, in which case specific lists override the global one).
+		local include = ptable.INCLUDE
+		if params.INCLUDE then
+			include        = params.INCLUDE
+			params.INCLUDE = nil
+		end
+
+		self.psets[#self.psets + 1] = ParamSet:new(params, stdc, include)
 	end
 end
 
