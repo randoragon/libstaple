@@ -71,7 +71,6 @@ function Block:write_expand(output_path, pconf)
 	-- Filtering paramsets should guarantee that each paramset will
 	-- correspond to exactly 1 output file
 	local filtered_pconf = self:filter_paramconf(pconf)
-	local fpath
 
 	-- If no parameters are needed for this block, guarantee that it will
 	-- still export once by adding an empty paramset

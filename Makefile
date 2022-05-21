@@ -30,6 +30,8 @@ MODULES := stack queue
 SRCDIR  := src
 OBJDIR  := obj
 MANDIR  := man
+GENDIR  := gen
+TEMPLATEDIR := $(GENDIR)/templates
 TESTDIR := test
 SRCSUBDIRS := . $(MODULES)
 
@@ -44,12 +46,15 @@ INCLUDES  := $(notdir $(wildcard $(SRCDIR)/staple*.h $(SRCDIR)/sp_*.h))
 MANPAGES3 := $(patsubst $(MANDIR)/%,%,$(shell find "$(MANDIR)" -type f -name '*.3'))
 MANPAGES7 := $(patsubst $(MANDIR)/%,%,$(shell find "$(MANDIR)" -type f -name '*.7'))
 
+# Template files
+TEMPLATES := $(patsubst $(TEMPLATEDIR)/%,%,$(shell find "$(TEMPLATEDIR)" -type f))
+
 # Output paths
 DESTDIR   :=
 PREFIX    := /usr/local
 MANPREFIX := $(PREFIX)/share/man
 
-.PHONY: directories static shared all main clean profile install uninstall test
+.PHONY: directories static shared all generate clean install uninstall test
 .SECONDARY: # Disable removal of intermediate files
 
 ##################################################################################################
@@ -85,6 +90,10 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 $(TESTDIR)/$(OBJDIR)/%.o: $(TESTDIR)/$(SRCDIR)/%.c
 	@printf 'CC\t%s\n' $^
 	@$(CC) -c $(CTESTFLAGS) $^ -o $@
+
+# Generates the source code from templates
+generate:
+	@$(GENDIR)/generate $(TEMPLATES)
 
 # Removes all object and output files
 clean:

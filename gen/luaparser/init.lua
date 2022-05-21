@@ -26,13 +26,28 @@ local function expand_snippet(line, list)
 	return false
 end
 
--- Generates C source file(s) from the template format.
+-- Detect template type and generate appropriate files.
 --
 -- pconf is a ParamConfig object containing a list of ParamSets. Each ParamSet
 -- should contain key-value pairs corresponding to the parameters inside the
 -- input template file.
 function generate(output_path, template_path, pconf)
+	local func
+	if template_path:match('.*%.c$') then
+		func = generate_c
+	elseif template_path:match('.*%.h$') then
+		func = generate_h
+	elseif template_path:match('.*%.%d$') then
+		func = generate_man
+	else
+		io.stderr:write('unknown template type: "'..template_path:gsub('.*/', '')..'"\n')
+		return
+	end
+	func(output_path, template_path, pconf)
+end
 
+-- Generate subroutine for C source files.
+function generate_c(output_path, template_path, pconf)
 	local base_includes = {}
 	local inside_block = false
 	local body, includes
