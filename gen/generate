@@ -35,7 +35,14 @@ pconf = ParamConfig:new{
 
 	C99 = {
 		INCLUDE = { 'stdint.h', 'inttypes.h' },
+		{ TYPE='uint8_t',  SUFFIX='u8',  FMT=[["%"PRIu8]] },
+		{ TYPE='uint16_t', SUFFIX='u16', FMT=[["%"PRIu16]] },
 		{ TYPE='uint32_t', SUFFIX='u32', FMT=[["%"PRIu32]] },
+		{ TYPE='uint64_t', SUFFIX='u64', FMT=[["%"PRIu64]] },
+		{ TYPE='int8_t',  SUFFIX='i8',  FMT=[["%"PRId8]] },
+		{ TYPE='int16_t', SUFFIX='i16', FMT=[["%"PRId16]] },
+		{ TYPE='int32_t', SUFFIX='i32', FMT=[["%"PRId32]] },
+		{ TYPE='int64_t', SUFFIX='i64', FMT=[["%"PRId64]] },
 	}
 }
 
