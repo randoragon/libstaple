@@ -106,22 +106,18 @@ function Block:write_expand(output_path, pconf)
 		-- Write block header
 		fout:write(self.header)
 
-		-- If the standard isn't C89, surround with #if directive
-		if pset.stdc ~= 'C89' then
-			local val = STDC_VALUES[pset.stdc]
-			fout:write('#if defined(__STDC_VERSION__) && '..
-			           '(__STDC_VERSION__ >= '..val..')\n')
-		end
+		-- Add a C version guard, if necessary
+		fout:write(stdc_guard_open(pset.stdc))
 
 		-- Write include lines
 		if self.includes then
 			for _, include in ipairs(self.includes) do
-				fout:write(include..'\n')
+				fout:write(include, '\n')
 			end
 		end
-		if pset:get('INCLUDE') then
-			for include in pset:get('INCLUDE'):gmatch('[^,]*') do
-				fout:write('#include <'..include..'>\n')
+		if #pset.includes ~= 0 then
+			for _, include in ipairs(pset.includes) do
+				fout:write('#include <', include, '>\n')
 			end
 		end
 		fout:write('\n')
@@ -129,14 +125,8 @@ function Block:write_expand(output_path, pconf)
 		-- Write body
 		fout:write(table.concat(body, '\n'))
 
-		-- If the standard isn't C89, terminate the #if directive
-		if pset.stdc ~= 'C89' then
-			-- ISO C forbids empty translation units, so add a dummy
-			-- meaningless line to prevent compilation errors
-			fout:write('\n\n#else\n')
-			fout:write('typedef int prevent_empty_translation_unit;\n')
-			fout:write('#endif')
-		end
+		-- Close the C version guard, if necessary
+		fout:write(stdc_guard_close(pset.stdc, true))
 
 		fout:close()
 	end

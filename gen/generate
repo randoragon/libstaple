@@ -9,7 +9,7 @@ DIRNAME = arg[0]:match('(.*/)')
 require(DIRNAME..'luaparser')
 
 -- GLOBAL CONFIGURATION
-SRCDIR      = DIRNAME..'../src/'
+BASEDIR     = DIRNAME..'../'
 SNIPPETDIR  = DIRNAME..'snippets/'
 TEMPLATEDIR = DIRNAME..'templates/'
 HEADER_TEXT = io.open(SNIPPETDIR..'C_LICENSE_HEADER', 'r'):read('a')
@@ -42,5 +42,5 @@ pconf = ParamConfig:new{
 -- Generate source files for every template
 for _, template in ipairs(TEMPLATES) do
 	local dirname = template:match('(.*)/')
-	generate(SRCDIR..dirname, TEMPLATEDIR..template, pconf)
+	generate(BASEDIR..dirname, TEMPLATEDIR..template, pconf)
 end

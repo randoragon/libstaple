@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 #include "../sp_queue.h"
-#include "../helpers.h"
+#include "../internal.h"
 
 float sp_queue_popf(struct sp_queue *queue)
 {

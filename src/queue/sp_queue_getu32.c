@@ -17,7 +17,9 @@
  */
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
 #include "../sp_queue.h"
-#include "../helpers.h"
+#include "../internal.h"
+#include <stdint.h>
+#include <inttypes.h>
 
 uint32_t sp_queue_getu32(const struct sp_queue *queue, size_t idx)
 {

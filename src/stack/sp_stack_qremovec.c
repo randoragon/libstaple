@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 #include "../sp_stack.h"
-#include "../helpers.h"
+#include "../internal.h"
 
 char sp_stack_qremovec(struct sp_stack *stack, size_t idx)
 {

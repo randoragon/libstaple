@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 #include "../sp_queue.h"
-#include "../helpers.h"
+#include "../internal.h"
 #include "../sp_errcodes.h"
 #include <string.h>
 
@@ -46,7 +46,7 @@ int sp_queue_setstr(struct sp_queue *queue, size_t idx, const char *val)
 #endif
 	p = sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
 	free(*(char**)p);
-	len = sp_strnlen(val, SIZE_MAX);
+	len = sp_strnlen(val, SP_SIZE_MAX);
 	if (sp_size_try_add(len, 1))
 		return SP_ERANGE;
 	buf = malloc((len + 1) * sizeof(*val));

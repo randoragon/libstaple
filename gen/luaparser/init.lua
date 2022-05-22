@@ -26,6 +26,40 @@ local function expand_snippet(line, list)
 	return false
 end
 
+-- Intakes a C version string (C89, C99, ...), and returns the opening of an
+-- adequate preprocessor guard.
+function stdc_guard_open(stdc)
+	local STDC_VALUES = {
+		C95 = '199409L',
+		C99 = '199901L',
+		C11 = '201112L',
+		C17 = '201710L'
+	}
+	if stdc ~= 'C89' then
+		local val = STDC_VALUES[stdc]
+		return '#if defined(__STDC_VERSION__) && '..
+		'(__STDC_VERSION__ >= '..val..')\n'
+	end
+	return ''
+end
+
+-- Intakes a C version string (C89, C99, ...) and returns the closing of an
+-- adequate preprocessor guard.
+function stdc_guard_close(stdc, prevent_empty)
+	if stdc ~= 'C89' then
+		if prevent_empty then
+			-- ISO C forbids empty translation units, so add a dummy
+			-- meaningless line to prevent compilation errors
+			return '\n\n#else\n'..
+			       'typedef int prevent_empty_translation_unit;\n'..
+			       '#endif'
+		else
+			return '#endif\n'
+		end
+	end
+	return ''
+end
+
 -- Detect template type and generate appropriate files.
 --
 -- pconf is a ParamConfig object containing a list of ParamSets. Each ParamSet
@@ -40,7 +74,7 @@ function generate(output_path, template_path, pconf)
 	elseif template_path:match('.*%.%d$') then
 		func = generate_man
 	else
-		io.stderr:write('unknown template type: "'..template_path:gsub('.*/', '')..'"\n')
+		io.stderr:write('unknown template type: "', template_path:gsub('.*/', ''), '"\n')
 		return
 	end
 	func(output_path, template_path, pconf)
@@ -96,6 +130,69 @@ function generate_c(output_path, template_path, pconf)
 
 		::continue::
 		linenum = linenum + 1
-		last_line = line
 	end
+end
+
+-- Generate subroutine for C header files.
+function generate_h(output_path, template_path, pconf)
+	print('GEN', template_path)
+	local fname = template_path:match('[^/]*$')
+	local fout = io.open(output_path..'/'..fname, 'w')
+	local inside_desc = false
+	local header_guard
+
+	-- Write license header
+	fout:write(HEADER_TEXT)
+
+	local linenum = 1
+	for line in io.lines(template_path) do
+
+		-- Parse description blocks
+		if not inside_desc and not header_guard then
+			-- Detect start of a description block
+			header_guard = line:match('^/%*H{%s*([%w_]*)%s*%*/')
+			if header_guard then
+				inside_desc = true
+				fout:write('#ifndef ', header_guard, '\n',
+				           '#define ', header_guard, '\n\n')
+				goto continue
+			end
+		else -- if inside a description block
+			if line:match('^/%*H}.*%*/') then -- End of description reached
+				inside_desc = false
+				goto continue
+			end
+		end
+
+		-- Expand parameters, if any
+		if line:match('%$[%w_]*%$') then
+			local already_written = {}
+			for pset in pconf:iter() do
+				-- Write one line for each distinct paramset
+				local expanded = line
+				for k, v in pset:iter() do
+					expanded = expanded:gsub('%$'..k..'%$', v)
+				end
+				assert(not expanded:match('%$[%w_]+%$'), 'unmatched param in line '..linenum..': '..line)
+
+				-- Avoid repeating the same lines
+				if not already_written[expanded] then
+					fout:write(stdc_guard_open(pset.stdc))
+					fout:write(expanded, '\n')
+					fout:write(stdc_guard_close(pset.stdc, false))
+					already_written[expanded] = true
+				end
+			end
+		else
+			fout:write(line, '\n')
+		end
+
+		::continue::
+		linenum = linenum + 1
+	end
+
+	-- Close the header guard
+	assert(header_guard, 'description block not found: '..template_path)
+	fout:write('\n#endif /* ', header_guard, ' */')
+	fout:close()
 end

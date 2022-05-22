@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 #include "../sp_queue.h"
-#include "../helpers.h"
+#include "../internal.h"
 #include "../sp_errcodes.h"
 
 int sp_queue_pushi(struct sp_queue *queue, int elem)

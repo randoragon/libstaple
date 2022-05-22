@@ -17,9 +17,11 @@
  */
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
 #include "../sp_queue.h"
-#include "../helpers.h"
+#include "../internal.h"
 #include "../sp_errcodes.h"
 #include <string.h>
+#include <stdint.h>
+#include <inttypes.h>
 
 int sp_queue_insertu32(struct sp_queue *queue, size_t idx, uint32_t elem)
 {

@@ -1,5 +1,5 @@
 #include "../sp_queue.h"
-#include "../helpers.h"
+#include "../internal.h"
 
 /*F{*/
 struct sp_queue *sp_queue_create(size_t elem_size, size_t capacity)
@@ -10,7 +10,7 @@ struct sp_queue *sp_queue_create(size_t elem_size, size_t capacity)
 	/*. C_ERR_ELEM_SIZE_ZERO */
 	/*. C_ERR_CAPACITY_ZERO */
 #endif
-	if (capacity > SIZE_MAX / elem_size) {
+	if (capacity > SP_SIZE_MAX / elem_size) {
 		/*. C_ERRMSG_SIZE_T_OVERFLOW */
 		return NULL;
 	}
@@ -206,7 +206,7 @@ int sp_queue_pushstr(struct sp_queue *queue, const char *elem)
 		return SP_ERANGE;
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;
-	len = sp_strnlen(elem, SIZE_MAX);
+	len = sp_strnlen(elem, SP_SIZE_MAX);
 	if (sp_size_try_add(len, 1))
 		return SP_ERANGE;
 	if (queue->size != 0)
@@ -320,7 +320,7 @@ int sp_queue_insertstr(struct sp_queue *queue, size_t idx, const char *elem)
 		return SP_ERANGE;
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;
-	len = sp_strnlen(elem, SIZE_MAX);
+	len = sp_strnlen(elem, SP_SIZE_MAX);
 	if (sp_size_try_add(len, 1))
 		return SP_ERANGE;
 	buf = malloc((len + 1) * sizeof(*elem));
@@ -446,7 +446,7 @@ int sp_queue_qinsertstr(struct sp_queue *queue, size_t idx, const char *elem)
 		return SP_ERANGE;
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;
-	len = sp_strnlen(elem, SIZE_MAX);
+	len = sp_strnlen(elem, SP_SIZE_MAX);
 	if (sp_size_try_add(len, 1))
 		return SP_ERANGE;
 	if (queue->size != 0)
@@ -849,7 +849,7 @@ int sp_queue_setstr(struct sp_queue *queue, size_t idx, const char *val)
 #endif
 	p = sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
 	free(*(char**)p);
-	len = sp_strnlen(val, SIZE_MAX);
+	len = sp_strnlen(val, SP_SIZE_MAX);
 	if (sp_size_try_add(len, 1))
 		return SP_ERANGE;
 	buf = malloc((len + 1) * sizeof(*val));

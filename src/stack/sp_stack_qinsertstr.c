@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 #include "../sp_stack.h"
-#include "../helpers.h"
+#include "../internal.h"
 #include "../sp_errcodes.h"
 #include <string.h>
 
@@ -48,7 +48,7 @@ int sp_stack_qinsertstr(struct sp_stack *stack, size_t idx, const char *elem)
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;
-	len = sp_strnlen(elem, SIZE_MAX);
+	len = sp_strnlen(elem, SP_SIZE_MAX);
 	if (sp_size_try_add(len, 1))
 		return SP_ERANGE;
 	buf = malloc((len + 1) * sizeof(*elem));

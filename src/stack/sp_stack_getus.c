@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 #include "../sp_stack.h"
-#include "../helpers.h"
+#include "../internal.h"
 
 unsigned short sp_stack_getus(const struct sp_stack *stack, size_t idx)
 {

@@ -15,27 +15,7 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#include "sp_utils.h"
-#include "helpers.h"
-#include <stdlib.h>
-
-int sp_is_debug(void)
-{
-#ifdef STAPLE_DEBUG
-	return 1;
-#else
-	return 0;
-#endif
-}
-
-int sp_is_quiet(void)
-{
-#ifdef STAPLE_QUIET
-	return 1;
-#else
-	return 0;
-#endif
-}
+#include "../sp_utils.h"
 
 int sp_is_abort(void)
 {
@@ -44,20 +24,4 @@ int sp_is_abort(void)
 #else
 	return 0;
 #endif
-}
-
-int sp_free(void *addr)
-{
-#ifdef STAPLE_DEBUG
-	if (addr == NULL) {
-		error(("addr is NULL"));
-		return 1;
-	}
-	if (*(void**)addr == NULL) {
-		error(("*(void**)addr is NULL"));
-		return 2;
-	}
-#endif
-	free(*(void**)addr);
-	return 0;
 }

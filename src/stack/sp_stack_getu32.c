@@ -17,7 +17,9 @@
  */
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
 #include "../sp_stack.h"
-#include "../helpers.h"
+#include "../internal.h"
+#include <stdint.h>
+#include <inttypes.h>
 
 uint32_t sp_stack_getu32(const struct sp_stack *stack, size_t idx)
 {

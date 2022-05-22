@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 #include "../sp_queue.h"
-#include "../helpers.h"
+#include "../internal.h"
 
 short sp_queue_peeks(const struct sp_queue *queue)
 {

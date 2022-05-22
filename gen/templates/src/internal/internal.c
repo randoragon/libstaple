@@ -1,27 +1,9 @@
-/*  Staple - A general-purpose data structure library in pure C89.
- *  Copyright (C) 2021  Randoragon
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation;
- *  version 2.1 of the License.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
-#include "helpers.h"
+#include "../internal.h"
 #include <stdlib.h>
+
+/*F{*/
 #include <stdio.h>
 #include <stdarg.h>
-#include <limits.h>
-#include <string.h>
-
 void stderr_printf(const char *fmt, ...)
 {
 	va_list ap;
@@ -29,27 +11,33 @@ void stderr_printf(const char *fmt, ...)
 	vfprintf(stderr, fmt, ap);
 	va_end(ap);
 }
+/*F}*/
 
+/*F{*/
+#include <limits.h>
 int sp_buf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size)
 {
 	if (size == *capacity) {
 		if (!sp_size_try_add(*capacity, *capacity)) {
 			*capacity *= 2;
-		} else if (size < SIZE_MAX / elem_size) {
-			*capacity = SIZE_MAX / elem_size;
+		} else if (size < SP_SIZE_MAX / elem_size) {
+			*capacity = SP_SIZE_MAX / elem_size;
 		} else {
 			error(("size_t overflow detected, stack size limit reached"));
 			return 2;
 		}
 		*buf = realloc(*buf, *capacity * elem_size);
 		if (*buf == NULL) {
-			error(("realloc"));
+			/*. C_ERRMSG_REALLOC */
 			return 1;
 		}
 	}
 	return 0;
 }
+/*F}*/
 
+/*F{*/
+#include <string.h>
 /* Same as sp_buf_fit, but for ring buffers.
  * Example (numbers denote order of insertion):
  * 	(1)	4 5 1 2 3
@@ -80,7 +68,9 @@ int sp_ringbuf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size, 
 	}
 	return 0;
 }
+/*F}*/
 
+/*F{*/
 int sp_foomap(void *buf, size_t size, size_t elem_size, int (*foo)(void*))
 {
 	const void *const end = (char*)buf + size * elem_size;
@@ -88,23 +78,28 @@ int sp_foomap(void *buf, size_t size, size_t elem_size, int (*foo)(void*))
 	while (p != end) {
 		int err;
 		if ((err = foo(p))) {
-			error(("external function handler returned %d (non-0)", err));
+			/*. C_ERRMSG_HANDLER_NON_ZERO handler err */
 			return 1;
 		}
 		p += elem_size;
 	}
 	return 0;
 }
+/*F}*/
 
+/*F{*/
+#include <limits.h>
 int sp_size_try_add(size_t size, size_t amount)
 {
-	if (size > SIZE_MAX - amount) {
+	if (size > SP_SIZE_MAX - amount) {
 		error(("size_t overflow detected, unable to increment by %lu", (unsigned long)amount));
 		return 1;
 	}
 	return 0;
 }
+/*F}*/
 
+/*F{*/
 void sp_ringbuf_incr(void **ptr, void *buf, size_t capacity, size_t elem_size)
 {
 	if (*ptr == (char*)buf + (capacity - 1) * elem_size)
@@ -112,7 +107,9 @@ void sp_ringbuf_incr(void **ptr, void *buf, size_t capacity, size_t elem_size)
 	else
 		*ptr = (char*)(*ptr) + elem_size;
 }
+/*F}*/
 
+/*F{*/
 void sp_ringbuf_decr(void **ptr, void *buf, size_t capacity, size_t elem_size)
 {
 	if (*ptr == buf)
@@ -120,7 +117,9 @@ void sp_ringbuf_decr(void **ptr, void *buf, size_t capacity, size_t elem_size)
 	else
 		*ptr = (char*)(*ptr) - elem_size;
 }
+/*F}*/
 
+/*F{*/
 /* Return address of nth element in a ring buffer. The obvious way to find a
  * specific index is by looping, but this function calculates it faster.
  * index 0 gives head, index size-1 gives tail.
@@ -134,7 +133,10 @@ void *sp_ringbuf_get(size_t idx, const void *buf, size_t capacity, size_t elem_s
 	else
 		return (char*)buf + (idx - no_elements_ahead) * elem_size;
 }
+/*F}*/
 
+/*F{*/
+#include <string.h>
 /* Insert an element into a ring buffer. The buffer must already have sufficient
  * capacity. Indexing starts from left to right, valid index values are in range
  * <0;size>. */
@@ -177,7 +179,10 @@ void sp_ringbuf_insert(const void *elem, size_t idx, void *buf, size_t *size, si
 	memcpy(d, elem, elem_size);
 	++(*size);
 }
+/*F}*/
 
+/*F{*/
+#include <string.h>
 /* Remove an element from a ring buffer. Indexing starts from left to right,
  * valid index values are in range <0;size>.
  */
@@ -214,10 +219,13 @@ void sp_ringbuf_remove(size_t idx, void *buf, size_t *size, size_t capacity, siz
 	}
 	--(*size);
 }
+/*F}*/
 
+/*F{*/
 size_t sp_strnlen(const char *s, size_t maxlen)
 {
 	size_t i = 0;
 	for (; i < maxlen && s[i] != '\0'; i++);
 	return i;
 }
+/*F}*/

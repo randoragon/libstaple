@@ -15,7 +15,8 @@ CC          := cc
 LINKER      := cc
 VFLAGS      := -DVERSION_MAJOR=$(VERSION_MAJOR) -DVERSION_MINOR=$(VERSION_MINOR)
 VFLAGS      += -DVERSION_PATCH=$(VERSION_PATCH) -DVERSION_STR="$(VERSION_STR)"
-CFLAGS      := -fpic $(VFLAGS) -std=c89 -Wall -Wextra -pedantic -Werror -Werror=vla
+STDC        := c99  # Change to newer standards, e.g. c99 to enable more functions
+CFLAGS      := -fpic $(VFLAGS) -std=$(STDC) -Wall -Wextra -pedantic -Werror -Werror=vla
 CFLAGS      += $(if $(filter 1,$(DEBUG)),-DSTAPLE_DEBUG -g -Og,-O3)
 CFLAGS      += $(if $(filter 1,$(QUIET)),-DSTAPLE_QUIET)
 CFLAGS      += $(if $(filter 1,$(ABORT)),-DSTAPLE_ABORT)
@@ -33,7 +34,7 @@ MANDIR  := man
 GENDIR  := gen
 TEMPLATEDIR := $(GENDIR)/templates
 TESTDIR := test
-SRCSUBDIRS := . $(MODULES)
+SRCSUBDIRS := . internal utils $(MODULES)
 
 # Source and object files (including SRCDIR)
 SRCDIRS := $(foreach dir, $(SRCSUBDIRS), $(addprefix $(SRCDIR)/, $(dir)))
@@ -68,6 +69,7 @@ all: directories static shared
 directories:
 	@mkdir -p -- $(SRCDIRS) $(OBJDIRS) $(TESTDIR)
 	@mkdir -p -- $(TESTDIR)/$(SRCDIR) $(TESTDIR)/$(OBJDIR) $(TESTDIR)/bin
+	@mkdir -p -- $(dir $(TEMPLATES))
 
 # Builds a shared library file
 shared: $(OBJS)
@@ -92,7 +94,7 @@ $(TESTDIR)/$(OBJDIR)/%.o: $(TESTDIR)/$(SRCDIR)/%.c
 	@$(CC) -c $(CTESTFLAGS) $^ -o $@
 
 # Generates the source code from templates
-generate:
+generate: directories
 	@$(GENDIR)/generate $(TEMPLATES)
 
 # Removes all object and output files
@@ -140,7 +142,7 @@ uninstall:
 
 # Runs all testing units
 #     To check if overflow protection is working,
-#     set SIZE_MAX to 65535 to reduce memory footprint.
+#     set SP_SIZE_MAX to 65535 to reduce memory footprint.
 test: $(addprefix test_,$(MODULES))
 
 test_clean:
@@ -149,7 +151,7 @@ test_clean:
 	@$(RM) -- $(TESTDIR)/bin/*
 	@echo 'done.'
 
-test_%: CFLAGS += -DSTAPLE_DEBUG -DSTAPLE_QUIET -DSIZE_MAX=65535
+test_%: CFLAGS += -DSTAPLE_DEBUG -DSTAPLE_QUIET -DSP_SIZE_MAX=65535
 test_%: all test/obj/test_struct.o test/obj/%.o
 	@printf 'LD\tLinking test programs... '
 	@$(LINKER) test/obj/test_struct.o test/obj/$*.o $(LDTESTFLAGS) -o $(TESTDIR)/bin/$*

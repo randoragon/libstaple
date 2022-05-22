@@ -17,8 +17,10 @@
  */
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
 #include "../sp_stack.h"
-#include "../helpers.h"
+#include "../internal.h"
 #include "../sp_errcodes.h"
+#include <stdint.h>
+#include <inttypes.h>
 
 int sp_stack_printu32(const struct sp_stack *stack)
 {

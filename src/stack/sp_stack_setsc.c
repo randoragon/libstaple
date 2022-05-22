@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 #include "../sp_stack.h"
-#include "../helpers.h"
+#include "../internal.h"
 #include "../sp_errcodes.h"
 
 int sp_stack_setsc(struct sp_stack *stack, size_t idx, signed char val)

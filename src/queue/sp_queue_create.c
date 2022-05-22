@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 #include "../sp_queue.h"
-#include "../helpers.h"
+#include "../internal.h"
 
 struct sp_queue *sp_queue_create(size_t elem_size, size_t capacity)
 {
@@ -32,7 +32,7 @@ struct sp_queue *sp_queue_create(size_t elem_size, size_t capacity)
 		return NULL;
 	}
 #endif
-	if (capacity > SIZE_MAX / elem_size) {
+	if (capacity > SP_SIZE_MAX / elem_size) {
 		error(("size_t overflow detected, maximum size exceeded"));
 		return NULL;
 	}
