@@ -167,6 +167,7 @@ function generate_h(output_path, template_path, pconf)
 		-- Expand parameters, if any
 		if line:match('%$[%w_]*%$') then
 			local already_written = {}
+			local last_pset
 			for pset in pconf:iter() do
 				-- Write one line for each distinct paramset
 				local expanded = line
@@ -177,11 +178,21 @@ function generate_h(output_path, template_path, pconf)
 
 				-- Avoid repeating the same lines
 				if not already_written[expanded] then
-					fout:write(stdc_guard_open(pset.stdc))
-					fout:write(expanded, '\n')
-					fout:write(stdc_guard_close(pset.stdc, false))
+					if not last_pset or pset.stdc ~= last_pset.stdc then
+						if last_pset then
+							fout:write(stdc_guard_close(last_pset.stdc, false))
+						end
+						fout:write(stdc_guard_open(pset.stdc))
+						fout:write(expanded, '\n')
+					else
+						fout:write(expanded, '\n')
+					end
 					already_written[expanded] = true
+					last_pset = pset
 				end
+			end
+			if last_pset then
+				fout:write(stdc_guard_close(last_pset.stdc))
 			end
 		else
 			fout:write(line, '\n')
