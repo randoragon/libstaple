@@ -1,4 +1,8 @@
-require(DIRNAME..'luaparser.ParamSet')
+--------------------------------------------------------------------------------
+-- An aggregation of paramsets defining the configuration for all source files,
+-- header files and man pages. A single ParamConfig is used to generate
+-- everything. Internally, it is a simple list of paramsets
+--------------------------------------------------------------------------------
 
 ParamConfig = {
 	psets = {},
@@ -95,3 +99,5 @@ function ParamConfig:print()
 		v:print()
 	end
 end
+
+

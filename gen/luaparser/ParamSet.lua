@@ -1,3 +1,11 @@
+--------------------------------------------------------------------------------
+-- Stores a single key-value dictionary of template parameters. Additionally,
+-- each paramset must be assigned a C standard version which it complies with.
+-- Each paramset may also have a list of header file names which are required
+-- for the params. (in practice, each ParamSet corresponds to one type->suffix
+-- mapping).
+--------------------------------------------------------------------------------
+
 ParamSet = {
 	params   = {},
 	stdc     = 'C89',

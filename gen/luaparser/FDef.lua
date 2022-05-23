@@ -1,22 +1,25 @@
-require(DIRNAME..'luaparser.ParamSet')
-require(DIRNAME..'luaparser.ParamConfig')
+--------------------------------------------------------------------------------
+-- This class is only used by generate_c.lua. It takes a function definition in
+-- the template format, parses it, creates valid C source files and distributes
+-- them to the right paths.
+--------------------------------------------------------------------------------
 
-Block = {
+require(DIRNAME..'luaparser.ParamConfig')
+require(DIRNAME..'luaparser.ParamSet')
+require(DIRNAME..'luaparser.STDCGuard')
+
+FDef = {
 	header     = nil, -- file header (typically license notice)
 	includes   = nil, -- list of include strings
-	body       = {},  -- block contents (typically function definition)
-	params     = nil  -- cache for Block:filter_paramsets()
+	body       = {},  -- function definition (list of lines)
+	params     = nil  -- cache for FDef:filter_paramsets()
 }
 
-local STDC_VALUES = {
-	C95 = '199409L',
-	C99 = '199901L',
-	C11 = '201112L',
-	C17 = '201710L'
-}
-
--- Constructs a new block object out of its raw textual form.
-function Block:new(header, includes, body)
+-- FDef constructor.
+-- header: string containing the header (typically license)
+-- includes: a list of function-specific include strings
+-- body: the function definition as a list of lines (strings)
+function FDef:new(header, includes, body)
 	local o = {
 		header   = header,
 		includes = includes,
@@ -26,7 +29,7 @@ function Block:new(header, includes, body)
 	setmetatable(o, self)
 	self.__index = self
 
-	-- Cache all parameters that occur within the block
+	-- Cache all parameters that occur within the definition
 	for _, line in ipairs(o.body) do
 		for param in line:gmatch('%$([%w_]*)%$') do
 			o.params[param] = true
@@ -36,10 +39,10 @@ function Block:new(header, includes, body)
 	return o
 end
 
--- Given a list of paramsets, cross-references each set with Block.params and
--- returns a maximally compacted, sufficient "subset" of the input list. This
--- allows Block:write_expand() to avoid creating the same files multiple times.
-function Block:filter_paramconf(pconf)
+-- Given a ParamConfig object, cross-references each pset with FDef.params and
+-- returns a maximally compacted, sufficient "subset" of the config. This allows
+-- FDef:write_expand() to avoid creating the same files multiple times.
+function FDef:filter_paramconf(pconf)
 
 	-- Populate filtered_set with filtered ParamSet hashes
 	local filtered = {}
@@ -64,15 +67,15 @@ function Block:filter_paramconf(pconf)
 	return filtered_pconf
 end
 
--- Given a list of paramsets, creates files by expanding block parameters in
--- accordance with each paramset.
-function Block:write_expand(output_path, pconf)
+-- Given a ParamConfig, creates files by expanding parameters in
+-- accordance with each ParamSet within.
+function FDef:write_expand(output_path, pconf)
 
 	-- Filtering paramsets should guarantee that each paramset will
 	-- correspond to exactly 1 output file
 	local filtered_pconf = self:filter_paramconf(pconf)
 
-	-- If no parameters are needed for this block, guarantee that it will
+	-- If no parameters are needed for this fdef, guarantee that it will
 	-- still export once by adding an empty paramset
 	if #filtered_pconf == 0 then
 		filtered_pconf:add(ParamSet:new())
@@ -103,11 +106,11 @@ function Block:write_expand(output_path, pconf)
 		print('GEN', fpath)
 		local fout = io.open(fpath, 'w')
 
-		-- Write block header
+		-- Write header
 		fout:write(self.header)
 
 		-- Add a C version guard, if necessary
-		fout:write(stdc_guard_open(pset.stdc))
+		fout:write(STDCGuard.open(pset.stdc))
 
 		-- Write include lines
 		if self.includes then
@@ -126,15 +129,15 @@ function Block:write_expand(output_path, pconf)
 		fout:write(table.concat(body, '\n'))
 
 		-- Close the C version guard, if necessary
-		fout:write(stdc_guard_close(pset.stdc, true))
+		fout:write(STDCGuard.close(pset.stdc, true))
 
 		fout:close()
 	end
 end
 
 -- For debugging
-function Block:print()
-	print('Block '..tostring(self)..':')
+function FDef:print()
+	print('FDef '..tostring(self)..':')
 
 	print('.header:')
 	print('\t'..self.header:gsub('\n', '\n\t'))
