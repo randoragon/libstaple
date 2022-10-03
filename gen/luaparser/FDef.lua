@@ -45,7 +45,7 @@ end
 function FDef:filter_paramconf(pconf)
 
 	-- Populate filtered_set with filtered ParamSet hashes
-	local filtered = {}
+	local filtered, sort_order = {}, {}
 	for pset in pconf:iter() do
 		local filtered_pset = ParamSet:new(nil, pset.stdc, pset.includes)
 		for k, v in pset:iter() do
@@ -54,14 +54,16 @@ function FDef:filter_paramconf(pconf)
 			end
 		end
 		if #filtered_pset ~= 0 then
-			filtered[filtered_pset:hash()] = filtered_pset
+			local hash = filtered_pset:hash()
+			filtered[hash] = filtered_pset
+			sort_order[#sort_order + 1] = hash
 		end
 	end
 
 	-- Convert filtered set to a filtered list of paramsets
 	local filtered_pconf = ParamConfig:new()
-	for _, filtered_pset in pairs(filtered) do
-		filtered_pconf:add(filtered_pset)
+	for _, hash in ipairs(sort_order) do
+		filtered_pconf:add(filtered[hash])
 	end
 
 	return filtered_pconf

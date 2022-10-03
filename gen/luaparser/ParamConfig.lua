@@ -6,8 +6,6 @@
 
 ParamConfig = {
 	psets = {},
-	iter_order = nil,
-	iter_order_desync = true
 }
 
 -- Creates a new list of parameter sets
@@ -58,36 +56,15 @@ end
 -- Appends a ParamSet to the list
 function ParamConfig:add(pset)
 	self.psets[#self.psets + 1] = pset
-	self.iter_order_desync = true
-end
-
--- Sorts the psets in deterministic order and caches it in self.iter_order
-function ParamConfig:update_iter_order()
-	self.iter_order = {}
-	for i, v in ipairs(self.psets) do
-		self.iter_order[#self.iter_order + 1] = i
-	end
-	local function pset_str(pset)
-		return pset.stdc..pset:get('SUFFIX')..pset:hash()
-	end
-	table.sort(self.iter_order,
-		function(a, b)
-			return pset_str(self.psets[a]) < pset_str(self.psets[b])
-		end
-		)
-	self.iter_order_desync = false
 end
 
 -- Returns generic for loop iterator
 function ParamConfig:iter()
-	if self.iter_order_desync then
-		self:update_iter_order()
-	end
 	local idx = 0
 	return function()
 		idx = idx + 1
 		if idx <= #self.psets then
-			return self.psets[self.iter_order[idx]]
+			return self.psets[idx]
 		end
 	end
 end
