@@ -6,11 +6,11 @@ require(DIRNAME..'luaparser.ParamConfig')
 require(DIRNAME..'luaparser.STDCGuard')
 
 function generate_h(output_path, template_path, pconf)
-	print('GEN', template_path)
 	local fname = template_path:match('[^/]*$')
 	local fout = io.open(output_path..'/'..fname, 'w')
 	local inside_desc = false
 	local header_guard
+	print('GEN', output_path:gsub('^gen/../', '')..'/'..fname)
 
 	-- Write license header
 	fout:write(C_HEADER_TEXT)

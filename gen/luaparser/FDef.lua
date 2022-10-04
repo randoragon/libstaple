@@ -105,7 +105,7 @@ function FDef:write_expand(output_path, pconf)
 		assert(fpath, 'undetected function name in body:\n\t'..table.concat(body, '\n\t'))
 
 		-- Open the output file
-		print('GEN', fpath)
+		print('GEN', fpath:gsub('^gen/../', '')..'')
 		local fout = io.open(fpath, 'w')
 
 		-- Write header
