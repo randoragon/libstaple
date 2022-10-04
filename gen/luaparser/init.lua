@@ -21,8 +21,8 @@ function generate(output_path, template_path, pconf)
 	elseif template_path:match('.*%.%d$') then
 		func = generate_man
 	else
-		io.stderr:write('unknown template type: "', template_path:gsub('.*/', ''), '"\n')
-		return
+		error('unknown template type: "', template_path:gsub('.*/', ''), '"\n')
 	end
 	func(output_path, template_path, pconf)
 end
+
