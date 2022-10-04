@@ -17,7 +17,7 @@ MAN_HEADER_TEXT = io.open(SNIPPETDIR..'MAN_LICENSE_HEADER', 'r'):read('a')
 TEMPLATES       = arg
 
 -- You can define the suffixed functions to generate here
-pconf = ParamConfig:new{
+local pconf = ParamConfig:new{
 	C89 = {
 		{ TYPE='char'          , SUFFIX='c' , FMT=[["%hd\\t'%c'"]] },
 		{ TYPE='short'         , SUFFIX='s' , FMT=[["%hd"]]        },
