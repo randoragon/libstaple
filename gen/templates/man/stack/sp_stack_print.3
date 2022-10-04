@@ -1,0 +1,40 @@
+.\"M stack
+.TH SP_STACK_PRINT 3 DATE "libstaple-VERSION"
+.\"NAME str
+\- print contents of a stack
+.\". MAN_SYNOPSIS_BEGIN
+int
+.BR sp_stack_print "(const struct sp_stack"
+.RI * stack )
+.\"SS{
+.br
+int
+.BR sp_stack_print$SUFFIX$ "(const struct sp_stack"
+.RI * stack )
+.\"SS}
+.br
+int
+.BR sp_stack_printstr "(const struct sp_stack"
+.RI * stack )
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+.P
+The functions in the
+.BR sp_stack_print ()
+family are used to print useful information about a stack, and are
+provided for debugging purposes.
+.P
+.I stack
+is the stack that shall be printed.
+.SH RETURN VALUE
+.\". MAN_RETVAL_0_OR_CODE_FAMILY sp_stack_print
+.SH ERRORS
+.\". MAN_SHALL_FAIL_IF_FAMILY sp_stack_print
+.\". MAN_ERRCODE SP_EINVAL
+.I stack
+is a null pointer (debug mode only).
+.SS Suffixed Form
+.\". MAN_ERRCODE SP_EILLEGAL
+.IR stack "'s " elem_size
+does not match the size of the function's return type (debug mode only).
+.\". MAN_CONFORMING_TO

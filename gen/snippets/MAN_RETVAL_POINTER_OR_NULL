@@ -1,0 +1,5 @@
+If successful, the
+.BR $1$ ()
+function shall return a valid pointer to the created $2$. Otherwise, it shall
+return
+.BR NULL .

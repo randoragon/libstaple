@@ -1,0 +1,5 @@
+The
+.BR sp_$1$_get ()
+function behaves slightly differently from all other functions in the family. It
+is used to access the \fBaddress\fP, not value, of an arbitrary element in a
+$1$. This is necessary, because value cannot be inferred from arbitrary data.

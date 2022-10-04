@@ -1,0 +1,78 @@
+.\"M queue
+.TH SP_QUEUE_QREMOVE 3 DATE "libstaple-VERSION"
+.\"NAME str
+\- quickly remove an element from any position of a queue
+.\". MAN_SYNOPSIS_BEGIN
+int
+.BR sp_queue_qremove "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+void
+.RI * output )
+.\"SS{
+.br
+$TYPE$
+.BR sp_queue_qremove$SUFFIX$ "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.\"SS}
+.br
+char
+.RB * sp_queue_qremovestr "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+See
+.BR sp_queue_remove (3).
+.P
+The functions in the
+.BR sp_queue_qremove ()
+family operate in constant time, which is achievable by changing the order of
+the elements during removal.
+.\". MAN_CONFORMING_TO
+.SH EXAMPLES
+To explain how the
+.BR sp_queue_remove ()
+and
+.BR sp_queue_qremove ()
+families differ, consider the following initial queue (from head to tail):
+.IP
+.B 1 2 3 4 _ _ _
+.P
+Now, let us investigate what happens when we try to remove the number
+.BR 2 .
+.P
+The functions in the
+.BR sp_queue_remove ()
+family would remove the element, and then move
+.BR 3 " and " 4
+forward into the freed spot, without affecting the order:
+.IP (1)
+.B 1 _ 3 4 _ _ _
+.br
+\h'2n'^
+.IP (2)
+.B 1 3 4 _ _ _ _
+.br
+\h'2n'^ ^
+.P
+On the contrary, the functions in the
+.BR sp_queue_qremove ()
+family achieve the goal faster by moving the tail of the queue (in this case
+.BR 4 )
+into the value that should be removed:
+.IP (1)
+.B 1 _ 3 4 _ _ _
+.br
+\h'2n'^
+.IP (2)
+.B 1 4 3 _ _ _ _
+.br
+\h'2n'^
+.P
+The second approach guarantees constant time, but does not preserve the order of
+the elements.

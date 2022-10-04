@@ -1,0 +1,3 @@
+The suffixed
+.BR $1$ ()
+functions shall return the value of the $2$ element.

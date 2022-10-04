@@ -1,0 +1,3 @@
+.IP \fIelem_size\fP
+the size (in bytes) of a single $1$ element. This value is set once
+during initialization, and must not be changed.

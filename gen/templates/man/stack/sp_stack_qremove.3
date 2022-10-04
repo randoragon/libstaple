@@ -1,0 +1,79 @@
+.\"M stack
+.TH SP_STACK_QREMOVE 3 DATE "libstaple-VERSION"
+.\"NAME str
+\- quickly remove an element from any position of a stack
+.\". MAN_SYNOPSIS_BEGIN
+int
+.BR sp_stack_qremove "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+void
+.RI * output )
+.\"SS{
+.br
+$TYPE$
+.BR sp_stack_qremove$SUFFIX$ "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.\"SS}
+.br
+char
+.RB * sp_stack_qremovestr "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+See
+.BR sp_stack_remove (3).
+.P
+The functions in the
+.BR sp_stack_qremove ()
+family operate in constant time, which is achievable by changing the order of
+the elements during removal.
+.\". MAN_CONFORMING_TO
+.SH EXAMPLES
+To explain how the
+.BR sp_stack_remove ()
+and
+.BR sp_stack_qremove ()
+families differ, consider the following initial stack (elements listed
+from bottom to top):
+.IP
+.B 1 2 3 4 _ _ _
+.P
+Now, let us investigate what happens when we try to remove the number
+.BR 2 .
+.P
+The functions in the
+.BR sp_stack_remove ()
+family would remove the element, and then move
+.BR 3 " and " 4
+downwards into the freed spot, without affecting the order:
+.IP (1)
+.B 1 _ 3 4 _ _ _
+.br
+\h'2n'^
+.IP (2)
+.B 1 3 4 _ _ _ _
+.br
+\h'2n'^ ^
+.P
+On the contrary, the functions in the
+.BR sp_stack_qremove ()
+family achieve the goal faster by moving the top of the stack (in this case
+.BR 4 )
+into the value that should be removed:
+.IP (1)
+.B 1 _ 3 4 _ _ _
+.br
+\h'2n'^
+.IP (2)
+.B 1 4 3 _ _ _ _
+.br
+\h'2n'^
+.P
+The second approach guarantees constant time, but does not preserve the order of
+the elements.

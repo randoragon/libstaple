@@ -1,0 +1,28 @@
+.\"M stack
+.TH SP_STACK 7 DATE "libstaple-VERSION"
+.SH NAME
+sp_stack \- staple library implementation of the stack
+.SH DESCRIPTION
+.\". MAN_DESCRIBES_STRUCTURE sp_stack
+.\". MAN_TRANSPARENT_TYPE sp_stack
+.SS Internal Structure
+.\". MAN_CODE_BEGIN IP
+struct sp_stack {
+	void  *data;
+	size_t elem_size;
+	size_t size;
+	size_t capacity;
+};
+.\". MAN_CODE_END
+.P
+.IP \fIdata\fP 12n
+the beginning of a contiguous array of elements. The first array element
+corresponds to the bottom of the stack, and the last to the top.
+.\". MAN_STRUCT_FIELD_ELEM_SIZE stack
+.\". MAN_STRUCT_FIELD_SIZE stack
+.\". MAN_STRUCT_FIELD_CAPACITY
+.P
+.\". MAN_REFER_TO_SOURCE
+.\". MAN_CONFORMING_TO
+.SH BUGS
+.\". MAN_BUG_BUFFER_CAP data capacity elem_size

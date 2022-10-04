@@ -1,0 +1,6 @@
+It is worth noting that the
+.BR $1$ ()
+function does not create a copy of the string, which means any attempt to
+modify the string will affect the $2$. Likewise, the pointer will become
+invalid if the $2$ gets destroyed (with a destructor function like
+.BR sp_free (3)).

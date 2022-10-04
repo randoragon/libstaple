@@ -1,0 +1,91 @@
+.\"M stack
+.TH SP_STACK_REMOVE 3 DATE "libstaple-VERSION"
+.\"NAME str
+\- remove an element from any position of a stack
+.\". MAN_SYNOPSIS_BEGIN
+int
+.BR sp_stack_remove "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+void
+.RI * output )
+.\"SS{
+.br
+$TYPE$
+.BR sp_stack_remove$SUFFIX$ "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.\"SS}
+.br
+char
+.RB * sp_stack_removestr "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+The functions in the
+.BR sp_stack_remove ()
+family are used to remove elements from any position of a stack. The order of
+remaining elements shall be preserved.
+.P
+.I stack
+is the stack that shall be removed from.
+.P
+.I idx
+is the index of the element that shall be removed. Indices start from 0 and
+extend downwards \(em 0 is the top element, 1 is the element below it, and so
+on.
+.br
+Removing position
+.BR n " requires " n
+elements to be moved in memory. Removing the 0th element has the same effect as
+.BR sp_stack_pop (3).
+.br
+.I idx
+must be smaller than
+.IR stack "'s " size .
+.SS Generic Form
+.I output
+is the start of an adequately-sized block of memory the removed element shall be
+copied into.
+.I output
+must not overlap in memory with the removed element.
+.B NULL
+can be passed to skip this functionality.
+.SH RETURN VALUE
+.SS Generic Form
+.\". MAN_RETVAL_0_OR_CODE sp_stack_remove
+.SS Suffixed Form
+.\". MAN_RETVAL_ELEM_VALUE_SUFFIXED sp_stack_remove removed
+.SH ERRORS
+.SS Generic Form
+.\". MAN_SHALL_FAIL_IF sp_stack_remove
+.\". MAN_ERRCODE SP_EINVAL
+.I stack
+is a null pointer (debug mode only).
+.\". MAN_ERRCODE SP_EINDEX
+.I idx
+out of range (debug mode only).
+.SS Suffixed Form
+.\". MAN_SHALL_FAIL_IF_SUFFIXED sp_stack_remove
+.\". MAN_ERRCODE 0
+.I stack
+is a null pointer (debug mode only).
+.\". MAN_ERRCODE 0
+.I idx
+out of range (debug mode only).
+.\". MAN_ERRCODE 0
+.IR stack "'s " elem_size
+does not match the size of the function's return type (debug mode only).
+.P
+(the
+.BR sp_stack_removestr ()
+function returns
+.B NULL
+instead of 0)
+.SH NOTES
+.\". MAN_NOTE_DEBUG_AMBIGUOUS_ERROR sp_stack_removestr
+.\". MAN_CONFORMING_TO

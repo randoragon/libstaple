@@ -1,0 +1,122 @@
+.\"M stack
+.TH SP_STACK_SET 3 DATE "libstaple-VERSION"
+.\"NAME str strn
+\- set the value of an arbitrary element in a stack
+.\". MAN_SYNOPSIS_BEGIN
+int
+.BR sp_stack_set "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+void
+.RI * val )
+.\"SS{
+.br
+int
+.BR sp_stack_set$SUFFIX$ "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+$TYPE$
+.IR val )
+.\"SS}
+.br
+int
+.BR sp_stack_setstr "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+const char
+.RI * val )
+.br
+int
+.BR sp_stack_setstrn "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+const char
+.RI * val ,
+size_t
+.IR len )
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+.P
+The functions in the
+.BR sp_stack_set ()
+family are used to set the value of an arbitrary element in a stack. The
+previous value is overwritten and non-recoverable.
+.P
+.I stack
+is the stack.
+.P
+.I idx
+is the index of the element that shall be overwritten.
+.P
+.I val
+is the new value for the element at position
+.IR idx .
+.SS Generic Form
+.I val
+must be a void pointer to the first byte of the new value. The source and
+destination blocks must not overlap in memory. The number of bytes to copy is
+equal to
+.IR stack "'s " elem_size
+field.
+.SS Suffixed Form
+.I val
+is passed directly in the function argument.
+.P
+The
+.BR sp_stack_setstr ()
+function creates a copy of the string pointed to by
+.I val
+and stores the new pointer on the stack. The string must fit in
+.I SIZE_MAX
+bytes, including the null terminator.
+.P
+The
+.BR sp_stack_setstrn ()
+function is equivalent to
+.BR sp_stack_setstr (),
+except it shall always copy exactly
+.I len
+bytes and append a null terminator at the end.
+.I len
+must be smaller than
+.IR SIZE_MAX .
+.SH RETURN VALUE
+.\". MAN_RETVAL_0_OR_CODE_FAMILY sp_stack_set
+.SH ERRORS
+.\". MAN_SHALL_FAIL_IF_FAMILY sp_stack_set
+.\". MAN_ERRCODE SP_EINVAL
+.I stack
+is a null pointer (debug mode only).
+.\". MAN_ERRCODE SP_EINDEX
+.I idx
+out of range (debug mode only).
+.SS Generic Form
+.\". MAN_ERRCODE SP_EINVAL
+.I val
+is a null pointer (debug mode only).
+.SS Suffixed Form
+.\". MAN_ERRCODE SP_EILLEGAL
+.IR stack "'s " elem_size
+does not match the size of the
+.I val
+argument (debug mode only).
+.P
+The
+.BR sp_stack_setstr ()
+and
+.BR sp_stack_setstrn ()
+functions shall fail if:
+.\". MAN_ERRCODE SP_EINVAL
+.I val
+is a null pointer (debug mode only).
+.\". MAN_ERRCODE SP_ERANGE
+string too long or
+.I len
+too large.
+.\". MAN_ERRCODE SP_ENOMEM
+Memory allocation failed.
+.\". MAN_CONFORMING_TO

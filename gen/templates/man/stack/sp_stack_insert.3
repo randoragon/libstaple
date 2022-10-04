@@ -1,0 +1,134 @@
+.\"M stack
+.TH SP_STACK_INSERT 3 DATE "libstaple-VERSION"
+.\"NAME str strn
+\- insert an element at any position of a stack
+.\". MAN_SYNOPSIS_BEGIN
+int
+.BR sp_stack_insert "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+const void
+.RI * elem )
+.\"SS{
+.br
+int
+.BR sp_stack_insert$SUFFIX$ "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+$TYPE$
+.IR elem )
+.\"SS}
+.br
+int
+.BR sp_stack_insertstr "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+const char
+.RI * elem )
+.br
+int
+.BR sp_stack_insertstrn "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+const char
+.RI * elem ,
+size_t
+.IR len )
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+The functions in the
+.BR sp_stack_insert ()
+family are used to insert elements at any position of a stack. The order of
+elements above and below the newly inserted element shall be preserved.
+.P
+.I stack
+is the stack that shall be inserted into.
+.P
+.I idx
+is the index at which the new element will be placed. Indices start from 0 and
+extend downwards \(em 0 is the top element, 1 is the element below it, and so
+on.
+.br
+Inserting at position \fBn\fP requires \fBn\fP elements to be moved in memory.
+Inserting at 0 has the same effect as
+.BR sp_stack_push (3).
+.br
+.I idx
+cannot be larger than
+.IR stack "'s " size .
+.P
+.I elem
+is the element to be inserted.
+.SS Generic Form
+.I elem
+must be a void pointer to the first byte of the element that shall be inserted.
+The number of bytes to copy is equal to
+.IR stack "'s " elem_size
+field.
+.SS Suffixed Form
+.I elem
+is passed directly in the function argument.
+.P
+The
+.BR sp_stack_insertstr ()
+function creates a copy of the string pointed to by
+.I elem
+and stores the new pointer on the stack. The string must fit in
+.I SIZE_MAX
+bytes, including the null terminator.
+.P
+The
+.BR sp_stack_insertstrn ()
+function is equivalent to
+.BR sp_stack_insertstr (),
+except it shall always copy exactly
+.I len
+bytes and append a null terminator at the end.
+.I len
+must be smaller than
+.IR SIZE_MAX .
+.SH RETURN VALUE
+.\". MAN_RETVAL_0_OR_CODE_FAMILY sp_stack_insert
+.SH ERRORS
+.\". MAN_SHALL_FAIL_IF_FAMILY sp_stack_insert
+.\". MAN_ERRCODE SP_EINVAL
+.I stack
+is a null pointer (debug mode only).
+.\". MAN_ERRCODE SP_EINDEX
+.I idx
+out of range (debug mode only).
+.\". MAN_ERRCODE SP_ERANGE
+Maximum buffer size exceeded. See BUGS in
+.BR sp_stack (7).
+.\". MAN_ERRCODE SP_ENOMEM
+Memory allocation failed.
+.SS Generic Form
+.\". MAN_SHALL_FAIL_IF sp_stack_insert
+.\". MAN_ERRCODE SP_EINVAL
+.I elem
+is a null pointer (debug mode only).
+.SS Suffixed Form
+.\". MAN_SHALL_FAIL_IF_SUFFIXED sp_stack_insert
+.\". MAN_ERRCODE SP_EILLEGAL
+.IR stack "'s " elem_size
+does not match the size of the
+.I elem
+argument (debug mode only).
+.P
+The
+.BR sp_stack_insertstr ()
+and
+.BR sp_stack_insertstrn ()
+functions shall fail if:
+.\". MAN_ERRCODE SP_EINVAL
+.I elem
+is a null pointer (debug mode only).
+.\". MAN_ERRCODE SP_ERANGE
+string too long or
+.I len
+too large.
+.\". MAN_CONFORMING_TO

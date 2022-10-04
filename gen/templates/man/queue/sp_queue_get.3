@@ -1,0 +1,83 @@
+.\"M queue
+.TH SP_QUEUE_GET 3 DATE "libstaple-VERSION"
+.\"NAME str
+\- look up arbitrary element in a queue
+.\". MAN_SYNOPSIS_BEGIN
+void
+.RB * sp_queue_get "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.\"SS{
+.br
+$TYPE$
+.BR sp_queue_get$SUFFIX$ "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.\"SS}
+.br
+char
+.RB * sp_queue_getstr "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+.P
+The functions in the
+.BR sp_queue_get ()
+family are used to look up the value of an arbitrary element in a queue. The
+looked up element remains on the queue.
+.P
+.I queue
+is the queue.
+.P
+.I idx
+is the index of the element. Indices start from 0 and extend to the rear \(em 0
+is the front element, 1 is the element behind it, and so on.
+.br
+.I idx
+must be smaller than
+.IR queue "'s " size .
+.SS Generic Form
+.\". MAN_GENERIC_GET_SLIGHTLY_DIFFERENT queue
+.P
+.\". MAN_GENERIC_GET_IMPORTANT_USE_CASE queue
+.SH RETURN VALUE
+.SS Generic Form
+.\". MAN_RETVAL_ADDRESS_AT sp_queue_get idx
+.SS Suffixed Form
+.\". MAN_RETVAL_VALUE_AT_SUFFIXED sp_queue_get idx
+.SH ERRORS
+.SS Generic Form
+.\". MAN_SHALL_FAIL_IF sp_queue_get
+.\". MAN_ERRCODE NULL
+Either
+.IR queue " or " output
+are null pointers (debug mode only).
+.\". MAN_ERRCODE NULL
+.I idx
+out of range (debug mode only).
+.SS Suffixed Form
+.\". MAN_SHALL_FAIL_IF_SUFFIXED sp_queue_get
+.\". MAN_ERRCODE 0
+.I queue
+is a null pointer (debug mode only).
+.\". MAN_ERRCODE 0
+.I idx
+out of range (debug mode only).
+.\". MAN_ERRCODE 0
+.IR queue "'s " elem_size
+does not match the size of the function's return type (debug mode only).
+.P
+(the
+.BR sp_queue_getstr ()
+function returns
+.B NULL
+instead of 0)
+.SH NOTES
+.\". MAN_NOTE_DEBUG_AMBIGUOUS_ERROR sp_queue_getstr
+.P
+.\". MAN_NOTE_DOES_NOT_COPY_STRING sp_queue_getstr queue
+.\". MAN_CONFORMING_TO

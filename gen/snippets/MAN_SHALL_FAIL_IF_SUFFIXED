@@ -1,0 +1,3 @@
+The suffixed
+.BR $1$ ()
+functions shall fail if:

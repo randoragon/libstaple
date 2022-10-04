@@ -1,0 +1,4 @@
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp

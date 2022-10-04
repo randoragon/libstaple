@@ -1,0 +1,4 @@
+If successful, the
+.BR $1$ ()
+function shall return 0. Otherwise, it shall return a code indicating the
+error.

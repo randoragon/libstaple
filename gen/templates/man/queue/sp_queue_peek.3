@@ -1,0 +1,26 @@
+.\"M queue
+.TH SP_QUEUE_PEEK 3 DATE "libstaple-VERSION"
+.\"NAME str
+\- look up the front element of a queue
+.\". MAN_SYNOPSIS_BEGIN
+void
+.RB * sp_queue_peek "(const struct sp_queue"
+.RI * queue )
+.\"SS{
+.br
+$TYPE$
+.BR sp_queue_peek$SUFFIX$ "(const struct sp_queue"
+.RI * queue )
+.\"SS}
+.br
+char
+.RB * sp_queue_peekstr "(const struct sp_queue"
+.RI * queue )
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+These functions behave identically to
+.BR sp_queue_get (3)
+with
+.I idx
+set to 0.
+.\". MAN_CONFORMING_TO
