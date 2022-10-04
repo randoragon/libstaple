@@ -37,13 +37,13 @@ function generate_c(output_path, template_path, pconf)
 			end
 
 			-- Expand snippets, if any
-			if Snippet.expand(line, body) then
+			if Snippet.expand_c(line, body) then
 				goto continue
 			end
 
 			-- End of function definition reached
 			if line:match('^/%*F}%s*%*/') then
-				local fdef = FDef:new(HEADER_TEXT, includes, body)
+				local fdef = FDef:new(C_HEADER_TEXT, includes, body)
 				fdef:write_expand(output_path, pconf)
 				inside_fdef = false
 				goto continue

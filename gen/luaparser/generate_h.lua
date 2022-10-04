@@ -13,7 +13,7 @@ function generate_h(output_path, template_path, pconf)
 	local header_guard
 
 	-- Write license header
-	fout:write(HEADER_TEXT)
+	fout:write(C_HEADER_TEXT)
 
 	local linenum = 1
 	for line in io.lines(template_path) do

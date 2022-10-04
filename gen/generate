@@ -9,11 +9,12 @@ DIRNAME = arg[0]:match('(.*/)')
 require(DIRNAME..'luaparser')
 
 -- GLOBAL CONFIGURATION
-BASEDIR     = DIRNAME..'../'
-SNIPPETDIR  = DIRNAME..'snippets/'
-TEMPLATEDIR = DIRNAME..'templates/'
-HEADER_TEXT = io.open(SNIPPETDIR..'C_LICENSE_HEADER', 'r'):read('a')
-TEMPLATES   = arg
+BASEDIR         = DIRNAME..'../'
+SNIPPETDIR      = DIRNAME..'snippets/'
+TEMPLATEDIR     = DIRNAME..'templates/'
+C_HEADER_TEXT   = io.open(SNIPPETDIR..'C_LICENSE_HEADER', 'r'):read('a')
+MAN_HEADER_TEXT = io.open(SNIPPETDIR..'MAN_LICENSE_HEADER', 'r'):read('a')
+TEMPLATES       = arg
 
 -- You can define the suffixed functions to generate here
 pconf = ParamConfig:new{
