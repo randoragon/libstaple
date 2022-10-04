@@ -1,26 +1,45 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_STACK_POP 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_stack_pop, sp_stack_popc, sp_stack_pops, sp_stack_popi, sp_stack_popl,
-sp_stack_popsc, sp_stack_popuc, sp_stack_popus, sp_stack_popui,
-sp_stack_popul, sp_stack_popf, sp_stack_popd, sp_stack_popld,
-sp_stack_popstr \- remove and retrieve the top element of a stack
+sp_stack_pop,
+sp_stack_popc,
+sp_stack_pops,
+sp_stack_popi,
+sp_stack_popl,
+sp_stack_popsc,
+sp_stack_popuc,
+sp_stack_popus,
+sp_stack_popui,
+sp_stack_popul,
+sp_stack_popf,
+sp_stack_popd,
+sp_stack_popld,
+sp_stack_popu8,
+sp_stack_popu16,
+sp_stack_popu32,
+sp_stack_popu64,
+sp_stack_popi8,
+sp_stack_popi16,
+sp_stack_popi32,
+sp_stack_popi64,
+sp_stack_popstr
+\- remove and retrieve the top element of a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -77,6 +96,38 @@ double
 .br
 long double
 .BR sp_stack_popld "(struct sp_stack"
+.RI * stack )
+.br
+uint8_t
+.BR sp_stack_popu8 "(struct sp_stack"
+.RI * stack )
+.br
+uint16_t
+.BR sp_stack_popu16 "(struct sp_stack"
+.RI * stack )
+.br
+uint32_t
+.BR sp_stack_popu32 "(struct sp_stack"
+.RI * stack )
+.br
+uint64_t
+.BR sp_stack_popu64 "(struct sp_stack"
+.RI * stack )
+.br
+int8_t
+.BR sp_stack_popi8 "(struct sp_stack"
+.RI * stack )
+.br
+int16_t
+.BR sp_stack_popi16 "(struct sp_stack"
+.RI * stack )
+.br
+int32_t
+.BR sp_stack_popi32 "(struct sp_stack"
+.RI * stack )
+.br
+int64_t
+.BR sp_stack_popi64 "(struct sp_stack"
 .RI * stack )
 .br
 char
@@ -137,13 +188,13 @@ is empty (debug mode only).
 The suffixed
 .BR sp_stack_pop ()
 functions shall fail if:
-.IP 0 1.5i
+.IP \fB0\fP 1.5i
 .I stack
 is a null pointer (debug mode only).
-.IP 0 1.5i
+.IP \fB0\fP 1.5i
 .I stack
 is empty (debug mode only).
-.IP 0 1.5i
+.IP \fB0\fP 1.5i
 .IR stack "'s " elem_size
 does not match the size of the function's return type (debug mode only).
 .P
@@ -184,14 +235,16 @@ See
 .BR sp_stack_create (3),
 .BR sp_stack_destroy (3),
 .BR sp_stack_clear (3),
-.BR sp_stack_copy (3),
-.BR sp_stack_foreach (3),
 .BR sp_stack_push (3),
-.BR sp_stack_insert (3),
-.BR sp_stack_qinsert (3),
 .BR sp_stack_peek (3),
+.BR sp_stack_pop (3),
+.BR sp_stack_insert (3),
 .BR sp_stack_remove (3),
+.BR sp_stack_qinsert (3),
 .BR sp_stack_qremove (3),
 .BR sp_stack_get (3),
 .BR sp_stack_set (3),
-.BR sp_stack_print (3)
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
+.BR sp_stack_print (3),
+.BR free (3)

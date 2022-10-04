@@ -1,16 +1,16 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -49,11 +49,11 @@ corresponds to the bottom of the stack, and the last to the top.
 the size (in bytes) of a single stack element. This value is set once
 during initialization, and must not be changed.
 .IP \fIsize\fP
-the number of elements on the stack.
+the number of elements in the stack.
 .IP \fIcapacity\fP
 the current maximum number of elements possible to store on the
 .I data
-buffer. This value is automatically doubled during insertion operations, if
+buffer. This value is automatically doubled during insertion operations if
 there is not enough room for a new element.
 .P
 Refer to
@@ -73,19 +73,19 @@ also cannot exceed
 .BR SIZE_MAX .
 .SH SEE ALSO
 .ad l
-.BR libstaple (7)
+.BR libstaple (7),
 .BR sp_stack_create (3),
 .BR sp_stack_destroy (3),
 .BR sp_stack_clear (3),
-.BR sp_stack_copy (3),
-.BR sp_stack_foreach (3),
 .BR sp_stack_push (3),
-.BR sp_stack_insert (3),
-.BR sp_stack_qinsert (3),
 .BR sp_stack_peek (3),
 .BR sp_stack_pop (3),
+.BR sp_stack_insert (3),
 .BR sp_stack_remove (3),
+.BR sp_stack_qinsert (3),
 .BR sp_stack_qremove (3),
 .BR sp_stack_get (3),
 .BR sp_stack_set (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
 .BR sp_stack_print (3)

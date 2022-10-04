@@ -1,27 +1,46 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_QUEUE_PUSH 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_queue_push, sp_queue_pushc, sp_queue_pushs, sp_queue_pushi,
-sp_queue_pushl, sp_queue_pushsc, sp_queue_pushuc, sp_queue_pushus,
-sp_queue_pushui, sp_queue_pushul, sp_queue_pushf, sp_queue_pushd,
-sp_queue_pushld, sp_queue_pushstr, sp_queue_pushstrn \- push
-a new element to the back of a queue
+sp_queue_push,
+sp_queue_pushc,
+sp_queue_pushs,
+sp_queue_pushi,
+sp_queue_pushl,
+sp_queue_pushsc,
+sp_queue_pushuc,
+sp_queue_pushus,
+sp_queue_pushui,
+sp_queue_pushul,
+sp_queue_pushf,
+sp_queue_pushd,
+sp_queue_pushld,
+sp_queue_pushu8,
+sp_queue_pushu16,
+sp_queue_pushu32,
+sp_queue_pushu64,
+sp_queue_pushi8,
+sp_queue_pushi16,
+sp_queue_pushi32,
+sp_queue_pushi64,
+sp_queue_pushstr,
+sp_queue_pushstrn
+\- push a new element to the back of a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -102,6 +121,54 @@ int
 .BR sp_queue_pushld "(struct sp_queue"
 .RI * queue ,
 long double
+.IR elem )
+.br
+int
+.BR sp_queue_pushu8 "(struct sp_queue"
+.RI * queue ,
+uint8_t
+.IR elem )
+.br
+int
+.BR sp_queue_pushu16 "(struct sp_queue"
+.RI * queue ,
+uint16_t
+.IR elem )
+.br
+int
+.BR sp_queue_pushu32 "(struct sp_queue"
+.RI * queue ,
+uint32_t
+.IR elem )
+.br
+int
+.BR sp_queue_pushu64 "(struct sp_queue"
+.RI * queue ,
+uint64_t
+.IR elem )
+.br
+int
+.BR sp_queue_pushi8 "(struct sp_queue"
+.RI * queue ,
+int8_t
+.IR elem )
+.br
+int
+.BR sp_queue_pushi16 "(struct sp_queue"
+.RI * queue ,
+int16_t
+.IR elem )
+.br
+int
+.BR sp_queue_pushi32 "(struct sp_queue"
+.RI * queue ,
+int32_t
+.IR elem )
+.br
+int
+.BR sp_queue_pushi64 "(struct sp_queue"
+.RI * queue ,
+int64_t
 .IR elem )
 .br
 int
@@ -204,7 +271,7 @@ The
 .BR sp_queue_pushstr ()
 and
 .BR sp_queue_pushstrn ()
-functions shall additionally fail if:
+functions shall fail if:
 .IP \fBSP_EINVAL\fP 1.5i
 .I elem
 is a null pointer (debug mode only).
@@ -222,14 +289,15 @@ See
 .BR sp_queue_create (3),
 .BR sp_queue_destroy (3),
 .BR sp_queue_clear (3),
-.BR sp_queue_copy (3),
-.BR sp_queue_foreach (3),
-.BR sp_queue_insert (3),
-.BR sp_queue_qinsert (3),
+.BR sp_queue_push (3),
 .BR sp_queue_peek (3),
 .BR sp_queue_pop (3),
+.BR sp_queue_insert (3),
 .BR sp_queue_remove (3),
+.BR sp_queue_qinsert (3),
 .BR sp_queue_qremove (3),
 .BR sp_queue_get (3),
 .BR sp_queue_set (3),
+.BR sp_queue_copy (3),
+.BR sp_queue_foreach (3),
 .BR sp_queue_print (3)

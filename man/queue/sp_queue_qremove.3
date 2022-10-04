@@ -1,28 +1,45 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_QUEUE_QREMOVE 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_queue_qremove, sp_queue_qremovec, sp_queue_qremoves,
-sp_queue_qremovei, sp_queue_qremovel, sp_queue_qremovesc,
-sp_queue_qremoveuc, sp_queue_qremoveus, sp_queue_qremoveui,
-sp_queue_qremoveul, sp_queue_qremovef, sp_queue_qremoved,
-sp_queue_qremoveld, sp_queue_qremovestr \- quickly remove an element from any
-position of a queue
+sp_queue_qremove,
+sp_queue_qremovec,
+sp_queue_qremoves,
+sp_queue_qremovei,
+sp_queue_qremovel,
+sp_queue_qremovesc,
+sp_queue_qremoveuc,
+sp_queue_qremoveus,
+sp_queue_qremoveui,
+sp_queue_qremoveul,
+sp_queue_qremovef,
+sp_queue_qremoved,
+sp_queue_qremoveld,
+sp_queue_qremoveu8,
+sp_queue_qremoveu16,
+sp_queue_qremoveu32,
+sp_queue_qremoveu64,
+sp_queue_qremovei8,
+sp_queue_qremovei16,
+sp_queue_qremovei32,
+sp_queue_qremovei64,
+sp_queue_qremovestr
+\- quickly remove an element from any position of a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -107,6 +124,54 @@ long double
 size_t
 .IR idx )
 .br
+uint8_t
+.BR sp_queue_qremoveu8 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+uint16_t
+.BR sp_queue_qremoveu16 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+uint32_t
+.BR sp_queue_qremoveu32 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+uint64_t
+.BR sp_queue_qremoveu64 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+int8_t
+.BR sp_queue_qremovei8 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+int16_t
+.BR sp_queue_qremovei16 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+int32_t
+.BR sp_queue_qremovei32 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+int64_t
+.BR sp_queue_qremovei64 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
 char
 .RB * sp_queue_qremovestr "(struct sp_queue"
 .RI * queue ,
@@ -123,6 +188,9 @@ The functions in the
 .BR sp_queue_qremove ()
 family operate in constant time, which is achievable by changing the order of
 the elements during removal.
+.SH CONFORMING TO
+See
+.BR libstaple (7).
 .SH EXAMPLES
 To explain how the
 .BR sp_queue_remove ()
@@ -172,15 +240,15 @@ the elements.
 .BR sp_queue_create (3),
 .BR sp_queue_destroy (3),
 .BR sp_queue_clear (3),
-.BR sp_queue_copy (3),
-.BR sp_queue_foreach (3),
 .BR sp_queue_push (3),
-.BR sp_queue_insert (3),
-.BR sp_queue_qinsert (3),
 .BR sp_queue_peek (3),
 .BR sp_queue_pop (3),
+.BR sp_queue_insert (3),
 .BR sp_queue_remove (3),
+.BR sp_queue_qinsert (3),
+.BR sp_queue_qremove (3),
 .BR sp_queue_get (3),
 .BR sp_queue_set (3),
+.BR sp_queue_copy (3),
+.BR sp_queue_foreach (3),
 .BR sp_queue_print (3)
-

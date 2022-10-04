@@ -1,26 +1,45 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_STACK_GET 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_stack_get, sp_stack_getc, sp_stack_gets, sp_stack_geti, sp_stack_getl,
-sp_stack_getsc, sp_stack_getuc, sp_stack_getus, sp_stack_getui,
-sp_stack_getul, sp_stack_getf, sp_stack_getd, sp_stack_getld, sp_stack_getstr \-
-look up arbitrary element in a stack
+sp_stack_get,
+sp_stack_getc,
+sp_stack_gets,
+sp_stack_geti,
+sp_stack_getl,
+sp_stack_getsc,
+sp_stack_getuc,
+sp_stack_getus,
+sp_stack_getui,
+sp_stack_getul,
+sp_stack_getf,
+sp_stack_getd,
+sp_stack_getld,
+sp_stack_getu8,
+sp_stack_getu16,
+sp_stack_getu32,
+sp_stack_getu64,
+sp_stack_geti8,
+sp_stack_geti16,
+sp_stack_geti32,
+sp_stack_geti64,
+sp_stack_getstr
+\- look up arbitrary element in a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -99,6 +118,54 @@ size_t
 .br
 long double
 .BR sp_stack_getld "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+uint8_t
+.BR sp_stack_getu8 "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+uint16_t
+.BR sp_stack_getu16 "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+uint32_t
+.BR sp_stack_getu32 "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+uint64_t
+.BR sp_stack_getu64 "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+int8_t
+.BR sp_stack_geti8 "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+int16_t
+.BR sp_stack_geti16 "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+int32_t
+.BR sp_stack_geti32 "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+int64_t
+.BR sp_stack_geti64 "(const struct sp_stack"
 .RI * stack ,
 size_t
 .IR idx )
@@ -182,13 +249,13 @@ out of range (debug mode only).
 The suffixed
 .BR sp_stack_get ()
 functions shall fail if:
-.IP 0 1.5i
+.IP \fB0\fP 1.5i
 .I stack
 is a null pointer (debug mode only).
-.IP 0 1.5i
+.IP \fB0\fP 1.5i
 .I idx
 out of range (debug mode only).
-.IP 0 1.5i
+.IP \fB0\fP 1.5i
 .IR stack "'s " elem_size
 does not match the size of the function's return type (debug mode only).
 .P
@@ -236,14 +303,15 @@ See
 .BR sp_stack_create (3),
 .BR sp_stack_destroy (3),
 .BR sp_stack_clear (3),
-.BR sp_stack_copy (3),
-.BR sp_stack_foreach (3),
 .BR sp_stack_push (3),
-.BR sp_stack_insert (3),
-.BR sp_stack_qinsert (3),
 .BR sp_stack_peek (3),
 .BR sp_stack_pop (3),
+.BR sp_stack_insert (3),
 .BR sp_stack_remove (3),
+.BR sp_stack_qinsert (3),
 .BR sp_stack_qremove (3),
+.BR sp_stack_get (3),
 .BR sp_stack_set (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
 .BR sp_stack_print (3)

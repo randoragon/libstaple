@@ -1,28 +1,46 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_STACK_QINSERT 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_stack_qinsert, sp_stack_qinsertc, sp_stack_qinserts,
-sp_stack_qinserti, sp_stack_qinsertl, sp_stack_qinsertsc,
-sp_stack_qinsertuc, sp_stack_qinsertus, sp_stack_qinsertui,
-sp_stack_qinsertul, sp_stack_qinsertf, sp_stack_qinsertd,
-sp_stack_qinsertld, sp_stack_qinsertstr, sp_stack_qinsertstrn \- quickly insert
-an element at any position of a stack
+sp_stack_qinsert,
+sp_stack_qinsertc,
+sp_stack_qinserts,
+sp_stack_qinserti,
+sp_stack_qinsertl,
+sp_stack_qinsertsc,
+sp_stack_qinsertuc,
+sp_stack_qinsertus,
+sp_stack_qinsertui,
+sp_stack_qinsertul,
+sp_stack_qinsertf,
+sp_stack_qinsertd,
+sp_stack_qinsertld,
+sp_stack_qinsertu8,
+sp_stack_qinsertu16,
+sp_stack_qinsertu32,
+sp_stack_qinsertu64,
+sp_stack_qinserti8,
+sp_stack_qinserti16,
+sp_stack_qinserti32,
+sp_stack_qinserti64,
+sp_stack_qinsertstr,
+sp_stack_qinsertstrn
+\- quickly insert an element at any position of a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -132,6 +150,70 @@ long double
 .IR elem )
 .br
 int
+.BR sp_stack_qinsertu8 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+uint8_t
+.IR elem )
+.br
+int
+.BR sp_stack_qinsertu16 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+uint16_t
+.IR elem )
+.br
+int
+.BR sp_stack_qinsertu32 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+uint32_t
+.IR elem )
+.br
+int
+.BR sp_stack_qinsertu64 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+uint64_t
+.IR elem )
+.br
+int
+.BR sp_stack_qinserti8 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+int8_t
+.IR elem )
+.br
+int
+.BR sp_stack_qinserti16 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+int16_t
+.IR elem )
+.br
+int
+.BR sp_stack_qinserti32 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+int32_t
+.IR elem )
+.br
+int
+.BR sp_stack_qinserti64 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+int64_t
+.IR elem )
+.br
+int
 .BR sp_stack_qinsertstr "(struct sp_stack"
 .RI * stack ,
 size_t
@@ -159,6 +241,9 @@ The functions in the
 .BR sp_stack_qinsert ()
 family operate in constant time, which is achievable by changing the order of
 the elements upon insertion.
+.SH CONFORMING TO
+See
+.BR libstaple (7).
 .SH EXAMPLES
 To explain how the
 .BR sp_stack_insert ()
@@ -213,15 +298,15 @@ the elements.
 .BR sp_stack_create (3),
 .BR sp_stack_destroy (3),
 .BR sp_stack_clear (3),
-.BR sp_stack_copy (3),
-.BR sp_stack_foreach (3),
 .BR sp_stack_push (3),
-.BR sp_stack_insert (3),
 .BR sp_stack_peek (3),
 .BR sp_stack_pop (3),
+.BR sp_stack_insert (3),
 .BR sp_stack_remove (3),
+.BR sp_stack_qinsert (3),
 .BR sp_stack_qremove (3),
 .BR sp_stack_get (3),
 .BR sp_stack_set (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
 .BR sp_stack_print (3)
-

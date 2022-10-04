@@ -1,16 +1,16 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -63,7 +63,6 @@ int sp_free(void *addr)
 .fi
 .ad
 .SH RETURN VALUE
-.P
 If successful, the
 .BR sp_free ()
 function shall return 0. Otherwise, it shall return a code indicating the
@@ -101,6 +100,7 @@ one can compare summaries of the below program with and without the
 .BR sp_free ()
 function to see that in the latter case exactly 45 bytes in 3 blocks are lost.
 .SS Program source
+.
 .ad l
 .nf
 #include <staple.h>

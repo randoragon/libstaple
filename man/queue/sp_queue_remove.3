@@ -1,27 +1,45 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_QUEUE_REMOVE 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_queue_remove, sp_queue_removec, sp_queue_removes, sp_queue_removei,
-sp_queue_removel, sp_queue_removesc, sp_queue_removeuc, sp_queue_removeus,
-sp_queue_removeui, sp_queue_removeul, sp_queue_removef, sp_queue_removed,
-sp_queue_removeld, sp_queue_removestr \- remove an element from any position of
-a queue
+sp_queue_remove,
+sp_queue_removec,
+sp_queue_removes,
+sp_queue_removei,
+sp_queue_removel,
+sp_queue_removesc,
+sp_queue_removeuc,
+sp_queue_removeus,
+sp_queue_removeui,
+sp_queue_removeul,
+sp_queue_removef,
+sp_queue_removed,
+sp_queue_removeld,
+sp_queue_removeu8,
+sp_queue_removeu16,
+sp_queue_removeu32,
+sp_queue_removeu64,
+sp_queue_removei8,
+sp_queue_removei16,
+sp_queue_removei32,
+sp_queue_removei64,
+sp_queue_removestr
+\- remove an element from any position of a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -106,8 +124,56 @@ long double
 size_t
 .IR idx )
 .br
+uint8_t
+.BR sp_queue_removeu8 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+uint16_t
+.BR sp_queue_removeu16 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+uint32_t
+.BR sp_queue_removeu32 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+uint64_t
+.BR sp_queue_removeu64 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+int8_t
+.BR sp_queue_removei8 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+int16_t
+.BR sp_queue_removei16 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+int32_t
+.BR sp_queue_removei32 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+int64_t
+.BR sp_queue_removei64 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
 char
-.RB * sp_queue_removeld "(struct sp_queue"
+.RB * sp_queue_removestr "(struct sp_queue"
 .RI * queue ,
 size_t
 .IR idx )
@@ -168,13 +234,13 @@ out of range (debug mode only).
 The suffixed
 .BR sp_queue_remove ()
 functions shall fail if:
-.IP 0 1.5i
+.IP \fB0\fP 1.5i
 .I queue
 is a null pointer (debug mode only).
-.IP 0 1.5i
+.IP \fB0\fP 1.5i
 .I idx
 out of range (debug mode only).
-.IP 0 1.5i
+.IP \fB0\fP 1.5i
 .IR queue "'s " elem_size
 does not match the size of the function's return type (debug mode only).
 .P
@@ -215,14 +281,15 @@ See
 .BR sp_queue_create (3),
 .BR sp_queue_destroy (3),
 .BR sp_queue_clear (3),
-.BR sp_queue_copy (3),
-.BR sp_queue_foreach (3),
 .BR sp_queue_push (3),
-.BR sp_queue_insert (3),
-.BR sp_queue_qinsert (3),
 .BR sp_queue_peek (3),
 .BR sp_queue_pop (3),
+.BR sp_queue_insert (3),
+.BR sp_queue_remove (3),
+.BR sp_queue_qinsert (3),
 .BR sp_queue_qremove (3),
 .BR sp_queue_get (3),
 .BR sp_queue_set (3),
+.BR sp_queue_copy (3),
+.BR sp_queue_foreach (3),
 .BR sp_queue_print (3)

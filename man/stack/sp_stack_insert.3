@@ -1,27 +1,46 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_STACK_INSERT 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_stack_insert, sp_stack_insertc, sp_stack_inserts, sp_stack_inserti,
-sp_stack_insertl, sp_stack_insertsc, sp_stack_insertuc, sp_stack_insertus,
-sp_stack_insertui, sp_stack_insertul, sp_stack_insertf, sp_stack_insertd,
-sp_stack_insertld, sp_stack_insertstr, sp_stack_insertstrn \- insert an element
-at any position of a stack
+sp_stack_insert,
+sp_stack_insertc,
+sp_stack_inserts,
+sp_stack_inserti,
+sp_stack_insertl,
+sp_stack_insertsc,
+sp_stack_insertuc,
+sp_stack_insertus,
+sp_stack_insertui,
+sp_stack_insertul,
+sp_stack_insertf,
+sp_stack_insertd,
+sp_stack_insertld,
+sp_stack_insertu8,
+sp_stack_insertu16,
+sp_stack_insertu32,
+sp_stack_insertu64,
+sp_stack_inserti8,
+sp_stack_inserti16,
+sp_stack_inserti32,
+sp_stack_inserti64,
+sp_stack_insertstr,
+sp_stack_insertstrn
+\- insert an element at any position of a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -128,6 +147,70 @@ int
 size_t
 .IR idx ,
 long double
+.IR elem )
+.br
+int
+.BR sp_stack_insertu8 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+uint8_t
+.IR elem )
+.br
+int
+.BR sp_stack_insertu16 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+uint16_t
+.IR elem )
+.br
+int
+.BR sp_stack_insertu32 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+uint32_t
+.IR elem )
+.br
+int
+.BR sp_stack_insertu64 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+uint64_t
+.IR elem )
+.br
+int
+.BR sp_stack_inserti8 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+int8_t
+.IR elem )
+.br
+int
+.BR sp_stack_inserti16 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+int16_t
+.IR elem )
+.br
+int
+.BR sp_stack_inserti32 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+int32_t
+.IR elem )
+.br
+int
+.BR sp_stack_inserti64 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+int64_t
 .IR elem )
 .br
 int
@@ -243,7 +326,7 @@ The
 .BR sp_stack_insertstr ()
 and
 .BR sp_stack_insertstrn ()
-functions shall additionally fail if:
+functions shall fail if:
 .IP \fBSP_EINVAL\fP 1.5i
 .I elem
 is a null pointer (debug mode only).
@@ -261,14 +344,15 @@ See
 .BR sp_stack_create (3),
 .BR sp_stack_destroy (3),
 .BR sp_stack_clear (3),
-.BR sp_stack_copy (3),
-.BR sp_stack_foreach (3),
 .BR sp_stack_push (3),
-.BR sp_stack_qinsert (3),
 .BR sp_stack_peek (3),
 .BR sp_stack_pop (3),
+.BR sp_stack_insert (3),
 .BR sp_stack_remove (3),
+.BR sp_stack_qinsert (3),
 .BR sp_stack_qremove (3),
 .BR sp_stack_get (3),
 .BR sp_stack_set (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
 .BR sp_stack_print (3)

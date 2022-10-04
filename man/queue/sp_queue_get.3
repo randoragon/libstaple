@@ -1,26 +1,45 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_QUEUE_GET 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_queue_get, sp_queue_getc, sp_queue_gets, sp_queue_geti, sp_queue_getl,
-sp_queue_getsc, sp_queue_getuc, sp_queue_getus, sp_queue_getui,
-sp_queue_getul, sp_queue_getf, sp_queue_getd, sp_queue_getld, sp_queue_getstr \-
-look up arbitrary element in a queue
+sp_queue_get,
+sp_queue_getc,
+sp_queue_gets,
+sp_queue_geti,
+sp_queue_getl,
+sp_queue_getsc,
+sp_queue_getuc,
+sp_queue_getus,
+sp_queue_getui,
+sp_queue_getul,
+sp_queue_getf,
+sp_queue_getd,
+sp_queue_getld,
+sp_queue_getu8,
+sp_queue_getu16,
+sp_queue_getu32,
+sp_queue_getu64,
+sp_queue_geti8,
+sp_queue_geti16,
+sp_queue_geti32,
+sp_queue_geti64,
+sp_queue_getstr
+\- look up arbitrary element in a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -99,6 +118,54 @@ size_t
 .br
 long double
 .BR sp_queue_getld "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+uint8_t
+.BR sp_queue_getu8 "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+uint16_t
+.BR sp_queue_getu16 "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+uint32_t
+.BR sp_queue_getu32 "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+uint64_t
+.BR sp_queue_getu64 "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+int8_t
+.BR sp_queue_geti8 "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+int16_t
+.BR sp_queue_geti16 "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+int32_t
+.BR sp_queue_geti32 "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx )
+.br
+int64_t
+.BR sp_queue_geti64 "(const struct sp_queue"
 .RI * queue ,
 size_t
 .IR idx )
@@ -183,13 +250,13 @@ out of range (debug mode only).
 The suffixed
 .BR sp_queue_get ()
 functions shall fail if:
-.IP 0 1.5i
+.IP \fB0\fP 1.5i
 .I queue
 is a null pointer (debug mode only).
-.IP 0 1.5i
+.IP \fB0\fP 1.5i
 .I idx
 out of range (debug mode only).
-.IP 0 1.5i
+.IP \fB0\fP 1.5i
 .IR queue "'s " elem_size
 does not match the size of the function's return type (debug mode only).
 .P
@@ -237,14 +304,15 @@ See
 .BR sp_queue_create (3),
 .BR sp_queue_destroy (3),
 .BR sp_queue_clear (3),
-.BR sp_queue_copy (3),
-.BR sp_queue_foreach (3),
 .BR sp_queue_push (3),
-.BR sp_queue_insert (3),
-.BR sp_queue_qinsert (3),
 .BR sp_queue_peek (3),
 .BR sp_queue_pop (3),
+.BR sp_queue_insert (3),
 .BR sp_queue_remove (3),
+.BR sp_queue_qinsert (3),
 .BR sp_queue_qremove (3),
+.BR sp_queue_get (3),
 .BR sp_queue_set (3),
+.BR sp_queue_copy (3),
+.BR sp_queue_foreach (3),
 .BR sp_queue_print (3)

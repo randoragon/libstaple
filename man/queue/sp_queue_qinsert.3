@@ -1,28 +1,46 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_QUEUE_QINSERT 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_queue_qinsert, sp_queue_qinsertc, sp_queue_qinserts,
-sp_queue_qinserti, sp_queue_qinsertl, sp_queue_qinsertsc,
-sp_queue_qinsertuc, sp_queue_qinsertus, sp_queue_qinsertui,
-sp_queue_qinsertul, sp_queue_qinsertf, sp_queue_qinsertd,
-sp_queue_qinsertld, sp_queue_qinsertstr, sp_queue_qinsertstrn \- quickly insert
-an element at any position of a queue
+sp_queue_qinsert,
+sp_queue_qinsertc,
+sp_queue_qinserts,
+sp_queue_qinserti,
+sp_queue_qinsertl,
+sp_queue_qinsertsc,
+sp_queue_qinsertuc,
+sp_queue_qinsertus,
+sp_queue_qinsertui,
+sp_queue_qinsertul,
+sp_queue_qinsertf,
+sp_queue_qinsertd,
+sp_queue_qinsertld,
+sp_queue_qinsertu8,
+sp_queue_qinsertu16,
+sp_queue_qinsertu32,
+sp_queue_qinsertu64,
+sp_queue_qinserti8,
+sp_queue_qinserti16,
+sp_queue_qinserti32,
+sp_queue_qinserti64,
+sp_queue_qinsertstr,
+sp_queue_qinsertstrn
+\- quickly insert an element at any position of a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -132,6 +150,70 @@ long double
 .IR elem )
 .br
 int
+.BR sp_queue_qinsertu8 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+uint8_t
+.IR elem )
+.br
+int
+.BR sp_queue_qinsertu16 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+uint16_t
+.IR elem )
+.br
+int
+.BR sp_queue_qinsertu32 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+uint32_t
+.IR elem )
+.br
+int
+.BR sp_queue_qinsertu64 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+uint64_t
+.IR elem )
+.br
+int
+.BR sp_queue_qinserti8 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+int8_t
+.IR elem )
+.br
+int
+.BR sp_queue_qinserti16 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+int16_t
+.IR elem )
+.br
+int
+.BR sp_queue_qinserti32 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+int32_t
+.IR elem )
+.br
+int
+.BR sp_queue_qinserti64 "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+int64_t
+.IR elem )
+.br
+int
 .BR sp_queue_qinsertstr "(struct sp_queue"
 .RI * queue ,
 size_t
@@ -159,6 +241,9 @@ The functions in the
 .BR sp_queue_qinsert ()
 family operate in constant time, which is achievable by changing the order of
 the elements upon insertion.
+.SH CONFORMING TO
+See
+.BR libstaple (7).
 .SH EXAMPLES
 To explain how the
 .BR sp_queue_insert ()
@@ -212,15 +297,15 @@ the elements.
 .BR sp_queue_create (3),
 .BR sp_queue_destroy (3),
 .BR sp_queue_clear (3),
-.BR sp_queue_copy (3),
-.BR sp_queue_foreach (3),
 .BR sp_queue_push (3),
-.BR sp_queue_insert (3),
 .BR sp_queue_peek (3),
 .BR sp_queue_pop (3),
+.BR sp_queue_insert (3),
 .BR sp_queue_remove (3),
+.BR sp_queue_qinsert (3),
 .BR sp_queue_qremove (3),
 .BR sp_queue_get (3),
 .BR sp_queue_set (3),
+.BR sp_queue_copy (3),
+.BR sp_queue_foreach (3),
 .BR sp_queue_print (3)
-

@@ -1,28 +1,45 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_STACK_QREMOVE 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_stack_qremove, sp_stack_qremovec, sp_stack_qremoves,
-sp_stack_qremovei, sp_stack_qremovel, sp_stack_qremovesc,
-sp_stack_qremoveuc, sp_stack_qremoveus, sp_stack_qremoveui,
-sp_stack_qremoveul, sp_stack_qremovef, sp_stack_qremoved,
-sp_stack_qremoveld, sp_stack_qremovestr \- quickly remove an element from any
-position of a stack
+sp_stack_qremove,
+sp_stack_qremovec,
+sp_stack_qremoves,
+sp_stack_qremovei,
+sp_stack_qremovel,
+sp_stack_qremovesc,
+sp_stack_qremoveuc,
+sp_stack_qremoveus,
+sp_stack_qremoveui,
+sp_stack_qremoveul,
+sp_stack_qremovef,
+sp_stack_qremoved,
+sp_stack_qremoveld,
+sp_stack_qremoveu8,
+sp_stack_qremoveu16,
+sp_stack_qremoveu32,
+sp_stack_qremoveu64,
+sp_stack_qremovei8,
+sp_stack_qremovei16,
+sp_stack_qremovei32,
+sp_stack_qremovei64,
+sp_stack_qremovestr
+\- quickly remove an element from any position of a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -107,6 +124,54 @@ long double
 size_t
 .IR idx )
 .br
+uint8_t
+.BR sp_stack_qremoveu8 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+uint16_t
+.BR sp_stack_qremoveu16 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+uint32_t
+.BR sp_stack_qremoveu32 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+uint64_t
+.BR sp_stack_qremoveu64 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+int8_t
+.BR sp_stack_qremovei8 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+int16_t
+.BR sp_stack_qremovei16 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+int32_t
+.BR sp_stack_qremovei32 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+int64_t
+.BR sp_stack_qremovei64 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
 char
 .RB * sp_stack_qremovestr "(struct sp_stack"
 .RI * stack ,
@@ -123,6 +188,9 @@ The functions in the
 .BR sp_stack_qremove ()
 family operate in constant time, which is achievable by changing the order of
 the elements during removal.
+.SH CONFORMING TO
+See
+.BR libstaple (7).
 .SH EXAMPLES
 To explain how the
 .BR sp_stack_remove ()
@@ -173,15 +241,15 @@ the elements.
 .BR sp_stack_create (3),
 .BR sp_stack_destroy (3),
 .BR sp_stack_clear (3),
-.BR sp_stack_copy (3),
-.BR sp_stack_foreach (3),
 .BR sp_stack_push (3),
-.BR sp_stack_insert (3),
-.BR sp_stack_qinsert (3),
 .BR sp_stack_peek (3),
 .BR sp_stack_pop (3),
+.BR sp_stack_insert (3),
 .BR sp_stack_remove (3),
+.BR sp_stack_qinsert (3),
+.BR sp_stack_qremove (3),
 .BR sp_stack_get (3),
 .BR sp_stack_set (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
 .BR sp_stack_print (3)
-

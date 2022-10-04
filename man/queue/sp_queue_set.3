@@ -1,27 +1,46 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_QUEUE_SET 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_queue_set, sp_queue_setc, sp_queue_sets, sp_queue_seti, sp_queue_setl,
-sp_queue_setsc, sp_queue_setuc, sp_queue_setus, sp_queue_setui,
-sp_queue_setul, sp_queue_setf, sp_queue_setd, sp_queue_setld,
-sp_queue_setstr, sp_queue_setstrn \- set the value of an arbitrary element in a
-queue
+sp_queue_set,
+sp_queue_setc,
+sp_queue_sets,
+sp_queue_seti,
+sp_queue_setl,
+sp_queue_setsc,
+sp_queue_setuc,
+sp_queue_setus,
+sp_queue_setui,
+sp_queue_setul,
+sp_queue_setf,
+sp_queue_setd,
+sp_queue_setld,
+sp_queue_setu8,
+sp_queue_setu16,
+sp_queue_setu32,
+sp_queue_setu64,
+sp_queue_seti8,
+sp_queue_seti16,
+sp_queue_seti32,
+sp_queue_seti64,
+sp_queue_setstr,
+sp_queue_setstrn
+\- set the value of an arbitrary element in a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -131,6 +150,70 @@ long double
 .IR val )
 .br
 int
+.BR sp_queue_setu8 "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+uint8_t
+.IR val )
+.br
+int
+.BR sp_queue_setu16 "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+uint16_t
+.IR val )
+.br
+int
+.BR sp_queue_setu32 "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+uint32_t
+.IR val )
+.br
+int
+.BR sp_queue_setu64 "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+uint64_t
+.IR val )
+.br
+int
+.BR sp_queue_seti8 "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+int8_t
+.IR val )
+.br
+int
+.BR sp_queue_seti16 "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+int16_t
+.IR val )
+.br
+int
+.BR sp_queue_seti32 "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+int32_t
+.IR val )
+.br
+int
+.BR sp_queue_seti64 "(const struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+int64_t
+.IR val )
+.br
+int
 .BR sp_queue_setstr "(const struct sp_queue"
 .RI * queue ,
 size_t
@@ -196,7 +279,6 @@ bytes and append a null terminator at the end.
 must be smaller than
 .IR SIZE_MAX .
 .SH RETURN VALUE
-.P
 If successful, the functions in the
 .BR sp_queue_set ()
 family shall return 0. Otherwise, they shall return a code indicating the
@@ -226,7 +308,7 @@ The
 .BR sp_queue_setstr ()
 and
 .BR sp_queue_setstrn ()
-functions shall additionally fail if:
+functions shall fail if:
 .IP \fBSP_EINVAL\fP 1.5i
 .I val
 is a null pointer (debug mode only).
@@ -246,15 +328,15 @@ See
 .BR sp_queue_create (3),
 .BR sp_queue_destroy (3),
 .BR sp_queue_clear (3),
-.BR sp_queue_copy (3),
-.BR sp_queue_foreach (3),
 .BR sp_queue_push (3),
-.BR sp_queue_insert (3),
-.BR sp_queue_qinsert (3),
 .BR sp_queue_peek (3),
 .BR sp_queue_pop (3),
+.BR sp_queue_insert (3),
 .BR sp_queue_remove (3),
+.BR sp_queue_qinsert (3),
 .BR sp_queue_qremove (3),
 .BR sp_queue_get (3),
+.BR sp_queue_set (3),
+.BR sp_queue_copy (3),
+.BR sp_queue_foreach (3),
 .BR sp_queue_print (3)
-
