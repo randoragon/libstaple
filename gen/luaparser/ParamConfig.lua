@@ -17,8 +17,14 @@ function ParamConfig:new(data)
 	self.__index = self
 	self.__len = function() return #o.psets end
 	if data then
-		for stdc, ptable in pairs(data) do
-			o:read_ptable(ptable, stdc)
+		-- Iterate in order of increasing stdc
+		local order = {}
+		for stdc, _ in pairs(data) do
+			order[#order + 1] = stdc
+		end
+		table.sort(order)
+		for _, stdc in ipairs(order) do
+			o:read_ptable(data[stdc], stdc)
 		end
 	end
 	return o
