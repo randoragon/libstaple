@@ -1,10 +1,9 @@
-#!/usr/bin/env lua
-
 -- This program generates the C source files from a rudimentary template format.
 -- This was necessary, because the C preprocessor does not offer support for
 -- advanced file splitting.
 
 DIRNAME = arg[0]:match('(.*/)')
+dofile(DIRNAME..'pathconf.lua')
 
 require(DIRNAME..'luaparser')
 
@@ -14,7 +13,6 @@ SNIPPETDIR      = DIRNAME..'snippets/'
 TEMPLATEDIR     = DIRNAME..'templates/'
 C_HEADER_TEXT   = io.open(SNIPPETDIR..'C_LICENSE_HEADER', 'r'):read('a')
 MAN_HEADER_TEXT = io.open(SNIPPETDIR..'MAN_LICENSE_HEADER', 'r'):read('a')
-TEMPLATES       = arg
 
 -- You can define the suffixed functions to generate here
 local pconf = ParamConfig:new{
@@ -48,7 +46,15 @@ local pconf = ParamConfig:new{
 }
 
 -- Generate source files for every template
-for _, template in ipairs(TEMPLATES) do
-	local dirname = template:match('(.*)/')
-	generate(BASEDIR..dirname, TEMPLATEDIR..template, pconf)
+for _, t in templates_iter(C_TEMPLATES) do
+	local dirname = t:match('(.*)/')
+	generate_c(BASEDIR..dirname, TEMPLATEDIR..t, pconf)
+end
+for _, t in templates_iter(H_TEMPLATES) do
+	local dirname = t:match('(.*)/')
+	generate_h(BASEDIR..dirname, TEMPLATEDIR..t, pconf)
+end
+for _, t in templates_iter(MAN_TEMPLATES) do
+	local dirname = t:match('(.*)/')
+	generate_man(BASEDIR..dirname, TEMPLATEDIR..t, pconf)
 end

@@ -2,31 +2,15 @@
 -- This file exposes the generate_man function used for generating man pages.
 --------------------------------------------------------------------------------
 
-require 'lfs'
 require(DIRNAME..'luaparser.ParamConfig')
 require(DIRNAME..'luaparser.Snippet')
 
--- Comparator function for sorting SEE ALSO
+-- Comparator function for sorting SEE ALSO. Note that this list comprises of
+-- man page NAME section entries, not their physical file names.
 local MAN_SORT_ORDER = {
 	'libstaple(7)',
 	'sp_stack(7)',
 	'sp_queue(7)',
-
-	'sp_queue_create(3)',
-	'sp_queue_destroy(3)',
-	'sp_queue_clear(3)',
-	'sp_queue_push(3)',
-	'sp_queue_peek(3)',
-	'sp_queue_pop(3)',
-	'sp_queue_insert(3)',
-	'sp_queue_remove(3)',
-	'sp_queue_qinsert(3)',
-	'sp_queue_qremove(3)',
-	'sp_queue_get(3)',
-	'sp_queue_set(3)',
-	'sp_queue_copy(3)',
-	'sp_queue_foreach(3)',
-	'sp_queue_print(3)',
 
 	'sp_stack_create(3)',
 	'sp_stack_destroy(3)',
@@ -43,6 +27,22 @@ local MAN_SORT_ORDER = {
 	'sp_stack_copy(3)',
 	'sp_stack_foreach(3)',
 	'sp_stack_print(3)',
+
+	'sp_queue_create(3)',
+	'sp_queue_destroy(3)',
+	'sp_queue_clear(3)',
+	'sp_queue_push(3)',
+	'sp_queue_peek(3)',
+	'sp_queue_pop(3)',
+	'sp_queue_insert(3)',
+	'sp_queue_remove(3)',
+	'sp_queue_qinsert(3)',
+	'sp_queue_qremove(3)',
+	'sp_queue_get(3)',
+	'sp_queue_set(3)',
+	'sp_queue_copy(3)',
+	'sp_queue_foreach(3)',
+	'sp_queue_print(3)',
 
 	'sp_free(3)',
 	'sp_is_debug(3)',
@@ -65,6 +65,22 @@ local function see_also_comp(a, b)
 		error(b..' not found in MAN_SORT_ORDER\n')
 	end
 	return sort_order[a] < sort_order[b]
+end
+
+-- Convert MAN_TEMPLATES into a more convenient data structure. We create a
+-- table that for each man page stores a list of all associated man pages.
+local man_friends = {}
+for _, v in ipairs(MAN_TEMPLATES) do
+	if type(v) == 'table' then
+		local list = {v.parent}
+		for _, v2 in ipairs(v) do
+			man_friends[v2] = list
+			list[#list + 1] = v2
+		end
+		if v.parent ~= nil then
+			man_friends[v.parent] = list
+		end
+	end
 end
 
 function generate_man(output_path, template_path, pconf)
@@ -159,18 +175,21 @@ function generate_man(output_path, template_path, pconf)
 			see_also['libstaple(7)'] = true
 		end
 		if module ~= nil then
-			local function add_module_pages(srcdir)
-				for f in lfs.dir(srcdir) do
-					local name, page = f:match('([%w%d_]+)%.(%d+)')
-					if (name and page) ~= nil then
-						see_also[name..'('..page..')'] = true
-					end
-				end
+			if man_friends[fname] == nil then
+				goto skip_friends
 			end
-			if fname == 'sp_'..module..'.7' then
-				add_module_pages(dirname..module)
-			else
-				add_module_pages(dirname)
+			for _, f in ipairs(man_friends[fname]) do
+				if fname == f then
+					goto continue
+				end
+				local name, page = f:match('([%w%d_]+)%.(%d+)')
+				if (name and page) ~= nil then
+					see_also[name..'('..page..')'] = true
+				end
+				::continue::
+			end
+			::skip_friends::
+			if fname ~= 'sp_'..module..'.7' then
 				see_also['sp_'..module..'(7)'] = true
 				see_also[fname] = nil
 			end

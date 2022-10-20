@@ -32,7 +32,6 @@ SRCDIR  := src
 OBJDIR  := obj
 MANDIR  := man
 GENDIR  := gen
-TEMPLATEDIR := $(GENDIR)/templates
 TESTDIR := test
 SRCSUBDIRS := . internal utils $(MODULES)
 
@@ -48,7 +47,10 @@ MANPAGES3 := $(patsubst $(MANDIR)/%,%,$(shell find "$(MANDIR)" -type f -name '*.
 MANPAGES7 := $(patsubst $(MANDIR)/%,%,$(shell find "$(MANDIR)" -type f -name '*.7'))
 
 # Template files
-TEMPLATES := $(patsubst $(TEMPLATEDIR)/%,%,$(shell find "$(TEMPLATEDIR)" -type f))
+LUA := lua
+LUA_PATHCONF := $(GENDIR)/pathconf.lua
+TEMPLATES := $(shell $(LUA) -e 'dofile("$(LUA_PATHCONF)");print_templates()')
+GENERATE := $(LUA) -- $(GENDIR)/generate.lua
 
 # Output paths
 DESTDIR   :=
@@ -95,7 +97,7 @@ $(TESTDIR)/$(OBJDIR)/%.o: $(TESTDIR)/$(SRCDIR)/%.c
 
 # Generates the source code from templates
 generate: directories
-	@$(GENDIR)/generate $(TEMPLATES)
+	@$(GENERATE)
 
 # Removes all object and output files
 clean:
