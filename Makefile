@@ -21,8 +21,8 @@ CFLAGS      += $(if $(filter 1,$(DEBUG)),-DSTAPLE_DEBUG -g -Og,-O3)
 CFLAGS      += $(if $(filter 1,$(QUIET)),-DSTAPLE_QUIET)
 CFLAGS      += $(if $(filter 1,$(ABORT)),-DSTAPLE_ABORT)
 LDFLAGS     := -shared
-CTESTFLAGS  := -std=c99 -Wall -Wextra -pedantic -Werror=vla -g -Og
-LDTESTFLAGS := -L. -l:./$(TARGET).so -lcriterion
+CTESTFLAGS  := -std=c89 -Wall -Wextra -pedantic -Werror=vla -g -Og
+LDTESTFLAGS := -L. -l:./$(TARGET).so -lcheck
 
 # List of all library module names
 MODULES := stack queue
@@ -162,7 +162,7 @@ test_%: all test/obj/test_struct.o test/obj/%.o
 	@tput setaf 4 ; printf "\n##########" ; tput setaf 3
 	@printf "[ $* ]"
 	@tput setaf 4 ; printf "##########\n\n" ; tput setaf 7
-	valgrind ./test/bin/$*
+	CK_FORK=no valgrind ./test/bin/$*
 	@tput setaf 4 ; printf "\n###########" ; tput setaf 3
 	@printf "[ END ]"
 	@tput setaf 4 ; printf "###########\n\n" ; tput setaf 7
