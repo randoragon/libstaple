@@ -2,7 +2,7 @@
 -- This was necessary, because the C preprocessor does not offer support for
 -- advanced file splitting.
 
-DIRNAME = arg[0]:match('(.*/)')
+DIRNAME = arg[0]:match('(.*/)') or ''
 dofile(DIRNAME..'pathconf.lua')
 
 require(DIRNAME..'luaparser')
