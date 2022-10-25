@@ -1,27 +1,46 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_STACK_PUSH 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_stack_push, sp_stack_pushc, sp_stack_pushs, sp_stack_pushi,
-sp_stack_pushl, sp_stack_pushsc, sp_stack_pushuc, sp_stack_pushus,
-sp_stack_pushui, sp_stack_pushul, sp_stack_pushf, sp_stack_pushd,
-sp_stack_pushld, sp_stack_pushstr, sp_stack_pushstrn \- push a new element onto
-a stack
+sp_stack_push,
+sp_stack_pushc,
+sp_stack_pushs,
+sp_stack_pushi,
+sp_stack_pushl,
+sp_stack_pushsc,
+sp_stack_pushuc,
+sp_stack_pushus,
+sp_stack_pushui,
+sp_stack_pushul,
+sp_stack_pushf,
+sp_stack_pushd,
+sp_stack_pushld,
+sp_stack_pushu8,
+sp_stack_pushu16,
+sp_stack_pushu32,
+sp_stack_pushu64,
+sp_stack_pushi8,
+sp_stack_pushi16,
+sp_stack_pushi32,
+sp_stack_pushi64,
+sp_stack_pushstr,
+sp_stack_pushstrn
+\- push a new element onto a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -33,75 +52,123 @@ const void
 .RI * elem )
 .br
 int
-.BR sp_stack_pushc "(struct sp_stack"
+.BR sp_stack_pushc "(struct sp_stack
 .RI * stack ,
 char
 .IR elem )
 .br
 int
-.BR sp_stack_pushs "(struct sp_stack"
+.BR sp_stack_pushs "(struct sp_stack
 .RI * stack ,
 short
 .IR elem )
 .br
 int
-.BR sp_stack_pushi "(struct sp_stack"
+.BR sp_stack_pushi "(struct sp_stack
 .RI * stack ,
 int
 .IR elem )
 .br
 int
-.BR sp_stack_pushl "(struct sp_stack"
+.BR sp_stack_pushl "(struct sp_stack
 .RI * stack ,
 long
 .IR elem )
 .br
 int
-.BR sp_stack_pushsc "(struct sp_stack"
+.BR sp_stack_pushsc "(struct sp_stack
 .RI * stack ,
 signed char
 .IR elem )
 .br
 int
-.BR sp_stack_pushuc "(struct sp_stack"
+.BR sp_stack_pushuc "(struct sp_stack
 .RI * stack ,
 unsigned char
 .IR elem )
 .br
 int
-.BR sp_stack_pushus "(struct sp_stack"
+.BR sp_stack_pushus "(struct sp_stack
 .RI * stack ,
 unsigned short
 .IR elem )
 .br
 int
-.BR sp_stack_pushui "(struct sp_stack"
+.BR sp_stack_pushui "(struct sp_stack
 .RI * stack ,
 unsigned int
 .IR elem )
 .br
 int
-.BR sp_stack_pushul "(struct sp_stack"
+.BR sp_stack_pushul "(struct sp_stack
 .RI * stack ,
 unsigned long
 .IR elem )
 .br
 int
-.BR sp_stack_pushf "(struct sp_stack"
+.BR sp_stack_pushf "(struct sp_stack
 .RI * stack ,
 float
 .IR elem )
 .br
 int
-.BR sp_stack_pushd "(struct sp_stack"
+.BR sp_stack_pushd "(struct sp_stack
 .RI * stack ,
 double
 .IR elem )
 .br
 int
-.BR sp_stack_pushld "(struct sp_stack"
+.BR sp_stack_pushld "(struct sp_stack
 .RI * stack ,
 long double
+.IR elem )
+.br
+int
+.BR sp_stack_pushu8 "(struct sp_stack
+.RI * stack ,
+uint8_t
+.IR elem )
+.br
+int
+.BR sp_stack_pushu16 "(struct sp_stack
+.RI * stack ,
+uint16_t
+.IR elem )
+.br
+int
+.BR sp_stack_pushu32 "(struct sp_stack
+.RI * stack ,
+uint32_t
+.IR elem )
+.br
+int
+.BR sp_stack_pushu64 "(struct sp_stack
+.RI * stack ,
+uint64_t
+.IR elem )
+.br
+int
+.BR sp_stack_pushi8 "(struct sp_stack
+.RI * stack ,
+int8_t
+.IR elem )
+.br
+int
+.BR sp_stack_pushi16 "(struct sp_stack
+.RI * stack ,
+int16_t
+.IR elem )
+.br
+int
+.BR sp_stack_pushi32 "(struct sp_stack
+.RI * stack ,
+int32_t
+.IR elem )
+.br
+int
+.BR sp_stack_pushi64 "(struct sp_stack
+.RI * stack ,
+int64_t
 .IR elem )
 .br
 int
@@ -204,7 +271,7 @@ The
 .BR sp_stack_pushstr ()
 and
 .BR sp_stack_pushstrn ()
-functions shall additionally fail if:
+functions shall fail if:
 .IP \fBSP_EINVAL\fP 1.5i
 .I elem
 is a null pointer (debug mode only).
@@ -222,14 +289,14 @@ See
 .BR sp_stack_create (3),
 .BR sp_stack_destroy (3),
 .BR sp_stack_clear (3),
-.BR sp_stack_copy (3),
-.BR sp_stack_foreach (3),
-.BR sp_stack_insert (3),
-.BR sp_stack_qinsert (3),
 .BR sp_stack_peek (3),
 .BR sp_stack_pop (3),
+.BR sp_stack_insert (3),
 .BR sp_stack_remove (3),
+.BR sp_stack_qinsert (3),
 .BR sp_stack_qremove (3),
 .BR sp_stack_get (3),
 .BR sp_stack_set (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
 .BR sp_stack_print (3)

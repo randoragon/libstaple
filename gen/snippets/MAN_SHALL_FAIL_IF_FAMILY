@@ -1,0 +1,3 @@
+The functions in the
+.BR $1$ ()
+family shall fail if:

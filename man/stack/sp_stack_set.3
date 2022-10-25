@@ -1,27 +1,46 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_STACK_SET 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_stack_set, sp_stack_setc, sp_stack_sets, sp_stack_seti, sp_stack_setl,
-sp_stack_setsc, sp_stack_setuc, sp_stack_setus, sp_stack_setui,
-sp_stack_setul, sp_stack_setf, sp_stack_setd, sp_stack_setld,
-sp_stack_setstr, sp_stack_setstrn \- set the value of an arbitrary element in a
-stack
+sp_stack_set,
+sp_stack_setc,
+sp_stack_sets,
+sp_stack_seti,
+sp_stack_setl,
+sp_stack_setsc,
+sp_stack_setuc,
+sp_stack_setus,
+sp_stack_setui,
+sp_stack_setul,
+sp_stack_setf,
+sp_stack_setd,
+sp_stack_setld,
+sp_stack_setu8,
+sp_stack_setu16,
+sp_stack_setu32,
+sp_stack_setu64,
+sp_stack_seti8,
+sp_stack_seti16,
+sp_stack_seti32,
+sp_stack_seti64,
+sp_stack_setstr,
+sp_stack_setstrn
+\- set the value of an arbitrary element in a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -131,6 +150,70 @@ long double
 .IR val )
 .br
 int
+.BR sp_stack_setu8 "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+uint8_t
+.IR val )
+.br
+int
+.BR sp_stack_setu16 "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+uint16_t
+.IR val )
+.br
+int
+.BR sp_stack_setu32 "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+uint32_t
+.IR val )
+.br
+int
+.BR sp_stack_setu64 "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+uint64_t
+.IR val )
+.br
+int
+.BR sp_stack_seti8 "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+int8_t
+.IR val )
+.br
+int
+.BR sp_stack_seti16 "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+int16_t
+.IR val )
+.br
+int
+.BR sp_stack_seti32 "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+int32_t
+.IR val )
+.br
+int
+.BR sp_stack_seti64 "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+int64_t
+.IR val )
+.br
+int
 .BR sp_stack_setstr "(const struct sp_stack"
 .RI * stack ,
 size_t
@@ -196,7 +279,6 @@ bytes and append a null terminator at the end.
 must be smaller than
 .IR SIZE_MAX .
 .SH RETURN VALUE
-.P
 If successful, the functions in the
 .BR sp_stack_set ()
 family shall return 0. Otherwise, they shall return a code indicating the
@@ -226,7 +308,7 @@ The
 .BR sp_stack_setstr ()
 and
 .BR sp_stack_setstrn ()
-functions shall additionally fail if:
+functions shall fail if:
 .IP \fBSP_EINVAL\fP 1.5i
 .I val
 is a null pointer (debug mode only).
@@ -246,14 +328,14 @@ See
 .BR sp_stack_create (3),
 .BR sp_stack_destroy (3),
 .BR sp_stack_clear (3),
-.BR sp_stack_copy (3),
-.BR sp_stack_foreach (3),
 .BR sp_stack_push (3),
-.BR sp_stack_insert (3),
-.BR sp_stack_qinsert (3),
 .BR sp_stack_peek (3),
 .BR sp_stack_pop (3),
+.BR sp_stack_insert (3),
 .BR sp_stack_remove (3),
+.BR sp_stack_qinsert (3),
 .BR sp_stack_qremove (3),
 .BR sp_stack_get (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
 .BR sp_stack_print (3)

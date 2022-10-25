@@ -1,26 +1,45 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_STACK_PEEK 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_stack_peek, sp_stack_peekc, sp_stack_peeks, sp_stack_peeki,
-sp_stack_peekl, sp_stack_peeksc, sp_stack_peekuc, sp_stack_peekus,
-sp_stack_peekui, sp_stack_peekul, sp_stack_peekf, sp_stack_peekd,
-sp_stack_peekld, sp_stack_peekstr \- look up the top element of a stack
+sp_stack_peek,
+sp_stack_peekc,
+sp_stack_peeks,
+sp_stack_peeki,
+sp_stack_peekl,
+sp_stack_peeksc,
+sp_stack_peekuc,
+sp_stack_peekus,
+sp_stack_peekui,
+sp_stack_peekul,
+sp_stack_peekf,
+sp_stack_peekd,
+sp_stack_peekld,
+sp_stack_peeku8,
+sp_stack_peeku16,
+sp_stack_peeku32,
+sp_stack_peeku64,
+sp_stack_peeki8,
+sp_stack_peeki16,
+sp_stack_peeki32,
+sp_stack_peeki64,
+sp_stack_peekstr
+\- look up the top element of a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -77,6 +96,38 @@ long double
 .BR sp_stack_peekld "(const struct sp_stack"
 .RI * stack )
 .br
+uint8_t
+.BR sp_stack_peeku8 "(const struct sp_stack"
+.RI * stack )
+.br
+uint16_t
+.BR sp_stack_peeku16 "(const struct sp_stack"
+.RI * stack )
+.br
+uint32_t
+.BR sp_stack_peeku32 "(const struct sp_stack"
+.RI * stack )
+.br
+uint64_t
+.BR sp_stack_peeku64 "(const struct sp_stack"
+.RI * stack )
+.br
+int8_t
+.BR sp_stack_peeki8 "(const struct sp_stack"
+.RI * stack )
+.br
+int16_t
+.BR sp_stack_peeki16 "(const struct sp_stack"
+.RI * stack )
+.br
+int32_t
+.BR sp_stack_peeki32 "(const struct sp_stack"
+.RI * stack )
+.br
+int64_t
+.BR sp_stack_peeki64 "(const struct sp_stack"
+.RI * stack )
+.br
 char
 .RB * sp_stack_peekstr "(const struct sp_stack"
 .RI * stack )
@@ -89,6 +140,9 @@ These functions behave identically to
 with
 .I idx
 set to 0.
+.SH CONFORMING TO
+See
+.BR libstaple (7).
 .SH SEE ALSO
 .ad l
 .BR libstaple (7),
@@ -96,14 +150,14 @@ set to 0.
 .BR sp_stack_create (3),
 .BR sp_stack_destroy (3),
 .BR sp_stack_clear (3),
-.BR sp_stack_copy (3),
-.BR sp_stack_foreach (3),
 .BR sp_stack_push (3),
-.BR sp_stack_insert (3),
-.BR sp_stack_qinsert (3),
 .BR sp_stack_pop (3),
+.BR sp_stack_insert (3),
 .BR sp_stack_remove (3),
+.BR sp_stack_qinsert (3),
 .BR sp_stack_qremove (3),
 .BR sp_stack_get (3),
 .BR sp_stack_set (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
 .BR sp_stack_print (3)

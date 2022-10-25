@@ -1,26 +1,45 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_QUEUE_PRINT 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_queue_print, sp_queue_printc, sp_queue_prints, sp_queue_printi,
-sp_queue_printl, sp_queue_printsc, sp_queue_printuc, sp_queue_printus,
-sp_queue_printui, sp_queue_printul, sp_queue_printf, sp_queue_printd,
-sp_queue_printld, sp_queue_printstr \- print contents of a queue
+sp_queue_print,
+sp_queue_printc,
+sp_queue_prints,
+sp_queue_printi,
+sp_queue_printl,
+sp_queue_printsc,
+sp_queue_printuc,
+sp_queue_printus,
+sp_queue_printui,
+sp_queue_printul,
+sp_queue_printf,
+sp_queue_printd,
+sp_queue_printld,
+sp_queue_printu8,
+sp_queue_printu16,
+sp_queue_printu32,
+sp_queue_printu64,
+sp_queue_printi8,
+sp_queue_printi16,
+sp_queue_printi32,
+sp_queue_printi64,
+sp_queue_printstr
+\- print contents of a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -80,6 +99,38 @@ int
 .RI * queue )
 .br
 int
+.BR sp_queue_printu8 "(const struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printu16 "(const struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printu32 "(const struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printu64 "(const struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printi8 "(const struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printi16 "(const struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printi32 "(const struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printi64 "(const struct sp_queue"
+.RI * queue )
+.br
+int
 .BR sp_queue_printstr "(const struct sp_queue"
 .RI * queue )
 .sp
@@ -112,7 +163,6 @@ in which case
 .BR sp_queue_print ()
 will default to printing the address of each element.
 .SH RETURN VALUE
-.P
 If successful, the functions in the
 .BR sp_queue_print ()
 family shall return 0. Otherwise, they shall return a code indicating the
@@ -148,14 +198,14 @@ See
 .BR sp_queue_create (3),
 .BR sp_queue_destroy (3),
 .BR sp_queue_clear (3),
-.BR sp_queue_copy (3),
-.BR sp_queue_foreach (3),
 .BR sp_queue_push (3),
-.BR sp_queue_insert (3),
-.BR sp_queue_qinsert (3),
 .BR sp_queue_peek (3),
 .BR sp_queue_pop (3),
+.BR sp_queue_insert (3),
 .BR sp_queue_remove (3),
+.BR sp_queue_qinsert (3),
 .BR sp_queue_qremove (3),
 .BR sp_queue_get (3),
-.BR sp_queue_set (3)
+.BR sp_queue_set (3),
+.BR sp_queue_copy (3),
+.BR sp_queue_foreach (3)

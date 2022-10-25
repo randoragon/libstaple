@@ -1,0 +1,23 @@
+The
+.BR sp_$1$_get ()
+function has another, very important use case. It pairs up well with all kinds
+of functions which intake a pointer to write something into it, e.g.
+.BR scanf (3).
+In those cases, it may be faster to pass the direct location, rather than
+using a proxy variable/buffer. For example, code like:
+.sp
+.ad l
+.nf
+	int val;
+	scanf("%d", &val);
+	sp_$1$_seti($1$, idx, val);
+.sp
+.ad
+.fi
+can be simplified to:
+.sp
+.ad l
+.nf
+	scanf("%d", (int*)sp_$1$_get($1$, idx));
+.ad
+.fi

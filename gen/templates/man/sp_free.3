@@ -1,0 +1,94 @@
+.TH SP_FREE 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_free \- a convenience destructor function for string and
+buffer-like elements
+.\". MAN_SYNOPSIS_BEGIN
+int
+.BR sp_free (void
+.RI * addr )
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+.P
+The
+.BR sp_free ()
+function exists for the sole purpose of being passed as the
+.I dtor
+argument in other library functions.
+.br
+It is specifically geared towards freeing strings, but it works on
+any buffer-like data. It simply calls
+.BR free (3)
+on the element behind the
+.I addr
+pointer.
+.P
+.I addr
+is the address of the pointer to the data. See
+.B NOTES
+for more details.
+.P
+The
+.BR sp_free ()
+function is implemented as follows (excluding debug checks):
+.\". MAN_CODE_BEGIN IP
+int sp_free(void *addr)
+{
+	free(*(void**)addr);
+	return 0;
+}
+.\". MAN_CODE_END
+.SH RETURN VALUE
+.\". MAN_RETVAL_0_OR_CODE sp_free
+.SH ERRORS
+The
+.BR sp_free ()
+function shall fail if:
+.IP \fB1\fP 1.5i
+.I addr
+is a null pointer (debug mode only)
+.IP \fB2\fP 1.5i
+.I addr
+points to a null pointer (debug mode only)
+.\". MAN_CONFORMING_TO
+.SH NOTES
+.I addr
+is the address of the pointer to the data. That means in order to free the
+data, a single dereference is required to access the "true" pointer, as can be
+seen in the implementation.
+.br
+The reason for this additional layer is, buffer-like data does not have
+constant width, which means pointers to buffers must be stored in data
+structures instead.
+.SH EXAMPLES
+Below is the canonical use case of
+.BR sp_free (),
+demonstrated on a stack of strings.
+.br
+Using a memory-checker tool such as
+.BR valgrind ,
+one can compare summaries of the below program with and without the
+.BR sp_free ()
+function to see that in the latter case exactly 45 bytes in 3 blocks are lost.
+.SS Program source
+.\". MAN_CODE_BEGIN
+#include <staple.h>
+
+int main()
+{
+	struct sp_stack *stack;
+	
+	stack = sp_stack_create(sizeof(char*), 15);
+
+	sp_stack_pushstr(stack, "test string #1");
+	sp_stack_pushstr(stack, "test string #2");
+	sp_stack_pushstr(stack, "test string #3");
+
+	sp_stack_destroy(stack, sp_free);
+	/* using NULL instead of sp_free leaks memory */
+
+	return 0;
+}
+.\". MAN_CODE_END
+.SH SEE ALSO
+.ad l
+.BR libstaple (7)

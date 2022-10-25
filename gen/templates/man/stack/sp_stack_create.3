@@ -1,0 +1,48 @@
+.\"M stack
+.TH SP_STACK_CREATE 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_stack_create \- initialize a stack
+.\". MAN_SYNOPSIS_BEGIN
+struct sp_stack
+.RB * sp_stack_create (size_t
+.IR elem_size ,
+size_t
+.IR capacity )
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+The
+.BR sp_stack_create ()
+function allocates and initializes a new stack, returning its address.
+.P
+.I elem_size
+denotes the size of a single element. This allows the user to store any kind of
+data, by setting
+.I elem_size
+to
+.BR sizeof ( data ).
+.I elem_size
+cannot be changed during the lifespan of a stack.
+.P
+.I capacity
+denotes the initial number of elements that can be stored on the stack without
+allocating more memory.
+.I capacity
+shall be dynamically increased whenever more space is needed.
+.SH RETURN VALUE
+.\". MAN_RETVAL_POINTER_OR_NULL sp_stack_create stack
+.SH ERRORS
+.\". MAN_SHALL_FAIL_IF sp_stack_create
+.\". MAN_ERRCODE NULL
+The buffer size
+.RI ( elem_size "\ *\ " capacity )
+exceeds
+.IR SIZE_MAX .
+.\". MAN_ERRCODE NULL
+Memory allocation failed.
+.\". MAN_ERRCODE NULL
+Either
+.I elem_size
+or
+.I capacity
+is 0 (debug mode only).
+.\". MAN_CONFORMING_TO

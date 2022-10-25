@@ -1,27 +1,45 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_STACK_REMOVE 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_stack_remove, sp_stack_removec, sp_stack_removes, sp_stack_removei,
-sp_stack_removel, sp_stack_removesc, sp_stack_removeuc, sp_stack_removeus,
-sp_stack_removeui, sp_stack_removeul, sp_stack_removef, sp_stack_removed,
-sp_stack_removeld, sp_stack_removestr \- remove an element from any
-position of a stack
+sp_stack_remove,
+sp_stack_removec,
+sp_stack_removes,
+sp_stack_removei,
+sp_stack_removel,
+sp_stack_removesc,
+sp_stack_removeuc,
+sp_stack_removeus,
+sp_stack_removeui,
+sp_stack_removeul,
+sp_stack_removef,
+sp_stack_removed,
+sp_stack_removeld,
+sp_stack_removeu8,
+sp_stack_removeu16,
+sp_stack_removeu32,
+sp_stack_removeu64,
+sp_stack_removei8,
+sp_stack_removei16,
+sp_stack_removei32,
+sp_stack_removei64,
+sp_stack_removestr
+\- remove an element from any position of a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -106,6 +124,54 @@ long double
 size_t
 .IR idx )
 .br
+uint8_t
+.BR sp_stack_removeu8 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+uint16_t
+.BR sp_stack_removeu16 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+uint32_t
+.BR sp_stack_removeu32 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+uint64_t
+.BR sp_stack_removeu64 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+int8_t
+.BR sp_stack_removei8 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+int16_t
+.BR sp_stack_removei16 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+int32_t
+.BR sp_stack_removei32 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
+int64_t
+.BR sp_stack_removei64 "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.br
 char
 .RB * sp_stack_removestr "(struct sp_stack"
 .RI * stack ,
@@ -169,13 +235,13 @@ out of range (debug mode only).
 The suffixed
 .BR sp_stack_remove ()
 functions shall fail if:
-.IP 0 1.5i
+.IP \fB0\fP 1.5i
 .I stack
 is a null pointer (debug mode only).
-.IP 0 1.5i
+.IP \fB0\fP 1.5i
 .I idx
 out of range (debug mode only).
-.IP 0 1.5i
+.IP \fB0\fP 1.5i
 .IR stack "'s " elem_size
 does not match the size of the function's return type (debug mode only).
 .P
@@ -216,14 +282,14 @@ See
 .BR sp_stack_create (3),
 .BR sp_stack_destroy (3),
 .BR sp_stack_clear (3),
-.BR sp_stack_copy (3),
-.BR sp_stack_foreach (3),
 .BR sp_stack_push (3),
-.BR sp_stack_insert (3),
-.BR sp_stack_qinsert (3),
 .BR sp_stack_peek (3),
 .BR sp_stack_pop (3),
+.BR sp_stack_insert (3),
+.BR sp_stack_qinsert (3),
 .BR sp_stack_qremove (3),
 .BR sp_stack_get (3),
 .BR sp_stack_set (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
 .BR sp_stack_print (3)

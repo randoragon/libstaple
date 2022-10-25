@@ -1,0 +1,65 @@
+.\"M stack
+.TH SP_STACK_PRINT 3 DATE "libstaple-VERSION"
+.\"NAME str
+\- print contents of a stack
+.\". MAN_SYNOPSIS_BEGIN
+int
+.BR sp_stack_print "(const struct sp_stack"
+.RI * stack ,
+int
+.RI (* func ")(const void*))"
+.\"SS{
+.br
+int
+.BR sp_stack_print$SUFFIX$ "(const struct sp_stack"
+.RI * stack )
+.\"SS}
+.br
+int
+.BR sp_stack_printstr "(const struct sp_stack"
+.RI * stack )
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+.P
+The functions in the
+.BR sp_stack_print ()
+family are used to print useful information about a stack, and are
+provided for debugging purposes.
+.P
+.I stack
+is the stack that shall be printed.
+.SS Generic Form
+.I func
+is an optional pointer to a custom print function. The function must be
+implemented in such a way that it accepts the address of
+an element as its argument.
+.P
+The function pointed to by
+.I func
+must return 0 for success, and anything else for failure. In debug mode, the
+caught error code (if any) is printed on stderr.
+.P
+.B NULL
+can be passed as
+.IR func ,
+in which case
+.BR sp_stack_print ()
+will default to printing the address of each element.
+.SH RETURN VALUE
+.\". MAN_RETVAL_0_OR_CODE_FAMILY sp_stack_print
+.SH ERRORS
+.\". MAN_SHALL_FAIL_IF_FAMILY sp_stack_print
+.\". MAN_ERRCODE SP_EINVAL
+.I stack
+is a null pointer (debug mode only).
+.SS Generic Form
+.\". MAN_SHALL_FAIL_IF sp_stack_print
+.\". MAN_ERRCODE SP_EHANDLER
+.I func
+returned non-0 for some stack element.
+.SS Suffixed Form
+.\". MAN_SHALL_FAIL_IF_SUFFIXED sp_stack_print
+.\". MAN_ERRCODE SP_EILLEGAL
+.IR stack "'s " elem_size
+does not match the size of the function's return type (debug mode only).
+.\". MAN_CONFORMING_TO

@@ -14,9 +14,11 @@
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
- * ---------------------------------------------------------------------------
- * This header defines symbolic names for all error codes returned by various
+ */
+#ifndef STAPLE_ERRCODES_H
+#define STAPLE_ERRCODES_H
+
+/* This header defines symbolic names for all error codes returned by various
  * functions of the library. That way it's easier for the end-user to capture,
  * identify and handle errors.
  */
@@ -38,3 +40,5 @@
 
 /* Numerical range exceeded (underflow/overflow) */
 #define SP_ERANGE 6
+
+#endif /* STAPLE_ERRCODES_H */

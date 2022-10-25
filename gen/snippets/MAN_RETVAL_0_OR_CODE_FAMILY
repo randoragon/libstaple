@@ -1,0 +1,4 @@
+If successful, the functions in the
+.BR $1$ ()
+family shall return 0. Otherwise, they shall return a code indicating the
+error.

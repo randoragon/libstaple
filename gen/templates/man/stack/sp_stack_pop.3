@@ -1,0 +1,82 @@
+.\"M stack
+.TH SP_STACK_POP 3 DATE "libstaple-VERSION"
+.\"NAME str
+\- remove and retrieve the top element of a stack
+.\". MAN_SYNOPSIS_BEGIN
+int
+.BR sp_stack_pop "(struct sp_stack"
+.RI * stack ,
+void
+.RI * output )
+.\"SS{
+.br
+$TYPE$
+.BR sp_stack_pop$SUFFIX$ "(struct sp_stack"
+.RI * stack )
+.\"SS}
+.br
+char
+.RB * sp_stack_popstr "(struct sp_stack"
+.RI * stack )
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+The functions in the
+.BR sp_stack_pop ()
+family are used to remove the top element of a stack and retrieve its value.
+.br
+Attempting to pop an element from an empty stack yields undefined behavior,
+except in debug mode (see
+.BR ERRORS ).
+.P
+.I stack
+is the stack.
+.SS Generic Form
+.I output
+is the start of an adequately-sized block of memory the popped element shall be
+copied into.
+.I output
+must not overlap in memory with the popped element.
+.B NULL
+can be passed to skip this functionality.
+.SS Suffixed Form
+.P
+The
+.BR sp_stack_popstr ()
+function returns a pointer to the memory block containing the popped string.
+The user must manually
+.BR free (3)
+the block, otherwise the memory will leak!
+.SH RETURN VALUE
+.SS Generic Form
+.\". MAN_RETVAL_0_OR_CODE sp_stack_pop
+.SS Suffixed Form
+.\". MAN_RETVAL_ELEM_VALUE_SUFFIXED sp_stack_pop popped
+.SH ERRORS
+.SS Generic Form
+.\". MAN_SHALL_FAIL_IF sp_stack_pop
+.\". MAN_ERRCODE SP_EINVAL
+.I stack
+is a null pointer (debug mode only).
+.\". MAN_ERRCODE SP_EILLEGAL
+.I stack
+is empty (debug mode only).
+.SS Suffixed Form
+.\". MAN_SHALL_FAIL_IF_SUFFIXED sp_stack_pop
+.\". MAN_ERRCODE 0
+.I stack
+is a null pointer (debug mode only).
+.\". MAN_ERRCODE 0
+.I stack
+is empty (debug mode only).
+.\". MAN_ERRCODE 0
+.IR stack "'s " elem_size
+does not match the size of the function's return type (debug mode only).
+.P
+(the
+.BR sp_stack_popstr ()
+function returns
+.B NULL
+instead of 0)
+.SH NOTES
+.\". MAN_NOTE_DEBUG_AMBIGUOUS_ERROR sp_stack_popstr
+.\". MAN_CONFORMING_TO

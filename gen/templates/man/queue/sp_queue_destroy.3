@@ -1,0 +1,48 @@
+.\"M queue
+.TH SP_QUEUE_DESTROY 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_queue_destroy \- destroy a queue
+.\". MAN_SYNOPSIS_BEGIN
+int sp_queue_destroy(struct sp_queue
+.RI * queue ,
+int
+.RI (* dtor )(void*))
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+The
+.BR sp_queue_destroy ()
+function frees all memory comprising a queue. Accessing the memory after
+destruction is undefined behavior, but the same
+.I queue
+variable can be safely reused to create a new queue.
+.P
+The
+.BR sp_queue_destroy ()
+function shall first call
+.BR sp_queue_clear ()
+to free all memory attributed to the contents of
+.IR queue ,
+and finally the memory of the container itself
+is freed.
+.P
+.I queue
+is a pointer to the queue that shall be freed.
+.P
+.I dtor
+is transparently passed to the
+.BR sp_queue_clear ()
+function. See
+.BR sp_queue_clear (3).
+.SH RETURN VALUE
+.\". MAN_RETVAL_0_OR_CODE sp_queue_destroy
+.SH ERRORS
+.\". MAN_SHALL_FAIL_IF sp_queue_destroy
+.\". MAN_ERRCODE SP_EINVAL
+.I queue
+is a null pointer (debug mode only).
+.\". MAN_ERRCODE SP_EHANDLER
+.I dtor
+returned non-0 for some queue element.
+.\". MAN_CONFORMING_TO
+.SH EXAMPLES
+.\". MAN_EXAMPLE_DTOR_FOUND_IN sp_queue_clear 3

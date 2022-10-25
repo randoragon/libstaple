@@ -1,0 +1,33 @@
+.\"M queue
+.TH SP_QUEUE 7 DATE "libstaple-VERSION"
+.SH NAME
+sp_queue \- staple library implementation of the queue
+.SH DESCRIPTION
+.\". MAN_DESCRIBES_STRUCTURE sp_queue
+.\". MAN_TRANSPARENT_TYPE sp_queue
+.SS Internal Structure
+.\". MAN_CODE_BEGIN IP
+struct sp_queue {
+	void  *data;
+	void  *head;
+	void  *tail;
+	size_t elem_size;
+	size_t size;
+	size_t capacity;
+};
+.\". MAN_CODE_END
+.P
+.IP \fIdata\fP 12n
+the beginning of a memory block used as a ring buffer for storing elements.
+.IP \fIhead\fP
+pointer to the first element in the queue.
+.IP \fItail\fP
+pointer to the last element in the queue.
+.\". MAN_STRUCT_FIELD_ELEM_SIZE queue
+.\". MAN_STRUCT_FIELD_SIZE queue
+.\". MAN_STRUCT_FIELD_CAPACITY
+.P
+.\". MAN_REFER_TO_SOURCE
+.\". MAN_CONFORMING_TO
+.SH BUGS
+.\". MAN_BUG_BUFFER_CAP data capacity elem_size

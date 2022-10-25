@@ -1,0 +1,8 @@
+When clearing a $1$ of strings (populated using the suffixed
+.B str
+or
+.B strn
+functions), it is necessary to free the string memory blocks with a destructor
+function. For convenience, the library offers
+.BR sp_free (3),
+which is specifically suited for this purpose.

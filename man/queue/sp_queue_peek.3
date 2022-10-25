@@ -1,26 +1,45 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_QUEUE_PEEK 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_queue_peek, sp_queue_peekc, sp_queue_peeks, sp_queue_peeki,
-sp_queue_peekl, sp_queue_peeksc, sp_queue_peekuc, sp_queue_peekus,
-sp_queue_peekui, sp_queue_peekul, sp_queue_peekf, sp_queue_peekd,
-sp_queue_peekld, sp_queue_peekstr \- look up the front element of a queue
+sp_queue_peek,
+sp_queue_peekc,
+sp_queue_peeks,
+sp_queue_peeki,
+sp_queue_peekl,
+sp_queue_peeksc,
+sp_queue_peekuc,
+sp_queue_peekus,
+sp_queue_peekui,
+sp_queue_peekul,
+sp_queue_peekf,
+sp_queue_peekd,
+sp_queue_peekld,
+sp_queue_peeku8,
+sp_queue_peeku16,
+sp_queue_peeku32,
+sp_queue_peeku64,
+sp_queue_peeki8,
+sp_queue_peeki16,
+sp_queue_peeki32,
+sp_queue_peeki64,
+sp_queue_peekstr
+\- look up the front element of a queue
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -77,6 +96,38 @@ long double
 .BR sp_queue_peekld "(const struct sp_queue"
 .RI * queue )
 .br
+uint8_t
+.BR sp_queue_peeku8 "(const struct sp_queue"
+.RI * queue )
+.br
+uint16_t
+.BR sp_queue_peeku16 "(const struct sp_queue"
+.RI * queue )
+.br
+uint32_t
+.BR sp_queue_peeku32 "(const struct sp_queue"
+.RI * queue )
+.br
+uint64_t
+.BR sp_queue_peeku64 "(const struct sp_queue"
+.RI * queue )
+.br
+int8_t
+.BR sp_queue_peeki8 "(const struct sp_queue"
+.RI * queue )
+.br
+int16_t
+.BR sp_queue_peeki16 "(const struct sp_queue"
+.RI * queue )
+.br
+int32_t
+.BR sp_queue_peeki32 "(const struct sp_queue"
+.RI * queue )
+.br
+int64_t
+.BR sp_queue_peeki64 "(const struct sp_queue"
+.RI * queue )
+.br
 char
 .RB * sp_queue_peekstr "(const struct sp_queue"
 .RI * queue )
@@ -89,6 +140,9 @@ These functions behave identically to
 with
 .I idx
 set to 0.
+.SH CONFORMING TO
+See
+.BR libstaple (7).
 .SH SEE ALSO
 .ad l
 .BR libstaple (7),
@@ -96,14 +150,14 @@ set to 0.
 .BR sp_queue_create (3),
 .BR sp_queue_destroy (3),
 .BR sp_queue_clear (3),
-.BR sp_queue_copy (3),
-.BR sp_queue_foreach (3),
 .BR sp_queue_push (3),
-.BR sp_queue_insert (3),
-.BR sp_queue_qinsert (3),
 .BR sp_queue_pop (3),
+.BR sp_queue_insert (3),
 .BR sp_queue_remove (3),
+.BR sp_queue_qinsert (3),
 .BR sp_queue_qremove (3),
 .BR sp_queue_get (3),
 .BR sp_queue_set (3),
+.BR sp_queue_copy (3),
+.BR sp_queue_foreach (3),
 .BR sp_queue_print (3)

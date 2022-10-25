@@ -1,26 +1,45 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
 .TH SP_STACK_PRINT 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_stack_print, sp_stack_printc, sp_stack_prints, sp_stack_printi,
-sp_stack_printl, sp_stack_printsc, sp_stack_printuc, sp_stack_printus,
-sp_stack_printui, sp_stack_printul, sp_stack_printf, sp_stack_printd,
-sp_stack_printld, sp_stack_printstr \- print contents of a stack
+sp_stack_print,
+sp_stack_printc,
+sp_stack_prints,
+sp_stack_printi,
+sp_stack_printl,
+sp_stack_printsc,
+sp_stack_printuc,
+sp_stack_printus,
+sp_stack_printui,
+sp_stack_printul,
+sp_stack_printf,
+sp_stack_printd,
+sp_stack_printld,
+sp_stack_printu8,
+sp_stack_printu16,
+sp_stack_printu32,
+sp_stack_printu64,
+sp_stack_printi8,
+sp_stack_printi16,
+sp_stack_printi32,
+sp_stack_printi64,
+sp_stack_printstr
+\- print contents of a stack
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
@@ -80,6 +99,38 @@ int
 .RI * stack )
 .br
 int
+.BR sp_stack_printu8 "(const struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printu16 "(const struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printu32 "(const struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printu64 "(const struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printi8 "(const struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printi16 "(const struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printi32 "(const struct sp_stack"
+.RI * stack )
+.br
+int
+.BR sp_stack_printi64 "(const struct sp_stack"
+.RI * stack )
+.br
+int
 .BR sp_stack_printstr "(const struct sp_stack"
 .RI * stack )
 .sp
@@ -112,7 +163,6 @@ in which case
 .BR sp_stack_print ()
 will default to printing the address of each element.
 .SH RETURN VALUE
-.P
 If successful, the functions in the
 .BR sp_stack_print ()
 family shall return 0. Otherwise, they shall return a code indicating the
@@ -148,14 +198,14 @@ See
 .BR sp_stack_create (3),
 .BR sp_stack_destroy (3),
 .BR sp_stack_clear (3),
-.BR sp_stack_copy (3),
-.BR sp_stack_foreach (3),
 .BR sp_stack_push (3),
-.BR sp_stack_insert (3),
-.BR sp_stack_qinsert (3),
 .BR sp_stack_peek (3),
 .BR sp_stack_pop (3),
+.BR sp_stack_insert (3),
 .BR sp_stack_remove (3),
+.BR sp_stack_qinsert (3),
 .BR sp_stack_qremove (3),
 .BR sp_stack_get (3),
-.BR sp_stack_set (3)
+.BR sp_stack_set (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3)

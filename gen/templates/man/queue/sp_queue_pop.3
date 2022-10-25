@@ -1,0 +1,82 @@
+.\"M queue
+.TH SP_QUEUE_POP 3 DATE "libstaple-VERSION"
+.\"NAME str
+\- remove and retrieve the front element of a queue
+.\". MAN_SYNOPSIS_BEGIN
+int
+.BR sp_queue_pop "(struct sp_queue"
+.RI * queue ,
+void
+.RI * output )
+.\"SS{
+.br
+$TYPE$
+.BR sp_queue_pop$SUFFIX$ "(struct sp_queue"
+.RI * queue )
+.\"SS}
+.br
+char
+.RB * sp_queue_popstr "(struct sp_queue"
+.RI * queue )
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+The functions in the
+.BR sp_queue_pop ()
+family are used to remove the front element of a queue and retrieve its value.
+.br
+Attempting to pop an element from an empty queue yields undefined behavior,
+except in debug mode (See
+.BR ERRORS ).
+.P
+.I queue
+is the queue.
+.SS Generic Form
+.I output
+is the start of an adequately-sized block of memory the popped element shall be
+copied into.
+.I output
+must not overlap in memory with the popped element.
+.B NULL
+can be passed to skip this functionality.
+.SS Suffixed Form
+.P
+The
+.BR sp_queue_popstr ()
+function returns a pointer to the memory block containing the popped string.
+The user must manually
+.BR free (3)
+the block, otherwise the memory will leak!
+.SH RETURN VALUE
+.SS Generic Form
+.\". MAN_RETVAL_0_OR_CODE sp_queue_pop
+.SS Suffixed Form
+.\". MAN_RETVAL_ELEM_VALUE_SUFFIXED sp_queue_pop popped
+.SH ERRORS
+.SS Generic Form
+.\". MAN_SHALL_FAIL_IF sp_queue_pop
+.\". MAN_ERRCODE SP_EINVAL
+.IR queue
+is a null pointer (debug mode only).
+.\". MAN_ERRCODE SP_EILLEGAL
+.I queue
+is empty (debug mode only).
+.SS Suffixed Form
+.\". MAN_SHALL_FAIL_IF_SUFFIXED sp_queue_pop
+.\". MAN_ERRCODE 0
+.I queue
+is a null pointer (debug mode only).
+.\". MAN_ERRCODE 0
+.I queue
+is empty (debug mode only).
+.\". MAN_ERRCODE 0
+.IR queue "'s " elem_size
+does not match the size of the function's return type (debug mode only).
+.P
+(the
+.BR sp_queue_popstr ()
+function returns
+.B NULL
+instead of 0)
+.SH NOTES
+.\". MAN_NOTE_DEBUG_AMBIGUOUS_ERROR sp_queue_popstr
+.\". MAN_CONFORMING_TO

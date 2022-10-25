@@ -1,16 +1,16 @@
 .\"  Staple - A general-purpose data structure library in pure C89.
 .\"  Copyright (C) 2021  Randoragon
-.\" 
+.\"
 .\"  This library is free software; you can redistribute it and/or
 .\"  modify it under the terms of the GNU Lesser General Public
 .\"  License as published by the Free Software Foundation;
 .\"  version 2.1 of the License.
-.\" 
+.\"
 .\"  This library is distributed in the hope that it will be useful,
 .\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 .\"  Lesser General Public License for more details.
-.\" 
+.\"
 .\"  You should have received a copy of the GNU Lesser General Public
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -59,14 +59,14 @@ return
 The
 .BR sp_stack_create ()
 function shall fail if:
-.IP (1) 1.5i
+.IP \fBNULL\fP 1.5i
 The buffer size
 .RI ( elem_size "\ *\ " capacity )
 exceeds
 .IR SIZE_MAX .
-.IP (2) 1.5i
+.IP \fBNULL\fP 1.5i
 Memory allocation failed.
-.IP (3) 1.5i
+.IP \fBNULL\fP 1.5i
 Either
 .I elem_size
 or
@@ -81,15 +81,15 @@ See
 .BR sp_stack (7),
 .BR sp_stack_destroy (3),
 .BR sp_stack_clear (3),
-.BR sp_stack_copy (3),
-.BR sp_stack_foreach (3),
 .BR sp_stack_push (3),
-.BR sp_stack_insert (3),
-.BR sp_stack_qinsert (3),
 .BR sp_stack_peek (3),
 .BR sp_stack_pop (3),
+.BR sp_stack_insert (3),
 .BR sp_stack_remove (3),
+.BR sp_stack_qinsert (3),
 .BR sp_stack_qremove (3),
 .BR sp_stack_get (3),
 .BR sp_stack_set (3),
+.BR sp_stack_copy (3),
+.BR sp_stack_foreach (3),
 .BR sp_stack_print (3)

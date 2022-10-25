@@ -1,0 +1,35 @@
+.TH LIBSTAPLE_MODES 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_is_debug, sp_is_quiet, sp_is_abort \- check Staple library modes at runtime
+.\". MAN_SYNOPSIS_BEGIN
+int
+.BR sp_is_debug (void)
+.br
+int
+.BR sp_is_quiet (void)
+.br
+int
+.BR sp_is_abort (void)
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+The functions in this family can be used at runtime to determine whether the
+.B Staple
+library has been compiled with a certain mode enabled.
+.SH RETURN VALUE
+The
+.BR sp_is_debug ()
+function shall return 1 if debug mode is active and 0 otherwise.
+.P
+The
+.BR sp_is_quiet ()
+function shall return 1 if quiet mode is active and 0 otherwise.
+.P
+The
+.BR sp_is_abort ()
+function shall return 1 if abort mode is active and 0 otherwise.
+.SH ERRORS
+These functions shall never fail.
+.\". MAN_CONFORMING_TO
+.SH SEE ALSO
+.ad l
+.BR libstaple (7)

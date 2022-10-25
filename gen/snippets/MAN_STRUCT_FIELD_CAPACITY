@@ -1,0 +1,5 @@
+.IP \fIcapacity\fP
+the current maximum number of elements possible to store on the
+.I data
+buffer. This value is automatically doubled during insertion operations if
+there is not enough room for a new element.

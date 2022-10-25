@@ -1,0 +1,82 @@
+.\"M stack
+.TH SP_STACK_GET 3 DATE "libstaple-VERSION"
+.\"NAME str
+\- look up arbitrary element in a stack
+.\". MAN_SYNOPSIS_BEGIN
+void
+.RB * sp_stack_get "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.\"SS{
+.br
+$TYPE$
+.BR sp_stack_get$SUFFIX$ "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.\"SS}
+.br
+char
+.RB * sp_stack_getstr "(const struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx )
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+.P
+The functions in the
+.BR sp_stack_get ()
+family are used to look up the value of an arbitrary element in a stack. The
+looked up element remains on the stack.
+.P
+.I stack
+is the stack.
+.P
+.I idx
+is the index of the element. Indices start from 0 and extend downwards \(em 0 is
+the top element, 1 is the element below it, and so on.
+.br
+.I idx
+must be smaller than
+.IR stack "'s " size .
+.SS Generic Form
+.\". MAN_GENERIC_GET_SLIGHTLY_DIFFERENT stack
+.P
+.\". MAN_GENERIC_GET_IMPORTANT_USE_CASE stack
+.SH RETURN VALUE
+.SS Generic Form
+.\". MAN_RETVAL_ADDRESS_AT sp_stack_get idx
+.SS Suffixed Form
+.\". MAN_RETVAL_VALUE_AT_SUFFIXED sp_stack_get idx
+.SH ERRORS
+.SS Generic Form
+.\". MAN_SHALL_FAIL_IF sp_stack_get
+.\". MAN_ERRCODE NULL
+.I stack
+is a null pointer (debug mode only).
+.\". MAN_ERRCODE NULL
+.I idx
+out of range (debug mode only).
+.SS Suffixed Form
+.\". MAN_SHALL_FAIL_IF_SUFFIXED sp_stack_get
+.\". MAN_ERRCODE 0
+.I stack
+is a null pointer (debug mode only).
+.\". MAN_ERRCODE 0
+.I idx
+out of range (debug mode only).
+.\". MAN_ERRCODE 0
+.IR stack "'s " elem_size
+does not match the size of the function's return type (debug mode only).
+.P
+(the
+.BR sp_stack_getstr ()
+function returns
+.B NULL
+instead of 0)
+.SH NOTES
+.\". MAN_NOTE_DEBUG_AMBIGUOUS_ERROR sp_stack_getstr
+.P
+.\". MAN_NOTE_DOES_NOT_COPY_STRING sp_stack_getstr stack
+.\". MAN_CONFORMING_TO

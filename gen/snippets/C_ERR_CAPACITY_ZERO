@@ -1,0 +1,4 @@
+if (capacity == 0) {
+	error(("capacity cannot be 0"));
+	return NULL;
+}

@@ -14,13 +14,13 @@
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
- * -------------------------------------
- * This header defines functions that should be exposed to the library user, but
- * do not belong in just one module or data structure.
  */
 #ifndef STAPLE_UTILS_H
 #define STAPLE_UTILS_H
+
+/* This header defines functions that should be exposed to the library user, but
+ * do not belong in just one module or data structure.
+ */
 
 int sp_is_debug(void);
 int sp_is_quiet(void);

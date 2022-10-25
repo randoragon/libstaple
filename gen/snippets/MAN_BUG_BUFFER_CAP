@@ -1,0 +1,8 @@
+The size of the
+.I $1$
+buffer is capped at
+.BR SIZE_MAX .
+In consequence, the product
+.RI ( $2$ " * " $3$ )
+also cannot exceed
+.BR SIZE_MAX .

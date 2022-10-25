@@ -1,0 +1,6 @@
+.P
+.B $1$
+is a
+.IR transparent
+type. It is encouraged that the user extends the functionality provided by
+default library functions, if there is need to do so.

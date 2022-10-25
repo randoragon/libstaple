@@ -1,0 +1,952 @@
+#include "../sp_stack.h"
+#include "../internal.h"
+
+/*F{*/
+struct sp_stack *sp_stack_create(size_t elem_size, size_t capacity)
+{
+	struct sp_stack *ret;
+
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_ELEM_SIZE_ZERO */
+	/*. C_ERR_CAPACITY_ZERO */
+#endif
+	if (capacity > SP_SIZE_MAX / elem_size) {
+		/*. C_ERRMSG_SIZE_T_OVERFLOW */
+		return NULL;
+	}
+
+	ret = malloc(sizeof(*ret));
+	if (ret == NULL) {
+		/*. C_ERRMSG_MALLOC */
+		return NULL;
+	}
+
+	ret->elem_size = elem_size;
+	ret->size      = 0;
+	ret->capacity  = capacity;
+	ret->data      = malloc(capacity * elem_size);
+	if (ret->data == NULL) {
+		/*. C_ERRMSG_MALLOC */
+		free(ret);
+		return NULL;
+	}
+
+	return ret;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+int sp_stack_clear(struct sp_stack *stack, int (*dtor)(void*))
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+#endif
+	if (dtor != NULL) {
+		const void *const end = (char*)stack->data + stack->size * stack->elem_size;
+		char *p = stack->data;
+		while (p != end) {
+			int err;
+			if ((err = dtor(p))) {
+				/*. C_ERRMSG_HANDLER_NON_ZERO dtor err */
+				return SP_EHANDLER;
+			}
+			p += stack->elem_size;
+		}
+	}
+	stack->size = 0;
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+int sp_stack_destroy(struct sp_stack *stack, int (*dtor)(void*))
+{
+	int error;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+#endif
+	if ((error = sp_stack_clear(stack, dtor)))
+		return SP_EHANDLER;
+	free(stack->data);
+	free(stack);
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_copy(struct sp_stack *dest, const struct sp_stack *src, int (*cpy)(void*, const void*))
+{
+	char *s, *d;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR src SP_EINVAL */
+	/*. C_ERR_NULLPTR dest SP_EINVAL */
+#endif
+	if (dest->capacity * dest->elem_size < src->size * src->elem_size) {
+		dest->capacity = src->size;
+		dest->data = realloc(dest->data, dest->capacity * src->elem_size);
+		if (dest->data == NULL) {
+			/*. C_ERRMSG_REALLOC */
+			return SP_ENOMEM;
+		}
+	}
+	dest->elem_size = src->elem_size;
+	dest->size      = src->size;
+	if (cpy == NULL) {
+		const void *const src_end = (char*)src->data + src->size * src->elem_size;
+		s = src->data;
+		d = dest->data;
+		while (s != src_end) {
+			memcpy(d, s, src->elem_size);
+			s += src->elem_size;
+			d += dest->elem_size;
+		}
+	} else {
+		const void *const src_end = (char*)src->data + src->size * src->elem_size;
+		s = src->data;
+		d = dest->data;
+		while (s != src_end) {
+			int err;
+			if ((err = cpy(d, s))) {
+				/*. C_ERRMSG_HANDLER_NON_ZERO cpy err */
+				return SP_EHANDLER;
+			}
+			s += src->elem_size;
+			d += dest->elem_size;
+		}
+	}
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+int sp_stack_foreach(struct sp_stack *stack, int (*func)(void*, size_t))
+{
+	size_t i;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_NULLPTR func SP_EINVAL */
+#endif
+	for (i = 0; i < stack->size; i++) {
+		void *const p = (char*)stack->data + i * stack->elem_size;
+		int err;
+		if ((err = func(p, i))) {
+			/*. C_ERRMSG_HANDLER_NON_ZERO func err */
+			return SP_EHANDLER;
+		}
+	}
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_push(struct sp_stack *stack, const void *elem)
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_NULLPTR elem SP_EINVAL */
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	memcpy((char*)stack->data + stack->size++ * stack->elem_size, elem, stack->elem_size);
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+int sp_stack_push$SUFFIX$(struct sp_stack *stack, $TYPE$ elem)
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	(($TYPE$*)stack->data)[stack->size++] = elem;
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_pushstr(struct sp_stack *stack, const char *elem)
+{
+	char *buf;
+	size_t len;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_NULLPTR elem SP_EINVAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	len = sp_strnlen(elem, SP_SIZE_MAX);
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		/*. C_ERRMSG_MALLOC */
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	((char**)stack->data)[stack->size++] = buf;
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_pushstrn(struct sp_stack *stack, const char *elem, size_t len)
+{
+	char *buf;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_NULLPTR elem SP_EINVAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		/*. C_ERRMSG_MALLOC */
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	((char**)stack->data)[stack->size++] = buf;
+	return 0;
+}
+/*F}*/
+
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_insert(struct sp_stack *stack, size_t idx, const void *elem)
+{
+	char *p;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_NULLPTR elem SP_EINVAL */
+	if (idx > stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return SP_EINDEX;
+	}
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	memmove(p + stack->elem_size, p, idx * stack->elem_size);
+	memcpy(p, elem, stack->elem_size);
+	++stack->size;
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_insert$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ elem)
+{
+	char *p;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+	if (idx > stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return SP_EINDEX;
+	}
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	memmove(p + stack->elem_size, p, idx * stack->elem_size);
+	*($TYPE$*)p = elem;
+	++stack->size;
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_insertstr(struct sp_stack *stack, size_t idx, const char *elem)
+{
+	char *p;
+	char *buf;
+	size_t len;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_NULLPTR elem SP_EINVAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+	if (idx > stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return SP_EINDEX;
+	}
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	len = sp_strnlen(elem, SP_SIZE_MAX);
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		/*. C_ERRMSG_MALLOC */
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	memmove(p + stack->elem_size, p, idx * stack->elem_size);
+	*(char**)p = buf;
+	++stack->size;
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_insertstrn(struct sp_stack *stack, size_t idx, const char *elem, size_t len)
+{
+	char *p;
+	char *buf;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_NULLPTR elem SP_EINVAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+	if (idx > stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return SP_EINDEX;
+	}
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		/*. C_ERRMSG_MALLOC */
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	memmove(p + stack->elem_size, p, idx * stack->elem_size);
+	*(char**)p = buf;
+	++stack->size;
+	return 0;
+}
+/*F}*/
+
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_qinsert(struct sp_stack *stack, size_t idx, const void *elem)
+{
+	char *p, *q;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_NULLPTR elem SP_EINVAL */
+	if (idx > stack->size) {
+		return SP_EINDEX;
+	}
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	q = (char*)stack->data + stack->size * stack->elem_size;
+	memcpy(q, p, stack->elem_size);
+	memcpy(p, elem, stack->elem_size);
+	++stack->size;
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+int sp_stack_qinsert$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ elem)
+{
+	char *p, *q;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+	if (idx > stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return SP_EINDEX;
+	}
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	q = (char*)stack->data + stack->size * stack->elem_size;
+	*($TYPE$*)q = *($TYPE$*)p;
+	*($TYPE$*)p = elem;
+	++stack->size;
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_qinsertstr(struct sp_stack *stack, size_t idx, const char *elem)
+{
+	char *p, *q;
+	char *buf;
+	size_t len;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_NULLPTR elem SP_EINVAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+	if (idx > stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return SP_EINDEX;
+	}
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	len = sp_strnlen(elem, SP_SIZE_MAX);
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		/*. C_ERRMSG_MALLOC */
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	q = (char*)stack->data + stack->size * stack->elem_size;
+	*(char**)q = *(char**)p;
+	*(char**)p = buf;
+	++stack->size;
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_qinsertstrn(struct sp_stack *stack, size_t idx, const char *elem, size_t len)
+{
+	char *p, *q;
+	char *buf;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_NULLPTR elem SP_EINVAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+	if (idx > stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return SP_EINDEX;
+	}
+#endif
+	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+		return SP_ERANGE;
+	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
+		return SP_ENOMEM;
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*elem));
+	if (buf == NULL) {
+		/*. C_ERRMSG_MALLOC */
+		return SP_ENOMEM;
+	}
+	memcpy(buf, elem, len * sizeof(*elem));
+	buf[len] = '\0';
+	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
+	q = (char*)stack->data + stack->size * stack->elem_size;
+	*(char**)q = *(char**)p;
+	*(char**)p = buf;
+	++stack->size;
+	return 0;
+}
+/*F}*/
+
+
+/*F{*/
+void *sp_stack_peek(const struct sp_stack *stack)
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack NULL */
+	if (stack->size == 0) {
+		/*. C_ERRMSG_IS_EMPTY stack */
+		return NULL;
+	}
+#endif
+	return (char*)stack->data + (stack->size - 1) * stack->elem_size;
+}
+/*F}*/
+
+/*F{*/
+$TYPE$ sp_stack_peek$SUFFIX$(const struct sp_stack *stack)
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack 0 */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack $TYPE$ 0 */
+	if (stack->size == 0) {
+		/*. C_ERRMSG_IS_EMPTY stack */
+		return 0;
+	}
+#endif
+	return (($TYPE$*)stack->data)[stack->size - 1];
+}
+/*F}*/
+
+/*F{*/
+char *sp_stack_peekstr(const struct sp_stack *stack)
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack NULL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack char* NULL */
+	if (stack->size == 0) {
+		/*. C_ERRMSG_IS_EMPTY stack */
+		return NULL;
+	}
+#endif
+	return ((char**)stack->data)[stack->size - 1];
+}
+/*F}*/
+
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_pop(struct sp_stack *stack, void *output)
+{
+	const void *src;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	if (stack->size == 0) {
+		/*. C_ERRMSG_IS_EMPTY stack */
+		return SP_EILLEGAL;
+	}
+#endif
+	src = (char*)stack->data + (stack->size - 1) * stack->elem_size;
+	if (output != NULL)
+		memcpy(output, src, stack->elem_size);
+	--stack->size;
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+$TYPE$ sp_stack_pop$SUFFIX$(struct sp_stack *stack)
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack 0 */
+	if (stack->size == 0) {
+		/*. C_ERRMSG_IS_EMPTY stack */
+		return 0;
+	}
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack $TYPE$ 0 */
+#endif
+	return (($TYPE$*)stack->data)[--stack->size];
+}
+/*F}*/
+
+/*F{*/
+char *sp_stack_popstr(struct sp_stack *stack)
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack NULL */
+	if (stack->size == 0) {
+		/*. C_ERRMSG_IS_EMPTY stack */
+		return NULL;
+	}
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack char* NULL */
+#endif
+	return ((char**)stack->data)[--stack->size];
+}
+/*F}*/
+
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_remove(struct sp_stack *stack, size_t idx, void *output)
+{
+	char *p;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	if (idx >= stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return SP_EINDEX;
+	}
+#endif
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	if (output != NULL)
+		memcpy(output, p, stack->elem_size);
+	memmove(p, p + stack->elem_size, idx * stack->elem_size);
+	--stack->size;
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include <string.h>
+$TYPE$ sp_stack_remove$SUFFIX$(struct sp_stack *stack, size_t idx)
+{
+	char *p;
+	$TYPE$ ret;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack 0 */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack $TYPE$ 0 */
+	if (idx >= stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return 0;
+	}
+#endif
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	ret = *($TYPE$*)p;
+	memmove(p, p + stack->elem_size, idx * stack->elem_size);
+	--stack->size;
+	return ret;
+}
+/*F}*/
+
+/*F{*/
+#include <string.h>
+char *sp_stack_removestr(struct sp_stack *stack, size_t idx)
+{
+	char *p;
+	char *ret;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack NULL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack char* NULL */
+	if (idx >= stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return NULL;
+	}
+#endif
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	ret = *(char**)p;
+	memmove(p, p + stack->elem_size, idx * stack->elem_size);
+	--stack->size;
+	return ret;
+}
+/*F}*/
+
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_qremove(struct sp_stack *stack, size_t idx, void *output)
+{
+	char *p, *q;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	if (idx >= stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return SP_EINDEX;
+	}
+#endif
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	q = (char*)stack->data + (stack->size - 1) * stack->elem_size;
+	if (output != NULL)
+		memcpy(output, p, stack->elem_size);
+	memcpy(p, q, stack->elem_size);
+	--stack->size;
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+$TYPE$ sp_stack_qremove$SUFFIX$(struct sp_stack *stack, size_t idx)
+{
+	char *p, *q;
+	$TYPE$ ret;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack 0 */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack $TYPE$ 0 */
+	if (idx >= stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return 0;
+	}
+#endif
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	q = (char*)stack->data + (stack->size - 1) * stack->elem_size;
+	ret = *($TYPE$*)p;
+	*($TYPE$*)p = *($TYPE$*)q;
+	--stack->size;
+	return ret;
+}
+/*F}*/
+
+/*F{*/
+char *sp_stack_qremovestr(struct sp_stack *stack, size_t idx)
+{
+	char *p, *q;
+	char *ret;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack NULL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack char* NULL */
+	if (idx >= stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return NULL;
+	}
+#endif
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	q = (char*)stack->data + (stack->size - 1) * stack->elem_size;
+	ret = *(char**)p;
+	*(char**)p = *(char**)q;
+	--stack->size;
+	return ret;
+}
+/*F}*/
+
+
+/*F{*/
+void *sp_stack_get(const struct sp_stack *stack, size_t idx)
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack NULL */
+	if (idx >= stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return NULL;
+	}
+#endif
+	return (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+}
+/*F}*/
+
+/*F{*/
+$TYPE$ sp_stack_get$SUFFIX$(const struct sp_stack *stack, size_t idx)
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack 0 */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack $TYPE$ 0 */
+	if (idx >= stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return 0;
+	}
+#endif
+	return (($TYPE$*)stack->data)[stack->size - 1 - idx];
+}
+/*F}*/
+
+/*F{*/
+char *sp_stack_getstr(const struct sp_stack *stack, size_t idx)
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack NULL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack char* NULL */
+	if (idx >= stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return NULL;
+	}
+#endif
+	return ((char**)stack->data)[stack->size - 1 - idx];
+}
+/*F}*/
+
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_set(struct sp_stack *stack, size_t idx, void *val)
+{
+	char *p;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_NULLPTR val SP_EINVAL */
+	if (idx >= stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return SP_EINDEX;
+	}
+#endif
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	memcpy(p, val, stack->elem_size);
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+int sp_stack_set$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ val)
+{
+	char *p;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack val SP_EILLEGAL */
+	if (idx >= stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return SP_EINDEX;
+	}
+#endif
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	*($TYPE$*)p = val;
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_setstr(struct sp_stack *stack, size_t idx, const char *val)
+{
+	char *p;
+	char *buf;
+	size_t len;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_NULLPTR val SP_EINVAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack val SP_EILLEGAL */
+	if (idx >= stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return SP_EINDEX;
+	}
+#endif
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	free(*(char**)p);
+	len = sp_strnlen(val, SP_SIZE_MAX);
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*val));
+	if (buf == NULL) {
+		/*. C_ERRMSG_MALLOC */
+		return SP_ENOMEM;
+	}
+	memcpy(buf, val, len * sizeof(*val));
+	buf[len] = '\0';
+	*(char**)p = buf;
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+#include <string.h>
+int sp_stack_setstrn(struct sp_stack *stack, size_t idx, const char *val, size_t len)
+{
+	char *p;
+	char *buf;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_NULLPTR val SP_EINVAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack val SP_EILLEGAL */
+	if (idx >= stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return SP_EINDEX;
+	}
+#endif
+	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	free(*(char**)p);
+	if (sp_size_try_add(len, 1))
+		return SP_ERANGE;
+	buf = malloc((len + 1) * sizeof(*val));
+	if (buf == NULL) {
+		/*. C_ERRMSG_MALLOC */
+		return SP_ENOMEM;
+	}
+	memcpy(buf, val, len * sizeof(*val));
+	buf[len] = '\0';
+	*(char**)p = buf;
+	return 0;
+}
+/*F}*/
+
+
+/*F{*/
+#include "../sp_errcodes.h"
+int sp_stack_print(const struct sp_stack *stack, int (*func)(const void*))
+{
+	size_t i;
+#ifdef STAPLE_DEBUG
+	if (stack == NULL) {
+		error(("stack is NULL"));
+		return SP_EINVAL;
+	}
+#endif
+	printf("sp_stack_print()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
+	if (func == NULL)
+		for (i = stack->size; i-- > 0;) {
+			const void *const elem = (char*)stack->data + i * stack->elem_size;
+			printf("[%lu]\t%p\n", (unsigned long)stack->size - 1 - i, elem);
+		}
+	else
+		for (i = stack->size; i-- > 0;) {
+			const void *const elem = (char*)stack->data + i * stack->elem_size;
+			int err;
+			printf("[%lu]\t", (unsigned long)stack->size - 1 - i);
+			if ((err = func(elem)) != 0) {
+				error(("external function handler returned %d (non-0)", err));
+				return SP_EHANDLER;
+			}
+		}
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+int sp_stack_print$SUFFIX$(const struct sp_stack *stack)
+{
+	size_t i;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack $TYPE$ SP_EILLEGAL */
+#endif
+	printf("sp_stack_print$SUFFIX$()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
+	for (i = stack->size; i-- > 0;) {
+		const $TYPE$ elem = (($TYPE$*)stack->data)[i];
+		printf("[%lu]\t"$FMT_STR$"\n", (unsigned long)stack->size - 1 - i, $FMT_ARGS$);
+	}
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
+int sp_stack_printstr(const struct sp_stack *stack)
+{
+	size_t i;
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack char* SP_EILLEGAL */
+#endif
+	printf("sp_stack_printstr()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
+		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
+	for (i = stack->size; i-- > 0;) {
+		const char *elem = ((char**)stack->data)[i];
+		printf("[%lu]\t%s\n", (unsigned long)stack->size - 1 - i, elem);
+	}
+	return 0;
+}
+/*F}*/
