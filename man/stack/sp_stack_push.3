@@ -209,7 +209,7 @@ is the element to be pushed.
 .I elem
 must be a void pointer to the first byte of the element that shall be pushed.
 The number of bytes to copy is equal to
-.IR stack "'s " elem_size
+.IR stack->elem_size
 field.
 .SS Suffixed Form
 .I elem
@@ -262,7 +262,7 @@ The suffixed
 .BR sp_stack_push ()
 functions shall fail if:
 .IP \fBSP_EILLEGAL\fP 1.5i
-.IR stack "'s " elem_size
+.IR stack->elem_size
 does not match the size of the
 .I elem
 argument (debug mode only).

@@ -200,7 +200,7 @@ memory. Removing the element at position \fIsize \fB- 1\fR has the same effect a
 .br
 .I idx
 must be smaller than
-.IR queue "'s " size .
+.IR queue->size .
 .SS Generic Form
 .I output
 is the start of an adequately-sized block of memory the removed element shall be
@@ -241,7 +241,7 @@ is a null pointer (debug mode only).
 .I idx
 out of range (debug mode only).
 .IP \fB0\fP 1.5i
-.IR queue "'s " elem_size
+.IR queue->elem_size
 does not match the size of the function's return type (debug mode only).
 .P
 (the
