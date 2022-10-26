@@ -47,8 +47,8 @@ int sp_queue_clear(struct sp_queue *queue, int (*dtor)(void*))
 		while (queue->size != 0) {
 			int err;
 			if ((err = dtor(queue->head))) {
-				/*. C_ERRMSG_HANDLER_NON_ZERO dtor err */
-				return SP_EHANDLER;
+				/*. C_ERRMSG_CALLBACK_NON_ZERO dtor err */
+				return SP_ECALLBK;
 			}
 			sp_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
 			queue->size--;
@@ -114,8 +114,8 @@ int sp_queue_copy(struct sp_queue *dest, const struct sp_queue *src, int (*cpy)(
 				sp_ringbuf_incr(&s, src->data, src->capacity, src->elem_size);
 				sp_ringbuf_incr(&dest->tail, dest->data, dest->capacity, dest->elem_size);
 				if ((err = cpy(dest->tail, s))) {
-					/*. C_ERRMSG_HANDLER_NON_ZERO cpy err */
-					return SP_EHANDLER;
+					/*. C_ERRMSG_CALLBACK_NON_ZERO cpy err */
+					return SP_ECALLBK;
 				}
 				--i;
 			}
@@ -139,8 +139,8 @@ int sp_queue_foreach(struct sp_queue *queue, int (*func)(void*, size_t))
 	while (i != queue->size) {
 		int err;
 		if ((err = func(p, i))) {
-			/*. C_ERRMSG_HANDLER_NON_ZERO func err */
-			return SP_EHANDLER;
+			/*. C_ERRMSG_CALLBACK_NON_ZERO func err */
+			return SP_ECALLBK;
 		}
 		sp_ringbuf_incr(&p, queue->data, queue->capacity, queue->elem_size);
 		++i;
@@ -921,8 +921,8 @@ int sp_queue_print(const struct sp_queue *queue, int (*func)(const void*))
 			int err;
 			printf("[%lu]\t", (unsigned long)i);
 			if ((err = func(elem)) != 0) {
-				error(("external function handler returned %d (non-0)", err));
-				return SP_EHANDLER;
+				/*. C_ERRMSG_CALLBACK_NON_ZERO dtor err */
+				return SP_ECALLBK;
 			}
 		}
 	return 0;

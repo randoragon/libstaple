@@ -33,8 +33,8 @@ int sp_stack_clear(struct sp_stack *stack, int (*dtor)(void*))
 		while (p != end) {
 			int err;
 			if ((err = dtor(p))) {
-				error(("external function dtor returned %d (non-0)", err));
-				return SP_EHANDLER;
+				error(("callback function dtor returned %d (non-0)", err));
+				return SP_ECALLBK;
 			}
 			p += stack->elem_size;
 		}

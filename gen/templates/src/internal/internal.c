@@ -78,7 +78,7 @@ int sp_foomap(void *buf, size_t size, size_t elem_size, int (*foo)(void*))
 	while (p != end) {
 		int err;
 		if ((err = foo(p))) {
-			/*. C_ERRMSG_HANDLER_NON_ZERO handler err */
+			/*. C_ERRMSG_CALLBACK_NON_ZERO foo err */
 			return 1;
 		}
 		p += elem_size;

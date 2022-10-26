@@ -41,8 +41,8 @@ int sp_queue_print(const struct sp_queue *queue, int (*func)(const void*))
 			int err;
 			printf("[%lu]\t", (unsigned long)i);
 			if ((err = func(elem)) != 0) {
-				error(("external function handler returned %d (non-0)", err));
-				return SP_EHANDLER;
+				error(("callback function dtor returned %d (non-0)", err));
+				return SP_ECALLBK;
 			}
 		}
 	return 0;

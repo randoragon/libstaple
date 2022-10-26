@@ -36,8 +36,8 @@ int sp_stack_foreach(struct sp_stack *stack, int (*func)(void*, size_t))
 		void *const p = (char*)stack->data + i * stack->elem_size;
 		int err;
 		if ((err = func(p, i))) {
-			error(("external function func returned %d (non-0)", err));
-			return SP_EHANDLER;
+			error(("callback function func returned %d (non-0)", err));
+			return SP_ECALLBK;
 		}
 	}
 	return 0;

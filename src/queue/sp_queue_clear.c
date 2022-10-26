@@ -31,8 +31,8 @@ int sp_queue_clear(struct sp_queue *queue, int (*dtor)(void*))
 		while (queue->size != 0) {
 			int err;
 			if ((err = dtor(queue->head))) {
-				error(("external function dtor returned %d (non-0)", err));
-				return SP_EHANDLER;
+				error(("callback function dtor returned %d (non-0)", err));
+				return SP_ECALLBK;
 			}
 			sp_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
 			queue->size--;

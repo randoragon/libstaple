@@ -48,8 +48,8 @@ int sp_stack_clear(struct sp_stack *stack, int (*dtor)(void*))
 		while (p != end) {
 			int err;
 			if ((err = dtor(p))) {
-				/*. C_ERRMSG_HANDLER_NON_ZERO dtor err */
-				return SP_EHANDLER;
+				/*. C_ERRMSG_CALLBACK_NON_ZERO dtor err */
+				return SP_ECALLBK;
 			}
 			p += stack->elem_size;
 		}
@@ -67,7 +67,7 @@ int sp_stack_destroy(struct sp_stack *stack, int (*dtor)(void*))
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
 #endif
 	if ((error = sp_stack_clear(stack, dtor)))
-		return SP_EHANDLER;
+		return SP_ECALLBK;
 	free(stack->data);
 	free(stack);
 	return 0;
@@ -110,8 +110,8 @@ int sp_stack_copy(struct sp_stack *dest, const struct sp_stack *src, int (*cpy)(
 		while (s != src_end) {
 			int err;
 			if ((err = cpy(d, s))) {
-				/*. C_ERRMSG_HANDLER_NON_ZERO cpy err */
-				return SP_EHANDLER;
+				/*. C_ERRMSG_CALLBACK_NON_ZERO cpy err */
+				return SP_ECALLBK;
 			}
 			s += src->elem_size;
 			d += dest->elem_size;
@@ -134,8 +134,8 @@ int sp_stack_foreach(struct sp_stack *stack, int (*func)(void*, size_t))
 		void *const p = (char*)stack->data + i * stack->elem_size;
 		int err;
 		if ((err = func(p, i))) {
-			/*. C_ERRMSG_HANDLER_NON_ZERO func err */
-			return SP_EHANDLER;
+			/*. C_ERRMSG_CALLBACK_NON_ZERO func err */
+			return SP_ECALLBK;
 		}
 	}
 	return 0;
@@ -905,8 +905,8 @@ int sp_stack_print(const struct sp_stack *stack, int (*func)(const void*))
 			int err;
 			printf("[%lu]\t", (unsigned long)stack->size - 1 - i);
 			if ((err = func(elem)) != 0) {
-				error(("external function handler returned %d (non-0)", err));
-				return SP_EHANDLER;
+				/*. C_ERRMSG_CALLBACK_NON_ZERO dtor err */
+				return SP_ECALLBK;
 			}
 		}
 	return 0;

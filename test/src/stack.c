@@ -68,7 +68,7 @@ Test(stack, destroy)
 		cr_assert_eq(0, data_init(&d));
 		cr_assert_eq(0, sp_stack_push(s, &d));
 	}
-	cr_assert_eq(SP_EHANDLER, sp_stack_destroy(s, data_dtor_bad));
+	cr_assert_eq(SP_ECALLBK, sp_stack_destroy(s, data_dtor_bad));
 	cr_assert_eq(0, sp_stack_destroy(s, data_dtor));
 }
 
@@ -365,7 +365,7 @@ Test(stack, clear)
 		cr_assert_eq(0, data_init(&d));
 		cr_assert_eq(0, sp_stack_push(s, &d));
 	}
-	cr_assert_eq(SP_EHANDLER, sp_stack_clear(s, data_dtor_bad));
+	cr_assert_eq(SP_ECALLBK, sp_stack_clear(s, data_dtor_bad));
 	cr_assert_eq(0, sp_stack_clear(s, data_dtor));
 	cr_assert_eq(0LU, (unsigned long)s->size);
 	cr_assert_eq(0, sp_stack_destroy(s, NULL));
@@ -387,7 +387,7 @@ Test(stack, foreach)
 		cr_assert_eq(0, data_init(&d));
 		cr_assert_eq(0, sp_stack_push(s, &d));
 	}
-	cr_assert_eq(SP_EHANDLER, sp_stack_foreach(s, data_mutate_bad));
+	cr_assert_eq(SP_ECALLBK, sp_stack_foreach(s, data_mutate_bad));
 	cr_assert_eq(0, sp_stack_foreach(s, data_mutate));
 	cr_assert_eq(0, sp_stack_foreach(s, data_verify));
 	cr_assert_eq(0, sp_stack_destroy(s, data_dtor));
@@ -429,7 +429,7 @@ Test(stack, copy)
 		cr_assert_eq(0, data_init(&d));
 		cr_assert_eq(0, sp_stack_push(s, &d));
 	}
-	cr_assert_eq(SP_EHANDLER, sp_stack_copy(p, s, data_cpy_bad));
+	cr_assert_eq(SP_ECALLBK, sp_stack_copy(p, s, data_cpy_bad));
 	cr_assert_eq(0, sp_stack_copy(p, s, data_cpy));
 	cr_assert_eq((unsigned long)p->size, (unsigned long)s->size);
 	cr_assert_eq((unsigned long)p->elem_size, (unsigned long)s->elem_size);
@@ -1564,7 +1564,7 @@ Test(stack, print)
 		cr_assert_eq(0, sp_stack_push(s, &a));
 		cr_assert_eq(0, sp_stack_push(s, &b));
 		cr_assert_eq(SP_EINVAL, sp_stack_print(NULL, NULL));
-		cr_assert_eq(SP_EHANDLER, sp_stack_print(s, data_print_bad));
+		cr_assert_eq(SP_ECALLBK, sp_stack_print(s, data_print_bad));
 		cr_assert_eq(0, sp_stack_print(s, NULL));
 		cr_assert_eq(0, sp_stack_print(s, data_print));
 		cr_assert_eq(0, sp_stack_destroy(s, data_dtor));

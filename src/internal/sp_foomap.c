@@ -25,7 +25,7 @@ int sp_foomap(void *buf, size_t size, size_t elem_size, int (*foo)(void*))
 	while (p != end) {
 		int err;
 		if ((err = foo(p))) {
-			error(("external function handler returned %d (non-0)", err));
+			error(("callback function foo returned %d (non-0)", err));
 			return 1;
 		}
 		p += elem_size;

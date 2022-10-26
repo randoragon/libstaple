@@ -11,8 +11,8 @@
 /* Insufficient memory */
 #define SP_ENOMEM 2
 
-/* External function handler returned error */
-#define SP_EHANDLER 3
+/* Callback function returned an error */
+#define SP_ECALLBK 3
 
 /* Index out of range */
 #define SP_EINDEX 4

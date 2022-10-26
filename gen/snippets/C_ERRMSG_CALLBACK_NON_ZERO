@@ -1,0 +1,1 @@
+error(("callback function $1$ returned %d (non-0)", $2$));

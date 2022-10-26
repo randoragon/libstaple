@@ -68,7 +68,7 @@ Test(queue, destroy)
 		cr_assert_eq(0, data_init(&d));
 		cr_assert_eq(0, sp_queue_push(q, &d));
 	}
-	cr_assert_eq(SP_EHANDLER, sp_queue_destroy(q, data_dtor_bad));
+	cr_assert_eq(SP_ECALLBK, sp_queue_destroy(q, data_dtor_bad));
 	cr_assert_eq(0, sp_queue_destroy(q, data_dtor));
 }
 
@@ -341,7 +341,7 @@ Test(queue, clear)
 		cr_assert_eq(0, data_init(&d));
 		cr_assert_eq(0, sp_queue_push(q, &d));
 	}
-	cr_assert_eq(SP_EHANDLER, sp_queue_clear(q, data_dtor_bad));
+	cr_assert_eq(SP_ECALLBK, sp_queue_clear(q, data_dtor_bad));
 	cr_assert_eq(0, sp_queue_clear(q, data_dtor));
 	cr_assert_eq(0LU, (unsigned long)q->size);
 	cr_assert_eq(0, sp_queue_destroy(q, NULL));
@@ -363,7 +363,7 @@ Test(queue, foreach)
 		cr_assert_eq(0, data_init(&d));
 		cr_assert_eq(0, sp_queue_push(q, &d));
 	}
-	cr_assert_eq(SP_EHANDLER, sp_queue_foreach(q, data_mutate_bad));
+	cr_assert_eq(SP_ECALLBK, sp_queue_foreach(q, data_mutate_bad));
 	cr_assert_eq(0, sp_queue_foreach(q, data_mutate));
 	cr_assert_eq(0, sp_queue_foreach(q, data_verify));
 	cr_assert_eq(0, sp_queue_destroy(q, data_dtor));
@@ -405,7 +405,7 @@ Test(queue, copy)
 		cr_assert_eq(0, data_init(&d));
 		cr_assert_eq(0, sp_queue_push(q, &d));
 	}
-	cr_assert_eq(SP_EHANDLER, sp_queue_copy(p, q, data_cpy_bad));
+	cr_assert_eq(SP_ECALLBK, sp_queue_copy(p, q, data_cpy_bad));
 	cr_assert_eq(0, sp_queue_copy(p, q, data_cpy));
 	cr_assert_eq((unsigned long)p->size, (unsigned long)q->size);
 	cr_assert_eq((unsigned long)p->elem_size, (unsigned long)q->elem_size);
@@ -1537,7 +1537,7 @@ Test(queue, print)
 		cr_assert_eq(0, sp_queue_push(q, &a));
 		cr_assert_eq(0, sp_queue_push(q, &b));
 		cr_assert_eq(SP_EINVAL, sp_queue_print(NULL, NULL));
-		cr_assert_eq(SP_EHANDLER, sp_queue_print(q, data_print_bad));
+		cr_assert_eq(SP_ECALLBK, sp_queue_print(q, data_print_bad));
 		cr_assert_eq(0, sp_queue_print(q, NULL));
 		cr_assert_eq(0, sp_queue_print(q, data_print));
 		cr_assert_eq(0, sp_queue_destroy(q, data_dtor));

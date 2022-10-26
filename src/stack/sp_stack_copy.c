@@ -59,8 +59,8 @@ int sp_stack_copy(struct sp_stack *dest, const struct sp_stack *src, int (*cpy)(
 		while (s != src_end) {
 			int err;
 			if ((err = cpy(d, s))) {
-				error(("external function cpy returned %d (non-0)", err));
-				return SP_EHANDLER;
+				error(("callback function cpy returned %d (non-0)", err));
+				return SP_ECALLBK;
 			}
 			s += src->elem_size;
 			d += dest->elem_size;

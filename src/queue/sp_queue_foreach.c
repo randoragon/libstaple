@@ -38,8 +38,8 @@ int sp_queue_foreach(struct sp_queue *queue, int (*func)(void*, size_t))
 	while (i != queue->size) {
 		int err;
 		if ((err = func(p, i))) {
-			error(("external function func returned %d (non-0)", err));
-			return SP_EHANDLER;
+			error(("callback function func returned %d (non-0)", err));
+			return SP_ECALLBK;
 		}
 		sp_ringbuf_incr(&p, queue->data, queue->capacity, queue->elem_size);
 		++i;

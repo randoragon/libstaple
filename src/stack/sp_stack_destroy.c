@@ -28,7 +28,7 @@ int sp_stack_destroy(struct sp_stack *stack, int (*dtor)(void*))
 	}
 #endif
 	if ((error = sp_stack_clear(stack, dtor)))
-		return SP_EHANDLER;
+		return SP_ECALLBK;
 	free(stack->data);
 	free(stack);
 	return 0;

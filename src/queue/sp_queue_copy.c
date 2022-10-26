@@ -62,8 +62,8 @@ int sp_queue_copy(struct sp_queue *dest, const struct sp_queue *src, int (*cpy)(
 				sp_ringbuf_incr(&s, src->data, src->capacity, src->elem_size);
 				sp_ringbuf_incr(&dest->tail, dest->data, dest->capacity, dest->elem_size);
 				if ((err = cpy(dest->tail, s))) {
-					error(("external function cpy returned %d (non-0)", err));
-					return SP_EHANDLER;
+					error(("callback function cpy returned %d (non-0)", err));
+					return SP_ECALLBK;
 				}
 				--i;
 			}
