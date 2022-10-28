@@ -76,6 +76,30 @@ int sp_queue_destroy(struct sp_queue *queue, int (*dtor)(void*))
 /*F}*/
 
 /*F{*/
+#include <string.h>
+int sp_queue_eq(const struct sp_queue *queue1, const struct sp_queue *queue2, int (*cmp)(const void*, const void*))
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR queue1 0 */
+	/*. C_ERR_NULLPTR queue2 0 */
+#endif
+	size_t i = queue1->size;
+	void *p = queue1->head,
+	     *q = queue2->head;
+	if (queue1->elem_size != queue2->elem_size || queue1->size != queue2->size)
+		return 0;
+	while (i != 0) {
+		if (cmp ? cmp(p, q) : memcmp(p, q, queue1->elem_size))
+			return 0;
+		sp_ringbuf_incr(&p, queue1->data, queue1->capacity, queue1->elem_size);
+		sp_ringbuf_incr(&q, queue1->data, queue1->capacity, queue1->elem_size);
+		--i;
+	}
+	return 1;
+}
+/*F}*/
+
+/*F{*/
 #include "../sp_errcodes.h"
 #include <string.h>
 int sp_queue_copy(struct sp_queue *dest, const struct sp_queue *src, int (*cpy)(void*, const void*))

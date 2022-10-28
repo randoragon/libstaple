@@ -75,6 +75,30 @@ int sp_stack_destroy(struct sp_stack *stack, int (*dtor)(void*))
 /*F}*/
 
 /*F{*/
+#include <string.h>
+int sp_stack_eq(const struct sp_stack *stack1, const struct sp_stack *stack2, int (*cmp)(const void*, const void*))
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack1 0 */
+	/*. C_ERR_NULLPTR stack2 0 */
+#endif
+	if (stack1->elem_size != stack2->elem_size || stack1->size != stack2->size)
+		return 0;
+	if (cmp) {
+		size_t i;
+		for (i = 0; i < stack1->size; i++) {
+			const void *const p = (char*)stack1->data + i * stack1->elem_size,
+			           *const q = (char*)stack2->data + i * stack2->elem_size;
+			if (cmp(p, q))
+				return 0;
+		}
+		return 1;
+	}
+	return !memcmp(stack1->data, stack2->data, stack1->elem_size * stack1->size);
+}
+/*F}*/
+
+/*F{*/
 #include "../sp_errcodes.h"
 #include <string.h>
 int sp_stack_copy(struct sp_stack *dest, const struct sp_stack *src, int (*cpy)(void*, const void*))
