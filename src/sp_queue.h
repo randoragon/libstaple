@@ -56,6 +56,9 @@ int sp_queue_pushf(struct sp_queue *queue, float elem);
 int sp_queue_pushd(struct sp_queue *queue, double elem);
 int sp_queue_pushld(struct sp_queue *queue, long double elem);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+int sp_queue_pushb(struct sp_queue *queue, _Bool elem);
+int sp_queue_pushll(struct sp_queue *queue, long long elem);
+int sp_queue_pushull(struct sp_queue *queue, unsigned long long elem);
 int sp_queue_pushu8(struct sp_queue *queue, uint8_t elem);
 int sp_queue_pushu16(struct sp_queue *queue, uint16_t elem);
 int sp_queue_pushu32(struct sp_queue *queue, uint32_t elem);
@@ -82,6 +85,9 @@ int sp_queue_insertf(struct sp_queue *queue, size_t idx, float elem);
 int sp_queue_insertd(struct sp_queue *queue, size_t idx, double elem);
 int sp_queue_insertld(struct sp_queue *queue, size_t idx, long double elem);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+int sp_queue_insertb(struct sp_queue *queue, size_t idx, _Bool elem);
+int sp_queue_insertll(struct sp_queue *queue, size_t idx, long long elem);
+int sp_queue_insertull(struct sp_queue *queue, size_t idx, unsigned long long elem);
 int sp_queue_insertu8(struct sp_queue *queue, size_t idx, uint8_t elem);
 int sp_queue_insertu16(struct sp_queue *queue, size_t idx, uint16_t elem);
 int sp_queue_insertu32(struct sp_queue *queue, size_t idx, uint32_t elem);
@@ -108,6 +114,9 @@ int sp_queue_qinsertf(struct sp_queue *queue, size_t idx, float elem);
 int sp_queue_qinsertd(struct sp_queue *queue, size_t idx, double elem);
 int sp_queue_qinsertld(struct sp_queue *queue, size_t idx, long double elem);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+int sp_queue_qinsertb(struct sp_queue *queue, size_t idx, _Bool elem);
+int sp_queue_qinsertll(struct sp_queue *queue, size_t idx, long long elem);
+int sp_queue_qinsertull(struct sp_queue *queue, size_t idx, unsigned long long elem);
 int sp_queue_qinsertu8(struct sp_queue *queue, size_t idx, uint8_t elem);
 int sp_queue_qinsertu16(struct sp_queue *queue, size_t idx, uint16_t elem);
 int sp_queue_qinsertu32(struct sp_queue *queue, size_t idx, uint32_t elem);
@@ -134,6 +143,9 @@ float         sp_queue_peekf(const struct sp_queue *queue);
 double         sp_queue_peekd(const struct sp_queue *queue);
 long double         sp_queue_peekld(const struct sp_queue *queue);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+_Bool         sp_queue_peekb(const struct sp_queue *queue);
+long long         sp_queue_peekll(const struct sp_queue *queue);
+unsigned long long         sp_queue_peekull(const struct sp_queue *queue);
 uint8_t         sp_queue_peeku8(const struct sp_queue *queue);
 uint16_t         sp_queue_peeku16(const struct sp_queue *queue);
 uint32_t         sp_queue_peeku32(const struct sp_queue *queue);
@@ -159,6 +171,9 @@ float         sp_queue_popf(struct sp_queue *queue);
 double         sp_queue_popd(struct sp_queue *queue);
 long double         sp_queue_popld(struct sp_queue *queue);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+_Bool         sp_queue_popb(struct sp_queue *queue);
+long long         sp_queue_popll(struct sp_queue *queue);
+unsigned long long         sp_queue_popull(struct sp_queue *queue);
 uint8_t         sp_queue_popu8(struct sp_queue *queue);
 uint16_t         sp_queue_popu16(struct sp_queue *queue);
 uint32_t         sp_queue_popu32(struct sp_queue *queue);
@@ -184,6 +199,9 @@ float         sp_queue_removef(struct sp_queue *queue, size_t idx);
 double         sp_queue_removed(struct sp_queue *queue, size_t idx);
 long double         sp_queue_removeld(struct sp_queue *queue, size_t idx);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+_Bool         sp_queue_removeb(struct sp_queue *queue, size_t idx);
+long long         sp_queue_removell(struct sp_queue *queue, size_t idx);
+unsigned long long         sp_queue_removeull(struct sp_queue *queue, size_t idx);
 uint8_t         sp_queue_removeu8(struct sp_queue *queue, size_t idx);
 uint16_t         sp_queue_removeu16(struct sp_queue *queue, size_t idx);
 uint32_t         sp_queue_removeu32(struct sp_queue *queue, size_t idx);
@@ -209,6 +227,9 @@ float         sp_queue_qremovef(struct sp_queue *queue, size_t idx);
 double         sp_queue_qremoved(struct sp_queue *queue, size_t idx);
 long double         sp_queue_qremoveld(struct sp_queue *queue, size_t idx);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+_Bool         sp_queue_qremoveb(struct sp_queue *queue, size_t idx);
+long long         sp_queue_qremovell(struct sp_queue *queue, size_t idx);
+unsigned long long         sp_queue_qremoveull(struct sp_queue *queue, size_t idx);
 uint8_t         sp_queue_qremoveu8(struct sp_queue *queue, size_t idx);
 uint16_t         sp_queue_qremoveu16(struct sp_queue *queue, size_t idx);
 uint32_t         sp_queue_qremoveu32(struct sp_queue *queue, size_t idx);
@@ -234,6 +255,9 @@ float         sp_queue_getf(const struct sp_queue *queue, size_t idx);
 double         sp_queue_getd(const struct sp_queue *queue, size_t idx);
 long double         sp_queue_getld(const struct sp_queue *queue, size_t idx);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+_Bool         sp_queue_getb(const struct sp_queue *queue, size_t idx);
+long long         sp_queue_getll(const struct sp_queue *queue, size_t idx);
+unsigned long long         sp_queue_getull(const struct sp_queue *queue, size_t idx);
 uint8_t         sp_queue_getu8(const struct sp_queue *queue, size_t idx);
 uint16_t         sp_queue_getu16(const struct sp_queue *queue, size_t idx);
 uint32_t         sp_queue_getu32(const struct sp_queue *queue, size_t idx);
@@ -259,6 +283,9 @@ int sp_queue_setf(struct sp_queue *queue, size_t idx, float val);
 int sp_queue_setd(struct sp_queue *queue, size_t idx, double val);
 int sp_queue_setld(struct sp_queue *queue, size_t idx, long double val);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+int sp_queue_setb(struct sp_queue *queue, size_t idx, _Bool val);
+int sp_queue_setll(struct sp_queue *queue, size_t idx, long long val);
+int sp_queue_setull(struct sp_queue *queue, size_t idx, unsigned long long val);
 int sp_queue_setu8(struct sp_queue *queue, size_t idx, uint8_t val);
 int sp_queue_setu16(struct sp_queue *queue, size_t idx, uint16_t val);
 int sp_queue_setu32(struct sp_queue *queue, size_t idx, uint32_t val);
@@ -285,6 +312,9 @@ int sp_queue_printf(const struct sp_queue *queue);
 int sp_queue_printd(const struct sp_queue *queue);
 int sp_queue_printld(const struct sp_queue *queue);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+int sp_queue_printb(const struct sp_queue *queue);
+int sp_queue_printll(const struct sp_queue *queue);
+int sp_queue_printull(const struct sp_queue *queue);
 int sp_queue_printu8(const struct sp_queue *queue);
 int sp_queue_printu16(const struct sp_queue *queue);
 int sp_queue_printu32(const struct sp_queue *queue);

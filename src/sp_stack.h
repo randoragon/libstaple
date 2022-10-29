@@ -54,6 +54,9 @@ int sp_stack_pushf(struct sp_stack *stack, float elem);
 int sp_stack_pushd(struct sp_stack *stack, double elem);
 int sp_stack_pushld(struct sp_stack *stack, long double elem);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+int sp_stack_pushb(struct sp_stack *stack, _Bool elem);
+int sp_stack_pushll(struct sp_stack *stack, long long elem);
+int sp_stack_pushull(struct sp_stack *stack, unsigned long long elem);
 int sp_stack_pushu8(struct sp_stack *stack, uint8_t elem);
 int sp_stack_pushu16(struct sp_stack *stack, uint16_t elem);
 int sp_stack_pushu32(struct sp_stack *stack, uint32_t elem);
@@ -80,6 +83,9 @@ int sp_stack_insertf(struct sp_stack *stack, size_t idx, float elem);
 int sp_stack_insertd(struct sp_stack *stack, size_t idx, double elem);
 int sp_stack_insertld(struct sp_stack *stack, size_t idx, long double elem);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+int sp_stack_insertb(struct sp_stack *stack, size_t idx, _Bool elem);
+int sp_stack_insertll(struct sp_stack *stack, size_t idx, long long elem);
+int sp_stack_insertull(struct sp_stack *stack, size_t idx, unsigned long long elem);
 int sp_stack_insertu8(struct sp_stack *stack, size_t idx, uint8_t elem);
 int sp_stack_insertu16(struct sp_stack *stack, size_t idx, uint16_t elem);
 int sp_stack_insertu32(struct sp_stack *stack, size_t idx, uint32_t elem);
@@ -106,6 +112,9 @@ int sp_stack_qinsertf(struct sp_stack *stack, size_t idx, float elem);
 int sp_stack_qinsertd(struct sp_stack *stack, size_t idx, double elem);
 int sp_stack_qinsertld(struct sp_stack *stack, size_t idx, long double elem);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+int sp_stack_qinsertb(struct sp_stack *stack, size_t idx, _Bool elem);
+int sp_stack_qinsertll(struct sp_stack *stack, size_t idx, long long elem);
+int sp_stack_qinsertull(struct sp_stack *stack, size_t idx, unsigned long long elem);
 int sp_stack_qinsertu8(struct sp_stack *stack, size_t idx, uint8_t elem);
 int sp_stack_qinsertu16(struct sp_stack *stack, size_t idx, uint16_t elem);
 int sp_stack_qinsertu32(struct sp_stack *stack, size_t idx, uint32_t elem);
@@ -132,6 +141,9 @@ float  sp_stack_peekf(const struct sp_stack *stack);
 double  sp_stack_peekd(const struct sp_stack *stack);
 long double  sp_stack_peekld(const struct sp_stack *stack);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+_Bool  sp_stack_peekb(const struct sp_stack *stack);
+long long  sp_stack_peekll(const struct sp_stack *stack);
+unsigned long long  sp_stack_peekull(const struct sp_stack *stack);
 uint8_t  sp_stack_peeku8(const struct sp_stack *stack);
 uint16_t  sp_stack_peeku16(const struct sp_stack *stack);
 uint32_t  sp_stack_peeku32(const struct sp_stack *stack);
@@ -157,6 +169,9 @@ float  sp_stack_popf(struct sp_stack *stack);
 double  sp_stack_popd(struct sp_stack *stack);
 long double  sp_stack_popld(struct sp_stack *stack);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+_Bool  sp_stack_popb(struct sp_stack *stack);
+long long  sp_stack_popll(struct sp_stack *stack);
+unsigned long long  sp_stack_popull(struct sp_stack *stack);
 uint8_t  sp_stack_popu8(struct sp_stack *stack);
 uint16_t  sp_stack_popu16(struct sp_stack *stack);
 uint32_t  sp_stack_popu32(struct sp_stack *stack);
@@ -182,6 +197,9 @@ float  sp_stack_removef(struct sp_stack *stack, size_t idx);
 double  sp_stack_removed(struct sp_stack *stack, size_t idx);
 long double  sp_stack_removeld(struct sp_stack *stack, size_t idx);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+_Bool  sp_stack_removeb(struct sp_stack *stack, size_t idx);
+long long  sp_stack_removell(struct sp_stack *stack, size_t idx);
+unsigned long long  sp_stack_removeull(struct sp_stack *stack, size_t idx);
 uint8_t  sp_stack_removeu8(struct sp_stack *stack, size_t idx);
 uint16_t  sp_stack_removeu16(struct sp_stack *stack, size_t idx);
 uint32_t  sp_stack_removeu32(struct sp_stack *stack, size_t idx);
@@ -207,6 +225,9 @@ float  sp_stack_qremovef(struct sp_stack *stack, size_t idx);
 double  sp_stack_qremoved(struct sp_stack *stack, size_t idx);
 long double  sp_stack_qremoveld(struct sp_stack *stack, size_t idx);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+_Bool  sp_stack_qremoveb(struct sp_stack *stack, size_t idx);
+long long  sp_stack_qremovell(struct sp_stack *stack, size_t idx);
+unsigned long long  sp_stack_qremoveull(struct sp_stack *stack, size_t idx);
 uint8_t  sp_stack_qremoveu8(struct sp_stack *stack, size_t idx);
 uint16_t  sp_stack_qremoveu16(struct sp_stack *stack, size_t idx);
 uint32_t  sp_stack_qremoveu32(struct sp_stack *stack, size_t idx);
@@ -232,6 +253,9 @@ float  sp_stack_getf(const struct sp_stack *stack, size_t idx);
 double  sp_stack_getd(const struct sp_stack *stack, size_t idx);
 long double  sp_stack_getld(const struct sp_stack *stack, size_t idx);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+_Bool  sp_stack_getb(const struct sp_stack *stack, size_t idx);
+long long  sp_stack_getll(const struct sp_stack *stack, size_t idx);
+unsigned long long  sp_stack_getull(const struct sp_stack *stack, size_t idx);
 uint8_t  sp_stack_getu8(const struct sp_stack *stack, size_t idx);
 uint16_t  sp_stack_getu16(const struct sp_stack *stack, size_t idx);
 uint32_t  sp_stack_getu32(const struct sp_stack *stack, size_t idx);
@@ -257,6 +281,9 @@ int sp_stack_setf(struct sp_stack *stack, size_t idx, float val);
 int sp_stack_setd(struct sp_stack *stack, size_t idx, double val);
 int sp_stack_setld(struct sp_stack *stack, size_t idx, long double val);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+int sp_stack_setb(struct sp_stack *stack, size_t idx, _Bool val);
+int sp_stack_setll(struct sp_stack *stack, size_t idx, long long val);
+int sp_stack_setull(struct sp_stack *stack, size_t idx, unsigned long long val);
 int sp_stack_setu8(struct sp_stack *stack, size_t idx, uint8_t val);
 int sp_stack_setu16(struct sp_stack *stack, size_t idx, uint16_t val);
 int sp_stack_setu32(struct sp_stack *stack, size_t idx, uint32_t val);
@@ -283,6 +310,9 @@ int sp_stack_printf(const struct sp_stack *stack);
 int sp_stack_printd(const struct sp_stack *stack);
 int sp_stack_printld(const struct sp_stack *stack);
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+int sp_stack_printb(const struct sp_stack *stack);
+int sp_stack_printll(const struct sp_stack *stack);
+int sp_stack_printull(const struct sp_stack *stack);
 int sp_stack_printu8(const struct sp_stack *stack);
 int sp_stack_printu16(const struct sp_stack *stack);
 int sp_stack_printu32(const struct sp_stack *stack);

@@ -30,6 +30,9 @@ sp_stack_qinsertul,
 sp_stack_qinsertf,
 sp_stack_qinsertd,
 sp_stack_qinsertld,
+sp_stack_qinsertb,
+sp_stack_qinsertll,
+sp_stack_qinsertull,
 sp_stack_qinsertu8,
 sp_stack_qinsertu16,
 sp_stack_qinsertu32,
@@ -147,6 +150,30 @@ int
 size_t
 .IR idx ,
 long double
+.IR elem )
+.br
+int
+.BR sp_stack_qinsertb "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+_Bool
+.IR elem )
+.br
+int
+.BR sp_stack_qinsertll "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+long long
+.IR elem )
+.br
+int
+.BR sp_stack_qinsertull "(struct sp_stack"
+.RI * stack ,
+size_t
+.IR idx ,
+unsigned long long
 .IR elem )
 .br
 int

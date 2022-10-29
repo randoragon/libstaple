@@ -30,6 +30,9 @@ sp_queue_popul,
 sp_queue_popf,
 sp_queue_popd,
 sp_queue_popld,
+sp_queue_popb,
+sp_queue_popll,
+sp_queue_popull,
 sp_queue_popu8,
 sp_queue_popu16,
 sp_queue_popu32,
@@ -96,6 +99,18 @@ double
 .br
 long double
 .BR sp_queue_popld "(struct sp_queue"
+.RI * queue )
+.br
+_Bool
+.BR sp_queue_popb "(struct sp_queue"
+.RI * queue )
+.br
+long long
+.BR sp_queue_popll "(struct sp_queue"
+.RI * queue )
+.br
+unsigned long long
+.BR sp_queue_popull "(struct sp_queue"
 .RI * queue )
 .br
 uint8_t

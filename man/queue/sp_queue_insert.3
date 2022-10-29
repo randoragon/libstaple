@@ -30,6 +30,9 @@ sp_queue_insertul,
 sp_queue_insertf,
 sp_queue_insertd,
 sp_queue_insertld,
+sp_queue_insertb,
+sp_queue_insertll,
+sp_queue_insertull,
 sp_queue_insertu8,
 sp_queue_insertu16,
 sp_queue_insertu32,
@@ -147,6 +150,30 @@ int
 size_t
 .IR idx ,
 long double
+.IR elem )
+.br
+int
+.BR sp_queue_insertb "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+_Bool
+.IR elem )
+.br
+int
+.BR sp_queue_insertll "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+long long
+.IR elem )
+.br
+int
+.BR sp_queue_insertull "(struct sp_queue"
+.RI * queue ,
+size_t
+.IR idx ,
+unsigned long long
 .IR elem )
 .br
 int

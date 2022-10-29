@@ -30,6 +30,9 @@ sp_queue_printul,
 sp_queue_printf,
 sp_queue_printd,
 sp_queue_printld,
+sp_queue_printb,
+sp_queue_printll,
+sp_queue_printull,
 sp_queue_printu8,
 sp_queue_printu16,
 sp_queue_printu32,
@@ -96,6 +99,18 @@ int
 .br
 int
 .BR sp_queue_printld "(const struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printb "(const struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printll "(const struct sp_queue"
+.RI * queue )
+.br
+int
+.BR sp_queue_printull "(const struct sp_queue"
 .RI * queue )
 .br
 int
