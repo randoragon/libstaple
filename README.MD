@@ -1,7 +1,7 @@
 # Staple - easy data structures in C
 
 Staple is a general-purpose library implementing common data structures in pure
-C89 without any external dependencies besides the C standard library.
+C without any external dependencies besides the C standard library.
 
 ## Available Modules
 
@@ -51,16 +51,21 @@ int main(void)
 
 ## Library Design Overview
 
+### Compatibility
+
+- works with any version of C starting from C89
+- fully compliant, compiler-agnostic
+
 ### Simplicity
 
-- pure C89
 - no magic macros
 - no typedefs
 
 ### Convenience
 
 - super easy integration with primitive types
-- man pages for every module and function
+- man pages for every module and function (integrates nicely with vim's `K`
+  keybinding)
 - built-in print functions for every structure
 
 ### Flexibility
@@ -104,24 +109,28 @@ first letters of your target type (except for strings):
 suffix | type
 ---: | :---
 none | any (`void*`)
-`l` | `long`
-`ul` | `unsigned long`
-`i` | `int`
-`ui` | `unsigned int`
-`s` | `short`
-`us` | `unsigned short`
-`c` | `char`
-`sc` | `signed char`
-`uc` | `unsigned char`
-`f` | `float`
-`d` | `double`
-`ld` | `long double`
-`str` | string (`char*`)
-`strn` | substring (`char*`)
+`c`, `sc`, `uc` | `char`, `signed char`, `unsigned char`
+`s`, `us` | `short`, `unsigned short`
+`i`, `ui` | `int`, `unsigned int`
+`l`, `ul` | `long`, `unsigned long`
+`f`, `d`, `ld` | `float`, `double`, `long double`
+`str`, `strn` | string (`char*`), substring (`char*`)
 
 `signed char` is the only explicitly signed type available, due to the fact that
 it is not defined by the standard whether or not `char` alone is signed or
 unsigned.
+
+Additionally, these C99 type suffixes are available when compiling the library
+in C99 (default):
+
+suffix | type
+---: | :---
+`b` | `_Bool`
+`ll`, `ull` | `long long`, `unsigned long long`
+`i8`, `u8` | `int8_t`, `uint8_t`
+`i16`, `u16` | `int16_t`, `uint16_t`
+`i32`, `u32` | `int32_t`, `uint32_t`
+`i64`, `u64` | `int64_t`, `uint64_t`
 
 This division into generic and suffixed form without using macro functions
 introduces a **lot** of redundancy and inflation to the code base and resulting
@@ -156,6 +165,16 @@ The library can be compiled with various optional modes (refer to the
 **libstaple**(7) man page for descriptions of each):
 
 	make clean install DEBUG=1 QUIET=1 ABORT=1
+
+### Compiling with C89 only
+
+If your target platform does not have a C99 compiler, the library can be built
+with just "ANSI" C89:
+
+	make STDC=c89 clean install
+
+This option is provided for compatibility purposes only - the library will
+behave exactly the same, except the C99 functionality will be missing.
 
 ## Unit Testing
 

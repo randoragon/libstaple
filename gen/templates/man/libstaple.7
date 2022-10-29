@@ -1,6 +1,6 @@
 .TH LIBSTAPLE 7 DATE "libstaple-VERSION"
 .SH NAME
-Staple \- a general-purpose data structure library in pure C89.
+Staple \- a general-purpose data structure library in pure C.
 .SH DESCRIPTION
 .P
 .B Staple
@@ -58,26 +58,41 @@ rb|lb.
 SUFFIX	TYPE
 _
 none 	any (\fBvoid*\fP)
-l 	long
-ul 	unsigned long
-i 	int
-ui 	unsigned int
-s 	short
-us 	unsigned short
-c 	char
-sc 	signed char
-uc 	unsigned char
-f 	float
-d 	double
-ld 	long double
-str	\fRstring (\fPchar*\fR)\fP
-strn	\fRsubstring (\fPchar*\fR)\fP
+c\fR,\fP sc\fR,\fP uc 	char\fR,\fP signed char\fR,\fP unsigned char
+s\fR,\fP us 	short\fR,\fP unsigned short
+i\fR,\fP ui 	int\fR,\fP unsigned int
+l\fR,\fP ul 	long\fR,\fP unsigned long
+f\fR,\fP d\fR,\fP ld 	float\fR,\fP double\fR,\fP long double
+str\fR,\fP strn	\fRstring (\fPchar*\fR), substring (\fPchar*\fR)\fP
 .TE
 .P
 .B "signed char"
 is the only explicitly signed type available due to the fact that
 .B char
 signedness is not defined by the standard.
+.P
+The
+.B strn
+"substring" prefix allows one to specify the number of bytes of the string to
+read. It is only implemented for insert operations.
+.P
+If compiled with C99 support (the default),
+.B Staple
+provides the following suffixes on top of the aforementioned ones:
+.TS
+box;
+rb|lb
+rb|lb.
+SUFFIX	TYPE
+_
+b	_Bool
+ll\fR,\fP ull	long long\fR,\fP unsigned long long
+i8\fR,\fP u8	int8_t\fR,\fP uint8_t
+i16\fR,\fP u16	int16_t\fR,\fP uint16_t
+i32\fR,\fP u32	int32_t\fR,\fP uint32_t
+i64\fR,\fP u64	int64_t\fR,\fP uint64_t
+.TE
+.
 .SS Thread Safety
 .P
 .B Staple
@@ -130,13 +145,25 @@ Abort mode state can be determined during runtime with the
 .BR sp_is_abort (3)
 function.
 .SH CONFORMING TO
-The entirety of
 .B Staple
-is written in pure
-.BR C89
-for maximum portability. There are no external dependencies besides the C
-Standard
-Library.
+is compatible with any C standard starting from "ANSI" C89. This is to ensure
+maximum portability and compatibility with platforms which may not have newer C
+compilers.
+.P
+Depending on which standard of C
+.B Staple
+is compiled in, some features may be present or missing. The following is a
+table of every feature that depends on a specific C standard:
+.
+.TS
+box;
+cb|cb
+c |c
+cb|cb.
+STANDARD	FEATURE
+_
+C99 or later	C99 type suffixes (see \fBDESCRIPTION\fP for the full table)
+.TE
 .SH NOTES
 .P
 In the future, the following additions are planned for the library (order is

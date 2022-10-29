@@ -15,7 +15,7 @@ CC          := cc
 LINKER      := cc
 VFLAGS      := -DVERSION_MAJOR=$(VERSION_MAJOR) -DVERSION_MINOR=$(VERSION_MINOR)
 VFLAGS      += -DVERSION_PATCH=$(VERSION_PATCH) -DVERSION_STR="$(VERSION_STR)"
-STDC        := c99  # Change to newer standards, e.g. c99 to enable more functions
+STDC        := c99  # Change to c89 to disable c99 types (may be needed if no c99 compiler is available)
 CFLAGS      := -fpic $(VFLAGS) -std=$(STDC) -Wall -Wextra -pedantic -Werror -Werror=vla
 CFLAGS      += $(if $(filter 1,$(DEBUG)),-DSTAPLE_DEBUG -g -Og,-O3)
 CFLAGS      += $(if $(filter 1,$(QUIET)),-DSTAPLE_QUIET)
