@@ -88,6 +88,11 @@ int sp_queue_eq(const struct sp_queue *queue1, const struct sp_queue *queue2, in
 	     *q = queue2->head;
 	if (queue1->elem_size != queue2->elem_size || queue1->size != queue2->size)
 		return 0;
+	/* Possible area for optimization: when cmp == NULL, don't run memcmp on
+	 * an element-by-element basis; instead calculate the largest possible
+	 * slices of memory to compare in queue1 and queue2 to minimize the
+	 * number of function calls (similar to how sp_stack_eq does it, but
+	 * suited for ring buffers). */
 	while (i != 0) {
 		if (cmp ? cmp(p, q) : memcmp(p, q, queue1->elem_size))
 			return 0;
