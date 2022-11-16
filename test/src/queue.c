@@ -1619,3 +1619,81 @@ Test(queue, ringbuf_resize)
 	cr_assert_eq(20LU, (unsigned long)q->capacity);
 	cr_assert_eq(0, sp_queue_destroy(q, NULL));
 }
+
+Test(queue, eq)
+{
+	struct sp_queue *q1, *q2;
+
+	/* Trivial errors */
+	q1 = sp_queue_create(1, 1);
+	q2 = sp_queue_create(2, 1);
+	cr_assert_eq(0, sp_queue_eq(q1, q2, NULL));
+	sp_queue_destroy(q1, NULL);
+	sp_queue_destroy(q2, NULL);
+	q1 = sp_queue_create(1, 1);
+	q2 = sp_queue_create(1, 1);
+	cr_assert_eq(0, sp_queue_eq(NULL, NULL, NULL));
+	cr_assert_eq(0, sp_queue_eq(q1, NULL, NULL));
+	cr_assert_eq(0, sp_queue_eq(NULL, q2, NULL));
+	cr_assert_eq(1, sp_queue_eq(q1, q2, NULL));
+	sp_queue_destroy(q1, NULL);
+	sp_queue_destroy(q2, NULL);
+
+	{ /* Generic form */
+		struct data a, b, c;
+		cr_assert_eq(0, data_init(&a));
+		cr_assert_eq(0, data_cpy(&b, &a));
+		cr_assert_eq(0, data_init(&c));
+		q1 = sp_queue_create(sizeof(struct data), 15);
+		q2 = sp_queue_create(sizeof(struct data), 30);
+
+		cr_assert_eq(0, sp_queue_push(q1, &a));
+		cr_assert_eq(0, sp_queue_eq(NULL, q2, data_cmp));
+		cr_assert_eq(0, sp_queue_clear(q1, NULL));
+		cr_assert_eq(1, sp_queue_eq(q1, q2, data_cmp));
+
+		cr_assert_eq(0, sp_queue_push(q1, &a));
+		cr_assert_eq(0, sp_queue_push(q2, &a));
+		cr_assert_eq(1, sp_queue_eq(q1, q2, NULL));
+		cr_assert_eq(1, sp_queue_eq(q1, q2, data_cmp));
+
+		cr_assert_eq(0, sp_queue_push(q1, &a));
+		cr_assert_eq(0, sp_queue_push(q2, &b));
+		cr_assert_eq(0, sp_queue_eq(q1, q2, NULL));
+		cr_assert_eq(1, sp_queue_eq(q1, q2, data_cmp));
+
+		cr_assert_eq(0, sp_queue_push(q1, &a));
+		cr_assert_eq(0, sp_queue_eq(q1, q2, data_cmp));
+		cr_assert_eq(0, sp_queue_push(q2, &c));
+		cr_assert_eq(0, sp_queue_eq(q1, q2, data_cmp));
+
+		sp_queue_destroy(q1, NULL);
+		sp_queue_destroy(q2, NULL);
+		data_dtor(&a);
+		data_dtor(&b);
+		data_dtor(&c);
+	}
+
+	{ /* Suffixed form */
+		const int a = 5, b = 10;
+		q1 = sp_queue_create(sizeof(int), 15);
+		q2 = sp_queue_create(sizeof(int), 30);
+
+		cr_assert_eq(0, sp_queue_pushi(q1, a));
+		cr_assert_eq(0, sp_queue_eq(NULL, q2, NULL));
+		cr_assert_eq(0, sp_queue_clear(q1, NULL));
+		cr_assert_eq(1, sp_queue_eq(q1, q2, NULL));
+
+		cr_assert_eq(0, sp_queue_pushi(q1, a));
+		cr_assert_eq(0, sp_queue_pushi(q2, a));
+		cr_assert_eq(1, sp_queue_eq(q1, q2, NULL));
+
+		cr_assert_eq(0, sp_queue_pushi(q1, b));
+		cr_assert_eq(0, sp_queue_eq(q1, q2, NULL));
+		cr_assert_eq(0, sp_queue_pushi(q2, b));
+		cr_assert_eq(1, sp_queue_eq(q1, q2, NULL));
+
+		sp_queue_destroy(q1, NULL);
+		sp_queue_destroy(q2, NULL);
+	}
+}

@@ -39,6 +39,7 @@ struct sp_queue {
 struct sp_queue *sp_queue_create(size_t elem_size, size_t capacity);
 int              sp_queue_clear(struct sp_queue *queue, int (*dtor)(void*));
 int              sp_queue_destroy(struct sp_queue *queue, int (*dtor)(void*));
+int              sp_queue_eq(const struct sp_queue *queue1, const struct sp_queue *queue2, int (*cmp)(const void*, const void*));
 int              sp_queue_copy(struct sp_queue *dest, const struct sp_queue *src, int (*cpy)(void*, const void*));
 int              sp_queue_foreach(struct sp_queue *queue, int (*func)(void*, size_t));
 

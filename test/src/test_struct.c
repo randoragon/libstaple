@@ -95,12 +95,14 @@ int data_dtor_bad(void *d)
 	return 1;
 }
 
-int data_cmp(const struct data *a, const struct data *b)
+int data_cmp(const void *a, const void *b)
 {
-	if (a->id != b->id)                 return 1;
-	if (a->age != b->age)               return 2;
-	if (strcmp(a->name, b->name))       return 3;
-	if (strcmp(a->surname, b->surname)) return 4;
+	const struct data *a_ = (struct data*)a;
+	const struct data *b_ = (struct data*)b;
+	if (a_->id != b_->id)                 return 1;
+	if (a_->age != b_->age)               return 2;
+	if (strcmp(a_->name, b_->name))       return 3;
+	if (strcmp(a_->surname, b_->surname)) return 4;
 	return 0;
 }
 

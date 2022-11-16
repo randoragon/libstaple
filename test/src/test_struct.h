@@ -41,7 +41,7 @@ int data_cpy(void *dest, const void *src);
 int data_cpy_bad(void *dest, const void *src);
 int data_dtor(void *d);
 int data_dtor_bad(void *d);
-int data_cmp(const struct data *a, const struct data *b);
+int data_cmp(const void *a, const void *b);
 
 /* These two functions are used for testing "foreach" functions, e.g.
  * sp_stack_foreach.  The goal is to first mutate a bunch of data structs in a
