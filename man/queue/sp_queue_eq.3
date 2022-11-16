@@ -1,0 +1,107 @@
+.\"  Staple - A general-purpose data structure library in pure C89.
+.\"  Copyright (C) 2021  Randoragon
+.\"
+.\"  This library is free software; you can redistribute it and/or
+.\"  modify it under the terms of the GNU Lesser General Public
+.\"  License as published by the Free Software Foundation;
+.\"  version 2.1 of the License.
+.\"
+.\"  This library is distributed in the hope that it will be useful,
+.\"  but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+.\"  Lesser General Public License for more details.
+.\"
+.\"  You should have received a copy of the GNU Lesser General Public
+.\"  License along with this library; if not, write to the Free Software
+.\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+.\"--------------------------------------------------------------------------------
+.TH SP_QUEUE_EQ 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_queue_eq \- check if two queues are equal
+.SH SYNOPSIS
+.ad l
+#include <staple.h>
+.sp
+int
+.RB * sp_queue_eq (const
+struct sp_queue
+.RI * queue1 ,
+const struct sp_queue
+.RI * queue2 ,
+int
+.RI (* cmp )(const
+void*, const void*))
+.sp
+Link with \fI-lstaple\fP.
+.ad
+.SH DESCRIPTION
+The
+.BR sp_queue_eq ()
+function intakes two queues and compares their contents. The
+queues are considered equal if and only if all of the following
+conditions are met:
+.IP (1)
+.IR queue1->elem_size " == " queue2->elem_size
+.IP (2)
+.IR queue1->size " == " queue2->size
+.IP (3)
+The queues' contents are equivalent, i.e. they both comprise of equal elements
+in the same order.
+.P
+.IR queue1 " and " queue2
+are the queues to compare. The order of these arguments does not matter.
+.P
+.I cmp
+is a pointer to a comparator function that shall be invoked on
+every pair of consecutive elements from
+.IR queue1 " and " queue2
+to decide whether they are equal or not. The function must be implemented in
+such a way that the first argument is the address to
+.IR queue1 's
+nth element and the second argument is the address to
+.IR queue2 's
+nth element.
+The function must return 0 if elements are different and non-0 if they are
+equal.
+.P
+.B NULL
+may be passed as \fIcmp\fP instead, in which case elements are compared using
+.BR memcmp (3).
+.SH RETURN VALUE
+The
+.BR sp_queue_eq ()
+function shall return \fB1\fP if the comparison was successful and
+.IR queue1 " and " queue2
+are equal. Otherwise, it shall return
+.BR 0 .
+.SH ERRORS
+The
+.BR sp_queue_eq ()
+function shall fail if:
+.IP \fB0\fP 1.5i
+Either
+.IR queue1 " or " queue2
+is a null pointer (debug mode only).
+.SH CONFORMING TO
+See
+.BR libstaple (7).
+.SH SEE ALSO
+.ad l
+.BR libstaple (7),
+.BR sp_queue (7),
+.BR sp_queue_create (3),
+.BR sp_queue_destroy (3),
+.BR sp_queue_clear (3),
+.BR sp_queue_push (3),
+.BR sp_queue_peek (3),
+.BR sp_queue_pop (3),
+.BR sp_queue_insert (3),
+.BR sp_queue_remove (3),
+.BR sp_queue_qinsert (3),
+.BR sp_queue_qremove (3),
+.BR sp_queue_get (3),
+.BR sp_queue_set (3),
+.BR sp_queue_copy (3),
+.BR sp_queue_foreach (3),
+.BR sp_queue_print (3),
+.BR memcmp (3)

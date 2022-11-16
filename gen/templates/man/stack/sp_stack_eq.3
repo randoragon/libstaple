@@ -1,0 +1,64 @@
+.\"M stack
+.TH SP_STACK_EQ 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_stack_eq \- check if two stacks are equal
+.\". MAN_SYNOPSIS_BEGIN
+int
+.RB * sp_stack_eq (const
+struct sp_stack
+.RI * stack1 ,
+const struct sp_stack
+.RI * stack2 ,
+int
+.RI (* cmp )(const
+void*, const void*))
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+The
+.BR sp_stack_eq ()
+function intakes two stacks and compares their contents. The
+stacks are considered equal if and only if all of the following
+conditions are met:
+.IP (1)
+.IR stack1->elem_size " == " stack2->elem_size
+.IP (2)
+.IR stack1->size " == " stack2->size
+.IP (3)
+The stacks' contents are equivalent, i.e. they both comprise of equal elements
+in the same order.
+.P
+.IR stack1 " and " stack2
+are the stacks to compare. The order of these arguments does not matter.
+.P
+.I cmp
+is a pointer to a comparator function that shall be invoked on
+every pair of consecutive elements from
+.IR stack1 " and " stack2
+to decide whether they are equal or not. The function must be implemented in
+such a way that the first argument is the address to
+.IR stack1 's
+nth element and the second argument is the address to
+.IR stack2 's
+nth element.
+The function must return 0 if elements are different and non-0 if they are
+equal.
+.P
+.B NULL
+may be passed as \fIcmp\fP instead, in which case elements are compared using
+.BR memcmp (3).
+.SH RETURN VALUE
+The
+.BR sp_stack_eq ()
+function shall return \fB1\fP if the comparison was successful and
+.IR stack1 " and " stack2
+are equal. Otherwise, it shall return
+.BR 0 .
+.SH ERRORS
+.\". MAN_SHALL_FAIL_IF sp_stack_eq
+.\". MAN_ERRCODE 0
+Either
+.IR stack1 " or " stack2
+is a null pointer (debug mode only).
+.SH CONFORMING TO
+See
+.BR libstaple (7).

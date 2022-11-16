@@ -24,6 +24,7 @@ local MAN_SORT_ORDER = {
 	'sp_stack_qremove(3)',
 	'sp_stack_get(3)',
 	'sp_stack_set(3)',
+	'sp_stack_eq(3)',
 	'sp_stack_copy(3)',
 	'sp_stack_foreach(3)',
 	'sp_stack_print(3)',
@@ -40,6 +41,7 @@ local MAN_SORT_ORDER = {
 	'sp_queue_qremove(3)',
 	'sp_queue_get(3)',
 	'sp_queue_set(3)',
+	'sp_queue_eq(3)',
 	'sp_queue_copy(3)',
 	'sp_queue_foreach(3)',
 	'sp_queue_print(3)',
@@ -52,6 +54,7 @@ local MAN_SORT_ORDER = {
 	'scanf(3)',
 	'free(3)',
 	'memcpy(3)',
+	'memcmp(3)',
 }
 local sort_order = {}
 for i, v in ipairs(MAN_SORT_ORDER) do

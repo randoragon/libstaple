@@ -1,0 +1,64 @@
+.\"M queue
+.TH SP_QUEUE_EQ 3 DATE "libstaple-VERSION"
+.SH NAME
+sp_queue_eq \- check if two queues are equal
+.\". MAN_SYNOPSIS_BEGIN
+int
+.RB * sp_queue_eq (const
+struct sp_queue
+.RI * queue1 ,
+const struct sp_queue
+.RI * queue2 ,
+int
+.RI (* cmp )(const
+void*, const void*))
+.\". MAN_SYNOPSIS_END
+.SH DESCRIPTION
+The
+.BR sp_queue_eq ()
+function intakes two queues and compares their contents. The
+queues are considered equal if and only if all of the following
+conditions are met:
+.IP (1)
+.IR queue1->elem_size " == " queue2->elem_size
+.IP (2)
+.IR queue1->size " == " queue2->size
+.IP (3)
+The queues' contents are equivalent, i.e. they both comprise of equal elements
+in the same order.
+.P
+.IR queue1 " and " queue2
+are the queues to compare. The order of these arguments does not matter.
+.P
+.I cmp
+is a pointer to a comparator function that shall be invoked on
+every pair of consecutive elements from
+.IR queue1 " and " queue2
+to decide whether they are equal or not. The function must be implemented in
+such a way that the first argument is the address to
+.IR queue1 's
+nth element and the second argument is the address to
+.IR queue2 's
+nth element.
+The function must return 0 if elements are different and non-0 if they are
+equal.
+.P
+.B NULL
+may be passed as \fIcmp\fP instead, in which case elements are compared using
+.BR memcmp (3).
+.SH RETURN VALUE
+The
+.BR sp_queue_eq ()
+function shall return \fB1\fP if the comparison was successful and
+.IR queue1 " and " queue2
+are equal. Otherwise, it shall return
+.BR 0 .
+.SH ERRORS
+.\". MAN_SHALL_FAIL_IF sp_queue_eq
+.\". MAN_ERRCODE 0
+Either
+.IR queue1 " or " queue2
+is a null pointer (debug mode only).
+.SH CONFORMING TO
+See
+.BR libstaple (7).
