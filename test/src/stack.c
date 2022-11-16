@@ -1617,3 +1617,81 @@ Test(stack, print)
 		cr_assert_eq(0, sp_stack_destroy(s, NULL));
 	}
 }
+
+Test(stack, eq)
+{
+	struct sp_stack *s1, *s2;
+
+	/* Trivial errors */
+	s1 = sp_stack_create(1, 1);
+	s2 = sp_stack_create(2, 1);
+	cr_assert_eq(0, sp_stack_eq(s1, s2, NULL));
+	sp_stack_destroy(s1, NULL);
+	sp_stack_destroy(s2, NULL);
+	s1 = sp_stack_create(1, 1);
+	s2 = sp_stack_create(1, 1);
+	cr_assert_eq(0, sp_stack_eq(NULL, NULL, NULL));
+	cr_assert_eq(0, sp_stack_eq(s1, NULL, NULL));
+	cr_assert_eq(0, sp_stack_eq(NULL, s2, NULL));
+	cr_assert_eq(1, sp_stack_eq(s1, s2, NULL));
+	sp_stack_destroy(s1, NULL);
+	sp_stack_destroy(s2, NULL);
+
+	{ /* Generic form */
+		struct data a, b, c;
+		cr_assert_eq(0, data_init(&a));
+		cr_assert_eq(0, data_cpy(&b, &a));
+		cr_assert_eq(0, data_init(&c));
+		s1 = sp_stack_create(sizeof(struct data), 15);
+		s2 = sp_stack_create(sizeof(struct data), 30);
+
+		cr_assert_eq(0, sp_stack_push(s1, &a));
+		cr_assert_eq(0, sp_stack_eq(NULL, s2, data_cmp));
+		cr_assert_eq(0, sp_stack_clear(s1, NULL));
+		cr_assert_eq(1, sp_stack_eq(s1, s2, data_cmp));
+
+		cr_assert_eq(0, sp_stack_push(s1, &a));
+		cr_assert_eq(0, sp_stack_push(s2, &a));
+		cr_assert_eq(1, sp_stack_eq(s1, s2, NULL));
+		cr_assert_eq(1, sp_stack_eq(s1, s2, data_cmp));
+
+		cr_assert_eq(0, sp_stack_push(s1, &a));
+		cr_assert_eq(0, sp_stack_push(s2, &b));
+		cr_assert_eq(0, sp_stack_eq(s1, s2, NULL));
+		cr_assert_eq(1, sp_stack_eq(s1, s2, data_cmp));
+
+		cr_assert_eq(0, sp_stack_push(s1, &a));
+		cr_assert_eq(0, sp_stack_eq(s1, s2, data_cmp));
+		cr_assert_eq(0, sp_stack_push(s2, &c));
+		cr_assert_eq(0, sp_stack_eq(s1, s2, data_cmp));
+
+		sp_stack_destroy(s1, NULL);
+		sp_stack_destroy(s2, NULL);
+		data_dtor(&a);
+		data_dtor(&b);
+		data_dtor(&c);
+	}
+
+	{ /* Suffixed form */
+		const int a = 5, b = 10;
+		s1 = sp_stack_create(sizeof(int), 15);
+		s2 = sp_stack_create(sizeof(int), 30);
+
+		cr_assert_eq(0, sp_stack_pushi(s1, a));
+		cr_assert_eq(0, sp_stack_eq(NULL, s2, NULL));
+		cr_assert_eq(0, sp_stack_clear(s1, NULL));
+		cr_assert_eq(1, sp_stack_eq(s1, s2, NULL));
+
+		cr_assert_eq(0, sp_stack_pushi(s1, a));
+		cr_assert_eq(0, sp_stack_pushi(s2, a));
+		cr_assert_eq(1, sp_stack_eq(s1, s2, NULL));
+
+		cr_assert_eq(0, sp_stack_pushi(s1, b));
+		cr_assert_eq(0, sp_stack_eq(s1, s2, NULL));
+		cr_assert_eq(0, sp_stack_pushi(s2, b));
+		cr_assert_eq(1, sp_stack_eq(s1, s2, NULL));
+
+		sp_stack_destroy(s1, NULL);
+		sp_stack_destroy(s2, NULL);
+	}
+}
