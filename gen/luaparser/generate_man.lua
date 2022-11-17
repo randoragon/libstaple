@@ -78,10 +78,10 @@ for _, v in ipairs(MAN_TEMPLATES) do
 		local list = {v.parent}
 		for _, v2 in ipairs(v) do
 			man_friends[v2] = list
-			list[#list + 1] = v2
+			list[#list + 1] = v2:match('[^/]*$')
 		end
 		if v.parent ~= nil then
-			man_friends[v.parent] = list
+			man_friends[v.parent:match('[^/]*$')] = list
 		end
 	end
 end
