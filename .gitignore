@@ -4,3 +4,4 @@ libstaple.a
 obj
 test/bin
 test/obj
+.ccls-cache
