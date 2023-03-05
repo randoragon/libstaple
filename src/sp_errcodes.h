@@ -23,7 +23,7 @@
  * identify and handle errors.
  */
 
-/* Invalid argmuent value */
+/* Invalid argument value */
 #define SP_EINVAL 1
 
 /* Insufficient memory */
