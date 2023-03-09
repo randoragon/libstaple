@@ -159,10 +159,6 @@ test_%: all test/obj/test_struct.o test/obj/%.o
 	@$(LINKER) test/obj/test_struct.o test/obj/$*.o $(LDTESTFLAGS) -o $(TESTDIR)/bin/$*
 	@echo 'done.'
 	@
-	@tput setaf 4 ; printf "\n##########" ; tput setaf 3
-	@printf "[ $* ]"
-	@tput setaf 4 ; printf "##########\n\n" ; tput setaf 7
+	@printf "\n==========[ BEGIN $* ]==========\n"
 	CK_FORK=no valgrind ./test/bin/$*
-	@tput setaf 4 ; printf "\n###########" ; tput setaf 3
-	@printf "[ END ]"
-	@tput setaf 4 ; printf "###########\n\n" ; tput setaf 7
+	@printf "==========[  END  $* ]==========\n"
