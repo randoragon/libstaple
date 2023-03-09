@@ -128,7 +128,7 @@ function FDef:write_expand(output_path, pconf)
 		fout:write('\n')
 
 		-- Write body
-		fout:write(table.concat(body, '\n'))
+		fout:write(table.concat(body, '\n'), '\n')
 
 		-- Close the C version guard, if necessary
 		fout:write(STDCGuard.close(pset.stdc, true))

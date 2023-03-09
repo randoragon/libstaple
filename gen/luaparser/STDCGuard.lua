@@ -29,9 +29,9 @@ function STDCGuard.close(stdc, prevent_empty)
 		if prevent_empty then
 			-- ISO C forbids empty translation units, so add a dummy
 			-- meaningless line to prevent compilation errors
-			return '\n\n#else\n'..
+			return '\n#else\n'..
 			       'typedef int prevent_empty_translation_unit;\n'..
-			       '#endif'
+			       '#endif\n'
 		else
 			return '#endif\n'
 		end

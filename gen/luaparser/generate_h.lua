@@ -75,6 +75,6 @@ function generate_h(output_path, template_path, pconf)
 
 	-- Close the header guard
 	assert(header_guard, 'description block not found: '..template_path)
-	fout:write('\n#endif /* ', header_guard, ' */')
+	fout:write('\n#endif /* ', header_guard, ' */\n')
 	fout:close()
 end
