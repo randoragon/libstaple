@@ -23,6 +23,7 @@ CFLAGS      += $(if $(filter 1,$(ABORT)),-DSTAPLE_ABORT)
 LDFLAGS     := -shared
 CTESTFLAGS  := -std=c89 -Wall -Wextra -pedantic -Werror=vla -g -Og
 LDTESTFLAGS := -L. -l:./$(TARGET).so -lcheck
+VALGRIND    := valgrind
 
 # List of all library module names
 MODULES := stack queue
@@ -160,5 +161,5 @@ test_%: all test/obj/test_struct.o test/obj/%.o
 	@echo 'done.'
 	@
 	@printf "\n==========[ BEGIN $* ]==========\n"
-	CK_FORK=no valgrind ./test/bin/$*
+	CK_FORK=no $(VALGRIND) ./test/bin/$*
 	@printf "==========[  END  $* ]==========\n"
