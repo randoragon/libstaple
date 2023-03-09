@@ -12,12 +12,11 @@ RUN mkdir -p -m 0700 /build
 # Copy necessary files and directories
 COPY Makefile /build/
 COPY gen/     /build/gen/
+COPY src/     /build/src/
+COPY man/     /build/man/
 COPY test/    /build/test/
 
-# Generate source code
+# Set working directories and entrypoint
 WORKDIR /build
-RUN make LUA=lua5.3 generate
-
-# Set GitHub working directory and entrypoint
 ARG GITHUB_WORKSPACE=/build
 ENTRYPOINT ["/build/test/docker-entrypoint.sh"]
