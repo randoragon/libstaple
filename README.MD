@@ -1,5 +1,7 @@
 # Staple - easy data structures in C
 
+![build status](https://github.com/Randoragon/libstaple/actions/workflows/main.yaml/badge.svg)
+
 Staple is a general-purpose library implementing common data structures in pure
 C without any external dependencies besides the C standard library.
 
