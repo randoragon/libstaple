@@ -1,0 +1,7 @@
+.P
+The
+.BR $1$ ()
+function returns a pointer to the memory block containing the $2$ $3$.
+The user must manually
+.BR free (3)
+the block, otherwise the memory will leak!

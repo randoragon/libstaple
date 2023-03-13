@@ -241,6 +241,13 @@ error.
 The suffixed
 .BR sp_stack_remove ()
 functions shall return the value of the removed element.
+.P
+The
+.BR sp_stack_removestr ()
+function returns a pointer to the memory block containing the removed string.
+The user must manually
+.BR free (3)
+the block, otherwise the memory will leak!
 .SH ERRORS
 .SS Generic Form
 The
@@ -314,4 +321,5 @@ See
 .BR sp_stack_eq (3),
 .BR sp_stack_copy (3),
 .BR sp_stack_foreach (3),
-.BR sp_stack_print (3)
+.BR sp_stack_print (3),
+.BR free (3)
