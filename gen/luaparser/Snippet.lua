@@ -32,7 +32,7 @@ end
 --
 -- Intakes a line and a file handle. Writes the expanded snippet to the file.
 -- Returns true if a snippet was found, false otherwise.
-function Snippet.expand_man(line, fout)
+function Snippet.expand_man(line, fout, see_also)
 	local indent, snip, argstr = line:match('^(%s*)%.\\"%.%s*([%w_]+)%s*(.*)%s*')
 	if snip then
 		local snip_linenum = 1
@@ -43,6 +43,15 @@ function Snippet.expand_man(line, fout)
 				i = i + 1
 			end
 			assert(not snip_line:match('%$%d+%$'), 'unmatched args left in snippet '..snip..' on line '..snip_linenum..':\n\t'..snip_line)
+
+			-- Add any referenced man pages to SEE ALSO
+			if see_also ~= nil then
+				local name, page = snip_line:match('^%.BR%s+([%w%d_]+)%s+%((%d+)%)')
+				if (name and page) ~= nil then
+					see_also[name..'('..page..')'] = true
+				end
+			end
+
 			fout:write(indent, snip_line, '\n')
 			snip_linenum = snip_linenum + 1
 		end

@@ -135,7 +135,7 @@ function generate_man(output_path, template_path, pconf)
 		end
 
 		-- Expand snippets, if any
-		if Snippet.expand_man(line, fout) then
+		if Snippet.expand_man(line, fout, see_also) then
 			goto continue
 		end
 
