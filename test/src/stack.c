@@ -55,6 +55,11 @@ int main(void)
 	      *tc_foreach = tcase_create("foreach"),
 	      *tc_print   = tcase_create("print");
 
+	if (!sp_is_debug() || sp_is_abort()) {
+		printf("staple was not compiled correctly for testing -- debug mode should be enabled and abort mode disabled\n");
+		return EXIT_FAILURE;
+	}
+
 	seed = time(NULL);
 	srand(seed);
 	printf("seed: %d\n", seed);
