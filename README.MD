@@ -85,7 +85,7 @@ int main(void)
 ### Reliability
 
 - complete type safety
-- unit testing with [criterion](https://github.com/Snaipe/Criterion)
+- unit testing with [libcheck](https://libcheck.github.io/check/index.html)
 - runtime errors reported on stderr (can be disabled) and with return codes
 
 ## Handling Generic Data vs. Primitives
@@ -181,16 +181,45 @@ behave exactly the same, except the C99 functionality will be missing.
 ## Unit Testing
 
 All test units are stored in `test/src`. If you wish to run the tests, you will
-need [criterion](https://github.com/Snaipe/Criterion).
+need [libcheck](https://github.com/libcheck/check) and optionally
+[valgrind](https://valgrind.org/). By default, the tests are run with valgrind
+to check for memory-related errors. Valgrind can be disabled by adding
+`VALGRIND=` argument to any make command, e.g. `make VALGRIND= test`.
 
-To execute all tests for a single module `XYZ`, run
+Testing is divided into modules. To execute tests for a single module "`XYZ`", run
 
-	make clean test_XYZ
+	make test_XYZ
 
-(for example `make clean test_stack`). To execute all tests for all
-modules, run
+(for example `make test_stack`). You can also run tests for all the
+modules with
 
-	make clean test
+	make test
 
-If any test fails on a release commit, please open an issue on GitHub or send me
-an email: <randoragongamedev@gmail.com>
+**NOTE:** Running tests requires that Staple was built with debug mode enabled
+and abort mode disabled. The Makefile is not smart enough to know when that
+isn't the case, but the test executables will notice and exit with an error
+automatically. If this happens, simply force the library to recompile with `make
+clean` and try running the tests again.
+
+Test executables and object files can be removed with
+
+	make test_clean
+
+(this is probably not useful unless you are writing tests).
+
+### Running tests in Docker
+
+The supplied `Dockerfile` can be used to automatically run tests in a Docker
+container. This includes all the libcheck tests and possibly more - for example
+it ensures the library is compiler-agnostic by testing Staple built with a few
+different C compilers (see `test/docker-entrypoint.sh` for more details).
+
+To build the Dockerfile and execute all tests in a container, run
+
+	docker build -t staple .
+	docker run staple
+
+---
+
+If you notice any test failing on a release commit, please open an issue on
+GitHub or send me an email: <randoragongamedev@gmail.com>
