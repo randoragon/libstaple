@@ -13,7 +13,7 @@ diff -r -q "$tmp/src" src || { echo 'error: src not in sync with gen' >&2; exit 
 diff -r -q "$tmp/man" man || { echo 'error: man not in sync with gen' >&2; exit 2; }
 rm -rf -- "$tmp"
 
-# Run all tests on Staple build with a particular compiler
+# Run all tests on Staple built with a particular compiler
 run_tests () {
     echo
     echo ">>> build&test with $1..."
