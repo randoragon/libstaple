@@ -77,9 +77,9 @@ int main(void)
   get/set functions (if feasible), even if the structure is not optimized for
   it. Some libraries will implement e.g. the stack with only push/peek/pop
   operations and not bother with insertion, removal and lookup at arbitrary
-  indices. Staple gives you full control out-of-the-box, because even if in
-  99% of cases you will only push/pop from the top of the stack, once in a while
-  you need that pinpoint insert, even at the cost of performance.
+  indices. Staple gives you full control out-of-the-box, because even if in 99%
+  of cases you will only push/pop from the top of the stack, once in a while you
+  need that pinpoint insert, even at the cost of performance.
 - no opaque types - you are free to extend the library, if needed
 
 ### Reliability
@@ -136,8 +136,9 @@ suffix | type
 
 This division into generic and suffixed form without using macro functions
 introduces a **lot** of redundancy and inflation to the code base and resulting
-library size, which is a conscious choice on my part. **This library does not aim
-to be small in size**. It prioritizes simplicity, convenience and flexibility.
+library size, which is a conscious choice on my part. **This library does not
+aim to be small in size**. It prioritizes simplicity, convenience and
+flexibility.
 
 ## Installation
 
@@ -153,15 +154,14 @@ To uninstall, run
 	make uninstall
 
 By default, the files will be copied to `/usr/local/lib`, `/usr/local/include`
-and `/usr/local/share/man`. If you want them (un)installed directly at
-`/usr` (or somewhere else),
-override the `PREFIX` variable:
+and `/usr/local/share/man`. If you want them (un)installed directly at `/usr`
+(or somewhere else), override the `PREFIX` variable:
 
 	make   install PREFIX=/usr
 	make uninstall PREFIX=/usr
 
-The Makefile produces two library files, `libstaple.so` and `libstaple.a`. The former
-is a dynamically linked library, the latter is static.
+The Makefile produces two library files, `libstaple.so` and `libstaple.a`. The
+former is a dynamically linked library, the latter is static.
 
 The library can be compiled with various optional modes (refer to the
 **libstaple**(7) man page for descriptions of each):
