@@ -271,7 +271,13 @@ previous value is overwritten and non-recoverable.
 is the stack.
 .P
 .I idx
-is the index of the element that shall be overwritten.
+is the index of the element that shall be overwritten. Indices start from 0 and
+extend downwards \(em 0 is the top element, 1 is the element below it, and so
+on.
+.br
+.I idx
+must be smaller or equal to
+.IR stack->size .
 .P
 .I val
 is the new value for the element at position
