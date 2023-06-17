@@ -30,7 +30,7 @@
 #include "queue/qinsert.c"
 #include "queue/qremove.c"
 #include "queue/copy.c"
-#include "queue/foreach.c"
+#include "queue/map.c"
 #include "queue/print.c"
 
 int main(void)
@@ -52,7 +52,7 @@ int main(void)
 	      *tc_qinsert = tcase_create("qinsert"),
 	      *tc_qremove = tcase_create("qremove"),
 	      *tc_copy    = tcase_create("copy"),
-	      *tc_foreach = tcase_create("foreach"),
+	      *tc_map     = tcase_create("map"),
 	      *tc_print   = tcase_create("print");
 
 	if (!sp_is_debug() || sp_is_abort()) {
@@ -79,7 +79,7 @@ int main(void)
 	init_and_add(qinsert);
 	init_and_add(qremove);
 	init_and_add(copy);
-	init_and_add(foreach);
+	init_and_add(map);
 	init_and_add(print);
 
 	runner = srunner_create(suite);

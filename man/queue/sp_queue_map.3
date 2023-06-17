@@ -15,16 +15,16 @@
 .\"  License along with this library; if not, write to the Free Software
 .\"  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 .\"--------------------------------------------------------------------------------
-.TH SP_STACK_FOREACH 3 DATE "libstaple-VERSION"
+.TH SP_QUEUE_MAP 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_stack_foreach \- run a function for each stack element
+sp_queue_map \- run a function for each queue element
 .SH SYNOPSIS
 .ad l
 #include <staple.h>
 .sp
 int
-.BR sp_stack_foreach "(struct sp_stack"
-.RI * stack ,
+.BR sp_queue_map "(struct sp_queue"
+.RI * queue ,
 int
 .RI (* func ")(void*, size_t))"
 .sp
@@ -32,12 +32,12 @@ Link with \fI-lstaple\fP.
 .ad
 .SH DESCRIPTION
 The
-.BR sp_stack_foreach ()
-function intakes a pointer to a function, then iterates through all stack
+.BR sp_queue_map ()
+function intakes a pointer to a function, then iterates through all queue
 elements in no particular order, and runs that function for each one.
 .P
-.I stack
-is a pointer to the stack.
+.I queue
+is a pointer to the queue.
 .P
 .I func
 is the pointer to a function. The function must be implemented in such
@@ -45,8 +45,8 @@ a way that the first argument
 .RB ( void* )
 is the address to the current element, and the second
 .RB ( size_t )
-is the index of the current element (index 0 corresponds to the top of the
-stack, 1 is the element below it and so on).
+is the index of the current element (index 0 corresponds to the front of the
+queue, 1 is the element behind it and so on).
 .P
 The function pointed to by
 .I func
@@ -54,39 +54,39 @@ must return 0 for success, and anything else for failure. In debug mode, the
 caught error code (if any) is printed on stderr.
 .SH RETURN VALUE
 If successful, the
-.BR sp_stack_foreach ()
+.BR sp_queue_map ()
 function shall return 0. Otherwise, it shall return a code indicating the
 error.
 .SH ERRORS
 The
-.BR sp_stack_foreach ()
+.BR sp_queue_map ()
 function shall fail if:
 .IP \fBSP_EINVAL\fP 1.5i
 Either
-.IR stack " or " func
+.IR queue " or " func
 are null pointers (debug mode only).
 .IP \fBSP_ECALLBK\fP 1.5i
 .I func
-returned non-0 for some stack element.
+returned non-0 for some queue element.
 .SH CONFORMING TO
 See
 .BR libstaple (7).
 .SH SEE ALSO
 .ad l
 .BR libstaple (7),
-.BR sp_stack (7),
-.BR sp_stack_create (3),
-.BR sp_stack_destroy (3),
-.BR sp_stack_clear (3),
-.BR sp_stack_push (3),
-.BR sp_stack_peek (3),
-.BR sp_stack_pop (3),
-.BR sp_stack_insert (3),
-.BR sp_stack_remove (3),
-.BR sp_stack_qinsert (3),
-.BR sp_stack_qremove (3),
-.BR sp_stack_get (3),
-.BR sp_stack_set (3),
-.BR sp_stack_eq (3),
-.BR sp_stack_copy (3),
-.BR sp_stack_print (3)
+.BR sp_queue (7),
+.BR sp_queue_create (3),
+.BR sp_queue_destroy (3),
+.BR sp_queue_clear (3),
+.BR sp_queue_push (3),
+.BR sp_queue_peek (3),
+.BR sp_queue_pop (3),
+.BR sp_queue_insert (3),
+.BR sp_queue_remove (3),
+.BR sp_queue_qinsert (3),
+.BR sp_queue_qremove (3),
+.BR sp_queue_get (3),
+.BR sp_queue_set (3),
+.BR sp_queue_eq (3),
+.BR sp_queue_copy (3),
+.BR sp_queue_print (3)

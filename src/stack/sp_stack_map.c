@@ -15,17 +15,16 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#include "../sp_queue.h"
+#include "../sp_stack.h"
 #include "../internal.h"
 #include "../sp_errcodes.h"
 
-int sp_queue_foreach(struct sp_queue *queue, int (*func)(void*, size_t))
+int sp_stack_map(struct sp_stack *stack, int (*func)(void*, size_t))
 {
 	size_t i;
-	void *p;
 #ifdef STAPLE_DEBUG
-	if (queue == NULL) {
-		error(("queue is NULL"));
+	if (stack == NULL) {
+		error(("stack is NULL"));
 		return SP_EINVAL;
 	}
 	if (func == NULL) {
@@ -33,16 +32,13 @@ int sp_queue_foreach(struct sp_queue *queue, int (*func)(void*, size_t))
 		return SP_EINVAL;
 	}
 #endif
-	p = queue->head;
-	i = 0;
-	while (i != queue->size) {
+	for (i = 0; i < stack->size; i++) {
+		void *const p = (char*)stack->data + i * stack->elem_size;
 		int err;
 		if ((err = func(p, i))) {
 			error(("callback function func returned %d (non-0)", err));
 			return SP_ECALLBK;
 		}
-		sp_ringbuf_incr(&p, queue->data, queue->capacity, queue->elem_size);
-		++i;
 	}
 	return 0;
 }

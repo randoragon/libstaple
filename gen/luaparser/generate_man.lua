@@ -26,7 +26,7 @@ local MAN_SORT_ORDER = {
 	'sp_stack_set(3)',
 	'sp_stack_eq(3)',
 	'sp_stack_copy(3)',
-	'sp_stack_foreach(3)',
+	'sp_stack_map(3)',
 	'sp_stack_print(3)',
 
 	'sp_queue_create(3)',
@@ -43,7 +43,7 @@ local MAN_SORT_ORDER = {
 	'sp_queue_set(3)',
 	'sp_queue_eq(3)',
 	'sp_queue_copy(3)',
-	'sp_queue_foreach(3)',
+	'sp_queue_map(3)',
 	'sp_queue_print(3)',
 
 	'sp_free(3)',

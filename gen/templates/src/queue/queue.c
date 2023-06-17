@@ -155,7 +155,7 @@ int sp_queue_copy(struct sp_queue *dest, const struct sp_queue *src, int (*cpy)(
 
 /*F{*/
 #include "../sp_errcodes.h"
-int sp_queue_foreach(struct sp_queue *queue, int (*func)(void*, size_t))
+int sp_queue_map(struct sp_queue *queue, int (*func)(void*, size_t))
 {
 	size_t i;
 	void *p;

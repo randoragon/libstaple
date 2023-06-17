@@ -1,22 +1,22 @@
-.\"M queue
-.TH SP_QUEUE_FOREACH 3 DATE "libstaple-VERSION"
+.\"M stack
+.TH SP_STACK_MAP 3 DATE "libstaple-VERSION"
 .SH NAME
-sp_queue_foreach \- run a function for each queue element
+sp_stack_map \- run a function for each stack element
 .\". MAN_SYNOPSIS_BEGIN
 int
-.BR sp_queue_foreach "(struct sp_queue"
-.RI * queue ,
+.BR sp_stack_map "(struct sp_stack"
+.RI * stack ,
 int
 .RI (* func ")(void*, size_t))"
 .\". MAN_SYNOPSIS_END
 .SH DESCRIPTION
 The
-.BR sp_queue_foreach ()
-function intakes a pointer to a function, then iterates through all queue
+.BR sp_stack_map ()
+function intakes a pointer to a function, then iterates through all stack
 elements in no particular order, and runs that function for each one.
 .P
-.I queue
-is a pointer to the queue.
+.I stack
+is a pointer to the stack.
 .P
 .I func
 is the pointer to a function. The function must be implemented in such
@@ -24,22 +24,22 @@ a way that the first argument
 .RB ( void* )
 is the address to the current element, and the second
 .RB ( size_t )
-is the index of the current element (index 0 corresponds to the front of the
-queue, 1 is the element behind it and so on).
+is the index of the current element (index 0 corresponds to the top of the
+stack, 1 is the element below it and so on).
 .P
 The function pointed to by
 .I func
 must return 0 for success, and anything else for failure. In debug mode, the
 caught error code (if any) is printed on stderr.
 .SH RETURN VALUE
-.\". MAN_RETVAL_0_OR_CODE sp_queue_foreach
+.\". MAN_RETVAL_0_OR_CODE sp_stack_map
 .SH ERRORS
-.\". MAN_SHALL_FAIL_IF sp_queue_foreach
+.\". MAN_SHALL_FAIL_IF sp_stack_map
 .\". MAN_ERRCODE SP_EINVAL
 Either
-.IR queue " or " func
+.IR stack " or " func
 are null pointers (debug mode only).
 .\". MAN_ERRCODE SP_ECALLBK
 .I func
-returned non-0 for some queue element.
+returned non-0 for some stack element.
 .\". MAN_CONFORMING_TO

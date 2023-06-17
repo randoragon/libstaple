@@ -43,11 +43,10 @@ int data_dtor(void *d);
 int data_dtor_bad(void *d);
 int data_cmp(const void *a, const void *b);
 
-/* These two functions are used for testing "foreach" functions, e.g.
- * sp_stack_foreach.  The goal is to first mutate a bunch of data structs in a
- * loop, and then verify if all the operations have been executed correctly.
- * It's not relevant what mutation actually does, so long it's something and
- * it's verifiable.
+/* These two functions are used for testing "map" functions, e.g. sp_stack_map.
+ * The goal is to first mutate a bunch of data structs in a loop, and then
+ * verify if all the operations have been executed correctly. It's not relevant
+ * what mutation actually does, so long it's something and it's verifiable.
  */
 int data_mutate(void *d, size_t idx);
 int data_mutate_bad(void *d, size_t idx);

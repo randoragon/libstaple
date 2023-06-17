@@ -147,7 +147,7 @@ int sp_stack_copy(struct sp_stack *dest, const struct sp_stack *src, int (*cpy)(
 
 /*F{*/
 #include "../sp_errcodes.h"
-int sp_stack_foreach(struct sp_stack *stack, int (*func)(void*, size_t))
+int sp_stack_map(struct sp_stack *stack, int (*func)(void*, size_t))
 {
 	size_t i;
 #ifdef STAPLE_DEBUG

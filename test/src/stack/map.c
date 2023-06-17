@@ -5,7 +5,7 @@
 #define teardown(D) \
 	ck_assert_int_eq(0, sp_stack_destroy(s, D));
 
-START_TEST(foreach_ok)
+START_TEST(map_ok)
 {
 	int i;
 	setup(struct data, 10);
@@ -14,23 +14,23 @@ START_TEST(foreach_ok)
 		ck_assert_int_eq(0, data_init(&d));
 		ck_assert_int_eq(0, sp_stack_push(s, &d));
 	}
-	ck_assert_int_eq(0, sp_stack_foreach(s, data_mutate));
-	ck_assert_int_eq(0, sp_stack_foreach(s, data_verify));
+	ck_assert_int_eq(0, sp_stack_map(s, data_mutate));
+	ck_assert_int_eq(0, sp_stack_map(s, data_verify));
 	teardown(data_dtor);
 }
 END_TEST
 
-START_TEST(foreach_bad_args)
+START_TEST(map_bad_args)
 {
 	setup(int, 10);
-	ck_assert_int_eq(SP_EINVAL, sp_stack_foreach(s, NULL));
-	ck_assert_int_eq(SP_EINVAL, sp_stack_foreach(NULL, data_mutate));
-	ck_assert_int_eq(SP_EINVAL, sp_stack_foreach(NULL, NULL));
+	ck_assert_int_eq(SP_EINVAL, sp_stack_map(s, NULL));
+	ck_assert_int_eq(SP_EINVAL, sp_stack_map(NULL, data_mutate));
+	ck_assert_int_eq(SP_EINVAL, sp_stack_map(NULL, NULL));
 	teardown(NULL);
 }
 END_TEST
 
-START_TEST(foreach_bad_callback)
+START_TEST(map_bad_callback)
 {
 	int i;
 	setup(struct data, 10);
@@ -39,17 +39,17 @@ START_TEST(foreach_bad_callback)
 		ck_assert_int_eq(0, data_init(&d));
 		ck_assert_int_eq(0, sp_stack_push(s, &d));
 	}
-	ck_assert_int_eq(SP_ECALLBK, sp_stack_foreach(s, data_mutate_bad));
+	ck_assert_int_eq(SP_ECALLBK, sp_stack_map(s, data_mutate_bad));
 	teardown(data_dtor);
 }
 END_TEST
 
-void init_foreach(Suite *suite, TCase *tc)
+void init_map(Suite *suite, TCase *tc)
 {
 	suite_add_tcase(suite, tc);
-	tcase_add_test(tc, foreach_ok);
-	tcase_add_test(tc, foreach_bad_args);
-	tcase_add_test(tc, foreach_bad_callback);
+	tcase_add_test(tc, map_ok);
+	tcase_add_test(tc, map_bad_args);
+	tcase_add_test(tc, map_bad_callback);
 }
 
 #undef setup
