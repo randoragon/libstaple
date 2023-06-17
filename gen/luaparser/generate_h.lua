@@ -7,7 +7,7 @@ require(DIRNAME..'luaparser.STDCGuard')
 
 function generate_h(output_path, template_path, pconf)
 	local fname = template_path:match('[^/]*$')
-	local fout = io.open(output_path..'/'..fname, 'w')
+	local fout = assert(io.open(output_path..'/'..fname, 'w'))
 	local inside_desc = false
 	local header_guard
 	print('GEN', output_path:gsub('^gen/../', '')..'/'..fname)

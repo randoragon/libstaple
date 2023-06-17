@@ -88,7 +88,7 @@ end
 
 function generate_man(output_path, template_path, pconf)
 	local fname = template_path:match('[^/]*$')
-	local fout = io.open(output_path..'/'..fname, 'w')
+	local fout = assert(io.open(output_path..'/'..fname, 'w'))
 	local module, see_also = nil, {}
 	local synopsis_block = nil
 	print('GEN', output_path:gsub('^gen/../', '')..'/'..fname)
@@ -172,7 +172,6 @@ function generate_man(output_path, template_path, pconf)
 
 	-- Add SEE ALSO section at the end
 	if see_also ~= nil then
-		local dirname = template_path:match('.*/')
 		fout:write('.SH SEE ALSO\n', '.ad l\n')
 		if fname ~= 'libstaple.7' then
 			see_also['libstaple(7)'] = true

@@ -35,7 +35,7 @@ function FDef:new(header, includes, body)
 			o.params[param] = true
 		end
 	end
-	
+
 	return o
 end
 
@@ -106,7 +106,7 @@ function FDef:write_expand(output_path, pconf)
 
 		-- Open the output file
 		print('GEN', fpath:gsub('^gen/../', '')..'')
-		local fout = io.open(fpath, 'w')
+		local fout = assert(io.open(fpath, 'w'))
 
 		-- Write header
 		fout:write(self.header)

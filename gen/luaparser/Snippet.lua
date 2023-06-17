@@ -14,7 +14,7 @@ function Snippet.expand_c(line, list)
 	if snip then
 		local snip_linenum = 1
 		for snip_line in io.lines(SNIPPETDIR..snip) do
-			local args, i = {}, 1
+			local i = 1
 			for word in argstr:gmatch('([^%s]*)') do
 				snip_line = snip_line:gsub('%$'..i..'%$', word)
 				i = i + 1
@@ -37,7 +37,7 @@ function Snippet.expand_man(line, fout, see_also)
 	if snip then
 		local snip_linenum = 1
 		for snip_line in io.lines(SNIPPETDIR..snip) do
-			local args, i = {}, 1
+			local i = 1
 			for word in argstr:gmatch('([^%s]*)') do
 				snip_line = snip_line:gsub('%$'..i..'%$', word)
 				i = i + 1
