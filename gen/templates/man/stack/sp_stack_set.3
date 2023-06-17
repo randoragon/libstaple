@@ -72,7 +72,7 @@ function creates a copy of the string pointed to by
 .I val
 and stores the new pointer on the stack. The string must fit in
 .I SIZE_MAX
-bytes, including the null terminator.
+bytes, including the null terminator. The previous string is freed.
 .P
 The
 .BR sp_stack_setstrn ()
