@@ -59,7 +59,7 @@ PREFIX    := /usr/local
 MANPREFIX := $(PREFIX)/share/man
 
 .PHONY: directories static shared all generate clean install uninstall test
-.SECONDARY: # Disable removal of intermediate files
+.SECONDARY:  # Disable removal of intermediate files
 
 ##################################################################################################
 ##################################################################################################
