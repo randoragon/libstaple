@@ -42,15 +42,15 @@ void   *sp_stack_peek(const struct sp_stack *stack);
 $TYPE$  sp_stack_peek$SUFFIX$(const struct sp_stack *stack);
 char   *sp_stack_peekstr(const struct sp_stack *stack);
 
-int     sp_stack_pop(struct sp_stack *stack, void *output);
+int     sp_stack_pop(struct sp_stack *stack, int (*dtor)(void*));
 $TYPE$  sp_stack_pop$SUFFIX$(struct sp_stack *stack);
 char   *sp_stack_popstr(struct sp_stack *stack);
 
-int     sp_stack_remove(struct sp_stack *stack, size_t idx, void *output);
+int     sp_stack_remove(struct sp_stack *stack, size_t idx, int (*dtor)(void*));
 $TYPE$  sp_stack_remove$SUFFIX$(struct sp_stack *stack, size_t idx);
 char   *sp_stack_removestr(struct sp_stack *stack, size_t idx);
 
-int     sp_stack_qremove(struct sp_stack *stack, size_t idx, void *output);
+int     sp_stack_qremove(struct sp_stack *stack, size_t idx, int (*dtor)(void*));
 $TYPE$  sp_stack_qremove$SUFFIX$(struct sp_stack *stack, size_t idx);
 char   *sp_stack_qremovestr(struct sp_stack *stack, size_t idx);
 

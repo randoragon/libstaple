@@ -20,9 +20,10 @@
 #include "../sp_errcodes.h"
 #include <string.h>
 
-int sp_stack_qremove(struct sp_stack *stack, size_t idx, void *output)
+int sp_stack_qremove(struct sp_stack *stack, size_t idx, int (*dtor)(void*))
 {
 	char *p, *q;
+	int err;
 #ifdef STAPLE_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
@@ -34,9 +35,11 @@ int sp_stack_qremove(struct sp_stack *stack, size_t idx, void *output)
 	}
 #endif
 	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	if (dtor != NULL && (err = dtor(p))) {
+		error(("callback function dtor returned %d (non-0)", err));
+		return SP_ECALLBK;
+	}
 	q = (char*)stack->data + (stack->size - 1) * stack->elem_size;
-	if (output != NULL)
-		memcpy(output, p, stack->elem_size);
 	memcpy(p, q, stack->elem_size);
 	--stack->size;
 	return 0;

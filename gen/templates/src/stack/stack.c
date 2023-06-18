@@ -570,9 +570,10 @@ char *sp_stack_peekstr(const struct sp_stack *stack)
 /*F{*/
 #include "../sp_errcodes.h"
 #include <string.h>
-int sp_stack_pop(struct sp_stack *stack, void *output)
+int sp_stack_pop(struct sp_stack *stack, int (*dtor)(void*))
 {
-	const void *src;
+	void *p;
+	int err;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	if (stack->size == 0) {
@@ -580,9 +581,11 @@ int sp_stack_pop(struct sp_stack *stack, void *output)
 		return SP_EILLEGAL;
 	}
 #endif
-	src = (char*)stack->data + (stack->size - 1) * stack->elem_size;
-	if (output != NULL)
-		memcpy(output, src, stack->elem_size);
+	p = (char*)stack->data + (stack->size - 1) * stack->elem_size;
+	if (dtor != NULL && (err = dtor(p))) {
+		/*. C_ERRMSG_CALLBACK_NON_ZERO dtor err */
+		return SP_ECALLBK;
+	}
 	--stack->size;
 	return 0;
 }
@@ -622,9 +625,10 @@ char *sp_stack_popstr(struct sp_stack *stack)
 /*F{*/
 #include "../sp_errcodes.h"
 #include <string.h>
-int sp_stack_remove(struct sp_stack *stack, size_t idx, void *output)
+int sp_stack_remove(struct sp_stack *stack, size_t idx, int (*dtor)(void*))
 {
 	char *p;
+	int err;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	if (idx >= stack->size) {
@@ -633,8 +637,10 @@ int sp_stack_remove(struct sp_stack *stack, size_t idx, void *output)
 	}
 #endif
 	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
-	if (output != NULL)
-		memcpy(output, p, stack->elem_size);
+	if (dtor != NULL && (err = dtor(p))) {
+		/*. C_ERRMSG_CALLBACK_NON_ZERO dtor err */
+		return SP_ECALLBK;
+	}
 	memmove(p, p + stack->elem_size, idx * stack->elem_size);
 	--stack->size;
 	return 0;
@@ -689,9 +695,10 @@ char *sp_stack_removestr(struct sp_stack *stack, size_t idx)
 /*F{*/
 #include "../sp_errcodes.h"
 #include <string.h>
-int sp_stack_qremove(struct sp_stack *stack, size_t idx, void *output)
+int sp_stack_qremove(struct sp_stack *stack, size_t idx, int (*dtor)(void*))
 {
 	char *p, *q;
+	int err;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	if (idx >= stack->size) {
@@ -700,9 +707,11 @@ int sp_stack_qremove(struct sp_stack *stack, size_t idx, void *output)
 	}
 #endif
 	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
+	if (dtor != NULL && (err = dtor(p))) {
+		/*. C_ERRMSG_CALLBACK_NON_ZERO dtor err */
+		return SP_ECALLBK;
+	}
 	q = (char*)stack->data + (stack->size - 1) * stack->elem_size;
-	if (output != NULL)
-		memcpy(output, p, stack->elem_size);
 	memcpy(p, q, stack->elem_size);
 	--stack->size;
 	return 0;

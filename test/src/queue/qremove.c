@@ -36,7 +36,7 @@ END_TEST
 
 START_TEST(qremove_object)
 {
-	struct data a, b, c, d, e, t;
+	struct data a, b, c, d, e;
 	setup(struct data, 15);
 	data_init(&a);
 	data_init(&b);
@@ -44,37 +44,32 @@ START_TEST(qremove_object)
 	data_init(&d);
 	data_init(&e);
 	ck_assert_int_eq(0, sp_queue_push(s, &a));
-	ck_assert_int_eq(0, sp_queue_qremove(s, 0, &t));
-	ck_assert_int_eq(0, data_cmp(&a, &t));
+	ck_assert_int_eq(0, sp_queue_qremove(s, 0, data_dtor));
 	ck_assert_uint_eq(0, s->size);
 
 	ck_assert_int_eq(0, sp_queue_push(s, &b));
 	ck_assert_int_eq(0, sp_queue_push(s, &c));
 	ck_assert_int_eq(0, sp_queue_push(s, &d));
-	ck_assert_int_eq(0, sp_queue_qremove(s, 1, &t));
-	ck_assert_int_eq(0, data_cmp(&c, &t));
+	ck_assert_int_eq(0, sp_queue_qremove(s, 1, data_dtor));
 	ck_assert_uint_eq(2, s->size);
 	ck_assert_int_eq(0, data_cmp(&b, sp_queue_peek(s)));
 	ck_assert_int_eq(0, data_cmp(&d, sp_queue_get(s, 1)));
 
 	ck_assert_int_eq(0, sp_queue_push(s, &e));
-	ck_assert_int_eq(0, sp_queue_qremove(s, 0, &t));
-	ck_assert_int_eq(0, data_cmp(&b, &t));
+	ck_assert_int_eq(0, sp_queue_qremove(s, 0, data_dtor));
 	ck_assert_uint_eq(2, s->size);
 	ck_assert_int_eq(0, data_cmp(&e, sp_queue_peek(s)));
 	ck_assert_int_eq(0, data_cmp(&d, sp_queue_get(s, 1)));
-	ck_assert_int_eq(0, sp_queue_qremove(s, 1, &t));
-	ck_assert_int_eq(0, data_cmp(&d, &t));
+	ck_assert_int_eq(0, sp_queue_qremove(s, 1, data_dtor));
 	ck_assert_uint_eq(1, s->size);
 	ck_assert_int_eq(0, data_cmp(&e, sp_queue_peek(s)));
-	ck_assert_int_eq(0, sp_queue_qremove(s, 0, &t));
-	ck_assert_int_eq(0, data_cmp(&e, &t));
+	ck_assert_int_eq(0, sp_queue_qremove(s, 0, data_dtor));
 	ck_assert_uint_eq(0, s->size);
-	data_dtor(&a);
-	data_dtor(&b);
-	data_dtor(&c);
-	data_dtor(&d);
-	data_dtor(&e);
+
+	/* `a` is uninitialized, but it doesn't matter. */
+	ck_assert_int_eq(0, sp_queue_push(s, &a));
+	ck_assert_int_eq(0, sp_queue_qremove(s, 0, NULL));
+	ck_assert_uint_eq(0, s->size);
 	teardown(NULL);
 }
 END_TEST
@@ -116,15 +111,10 @@ END_TEST
 
 START_TEST(qremove_bad_args)
 {
-	struct data a, b;
-	data_init(&a);
-	b = a;
 	ck_assert_int_eq(0, sp_queue_qremovei(NULL, 0));
 	ck_assert_int_eq(SP_EINVAL, sp_queue_qremove(NULL, 0, NULL));
-	ck_assert_int_eq(SP_EINVAL, sp_queue_qremove(NULL, 0, &a));
-	ck_assert_int_eq(0, memcmp(&a, &b, sizeof(struct data)));
+	ck_assert_int_eq(SP_EINVAL, sp_queue_qremove(NULL, 0, data_dtor));
 	ck_assert_ptr_null(sp_queue_qremovestr(NULL, 0));
-	data_dtor(&a);
 }
 END_TEST
 
@@ -155,11 +145,11 @@ START_TEST(qremove_bad_index)
 
 	data_init(&a);
 	ck_assert_ptr_nonnull(s = sp_queue_create(sizeof(struct data), 10));
-	ck_assert_int_eq(SP_EINDEX, sp_queue_qremove(s, 0, &a));
+	ck_assert_int_eq(SP_EINDEX, sp_queue_qremove(s, 0, NULL));
 	ck_assert_int_eq(0, sp_queue_push(s, &a));
-	ck_assert_int_eq(SP_EINDEX, sp_queue_qremove(s, 1, &a));
+	ck_assert_int_eq(SP_EINDEX, sp_queue_qremove(s, 1, NULL));
 	ck_assert_int_eq(0, sp_queue_push(s, &a));
-	ck_assert_int_eq(SP_EINDEX, sp_queue_qremove(s, 2, &a));
+	ck_assert_int_eq(SP_EINDEX, sp_queue_qremove(s, 2, NULL));
 	ck_assert_int_eq(0, sp_queue_destroy(s, NULL));
 	data_dtor(&a);
 
@@ -173,6 +163,21 @@ START_TEST(qremove_bad_index)
 }
 END_TEST
 
+START_TEST(qremove_bad_dtor)
+{
+	struct data a, b, c;
+	setup(struct data, 10);
+	data_init(&a);
+	data_init(&b);
+	data_init(&c);
+	ck_assert_int_eq(0, sp_queue_push(s, &a));
+	ck_assert_int_eq(0, sp_queue_push(s, &b));
+	ck_assert_int_eq(0, sp_queue_push(s, &c));
+	ck_assert_int_eq(SP_ECALLBK, sp_queue_qremove(s, 0, data_dtor_bad));
+	teardown(data_dtor);
+}
+END_TEST
+
 void init_qremove(Suite *suite, TCase *tc)
 {
 	suite_add_tcase(suite, tc);
@@ -182,6 +187,7 @@ void init_qremove(Suite *suite, TCase *tc)
 	tcase_add_test(tc, qremove_bad_args);
 	tcase_add_test(tc, qremove_bad_elem_size);
 	tcase_add_test(tc, qremove_bad_index);
+	tcase_add_test(tc, qremove_bad_dtor);
 }
 
 #undef setup

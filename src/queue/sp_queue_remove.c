@@ -20,9 +20,10 @@
 #include "../sp_errcodes.h"
 #include <string.h>
 
-int sp_queue_remove(struct sp_queue *queue, size_t idx, void *output)
+int sp_queue_remove(struct sp_queue *queue, size_t idx, int (*dtor)(void*))
 {
 	char *p;
+	int err;
 #ifdef STAPLE_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -34,8 +35,10 @@ int sp_queue_remove(struct sp_queue *queue, size_t idx, void *output)
 	}
 #endif
 	p = sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
-	if (output != NULL)
-		memcpy(output, p, queue->elem_size);
+	if (dtor != NULL && (err = dtor(p))) {
+		error(("callback function dtor returned %d (non-0)", err));
+		return SP_ECALLBK;
+	}
 	sp_ringbuf_remove(idx, queue->data, &queue->size, queue->capacity, queue->elem_size, &queue->head, &queue->tail);
 	return 0;
 }

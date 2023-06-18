@@ -1,0 +1,17 @@
+The generic
+.BR sp_$1$_pop ()
+function does not return the popped element. To work around this limitation,
+one should use
+.BR sp_$1$_peek ()
+to manually copy the element prior to its removal:
+.IP
+.ad l
+.nf
+/* If element type is known */
+elem_t elem = *(elem_t*)sp_$1$_peek($1$);
+
+/* If only element size is known */
+void *elem = malloc($1$->elem_size);
+memcpy(elem, sp_$1$_peek($1$), $1$->elem_size);
+.fi
+.ad

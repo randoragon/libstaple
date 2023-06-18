@@ -52,8 +52,8 @@ int
 .RI * stack ,
 size_t
 .IR idx ,
-void
-.RI * output )
+int
+.RI (* dtor )(void*))
 .br
 char
 .BR sp_stack_qremovec "(struct sp_stack"

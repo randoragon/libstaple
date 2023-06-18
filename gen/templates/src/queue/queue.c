@@ -583,8 +583,9 @@ char *sp_queue_peekstr(const struct sp_queue *queue)
 /*F{*/
 #include "../sp_errcodes.h"
 #include <string.h>
-int sp_queue_pop(struct sp_queue *queue, void *output)
+int sp_queue_pop(struct sp_queue *queue, int (*dtor)(void*))
 {
+	int err;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
 	if (queue->size == 0) {
@@ -592,8 +593,10 @@ int sp_queue_pop(struct sp_queue *queue, void *output)
 		return SP_EILLEGAL;
 	}
 #endif
-	if (output != NULL)
-		memcpy(output, queue->head, queue->elem_size);
+	if (dtor != NULL && (err = dtor(queue->head))) {
+		/*. C_ERRMSG_CALLBACK_NON_ZERO dtor err */
+		return SP_ECALLBK;
+	}
 	if (queue->size != 1)
 		sp_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
 	--queue->size;
@@ -645,9 +648,10 @@ char *sp_queue_popstr(struct sp_queue *queue)
 /*F{*/
 #include "../sp_errcodes.h"
 #include <string.h>
-int sp_queue_remove(struct sp_queue *queue, size_t idx, void *output)
+int sp_queue_remove(struct sp_queue *queue, size_t idx, int (*dtor)(void*))
 {
 	char *p;
+	int err;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
 	if (idx >= queue->size) {
@@ -656,8 +660,10 @@ int sp_queue_remove(struct sp_queue *queue, size_t idx, void *output)
 	}
 #endif
 	p = sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
-	if (output != NULL)
-		memcpy(output, p, queue->elem_size);
+	if (dtor != NULL && (err = dtor(p))) {
+		/*. C_ERRMSG_CALLBACK_NON_ZERO dtor err */
+		return SP_ECALLBK;
+	}
 	sp_ringbuf_remove(idx, queue->data, &queue->size, queue->capacity, queue->elem_size, &queue->head, &queue->tail);
 	return 0;
 }
@@ -705,9 +711,10 @@ char *sp_queue_removestr(struct sp_queue *queue, size_t idx)
 /*F{*/
 #include "../sp_errcodes.h"
 #include <string.h>
-int sp_queue_qremove(struct sp_queue *queue, size_t idx, void *output)
+int sp_queue_qremove(struct sp_queue *queue, size_t idx, int (*dtor)(void*))
 {
 	char *p;
+	int err;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
 	if (idx >= queue->size) {
@@ -716,8 +723,10 @@ int sp_queue_qremove(struct sp_queue *queue, size_t idx, void *output)
 	}
 #endif
 	p = sp_ringbuf_get(idx, queue->data, queue->capacity, queue->elem_size, queue->head);
-	if (output != NULL)
-		memcpy(output, p, queue->elem_size);
+	if (dtor != NULL && (err = dtor(p))) {
+		/*. C_ERRMSG_CALLBACK_NON_ZERO dtor err */
+		return SP_ECALLBK;
+	}
 	memcpy(p, queue->tail, queue->elem_size);
 	if (queue->size != 1)
 		sp_ringbuf_decr(&queue->tail, queue->data, queue->capacity, queue->elem_size);

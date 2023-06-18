@@ -156,7 +156,7 @@ int64_t  sp_stack_peeki64(const struct sp_stack *stack);
 #endif
 char   *sp_stack_peekstr(const struct sp_stack *stack);
 
-int     sp_stack_pop(struct sp_stack *stack, void *output);
+int     sp_stack_pop(struct sp_stack *stack, int (*dtor)(void*));
 char  sp_stack_popc(struct sp_stack *stack);
 short  sp_stack_pops(struct sp_stack *stack);
 int  sp_stack_popi(struct sp_stack *stack);
@@ -184,7 +184,7 @@ int64_t  sp_stack_popi64(struct sp_stack *stack);
 #endif
 char   *sp_stack_popstr(struct sp_stack *stack);
 
-int     sp_stack_remove(struct sp_stack *stack, size_t idx, void *output);
+int     sp_stack_remove(struct sp_stack *stack, size_t idx, int (*dtor)(void*));
 char  sp_stack_removec(struct sp_stack *stack, size_t idx);
 short  sp_stack_removes(struct sp_stack *stack, size_t idx);
 int  sp_stack_removei(struct sp_stack *stack, size_t idx);
@@ -212,7 +212,7 @@ int64_t  sp_stack_removei64(struct sp_stack *stack, size_t idx);
 #endif
 char   *sp_stack_removestr(struct sp_stack *stack, size_t idx);
 
-int     sp_stack_qremove(struct sp_stack *stack, size_t idx, void *output);
+int     sp_stack_qremove(struct sp_stack *stack, size_t idx, int (*dtor)(void*));
 char  sp_stack_qremovec(struct sp_stack *stack, size_t idx);
 short  sp_stack_qremoves(struct sp_stack *stack, size_t idx);
 int  sp_stack_qremovei(struct sp_stack *stack, size_t idx);

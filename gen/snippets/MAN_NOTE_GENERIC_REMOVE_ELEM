@@ -1,0 +1,19 @@
+The generic
+.BR sp_$1$_remove ()
+function does not return the removed element. To work around this limitation,
+one should use
+.BR sp_$1$_peek ()
+or
+.BR sp_$1$_get ()
+to manually copy the element prior to its removal:
+.IP
+.ad l
+.nf
+/* If element type is known */
+elem_t elem = *(elem_t*)sp_$1$_get($1$, n);
+
+/* If only element size is known */
+void *elem = malloc($1$->elem_size);
+memcpy(elem, sp_$1$_get($1$, n), $1$->elem_size);
+.fi
+.ad

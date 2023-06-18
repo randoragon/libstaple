@@ -44,15 +44,15 @@ void          *sp_queue_peek(const struct sp_queue *queue);
 $TYPE$         sp_queue_peek$SUFFIX$(const struct sp_queue *queue);
 char          *sp_queue_peekstr(const struct sp_queue *queue);
 
-int            sp_queue_pop(struct sp_queue *queue, void *output);
+int            sp_queue_pop(struct sp_queue *queue, int (*dtor)(void*));
 $TYPE$         sp_queue_pop$SUFFIX$(struct sp_queue *queue);
 char          *sp_queue_popstr(struct sp_queue *queue);
 
-int            sp_queue_remove(struct sp_queue *queue, size_t idx, void *output);
+int            sp_queue_remove(struct sp_queue *queue, size_t idx, int (*dtor)(void*));
 $TYPE$         sp_queue_remove$SUFFIX$(struct sp_queue *queue, size_t idx);
 char          *sp_queue_removestr(struct sp_queue *queue, size_t idx);
 
-int            sp_queue_qremove(struct sp_queue *queue, size_t idx, void *output);
+int            sp_queue_qremove(struct sp_queue *queue, size_t idx, int (*dtor)(void*));
 $TYPE$         sp_queue_qremove$SUFFIX$(struct sp_queue *queue, size_t idx);
 char          *sp_queue_qremovestr(struct sp_queue *queue, size_t idx);
 

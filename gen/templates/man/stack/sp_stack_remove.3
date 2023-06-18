@@ -8,8 +8,8 @@ int
 .RI * stack ,
 size_t
 .IR idx ,
-void
-.RI * output )
+int
+.RI (* dtor )(void*))
 .\"SS{
 .br
 $TYPE$
@@ -48,11 +48,10 @@ elements to be moved in memory. Removing the 0th element has the same effect as
 must be smaller than
 .IR stack->size .
 .SS Generic Form
-.I output
-is the start of an adequately-sized block of memory the removed element shall be
-copied into.
-.I output
-must not overlap in memory with the removed element.
+.I dtor
+is a pointer to a destructor function that shall be invoked on the removed
+element. This mechanism is useful if individual stack elements own memory
+that should be freed (see EXAMPLES). If no such destructor function is needed,
 .B NULL
 can be passed to skip this functionality.
 .SH RETURN VALUE
@@ -70,6 +69,9 @@ is a null pointer (debug mode only).
 .\". MAN_ERRCODE SP_EINDEX
 .I idx
 out of range (debug mode only).
+.\". MAN_ERRCODE SP_ECALLBK
+.I dtor
+returned non-0.
 .SS Suffixed Form
 .\". MAN_SHALL_FAIL_IF_SUFFIXED sp_stack_remove
 .\". MAN_ERRCODE 0
@@ -89,4 +91,8 @@ function returns
 instead of 0)
 .SH NOTES
 .\". MAN_NOTE_DEBUG_AMBIGUOUS_ERROR sp_stack_removestr
+.P
+.\". MAN_NOTE_GENERIC_REMOVE_ELEM stack
 .\". MAN_CONFORMING_TO
+.SH EXAMPLES
+.\". MAN_EXAMPLE_REMOVE_DTOR stack s

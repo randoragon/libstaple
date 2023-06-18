@@ -20,8 +20,9 @@
 #include "../sp_errcodes.h"
 #include <string.h>
 
-int sp_queue_pop(struct sp_queue *queue, void *output)
+int sp_queue_pop(struct sp_queue *queue, int (*dtor)(void*))
 {
+	int err;
 #ifdef STAPLE_DEBUG
 	if (queue == NULL) {
 		error(("queue is NULL"));
@@ -32,8 +33,10 @@ int sp_queue_pop(struct sp_queue *queue, void *output)
 		return SP_EILLEGAL;
 	}
 #endif
-	if (output != NULL)
-		memcpy(output, queue->head, queue->elem_size);
+	if (dtor != NULL && (err = dtor(queue->head))) {
+		error(("callback function dtor returned %d (non-0)", err));
+		return SP_ECALLBK;
+	}
 	if (queue->size != 1)
 		sp_ringbuf_incr(&queue->head, queue->data, queue->capacity, queue->elem_size);
 	--queue->size;

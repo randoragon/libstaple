@@ -20,9 +20,10 @@
 #include "../sp_errcodes.h"
 #include <string.h>
 
-int sp_stack_pop(struct sp_stack *stack, void *output)
+int sp_stack_pop(struct sp_stack *stack, int (*dtor)(void*))
 {
-	const void *src;
+	void *p;
+	int err;
 #ifdef STAPLE_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
@@ -33,9 +34,11 @@ int sp_stack_pop(struct sp_stack *stack, void *output)
 		return SP_EILLEGAL;
 	}
 #endif
-	src = (char*)stack->data + (stack->size - 1) * stack->elem_size;
-	if (output != NULL)
-		memcpy(output, src, stack->elem_size);
+	p = (char*)stack->data + (stack->size - 1) * stack->elem_size;
+	if (dtor != NULL && (err = dtor(p))) {
+		error(("callback function dtor returned %d (non-0)", err));
+		return SP_ECALLBK;
+	}
 	--stack->size;
 	return 0;
 }

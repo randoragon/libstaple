@@ -52,8 +52,8 @@ int
 .RI * queue ,
 size_t
 .IR idx ,
-void
-.RI * output )
+int
+.RI (* dtor )(void*))
 .br
 char
 .BR sp_queue_qremovec "(struct sp_queue"

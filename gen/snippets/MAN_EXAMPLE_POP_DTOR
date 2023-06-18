@@ -1,0 +1,32 @@
+This is an example of how to use the
+.I dtor
+function:
+.IP
+.ad l
+.nf
+struct example {
+        void *ptr;
+};
+
+int example_dtor(void *elem)
+{
+        free(((struct example*)elem)->ptr);
+        return 0;
+}
+
+int main()
+{
+        struct sp_$1$ *$2$;
+        struct example data;
+        $2$ = sp_$1$_create(sizeof(struct example), 1);
+        data.ptr = malloc(32);
+        sp_$1$_push($2$, &data);
+        sp_$1$_pop($2$, &example_dtor);
+        /* The above function call is equivalent to:
+                example_dtor(sp_$1$_peek($2$))
+                sp_$1$_pop($2$, NULL);
+        */
+        return 0;
+}
+.fi
+.ad

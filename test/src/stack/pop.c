@@ -26,7 +26,7 @@ END_TEST
 
 START_TEST(pop_object)
 {
-	struct data a, b, c, d, t;
+	struct data a, b, c, d;
 	setup(struct data, 10);
 	data_init(&a);
 	data_init(&b);
@@ -35,25 +35,17 @@ START_TEST(pop_object)
 	ck_assert_int_eq(0, sp_stack_push(s, &a));
 	ck_assert_int_eq(0, sp_stack_push(s, &b));
 	ck_assert_int_eq(0, sp_stack_push(s, &c));
-	ck_assert_int_eq(0, sp_stack_pop(s, &t));
-	ck_assert_int_eq(0, data_cmp(&t, &c));
+	ck_assert_int_eq(0, sp_stack_pop(s, data_dtor));
 	ck_assert_uint_eq(2, s->size);
-	data_dtor(&t);
-	ck_assert_int_eq(0, sp_stack_pop(s, &t));
-	ck_assert_int_eq(0, data_cmp(&t, &b));
+	ck_assert_int_eq(0, sp_stack_pop(s, data_dtor));
 	ck_assert_uint_eq(1, s->size);
-	data_dtor(&t);
 	ck_assert_int_eq(0, sp_stack_push(s, &d));
-	ck_assert_int_eq(0, sp_stack_pop(s, &t));
-	ck_assert_int_eq(0, data_cmp(&t, &d));
+	ck_assert_int_eq(0, sp_stack_pop(s, data_dtor));
 	ck_assert_uint_eq(1, s->size);
-	data_dtor(&t);
-	ck_assert_int_eq(0, sp_stack_pop(s, &t));
-	ck_assert_int_eq(0, data_cmp(&t, &a));
+	ck_assert_int_eq(0, sp_stack_pop(s, data_dtor));
 	ck_assert_uint_eq(0, s->size);
-	data_dtor(&t);
-	/* Deliberately push unallocated memory, because
-	 * it would be lost with the subsequent pop */
+
+	/* `a` is uninitialized, but it doesn't matter. */
 	ck_assert_int_eq(0, sp_stack_push(s, &a));
 	ck_assert_int_eq(0, sp_stack_pop(s, NULL));
 	ck_assert_uint_eq(0, s->size);
@@ -88,13 +80,12 @@ END_TEST
 START_TEST(pop_empty)
 {
 	struct sp_stack *s;
-	struct data a;
 	ck_assert_ptr_nonnull(s = sp_stack_create(sizeof(int), 20));
 	ck_assert_int_eq(0, sp_stack_popi(s));
 	ck_assert_int_eq(0, sp_stack_destroy(s, NULL));
 
 	ck_assert_ptr_nonnull(s = sp_stack_create(sizeof(struct data), 20));
-	ck_assert_int_eq(SP_EILLEGAL, sp_stack_pop(s, &a));
+	ck_assert_int_eq(SP_EILLEGAL, sp_stack_pop(s, NULL));
 	ck_assert_int_eq(0, sp_stack_destroy(s, data_dtor));
 
 	ck_assert_ptr_nonnull(s = sp_stack_create(sizeof(char*), 20));
@@ -105,15 +96,10 @@ END_TEST
 
 START_TEST(pop_bad_args)
 {
-	struct data a, b;
-	data_init(&a);
-	b = a;
 	ck_assert_int_eq(0, sp_stack_popi(NULL));
 	ck_assert_int_eq(SP_EINVAL, sp_stack_pop(NULL, NULL));
-	ck_assert_int_eq(SP_EINVAL, sp_stack_pop(NULL, &a));
-	ck_assert_int_eq(0, memcmp(&a, &b, sizeof(struct data)));
+	ck_assert_int_eq(SP_EINVAL, sp_stack_pop(NULL, data_dtor));
 	ck_assert_ptr_null(sp_stack_popstr(NULL));
-	data_dtor(&a);
 }
 END_TEST
 
@@ -130,6 +116,21 @@ START_TEST(pop_bad_elem_size)
 }
 END_TEST
 
+START_TEST(pop_bad_dtor)
+{
+	struct data a, b, c;
+	setup(struct data, 10);
+	data_init(&a);
+	data_init(&b);
+	data_init(&c);
+	ck_assert_int_eq(0, sp_stack_push(s, &a));
+	ck_assert_int_eq(0, sp_stack_push(s, &b));
+	ck_assert_int_eq(0, sp_stack_push(s, &c));
+	ck_assert_int_eq(SP_ECALLBK, sp_stack_pop(s, data_dtor_bad));
+	teardown(data_dtor);
+}
+END_TEST
+
 void init_pop(Suite *suite, TCase *tc)
 {
 	suite_add_tcase(suite, tc);
@@ -139,6 +140,7 @@ void init_pop(Suite *suite, TCase *tc)
 	tcase_add_test(tc, pop_empty);
 	tcase_add_test(tc, pop_bad_args);
 	tcase_add_test(tc, pop_bad_elem_size);
+	tcase_add_test(tc, pop_bad_dtor);
 }
 
 #undef setup

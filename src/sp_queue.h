@@ -158,7 +158,7 @@ int64_t         sp_queue_peeki64(const struct sp_queue *queue);
 #endif
 char          *sp_queue_peekstr(const struct sp_queue *queue);
 
-int            sp_queue_pop(struct sp_queue *queue, void *output);
+int            sp_queue_pop(struct sp_queue *queue, int (*dtor)(void*));
 char         sp_queue_popc(struct sp_queue *queue);
 short         sp_queue_pops(struct sp_queue *queue);
 int         sp_queue_popi(struct sp_queue *queue);
@@ -186,7 +186,7 @@ int64_t         sp_queue_popi64(struct sp_queue *queue);
 #endif
 char          *sp_queue_popstr(struct sp_queue *queue);
 
-int            sp_queue_remove(struct sp_queue *queue, size_t idx, void *output);
+int            sp_queue_remove(struct sp_queue *queue, size_t idx, int (*dtor)(void*));
 char         sp_queue_removec(struct sp_queue *queue, size_t idx);
 short         sp_queue_removes(struct sp_queue *queue, size_t idx);
 int         sp_queue_removei(struct sp_queue *queue, size_t idx);
@@ -214,7 +214,7 @@ int64_t         sp_queue_removei64(struct sp_queue *queue, size_t idx);
 #endif
 char          *sp_queue_removestr(struct sp_queue *queue, size_t idx);
 
-int            sp_queue_qremove(struct sp_queue *queue, size_t idx, void *output);
+int            sp_queue_qremove(struct sp_queue *queue, size_t idx, int (*dtor)(void*));
 char         sp_queue_qremovec(struct sp_queue *queue, size_t idx);
 short         sp_queue_qremoves(struct sp_queue *queue, size_t idx);
 int         sp_queue_qremovei(struct sp_queue *queue, size_t idx);
