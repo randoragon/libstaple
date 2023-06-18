@@ -929,7 +929,7 @@ int sp_stack_print(const struct sp_stack *stack, int (*func)(const void*))
 			int err;
 			printf("[%lu]\t", (unsigned long)stack->size - 1 - i);
 			if ((err = func(elem)) != 0) {
-				/*. C_ERRMSG_CALLBACK_NON_ZERO dtor err */
+				/*. C_ERRMSG_CALLBACK_NON_ZERO func err */
 				return SP_ECALLBK;
 			}
 		}

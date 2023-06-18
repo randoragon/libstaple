@@ -950,7 +950,7 @@ int sp_queue_print(const struct sp_queue *queue, int (*func)(const void*))
 			int err;
 			printf("[%lu]\t", (unsigned long)i);
 			if ((err = func(elem)) != 0) {
-				/*. C_ERRMSG_CALLBACK_NON_ZERO dtor err */
+				/*. C_ERRMSG_CALLBACK_NON_ZERO func err */
 				return SP_ECALLBK;
 			}
 		}

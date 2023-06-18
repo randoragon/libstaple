@@ -41,7 +41,7 @@ int sp_stack_print(const struct sp_stack *stack, int (*func)(const void*))
 			int err;
 			printf("[%lu]\t", (unsigned long)stack->size - 1 - i);
 			if ((err = func(elem)) != 0) {
-				error(("callback function dtor returned %d (non-0)", err));
+				error(("callback function func returned %d (non-0)", err));
 				return SP_ECALLBK;
 			}
 		}
