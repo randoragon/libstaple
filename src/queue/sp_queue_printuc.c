@@ -33,11 +33,11 @@ int sp_queue_printuc(const struct sp_queue *queue)
 		return SP_EILLEGAL;
 	}
 #endif
-	printf("sp_queue_printuc()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
-		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
+	printf("sp_queue_printuc()\nsize/capacity: "SP_SIZE_FMT"/"SP_SIZE_FMT", elem_size: "SP_SIZE_FMT"\n",
+		(SP_SIZE_T)queue->size, (SP_SIZE_T)queue->capacity, (SP_SIZE_T)queue->elem_size);
 	for (i = 0; i < queue->size; i++) {
 		const unsigned char elem = *(unsigned char*)sp_ringbuf_get(i, queue->data, queue->capacity, queue->elem_size, queue->head);
-		printf("[%lu]\t""%hd\t'%c'""\n", (unsigned long)i, elem, elem);
+		printf("["SP_SIZE_FMT"]\t""%hd\t'%c'""\n", (SP_SIZE_T)i, elem, elem);
 	}
 	return 0;
 }

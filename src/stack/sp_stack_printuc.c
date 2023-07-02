@@ -33,11 +33,11 @@ int sp_stack_printuc(const struct sp_stack *stack)
 		return SP_EILLEGAL;
 	}
 #endif
-	printf("sp_stack_printuc()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
-		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
+	printf("sp_stack_printuc()\nsize/capacity: "SP_SIZE_FMT"/"SP_SIZE_FMT", elem_size: "SP_SIZE_FMT"\n",
+		(SP_SIZE_T)stack->size, (SP_SIZE_T)stack->capacity, (SP_SIZE_T)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const unsigned char elem = ((unsigned char*)stack->data)[i];
-		printf("[%lu]\t""%hd\t'%c'""\n", (unsigned long)stack->size - 1 - i, elem, elem);
+		printf("["SP_SIZE_FMT"]\t""%hd\t'%c'""\n", (SP_SIZE_T)stack->size - 1 - i, elem, elem);
 	}
 	return 0;
 }

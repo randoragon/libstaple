@@ -14,6 +14,15 @@
 #define SP_SIZE_MAX ((size_t)(-1))
 #endif
 
+/* These macros are only used for printf format strings and casts */
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+#define SP_SIZE_FMT "%zu"
+#define SP_SIZE_T size_t
+#else
+#define SP_SIZE_FMT "%lu"
+#define SP_SIZE_T unsigned long
+#endif
+
 /* STAPLE_DEBUG enables extra debug checks during runtime.
  * STAPLE_QUIET disables all output from the library (if STAPLE_DEBUG is enabled, each
  *           check will produce the appropriate error code, only silently)

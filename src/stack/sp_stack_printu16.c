@@ -36,11 +36,11 @@ int sp_stack_printu16(const struct sp_stack *stack)
 		return SP_EILLEGAL;
 	}
 #endif
-	printf("sp_stack_printu16()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
-		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
+	printf("sp_stack_printu16()\nsize/capacity: "SP_SIZE_FMT"/"SP_SIZE_FMT", elem_size: "SP_SIZE_FMT"\n",
+		(SP_SIZE_T)stack->size, (SP_SIZE_T)stack->capacity, (SP_SIZE_T)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const uint16_t elem = ((uint16_t*)stack->data)[i];
-		printf("[%lu]\t""%"PRIu16"\n", (unsigned long)stack->size - 1 - i, elem);
+		printf("["SP_SIZE_FMT"]\t""%"PRIu16"\n", (SP_SIZE_T)stack->size - 1 - i, elem);
 	}
 	return 0;
 }

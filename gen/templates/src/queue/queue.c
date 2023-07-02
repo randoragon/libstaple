@@ -946,18 +946,18 @@ int sp_queue_print(const struct sp_queue *queue, int (*func)(const void*))
 		return SP_EINVAL;
 	}
 #endif
-	printf("sp_queue_print()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
-		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
+	printf("sp_queue_print()\nsize/capacity: "SP_SIZE_FMT"/"SP_SIZE_FMT", elem_size: "SP_SIZE_FMT"\n",
+		(SP_SIZE_T)queue->size, (SP_SIZE_T)queue->capacity, (SP_SIZE_T)queue->elem_size);
 	if (func == NULL)
 		for (i = 0; i < queue->size; i++) {
 			const void *const elem = sp_ringbuf_get(i, queue->data, queue->capacity, queue->elem_size, queue->head);
-			printf("[%lu]\t%p\n", (unsigned long)i, elem);
+			printf("["SP_SIZE_FMT"]\t%p\n", (SP_SIZE_T)i, elem);
 		}
 	else
 		for (i = 0; i < queue->size; i++) {
 			const void *const elem = sp_ringbuf_get(i, queue->data, queue->capacity, queue->elem_size, queue->head);
 			int err;
-			printf("[%lu]\t", (unsigned long)i);
+			printf("["SP_SIZE_FMT"]\t", (SP_SIZE_T)i);
 			if ((err = func(elem)) != 0) {
 				/*. C_ERRMSG_CALLBACK_NON_ZERO func err */
 				return SP_ECALLBK;
@@ -976,11 +976,11 @@ int sp_queue_print$SUFFIX$(const struct sp_queue *queue)
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
 	/*. C_ERR_INCOMPAT_ELEM_TYPE queue $TYPE$ SP_EILLEGAL */
 #endif
-	printf("sp_queue_print$SUFFIX$()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
-		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
+	printf("sp_queue_print$SUFFIX$()\nsize/capacity: "SP_SIZE_FMT"/"SP_SIZE_FMT", elem_size: "SP_SIZE_FMT"\n",
+		(SP_SIZE_T)queue->size, (SP_SIZE_T)queue->capacity, (SP_SIZE_T)queue->elem_size);
 	for (i = 0; i < queue->size; i++) {
 		const $TYPE$ elem = *($TYPE$*)sp_ringbuf_get(i, queue->data, queue->capacity, queue->elem_size, queue->head);
-		printf("[%lu]\t"$FMT_STR$"\n", (unsigned long)i, $FMT_ARGS$);
+		printf("["SP_SIZE_FMT"]\t"$FMT_STR$"\n", (SP_SIZE_T)i, $FMT_ARGS$);
 	}
 	return 0;
 }
@@ -995,11 +995,11 @@ int sp_queue_printstr(const struct sp_queue *queue)
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
 	/*. C_ERR_INCOMPAT_ELEM_TYPE queue char* SP_EILLEGAL */
 #endif
-	printf("sp_queue_printstr()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
-		(unsigned long)queue->size, (unsigned long)queue->capacity, (unsigned long)queue->elem_size);
+	printf("sp_queue_printstr()\nsize/capacity: "SP_SIZE_FMT"/"SP_SIZE_FMT", elem_size: "SP_SIZE_FMT"\n",
+		(SP_SIZE_T)queue->size, (SP_SIZE_T)queue->capacity, (SP_SIZE_T)queue->elem_size);
 	for (i = 0; i < queue->size; i++) {
 		const char *const elem = *(char**)sp_ringbuf_get(i, queue->data, queue->capacity, queue->elem_size, queue->head);
-		printf("[%lu]\t%s\n", (unsigned long)i, elem);
+		printf("["SP_SIZE_FMT"]\t%s\n", (SP_SIZE_T)i, elem);
 	}
 	return 0;
 }

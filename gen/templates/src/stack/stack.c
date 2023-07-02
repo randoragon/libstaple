@@ -925,18 +925,18 @@ int sp_stack_print(const struct sp_stack *stack, int (*func)(const void*))
 		return SP_EINVAL;
 	}
 #endif
-	printf("sp_stack_print()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
-		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
+	printf("sp_stack_print()\nsize/capacity: "SP_SIZE_FMT"/"SP_SIZE_FMT", elem_size: "SP_SIZE_FMT"\n",
+		(SP_SIZE_T)stack->size, (SP_SIZE_T)stack->capacity, (SP_SIZE_T)stack->elem_size);
 	if (func == NULL)
 		for (i = stack->size; i-- > 0;) {
 			const void *const elem = (char*)stack->data + i * stack->elem_size;
-			printf("[%lu]\t%p\n", (unsigned long)stack->size - 1 - i, elem);
+			printf("["SP_SIZE_FMT"]\t%p\n", (SP_SIZE_T)stack->size - 1 - i, elem);
 		}
 	else
 		for (i = stack->size; i-- > 0;) {
 			const void *const elem = (char*)stack->data + i * stack->elem_size;
 			int err;
-			printf("[%lu]\t", (unsigned long)stack->size - 1 - i);
+			printf("["SP_SIZE_FMT"]\t", (SP_SIZE_T)stack->size - 1 - i);
 			if ((err = func(elem)) != 0) {
 				/*. C_ERRMSG_CALLBACK_NON_ZERO func err */
 				return SP_ECALLBK;
@@ -955,11 +955,11 @@ int sp_stack_print$SUFFIX$(const struct sp_stack *stack)
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_INCOMPAT_ELEM_TYPE stack $TYPE$ SP_EILLEGAL */
 #endif
-	printf("sp_stack_print$SUFFIX$()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
-		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
+	printf("sp_stack_print$SUFFIX$()\nsize/capacity: "SP_SIZE_FMT"/"SP_SIZE_FMT", elem_size: "SP_SIZE_FMT"\n",
+		(SP_SIZE_T)stack->size, (SP_SIZE_T)stack->capacity, (SP_SIZE_T)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const $TYPE$ elem = (($TYPE$*)stack->data)[i];
-		printf("[%lu]\t"$FMT_STR$"\n", (unsigned long)stack->size - 1 - i, $FMT_ARGS$);
+		printf("["SP_SIZE_FMT"]\t"$FMT_STR$"\n", (SP_SIZE_T)stack->size - 1 - i, $FMT_ARGS$);
 	}
 	return 0;
 }
@@ -974,11 +974,11 @@ int sp_stack_printstr(const struct sp_stack *stack)
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_INCOMPAT_ELEM_TYPE stack char* SP_EILLEGAL */
 #endif
-	printf("sp_stack_printstr()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
-		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
+	printf("sp_stack_printstr()\nsize/capacity: "SP_SIZE_FMT"/"SP_SIZE_FMT", elem_size: "SP_SIZE_FMT"\n",
+		(SP_SIZE_T)stack->size, (SP_SIZE_T)stack->capacity, (SP_SIZE_T)stack->elem_size);
 	for (i = stack->size; i-- > 0;) {
 		const char *elem = ((char**)stack->data)[i];
-		printf("[%lu]\t%s\n", (unsigned long)stack->size - 1 - i, elem);
+		printf("["SP_SIZE_FMT"]\t%s\n", (SP_SIZE_T)stack->size - 1 - i, elem);
 	}
 	return 0;
 }

@@ -28,18 +28,18 @@ int sp_stack_print(const struct sp_stack *stack, int (*func)(const void*))
 		return SP_EINVAL;
 	}
 #endif
-	printf("sp_stack_print()\nsize/capacity: %lu/%lu, elem_size: %lu\n",
-		(unsigned long)stack->size, (unsigned long)stack->capacity, (unsigned long)stack->elem_size);
+	printf("sp_stack_print()\nsize/capacity: "SP_SIZE_FMT"/"SP_SIZE_FMT", elem_size: "SP_SIZE_FMT"\n",
+		(SP_SIZE_T)stack->size, (SP_SIZE_T)stack->capacity, (SP_SIZE_T)stack->elem_size);
 	if (func == NULL)
 		for (i = stack->size; i-- > 0;) {
 			const void *const elem = (char*)stack->data + i * stack->elem_size;
-			printf("[%lu]\t%p\n", (unsigned long)stack->size - 1 - i, elem);
+			printf("["SP_SIZE_FMT"]\t%p\n", (SP_SIZE_T)stack->size - 1 - i, elem);
 		}
 	else
 		for (i = stack->size; i-- > 0;) {
 			const void *const elem = (char*)stack->data + i * stack->elem_size;
 			int err;
-			printf("[%lu]\t", (unsigned long)stack->size - 1 - i);
+			printf("["SP_SIZE_FMT"]\t", (SP_SIZE_T)stack->size - 1 - i);
 			if ((err = func(elem)) != 0) {
 				error(("callback function func returned %d (non-0)", err));
 				return SP_ECALLBK;
