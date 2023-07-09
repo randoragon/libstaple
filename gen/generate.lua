@@ -18,17 +18,17 @@ MAN_HEADER_TEXT = io.open(SNIPPETDIR..'MAN_LICENSE_HEADER', 'r'):read('a')
 local pconf = ParamConfig:new{
 	C89 = {
 		{ TYPE='char'          , SUFFIX='c' , FMT=[["%hd\t'%c'"]] },
-		{ TYPE='short'         , SUFFIX='s' , FMT=[["%hd"]]        },
-		{ TYPE='int'           , SUFFIX='i' , FMT=[["%d"]]         },
-		{ TYPE='long'          , SUFFIX='l' , FMT=[["%ld"]]        },
+		{ TYPE='short'         , SUFFIX='s' , FMT=[["%hd"]]       },
+		{ TYPE='int'           , SUFFIX='i' , FMT=[["%d"]]        },
+		{ TYPE='long'          , SUFFIX='l' , FMT=[["%ld"]]       },
 		{ TYPE='signed char'   , SUFFIX='sc', FMT=[["%hd\t'%c'"]] },
 		{ TYPE='unsigned char' , SUFFIX='uc', FMT=[["%hd\t'%c'"]] },
-		{ TYPE='unsigned short', SUFFIX='us', FMT=[["%hu"]]        },
-		{ TYPE='unsigned int'  , SUFFIX='ui', FMT=[["%u"]]         },
-		{ TYPE='unsigned long' , SUFFIX='ul', FMT=[["%lu"]]        },
-		{ TYPE='float'         , SUFFIX='f' , FMT=[["%g"]]         },
-		{ TYPE='double'        , SUFFIX='d' , FMT=[["%g"]]         },
-		{ TYPE='long double'   , SUFFIX='ld', FMT=[["%Lg"]]        },
+		{ TYPE='unsigned short', SUFFIX='us', FMT=[["%hu"]]       },
+		{ TYPE='unsigned int'  , SUFFIX='ui', FMT=[["%u"]]        },
+		{ TYPE='unsigned long' , SUFFIX='ul', FMT=[["%lu"]]       },
+		{ TYPE='float'         , SUFFIX='f' , FMT=[["%g"]]        },
+		{ TYPE='double'        , SUFFIX='d' , FMT=[["%g"]]        },
+		{ TYPE='long double'   , SUFFIX='ld', FMT=[["%Lg"]]       },
 		-- bool, str and strn suffixed functions are implemented separately
 	},
 
