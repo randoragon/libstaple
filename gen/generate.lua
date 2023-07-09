@@ -29,12 +29,11 @@ local pconf = ParamConfig:new{
 		{ TYPE='float'         , SUFFIX='f' , FMT=[["%g"]]         },
 		{ TYPE='double'        , SUFFIX='d' , FMT=[["%g"]]         },
 		{ TYPE='long double'   , SUFFIX='ld', FMT=[["%Lg"]]        },
-		-- str and strn suffixed functions are implemented separately
+		-- bool, str and strn suffixed functions are implemented separately
 	},
 
 	C99 = {
 		INCLUDE = { 'stdint.h', 'inttypes.h' },
-		{ TYPE='_Bool'             , SUFFIX='b'  , FMT=[["%d"]]      },
 		{ TYPE='long long'         , SUFFIX='ll' , FMT=[["%lld"]]    },
 		{ TYPE='unsigned long long', SUFFIX='ull', FMT=[["%llu"]]    },
 		{ TYPE='uint8_t'           , SUFFIX='u8' , FMT=[["%"PRIu8]]  },

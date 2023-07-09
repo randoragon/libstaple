@@ -31,7 +31,7 @@ now my priorities lie elsewhere.
 ### `generate.lua`
 
 The main runner script invoked by the Makefile; it contains a table defining
-every (except `str` and `strn`, which are implemented separately) suffixed
+every (except `str`,`strn` and `b`, which are implemented separately) suffixed
 variant to generate. It should be easy to tweak even without me describing its
 syntax, because the existing configuration serves as a good example.
 
