@@ -21,7 +21,7 @@ CFLAGS      += $(if $(filter 1,$(DEBUG)),-DSTAPLE_DEBUG -g -Og,-O3)
 CFLAGS      += $(if $(filter 1,$(QUIET)),-DSTAPLE_QUIET)
 CFLAGS      += $(if $(filter 1,$(ABORT)),-DSTAPLE_ABORT)
 LDFLAGS     := -shared
-CTESTFLAGS  := -std=c89 -Wall -Wextra -pedantic -Werror=vla -g -Og
+CTESTFLAGS  := -std=c89 -Wall -Wextra -pedantic -Wno-unused-parameter -Werror -Werror=vla -g -Og
 LDTESTFLAGS := -L. -l:./$(TARGET).so -lcheck
 VALGRIND    := valgrind
 
