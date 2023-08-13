@@ -1,5 +1,5 @@
-if ($1$->elem_size != sizeof($2$)) {
+if ($1$->elem_size != $2$) {
 	error(("$1$->elem_size is incompatible with elem type (%lu != %lu)",
-				(unsigned long)$1$->elem_size, sizeof($2$)));
+				(unsigned long)$1$->elem_size, $2$));
 	return $3$;
 }

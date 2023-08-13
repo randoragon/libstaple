@@ -190,7 +190,7 @@ int sp_stack_push$SUFFIX$(struct sp_stack *stack, $TYPE$ elem)
 {
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(elem) SP_EILLEGAL */
 #endif
 	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return SP_ERANGE;
@@ -211,7 +211,7 @@ int sp_stack_pushstr(struct sp_stack *stack, const char *elem)
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(elem) SP_EILLEGAL */
 #endif
 	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return SP_ERANGE;
@@ -241,7 +241,7 @@ int sp_stack_pushstrn(struct sp_stack *stack, const char *elem, size_t len)
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(elem) SP_EILLEGAL */
 #endif
 	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
 		return SP_ERANGE;
@@ -296,7 +296,7 @@ int sp_stack_insert$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ elem)
 	char *p;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(elem) SP_EILLEGAL */
 	if (idx > stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -325,7 +325,7 @@ int sp_stack_insertstr(struct sp_stack *stack, size_t idx, const char *elem)
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(elem) SP_EILLEGAL */
 	if (idx > stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -363,7 +363,7 @@ int sp_stack_insertstrn(struct sp_stack *stack, size_t idx, const char *elem, si
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(elem) SP_EILLEGAL */
 	if (idx > stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -424,7 +424,7 @@ int sp_stack_qinsert$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ elem)
 	char *p, *q;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(elem) SP_EILLEGAL */
 	if (idx > stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -454,7 +454,7 @@ int sp_stack_qinsertstr(struct sp_stack *stack, size_t idx, const char *elem)
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(elem) SP_EILLEGAL */
 	if (idx > stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -493,7 +493,7 @@ int sp_stack_qinsertstrn(struct sp_stack *stack, size_t idx, const char *elem, s
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(elem) SP_EILLEGAL */
 	if (idx > stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -541,7 +541,7 @@ $TYPE$ sp_stack_peek$SUFFIX$(const struct sp_stack *stack)
 {
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack 0 */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack $TYPE$ 0 */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof($TYPE$) 0 */
 	if (stack->size == 0) {
 		/*. C_ERRMSG_IS_EMPTY stack */
 		return 0;
@@ -556,7 +556,7 @@ char *sp_stack_peekstr(const struct sp_stack *stack)
 {
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack NULL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack char* NULL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(char*) NULL */
 	if (stack->size == 0) {
 		/*. C_ERRMSG_IS_EMPTY stack */
 		return NULL;
@@ -600,7 +600,7 @@ $TYPE$ sp_stack_pop$SUFFIX$(struct sp_stack *stack)
 		/*. C_ERRMSG_IS_EMPTY stack */
 		return 0;
 	}
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack $TYPE$ 0 */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof($TYPE$) 0 */
 #endif
 	return (($TYPE$*)stack->data)[--stack->size];
 }
@@ -615,7 +615,7 @@ char *sp_stack_popstr(struct sp_stack *stack)
 		/*. C_ERRMSG_IS_EMPTY stack */
 		return NULL;
 	}
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack char* NULL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(char*) NULL */
 #endif
 	return ((char**)stack->data)[--stack->size];
 }
@@ -655,7 +655,7 @@ $TYPE$ sp_stack_remove$SUFFIX$(struct sp_stack *stack, size_t idx)
 	$TYPE$ ret;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack 0 */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack $TYPE$ 0 */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof($TYPE$) 0 */
 	if (idx >= stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return 0;
@@ -677,7 +677,7 @@ char *sp_stack_removestr(struct sp_stack *stack, size_t idx)
 	char *ret;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack NULL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack char* NULL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(char*) NULL */
 	if (idx >= stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return NULL;
@@ -725,7 +725,7 @@ $TYPE$ sp_stack_qremove$SUFFIX$(struct sp_stack *stack, size_t idx)
 	$TYPE$ ret;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack 0 */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack $TYPE$ 0 */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof($TYPE$) 0 */
 	if (idx >= stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return 0;
@@ -747,7 +747,7 @@ char *sp_stack_qremovestr(struct sp_stack *stack, size_t idx)
 	char *ret;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack NULL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack char* NULL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(char*) NULL */
 	if (idx >= stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return NULL;
@@ -782,7 +782,7 @@ $TYPE$ sp_stack_get$SUFFIX$(const struct sp_stack *stack, size_t idx)
 {
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack 0 */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack $TYPE$ 0 */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof($TYPE$) 0 */
 	if (idx >= stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return 0;
@@ -797,7 +797,7 @@ char *sp_stack_getstr(const struct sp_stack *stack, size_t idx)
 {
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack NULL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack char* NULL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(char*) NULL */
 	if (idx >= stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return NULL;
@@ -835,7 +835,7 @@ int sp_stack_set$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ val)
 	char *p;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack val SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(val) SP_EILLEGAL */
 	if (idx >= stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -858,7 +858,7 @@ int sp_stack_setstr(struct sp_stack *stack, size_t idx, const char *val)
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_NULLPTR val SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack val SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(val) SP_EILLEGAL */
 	if (idx >= stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -891,7 +891,7 @@ int sp_stack_setstrn(struct sp_stack *stack, size_t idx, const char *val, size_t
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_NULLPTR val SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack val SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(val) SP_EILLEGAL */
 	if (idx >= stack->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -953,7 +953,7 @@ int sp_stack_print$SUFFIX$(const struct sp_stack *stack)
 	size_t i;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack $TYPE$ SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof($TYPE$) SP_EILLEGAL */
 #endif
 	printf("sp_stack_print$SUFFIX$()\nsize/capacity: "SP_SIZE_FMT"/"SP_SIZE_FMT", elem_size: "SP_SIZE_FMT"\n",
 		(SP_SIZE_T)stack->size, (SP_SIZE_T)stack->capacity, (SP_SIZE_T)stack->elem_size);
@@ -972,7 +972,7 @@ int sp_stack_printstr(const struct sp_stack *stack)
 	size_t i;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE stack char* SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(char*) SP_EILLEGAL */
 #endif
 	printf("sp_stack_printstr()\nsize/capacity: "SP_SIZE_FMT"/"SP_SIZE_FMT", elem_size: "SP_SIZE_FMT"\n",
 		(SP_SIZE_T)stack->size, (SP_SIZE_T)stack->capacity, (SP_SIZE_T)stack->elem_size);

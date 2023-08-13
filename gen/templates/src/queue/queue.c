@@ -205,7 +205,7 @@ int sp_queue_push$SUFFIX$(struct sp_queue *queue, $TYPE$ elem)
 {
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(elem) SP_EILLEGAL */
 #endif
 	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return SP_ERANGE;
@@ -229,7 +229,7 @@ int sp_queue_pushstr(struct sp_queue *queue, const char *elem)
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(elem) SP_EILLEGAL */
 #endif
 	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return SP_ERANGE;
@@ -262,7 +262,7 @@ int sp_queue_pushstrn(struct sp_queue *queue, const char *elem, size_t len)
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(elem) SP_EILLEGAL */
 #endif
 	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
 		return SP_ERANGE;
@@ -314,7 +314,7 @@ int sp_queue_insert$SUFFIX$(struct sp_queue *queue, size_t idx, $TYPE$ elem)
 {
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(elem) SP_EILLEGAL */
 	if (idx > queue->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -339,7 +339,7 @@ int sp_queue_insertstr(struct sp_queue *queue, size_t idx, const char *elem)
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(elem) SP_EILLEGAL */
 	if (idx > queue->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -373,7 +373,7 @@ int sp_queue_insertstrn(struct sp_queue *queue, size_t idx, const char *elem, si
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(elem) SP_EILLEGAL */
 	if (idx > queue->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -434,7 +434,7 @@ int sp_queue_qinsert$SUFFIX$(struct sp_queue *queue, size_t idx, $TYPE$ elem)
 	char *p;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(elem) SP_EILLEGAL */
 	if (idx > queue->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -465,7 +465,7 @@ int sp_queue_qinsertstr(struct sp_queue *queue, size_t idx, const char *elem)
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(elem) SP_EILLEGAL */
 	if (idx > queue->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -505,7 +505,7 @@ int sp_queue_qinsertstrn(struct sp_queue *queue, size_t idx, const char *elem, s
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue elem SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(elem) SP_EILLEGAL */
 	if (idx > queue->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -554,7 +554,7 @@ $TYPE$ sp_queue_peek$SUFFIX$(const struct sp_queue *queue)
 {
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue 0 */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue $TYPE$ 0 */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof($TYPE$) 0 */
 	if (queue->size == 0) {
 		/*. C_ERRMSG_IS_EMPTY queue */
 		return 0;
@@ -569,7 +569,7 @@ char *sp_queue_peekstr(const struct sp_queue *queue)
 {
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue NULL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue char* NULL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(char*) NULL */
 	if (queue->size == 0) {
 		/*. C_ERRMSG_IS_EMPTY queue */
 		return NULL;
@@ -614,7 +614,7 @@ $TYPE$ sp_queue_pop$SUFFIX$(struct sp_queue *queue)
 		/*. C_ERRMSG_IS_EMPTY queue */
 		return 0;
 	}
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue $TYPE$ 0 */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof($TYPE$) 0 */
 #endif
 	ret = *($TYPE$*)queue->head;
 	if (queue->size != 1)
@@ -630,7 +630,7 @@ char *sp_queue_popstr(struct sp_queue *queue)
 	char *ret;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue NULL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue char* NULL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(char*) NULL */
 	if (queue->size == 0) {
 		/*. C_ERRMSG_IS_EMPTY queue */
 		return NULL;
@@ -675,7 +675,7 @@ $TYPE$ sp_queue_remove$SUFFIX$(struct sp_queue *queue, size_t idx)
 	$TYPE$ ret;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue 0 */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue $TYPE$ 0 */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof($TYPE$) 0 */
 	if (idx >= queue->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return 0;
@@ -694,7 +694,7 @@ char *sp_queue_removestr(struct sp_queue *queue, size_t idx)
 	char *ret;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue NULL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue char* NULL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(char*) NULL */
 	if (idx >= queue->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return NULL;
@@ -742,7 +742,7 @@ $TYPE$ sp_queue_qremove$SUFFIX$(struct sp_queue *queue, size_t idx)
 	$TYPE$ ret;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue 0 */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue $TYPE$ 0 */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof($TYPE$) 0 */
 	if (idx >= queue->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return 0;
@@ -765,7 +765,7 @@ char *sp_queue_qremovestr(struct sp_queue *queue, size_t idx)
 	char *ret;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue NULL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue char* NULL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(char*) NULL */
 	if (idx >= queue->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return NULL;
@@ -801,7 +801,7 @@ $TYPE$ sp_queue_get$SUFFIX$(const struct sp_queue *queue, size_t idx)
 {
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue 0 */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue $TYPE$ 0 */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof($TYPE$) 0 */
 	if (idx >= queue->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return 0;
@@ -817,7 +817,7 @@ char *sp_queue_getstr(const struct sp_queue *queue, size_t idx)
 	void *src;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue NULL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue char* NULL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(char*) NULL */
 	if (idx >= queue->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return NULL;
@@ -856,7 +856,7 @@ int sp_queue_set$SUFFIX$(struct sp_queue *queue, size_t idx, $TYPE$ val)
 	char *p;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue val SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(val) SP_EILLEGAL */
 	if (idx >= queue->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -879,7 +879,7 @@ int sp_queue_setstr(struct sp_queue *queue, size_t idx, const char *val)
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
 	/*. C_ERR_NULLPTR val SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue val SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(val) SP_EILLEGAL */
 	if (idx >= queue->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -912,7 +912,7 @@ int sp_queue_setstrn(struct sp_queue *queue, size_t idx, const char *val, size_t
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
 	/*. C_ERR_NULLPTR val SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue val SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(val) SP_EILLEGAL */
 	if (idx >= queue->size) {
 		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
 		return SP_EINDEX;
@@ -974,7 +974,7 @@ int sp_queue_print$SUFFIX$(const struct sp_queue *queue)
 	size_t i;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue $TYPE$ SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof($TYPE$) SP_EILLEGAL */
 #endif
 	printf("sp_queue_print$SUFFIX$()\nsize/capacity: "SP_SIZE_FMT"/"SP_SIZE_FMT", elem_size: "SP_SIZE_FMT"\n",
 		(SP_SIZE_T)queue->size, (SP_SIZE_T)queue->capacity, (SP_SIZE_T)queue->elem_size);
@@ -993,7 +993,7 @@ int sp_queue_printstr(const struct sp_queue *queue)
 	size_t i;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
-	/*. C_ERR_INCOMPAT_ELEM_TYPE queue char* SP_EILLEGAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(char*) SP_EILLEGAL */
 #endif
 	printf("sp_queue_printstr()\nsize/capacity: "SP_SIZE_FMT"/"SP_SIZE_FMT", elem_size: "SP_SIZE_FMT"\n",
 		(SP_SIZE_T)queue->size, (SP_SIZE_T)queue->capacity, (SP_SIZE_T)queue->elem_size);
