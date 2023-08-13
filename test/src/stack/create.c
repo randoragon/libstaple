@@ -42,9 +42,22 @@ END_TEST
 
 START_TEST(create_bad_args)
 {
-	ck_assert_ptr_null(sp_stack_create(0, 10));
 	ck_assert_ptr_null(sp_stack_create(10, 0));
-	ck_assert_ptr_null(sp_stack_create(0, 0));
+}
+END_TEST
+
+START_TEST(create_bool_roundup)
+{
+	struct sp_stack *s;
+	ck_assert_ptr_nonnull(s = sp_stack_create(SP_SIZEOF_BOOL, 1));
+	ck_assert_uint_eq(s->capacity, SP_BYTE_SIZE);
+	ck_assert_int_eq(0, sp_stack_destroy(s, NULL));
+	ck_assert_ptr_nonnull(s = sp_stack_create(SP_SIZEOF_BOOL, SP_BYTE_SIZE));
+	ck_assert_uint_eq(s->capacity, SP_BYTE_SIZE);
+	ck_assert_int_eq(0, sp_stack_destroy(s, NULL));
+	ck_assert_ptr_nonnull(s = sp_stack_create(SP_SIZEOF_BOOL, SP_BYTE_SIZE + 1));
+	ck_assert_uint_eq(s->capacity, 2 * SP_BYTE_SIZE);
+	ck_assert_int_eq(0, sp_stack_destroy(s, NULL));
 }
 END_TEST
 
@@ -54,4 +67,5 @@ void init_create(Suite *suite, TCase *tc)
 	tcase_add_test(tc, create_ok);
 	tcase_add_test(tc, create_buffer_too_big);
 	tcase_add_test(tc, create_bad_args);
+	tcase_add_test(tc, create_bool_roundup);
 }

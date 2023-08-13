@@ -20,6 +20,7 @@ data, by setting
 .I elem_size
 to
 .BR sizeof ( data ).
+.\". MAN_ELEM_SIZE_BOOL_SPECIALIZATION
 .I elem_size
 cannot be changed during the lifespan of a stack.
 .P
@@ -28,6 +29,7 @@ denotes the initial number of elements that can be stored on the stack without
 allocating more memory.
 .I capacity
 shall be dynamically increased whenever more space is needed.
+.\". MAN_CAPACITY_BOOL_ROUNDING
 .SH RETURN VALUE
 .\". MAN_RETVAL_POINTER_OR_NULL sp_stack_create stack
 .SH ERRORS
@@ -40,9 +42,6 @@ exceeds
 .\". MAN_ERRCODE NULL
 Memory allocation failed.
 .\". MAN_ERRCODE NULL
-Either
-.I elem_size
-or
 .I capacity
 is 0 (debug mode only).
 .\". MAN_CONFORMING_TO

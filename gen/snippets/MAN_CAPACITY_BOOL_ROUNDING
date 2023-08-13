@@ -1,0 +1,6 @@
+Note that when
+.I elem_size
+is set to
+.BR SP_SIZEOF_BOOL ,
+.I capacity
+is automatically rounded up to the nearest full byte.

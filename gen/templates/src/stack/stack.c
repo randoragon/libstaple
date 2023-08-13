@@ -2,15 +2,15 @@
 #include "../internal.h"
 
 /*F{*/
+#include "../sp_utils.h"
 struct sp_stack *sp_stack_create(size_t elem_size, size_t capacity)
 {
 	struct sp_stack *ret;
 
 #ifdef STAPLE_DEBUG
-	/*. C_ERR_ELEM_SIZE_ZERO */
 	/*. C_ERR_CAPACITY_ZERO */
 #endif
-	if (capacity > SP_SIZE_MAX / elem_size) {
+	if (elem_size != SP_SIZEOF_BOOL && capacity > SP_SIZE_MAX / elem_size) {
 		/*. C_ERRMSG_SIZE_T_OVERFLOW */
 		return NULL;
 	}
@@ -23,8 +23,13 @@ struct sp_stack *sp_stack_create(size_t elem_size, size_t capacity)
 
 	ret->elem_size = elem_size;
 	ret->size      = 0;
-	ret->capacity  = capacity;
-	ret->data      = malloc(capacity * elem_size);
+	if (elem_size == SP_SIZEOF_BOOL) {
+		ret->capacity = ROUND_UP_TO_BYTE(capacity);
+		ret->data     = malloc(ret->capacity / SP_BYTE_SIZE);
+	} else {
+		ret->capacity = capacity;
+		ret->data     = malloc(capacity * elem_size);
+	}
 	if (ret->data == NULL) {
 		/*. C_ERRMSG_MALLOC */
 		free(ret);

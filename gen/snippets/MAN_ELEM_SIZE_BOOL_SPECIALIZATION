@@ -1,0 +1,5 @@
+For boolean data, a bit-precise specialization is available through the
+.B SP_SIZEOF_BOOL
+constant (for use with
+.IR b -suffixed
+functions).

@@ -17,22 +17,19 @@
  */
 #include "../sp_stack.h"
 #include "../internal.h"
+#include "../sp_utils.h"
 
 struct sp_stack *sp_stack_create(size_t elem_size, size_t capacity)
 {
 	struct sp_stack *ret;
 
 #ifdef STAPLE_DEBUG
-	if (elem_size == 0) {
-		error(("elem_size cannot be 0"));
-		return NULL;
-	}
 	if (capacity == 0) {
 		error(("capacity cannot be 0"));
 		return NULL;
 	}
 #endif
-	if (capacity > SP_SIZE_MAX / elem_size) {
+	if (elem_size != SP_SIZEOF_BOOL && capacity > SP_SIZE_MAX / elem_size) {
 		error(("size_t overflow detected, maximum size exceeded"));
 		return NULL;
 	}
@@ -45,8 +42,13 @@ struct sp_stack *sp_stack_create(size_t elem_size, size_t capacity)
 
 	ret->elem_size = elem_size;
 	ret->size      = 0;
-	ret->capacity  = capacity;
-	ret->data      = malloc(capacity * elem_size);
+	if (elem_size == SP_SIZEOF_BOOL) {
+		ret->capacity = ROUND_UP_TO_BYTE(capacity);
+		ret->data     = malloc(ret->capacity / SP_BYTE_SIZE);
+	} else {
+		ret->capacity = capacity;
+		ret->data     = malloc(capacity * elem_size);
+	}
 	if (ret->data == NULL) {
 		error(("malloc"));
 		free(ret);

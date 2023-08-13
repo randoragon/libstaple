@@ -41,6 +41,11 @@ data, by setting
 .I elem_size
 to
 .BR sizeof ( data ).
+For boolean data, a bit-precise specialization is available through the
+.B SP_SIZEOF_BOOL
+constant (for use with
+.IR b -suffixed
+functions).
 .I elem_size
 cannot be changed during the lifespan of a stack.
 .P
@@ -49,6 +54,12 @@ denotes the initial number of elements that can be stored on the stack without
 allocating more memory.
 .I capacity
 shall be dynamically increased whenever more space is needed.
+Note that when
+.I elem_size
+is set to
+.BR SP_SIZEOF_BOOL ,
+.I capacity
+is automatically rounded up to the nearest full byte.
 .SH RETURN VALUE
 If successful, the
 .BR sp_stack_create ()
@@ -67,9 +78,6 @@ exceeds
 .IP \fBNULL\fP 1.5i
 Memory allocation failed.
 .IP \fBNULL\fP 1.5i
-Either
-.I elem_size
-or
 .I capacity
 is 0 (debug mode only).
 .SH CONFORMING TO
