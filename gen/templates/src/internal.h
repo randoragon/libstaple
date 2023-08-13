@@ -5,6 +5,7 @@
  */
 /*H}*/
 
+#include "sp_utils.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -13,6 +14,11 @@
 #ifndef SP_SIZE_MAX
 #define SP_SIZE_MAX ((size_t)(-1))
 #endif
+
+/* Computes the minimum number of bytes necessary to store X bits. */
+#define BITS_TO_BYTES(X) ((X) / SP_BYTE_SIZE + ((X) % SP_BYTE_SIZE ? 1 : 0))
+/* Rounds a number of bits up to the nearest full byte. */
+#define ROUND_UP_TO_BYTE(X) ((X) + ((X) % SP_BYTE_SIZE ? SP_BYTE_SIZE - (X) % SP_BYTE_SIZE : 0))
 
 /* These macros are only used for printf format strings and casts */
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
@@ -63,6 +69,7 @@
 
 void stderr_printf(const char *fmt, ...);
 int sp_buf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size);
+int sp_boolbuf_fit(void **buf, size_t size, size_t *capacity);
 int sp_ringbuf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size, void **head, void **tail);
 int sp_foomap(void *buf, size_t size, size_t elem_size, int (*foo)(void*));
 int sp_size_try_add(size_t size, size_t amount);

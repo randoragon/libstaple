@@ -37,6 +37,29 @@ int sp_buf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size)
 /*F}*/
 
 /*F{*/
+#include <limits.h>
+int sp_boolbuf_fit(void **buf, size_t size, size_t *capacity)
+{
+	if (size == *capacity) {
+		if (!sp_size_try_add(*capacity, *capacity)) {
+			*capacity *= 2;
+		} else if (size < SP_SIZE_MAX) {
+			*capacity = SP_SIZE_MAX;
+		} else {
+			error(("size_t overflow detected, stack size limit reached"));
+			return 2;
+		}
+		*buf = realloc(*buf, BITS_TO_BYTES(*capacity));
+		if (*buf == NULL) {
+			/*. C_ERRMSG_REALLOC */
+			return 1;
+		}
+	}
+	return 0;
+}
+/*F}*/
+
+/*F{*/
 #include <string.h>
 /* Same as sp_buf_fit, but for ring buffers.
  * Example (numbers denote order of insertion):
