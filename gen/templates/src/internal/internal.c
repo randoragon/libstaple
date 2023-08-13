@@ -14,7 +14,6 @@ void stderr_printf(const char *fmt, ...)
 /*F}*/
 
 /*F{*/
-#include <limits.h>
 int sp_buf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size)
 {
 	if (size == *capacity) {
