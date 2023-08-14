@@ -25,6 +25,7 @@ int              sp_stack_map(struct sp_stack *stack, int (*func)(void*, size_t)
 
 int sp_stack_push(struct sp_stack *stack, const void *elem);
 int sp_stack_push$SUFFIX$(struct sp_stack *stack, $TYPE$ elem);
+int sp_stack_pushb(struct sp_stack *stack, int elem);
 int sp_stack_pushstr(struct sp_stack *stack, const char *elem);
 int sp_stack_pushstrn(struct sp_stack *stack, const char *elem, size_t len);
 

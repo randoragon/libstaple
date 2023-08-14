@@ -15,30 +15,16 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#include "../sp_stack.h"
 #include "../internal.h"
-#include "../sp_utils.h"
-#include "../sp_errcodes.h"
+#include <stdlib.h>
 
-int sp_stack_pushb(struct sp_stack *stack, int elem)
+void sp_boolbuf_set(size_t idx, int val, void *buf)
 {
-#ifdef STAPLE_DEBUG
-	if (stack == NULL) {
-		error(("stack is NULL"));
-		return SP_EINVAL;
-	}
-	if (stack->elem_size != SP_SIZEOF_BOOL) {
-		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
-					(unsigned long)stack->elem_size, SP_SIZEOF_BOOL));
-		return SP_EILLEGAL;
-	}
-#endif
-	if (stack->size % SP_BYTE_SIZE == 0) {
-		if (sp_size_try_add(stack->size, 1))
-			return SP_ERANGE;
-		if (sp_boolbuf_fit(&stack->data, stack->size, &stack->capacity))
-			return SP_ENOMEM;
-	}
-	sp_boolbuf_set(stack->size++, elem, stack->data);
-	return 0;
+	unsigned char *byte, offset;
+	byte = (unsigned char*)buf + (idx / SP_BYTE_SIZE);
+	offset = (SP_BYTE_SIZE - 1) - (idx % SP_BYTE_SIZE);
+	if (val)
+		*byte |= ((unsigned char)1) << offset;
+	else
+		*byte &= (unsigned char)(~((unsigned int)1) << offset);
 }

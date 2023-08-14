@@ -207,6 +207,26 @@ int sp_stack_push$SUFFIX$(struct sp_stack *stack, $TYPE$ elem)
 /*F}*/
 
 /*F{*/
+#include "../sp_utils.h"
+#include "../sp_errcodes.h"
+int sp_stack_pushb(struct sp_stack *stack, int elem)
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack SP_SIZEOF_BOOL SP_EILLEGAL */
+#endif
+	if (stack->size % SP_BYTE_SIZE == 0) {
+		if (sp_size_try_add(stack->size, 1))
+			return SP_ERANGE;
+		if (sp_boolbuf_fit(&stack->data, stack->size, &stack->capacity))
+			return SP_ENOMEM;
+	}
+	sp_boolbuf_set(stack->size++, elem, stack->data);
+	return 0;
+}
+/*F}*/
+
+/*F{*/
 #include "../sp_errcodes.h"
 #include <string.h>
 int sp_stack_pushstr(struct sp_stack *stack, const char *elem)

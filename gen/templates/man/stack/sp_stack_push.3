@@ -1,6 +1,6 @@
 .\"M stack
 .TH SP_STACK_PUSH 3 DATE "libstaple-VERSION"
-.\"NAME str strn
+.\"NAME b str strn
 \- push a new element onto a stack
 .\". MAN_SYNOPSIS_BEGIN
 int
@@ -16,6 +16,12 @@ int
 $TYPE$
 .IR elem )
 .\"SS}
+.br
+int
+.BR sp_stack_pushb "(struct sp_stack"
+.RI * stack ,
+int
+.IR elem )
 .br
 int
 .BR sp_stack_pushstr "(struct sp_stack"

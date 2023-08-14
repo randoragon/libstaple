@@ -66,6 +66,7 @@ int sp_stack_pushi16(struct sp_stack *stack, int16_t elem);
 int sp_stack_pushi32(struct sp_stack *stack, int32_t elem);
 int sp_stack_pushi64(struct sp_stack *stack, int64_t elem);
 #endif
+int sp_stack_pushb(struct sp_stack *stack, int elem);
 int sp_stack_pushstr(struct sp_stack *stack, const char *elem);
 int sp_stack_pushstrn(struct sp_stack *stack, const char *elem, size_t len);
 

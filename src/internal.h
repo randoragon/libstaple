@@ -91,6 +91,7 @@ int sp_boolbuf_fit(void **buf, size_t size, size_t *capacity);
 int sp_ringbuf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size, void **head, void **tail);
 int sp_foomap(void *buf, size_t size, size_t elem_size, int (*foo)(void*));
 int sp_size_try_add(size_t size, size_t amount);
+void  sp_boolbuf_set(size_t idx, int val, void *buf);
 void  sp_ringbuf_incr(void **ptr, void *buf, size_t capacity, size_t elem_size);
 void  sp_ringbuf_decr(void **ptr, void *buf, size_t capacity, size_t elem_size);
 void *sp_ringbuf_get(size_t idx, const void *buf, size_t capacity, size_t elem_size, const void *head);

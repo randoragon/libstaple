@@ -122,6 +122,19 @@ int sp_size_try_add(size_t size, size_t amount)
 /*F}*/
 
 /*F{*/
+void sp_boolbuf_set(size_t idx, int val, void *buf)
+{
+	unsigned char *byte, offset;
+	byte = (unsigned char*)buf + (idx / SP_BYTE_SIZE);
+	offset = (SP_BYTE_SIZE - 1) - (idx % SP_BYTE_SIZE);
+	if (val)
+		*byte |= ((unsigned char)1) << offset;
+	else
+		*byte &= (unsigned char)(~((unsigned int)1) << offset);
+}
+/*F}*/
+
+/*F{*/
 void sp_ringbuf_incr(void **ptr, void *buf, size_t capacity, size_t elem_size)
 {
 	if (*ptr == (char*)buf + (capacity - 1) * elem_size)

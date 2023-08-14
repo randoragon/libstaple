@@ -40,6 +40,7 @@ sp_stack_pushi8,
 sp_stack_pushi16,
 sp_stack_pushi32,
 sp_stack_pushi64,
+sp_stack_pushb,
 sp_stack_pushstr,
 sp_stack_pushstrn
 \- push a new element onto a stack
@@ -183,6 +184,12 @@ int
 .BR sp_stack_pushi64 "(struct sp_stack
 .RI * stack ,
 int64_t
+.IR elem )
+.br
+int
+.BR sp_stack_pushb "(struct sp_stack"
+.RI * stack ,
+int
 .IR elem )
 .br
 int

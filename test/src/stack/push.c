@@ -1,13 +1,13 @@
-#define setup(T, X) \
+#define setup(E, C) \
 	struct sp_stack *s; \
-	ck_assert_ptr_nonnull(s = sp_stack_create(sizeof(T), X));
+	ck_assert_ptr_nonnull(s = sp_stack_create(E, C));
 
 #define teardown(D) \
 	ck_assert_int_eq(0, sp_stack_destroy(s, D));
 
 START_TEST(push_basic)
 {
-	setup(int, 30);
+	setup(sizeof(int), 30);
 	ck_assert_int_eq(0, sp_stack_pushi(s, 1));
 	ck_assert_uint_eq(1, s->size);
 	ck_assert_int_eq(1, sp_stack_peeki(s));
@@ -26,10 +26,31 @@ START_TEST(push_basic)
 }
 END_TEST
 
+START_TEST(push_bool)
+{
+	setup(SP_SIZEOF_BOOL, 30);
+	ck_assert_int_eq(0, sp_stack_pushb(s, 1));
+	ck_assert_uint_eq(1, s->size);
+	ck_assert(sp_stack_peekb(s));
+
+	ck_assert_int_eq(0, sp_stack_pushb(s, 0));
+	ck_assert_uint_eq(2, s->size);
+	ck_assert(!sp_stack_peekb(s));
+	ck_assert(sp_stack_getb(s, 1));
+
+	ck_assert_int_eq(0, sp_stack_pushb(s, 1));
+	ck_assert_uint_eq(3, s->size);
+	ck_assert(sp_stack_peekb(s));
+	ck_assert(!sp_stack_getb(s, 1));
+	ck_assert(sp_stack_getb(s, 2));
+	teardown(NULL);
+}
+END_TEST
+
 START_TEST(push_object)
 {
 	struct data a, b, c;
-	setup(struct data, 30);
+	setup(sizeof(struct data), 30);
 	data_init(&a);
 	data_init(&b);
 	data_init(&c);
@@ -53,7 +74,7 @@ END_TEST
 
 START_TEST(push_string)
 {
-	setup(char*, 20);
+	setup(sizeof(char*), 20);
 	ck_assert_int_eq(0, sp_stack_pushstr(s, "first"));
 	ck_assert_uint_eq(1, s->size);
 	ck_assert_str_eq("first", sp_stack_peekstr(s));
@@ -74,7 +95,7 @@ END_TEST
 
 START_TEST(push_substring)
 {
-	setup(char*, 20);
+	setup(sizeof(char*), 20);
 	ck_assert_int_eq(0, sp_stack_pushstrn(s, "first", 0));
 	ck_assert_uint_eq(1, s->size);
 	ck_assert_str_eq("", sp_stack_peekstr(s));
@@ -166,7 +187,7 @@ START_TEST(push_string_too_long)
 {
 	size_t i;
 	char *str;
-	setup(char*, 10);
+	setup(sizeof(char*), 10);
 	/* SIZE_MAX + 1 is safe, because we redefined SIZE_MAX to be small */
 	ck_assert_ptr_nonnull(str = malloc(sizeof(char) * (SIZE_MAX + 1)));
 	for (i = 0; i < SIZE_MAX + 1; i++)
@@ -183,6 +204,7 @@ void init_push(Suite *suite, TCase *tc)
 {
 	suite_add_tcase(suite, tc);
 	tcase_add_test(tc, push_basic);
+	tcase_add_test(tc, push_bool);
 	tcase_add_test(tc, push_object);
 	tcase_add_test(tc, push_string);
 	tcase_add_test(tc, push_substring);
