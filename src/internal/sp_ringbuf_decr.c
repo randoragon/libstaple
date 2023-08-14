@@ -18,7 +18,7 @@
 #include "../internal.h"
 #include <stdlib.h>
 
-void sp_ringbuf_decr(void **ptr, void *buf, size_t capacity, size_t elem_size)
+void sp_ringbuf_decr(void **ptr, const void *buf, size_t capacity, size_t elem_size)
 {
 	if (*ptr == buf)
 		*ptr = (char*)buf + (capacity - 1) * elem_size;
