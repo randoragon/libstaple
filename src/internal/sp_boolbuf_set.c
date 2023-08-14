@@ -26,5 +26,6 @@ void sp_boolbuf_set(size_t idx, int val, void *buf)
 	if (val)
 		*byte |= ((unsigned char)1) << offset;
 	else
-		*byte &= (unsigned char)(~((unsigned int)1) << offset);
+		/* Negation works on int/uint or larger types (smaller ones get promoted) */
+		*byte &= (unsigned char)(~1U << offset);
 }
