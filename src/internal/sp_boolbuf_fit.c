@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <limits.h>
 
+/* Same as sp_buf_fit, but for boolean buffers. */
 int sp_boolbuf_fit(void **buf, size_t size, size_t *capacity)
 {
 	if (size == *capacity) {

@@ -2,6 +2,15 @@
 #include <stdlib.h>
 
 /*F{*/
+size_t sp_strnlen(const char *s, size_t maxlen)
+{
+	size_t i = 0;
+	for (; i < maxlen && s[i] != '\0'; i++);
+	return i;
+}
+/*F}*/
+
+/*F{*/
 #include <stdio.h>
 #include <stdarg.h>
 void stderr_printf(const char *fmt, ...)
@@ -10,6 +19,35 @@ void stderr_printf(const char *fmt, ...)
 	va_start(ap, fmt);
 	vfprintf(stderr, fmt, ap);
 	va_end(ap);
+}
+/*F}*/
+
+/*F{*/
+int sp_foomap(void *buf, size_t size, size_t elem_size, int (*foo)(void*))
+{
+	const void *const end = (char*)buf + size * elem_size;
+	char *p = buf;
+	while (p != end) {
+		int err;
+		if ((err = foo(p))) {
+			/*. C_ERRMSG_CALLBACK_NON_ZERO foo err */
+			return 1;
+		}
+		p += elem_size;
+	}
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include <limits.h>
+int sp_size_try_add(size_t size, size_t amount)
+{
+	if (size > SP_SIZE_MAX - amount) {
+		error(("size_t overflow detected, unable to increment by %lu", (unsigned long)amount));
+		return 1;
+	}
+	return 0;
 }
 /*F}*/
 
@@ -37,6 +75,7 @@ int sp_buf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size)
 
 /*F{*/
 #include <limits.h>
+/* Same as sp_buf_fit, but for boolean buffers. */
 int sp_boolbuf_fit(void **buf, size_t size, size_t *capacity)
 {
 	if (size == *capacity) {
@@ -55,6 +94,30 @@ int sp_boolbuf_fit(void **buf, size_t size, size_t *capacity)
 		}
 	}
 	return 0;
+}
+/*F}*/
+
+/*F{*/
+int sp_boolbuf_get(size_t idx, const void *buf)
+{
+	unsigned int byte, offset;
+	byte = *((unsigned char*)buf + (idx / SP_BYTE_SIZE));
+	offset = (SP_BYTE_SIZE - 1) - (idx % SP_BYTE_SIZE);
+	return (byte & (1U << offset)) ? 1 : 0;
+}
+/*F}*/
+
+/*F{*/
+void sp_boolbuf_set(size_t idx, int val, void *buf)
+{
+	unsigned char *byte, offset;
+	byte = (unsigned char*)buf + (idx / SP_BYTE_SIZE);
+	offset = (SP_BYTE_SIZE - 1) - (idx % SP_BYTE_SIZE);
+	if (val)
+		*byte |= ((unsigned char)1) << offset;
+	else
+		/* Negation works on int/uint or larger types (smaller ones get promoted) */
+		*byte &= (unsigned char)(~1U << offset);
 }
 /*F}*/
 
@@ -89,59 +152,6 @@ int sp_ringbuf_fit(void **buf, size_t size, size_t *capacity, size_t elem_size, 
 		memcpy(dest, *buf, head_offset);
 	}
 	return 0;
-}
-/*F}*/
-
-/*F{*/
-int sp_foomap(void *buf, size_t size, size_t elem_size, int (*foo)(void*))
-{
-	const void *const end = (char*)buf + size * elem_size;
-	char *p = buf;
-	while (p != end) {
-		int err;
-		if ((err = foo(p))) {
-			/*. C_ERRMSG_CALLBACK_NON_ZERO foo err */
-			return 1;
-		}
-		p += elem_size;
-	}
-	return 0;
-}
-/*F}*/
-
-/*F{*/
-#include <limits.h>
-int sp_size_try_add(size_t size, size_t amount)
-{
-	if (size > SP_SIZE_MAX - amount) {
-		error(("size_t overflow detected, unable to increment by %lu", (unsigned long)amount));
-		return 1;
-	}
-	return 0;
-}
-/*F}*/
-
-/*F{*/
-int sp_boolbuf_get(size_t idx, const void *buf)
-{
-	unsigned int byte, offset;
-	byte = *((unsigned char*)buf + (idx / SP_BYTE_SIZE));
-	offset = (SP_BYTE_SIZE - 1) - (idx % SP_BYTE_SIZE);
-	return (byte & (1U << offset)) ? 1 : 0;
-}
-/*F}*/
-
-/*F{*/
-void sp_boolbuf_set(size_t idx, int val, void *buf)
-{
-	unsigned char *byte, offset;
-	byte = (unsigned char*)buf + (idx / SP_BYTE_SIZE);
-	offset = (SP_BYTE_SIZE - 1) - (idx % SP_BYTE_SIZE);
-	if (val)
-		*byte |= ((unsigned char)1) << offset;
-	else
-		/* Negation works on int/uint or larger types (smaller ones get promoted) */
-		*byte &= (unsigned char)(~1U << offset);
 }
 /*F}*/
 
@@ -264,14 +274,5 @@ void sp_ringbuf_remove(size_t idx, void *buf, size_t *size, size_t capacity, siz
 		}
 	}
 	--(*size);
-}
-/*F}*/
-
-/*F{*/
-size_t sp_strnlen(const char *s, size_t maxlen)
-{
-	size_t i = 0;
-	for (; i < maxlen && s[i] != '\0'; i++);
-	return i;
 }
 /*F}*/
