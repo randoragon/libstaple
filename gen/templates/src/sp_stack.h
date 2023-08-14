@@ -41,6 +41,7 @@ int sp_stack_qinsertstrn(struct sp_stack *stack, size_t idx, const char *elem, s
 
 void   *sp_stack_peek(const struct sp_stack *stack);
 $TYPE$  sp_stack_peek$SUFFIX$(const struct sp_stack *stack);
+int     sp_stack_peekb(const struct sp_stack *stack);
 char   *sp_stack_peekstr(const struct sp_stack *stack);
 
 int     sp_stack_pop(struct sp_stack *stack, int (*dtor)(void*));
@@ -57,6 +58,7 @@ char   *sp_stack_qremovestr(struct sp_stack *stack, size_t idx);
 
 void   *sp_stack_get(const struct sp_stack *stack, size_t idx);
 $TYPE$  sp_stack_get$SUFFIX$(const struct sp_stack *stack, size_t idx);
+int     sp_stack_getb(const struct sp_stack *stack, size_t idx);
 char   *sp_stack_getstr(const struct sp_stack *stack, size_t idx);
 
 int sp_stack_set(struct sp_stack *stack, size_t idx, void *val);

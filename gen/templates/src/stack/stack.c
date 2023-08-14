@@ -577,6 +577,21 @@ $TYPE$ sp_stack_peek$SUFFIX$(const struct sp_stack *stack)
 /*F}*/
 
 /*F{*/
+int sp_stack_peekb(const struct sp_stack *stack)
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack 0 */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack SP_SIZEOF_BOOL 0 */
+	if (stack->size == 0) {
+		/*. C_ERRMSG_IS_EMPTY stack */
+		return 0;
+	}
+#endif
+	return sp_boolbuf_get(stack->size - 1, stack->data);
+}
+/*F}*/
+
+/*F{*/
 char *sp_stack_peekstr(const struct sp_stack *stack)
 {
 #ifdef STAPLE_DEBUG
@@ -814,6 +829,21 @@ $TYPE$ sp_stack_get$SUFFIX$(const struct sp_stack *stack, size_t idx)
 	}
 #endif
 	return (($TYPE$*)stack->data)[stack->size - 1 - idx];
+}
+/*F}*/
+
+/*F{*/
+int sp_stack_getb(const struct sp_stack *stack, size_t idx)
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack 0 */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack SP_SIZEOF_BOOL 0 */
+	if (idx >= stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return 0;
+	}
+#endif
+	return sp_boolbuf_get(stack->size - 1 - idx, stack->data);
 }
 /*F}*/
 

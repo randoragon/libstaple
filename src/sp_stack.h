@@ -151,6 +151,7 @@ int16_t  sp_stack_peeki16(const struct sp_stack *stack);
 int32_t  sp_stack_peeki32(const struct sp_stack *stack);
 int64_t  sp_stack_peeki64(const struct sp_stack *stack);
 #endif
+int     sp_stack_peekb(const struct sp_stack *stack);
 char   *sp_stack_peekstr(const struct sp_stack *stack);
 
 int     sp_stack_pop(struct sp_stack *stack, int (*dtor)(void*));
@@ -259,6 +260,7 @@ int16_t  sp_stack_geti16(const struct sp_stack *stack, size_t idx);
 int32_t  sp_stack_geti32(const struct sp_stack *stack, size_t idx);
 int64_t  sp_stack_geti64(const struct sp_stack *stack, size_t idx);
 #endif
+int     sp_stack_getb(const struct sp_stack *stack, size_t idx);
 char   *sp_stack_getstr(const struct sp_stack *stack, size_t idx);
 
 int sp_stack_set(struct sp_stack *stack, size_t idx, void *val);

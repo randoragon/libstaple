@@ -1,13 +1,13 @@
-#define setup(T, X) \
+#define setup(E, C) \
 	struct sp_stack *s; \
-	ck_assert_ptr_nonnull(s = sp_stack_create(sizeof(T), X));
+	ck_assert_ptr_nonnull(s = sp_stack_create(E, C));
 
 #define teardown(D) \
 	ck_assert_int_eq(0, sp_stack_destroy(s, D));
 
 START_TEST(get_basic)
 {
-	setup(int, 10);
+	setup(sizeof(int), 10);
 	ck_assert_int_eq(0, sp_stack_pushi(s, 1));
 	ck_assert_int_eq(1, sp_stack_geti(s, 0));
 
@@ -23,10 +23,28 @@ START_TEST(get_basic)
 }
 END_TEST
 
+START_TEST(get_bool)
+{
+	setup(SP_SIZEOF_BOOL, 10);
+	ck_assert_int_eq(0, sp_stack_pushb(s, 1));
+	ck_assert(sp_stack_getb(s, 0));
+
+	ck_assert_int_eq(0, sp_stack_pushb(s, 0));
+	ck_assert(!sp_stack_getb(s, 0));
+	ck_assert(sp_stack_getb(s, 1));
+
+	ck_assert_int_eq(0, sp_stack_pushb(s, 1));
+	ck_assert(sp_stack_getb(s, 0));
+	ck_assert(!sp_stack_getb(s, 1));
+	ck_assert(sp_stack_getb(s, 2));
+	teardown(NULL);
+}
+END_TEST
+
 START_TEST(get_object)
 {
 	struct data a, b, c;
-	setup(struct data, 10);
+	setup(sizeof(struct data), 10);
 	data_init(&a);
 	data_init(&b);
 	data_init(&c);
@@ -47,7 +65,7 @@ END_TEST
 
 START_TEST(get_string)
 {
-	setup(char*, 10);
+	setup(sizeof(char*), 10);
 	ck_assert_int_eq(0, sp_stack_pushstr(s, "first"));
 	ck_assert_str_eq("first", sp_stack_getstr(s, 0));
 
@@ -120,6 +138,7 @@ void init_get(Suite *suite, TCase *tc)
 {
 	suite_add_tcase(suite, tc);
 	tcase_add_test(tc, get_basic);
+	tcase_add_test(tc, get_bool);
 	tcase_add_test(tc, get_object);
 	tcase_add_test(tc, get_string);
 	tcase_add_test(tc, get_bad_args);

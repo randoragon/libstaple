@@ -15,25 +15,13 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#include "../sp_stack.h"
 #include "../internal.h"
+#include <stdlib.h>
 
-int sp_stack_getb(const struct sp_stack *stack, size_t idx)
+int sp_boolbuf_get(size_t idx, const void *buf)
 {
-#ifdef STAPLE_DEBUG
-	if (stack == NULL) {
-		error(("stack is NULL"));
-		return 0;
-	}
-	if (stack->elem_size != SP_SIZEOF_BOOL) {
-		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
-					(unsigned long)stack->elem_size, SP_SIZEOF_BOOL));
-		return 0;
-	}
-	if (idx >= stack->size) {
-		error(("index out of range"));
-		return 0;
-	}
-#endif
-	return sp_boolbuf_get(stack->size - 1 - idx, stack->data);
+	unsigned int byte, offset;
+	byte = *((unsigned char*)buf + (idx / SP_BYTE_SIZE));
+	offset = (SP_BYTE_SIZE - 1) - (idx % SP_BYTE_SIZE);
+	return (byte & (1U << offset)) ? 1 : 0;
 }

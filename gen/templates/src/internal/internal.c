@@ -122,6 +122,16 @@ int sp_size_try_add(size_t size, size_t amount)
 /*F}*/
 
 /*F{*/
+int sp_boolbuf_get(size_t idx, const void *buf)
+{
+	unsigned int byte, offset;
+	byte = *((unsigned char*)buf + (idx / SP_BYTE_SIZE));
+	offset = (SP_BYTE_SIZE - 1) - (idx % SP_BYTE_SIZE);
+	return (byte & (1U << offset)) ? 1 : 0;
+}
+/*F}*/
+
+/*F{*/
 void sp_boolbuf_set(size_t idx, int val, void *buf)
 {
 	unsigned char *byte, offset;

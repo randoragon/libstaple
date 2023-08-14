@@ -1,3 +1,10 @@
 The suffixed
 .BR $1$ ()
 functions shall return the value of the element at \fI$2$\fP.
+In the case of
+.BR $1$b (),
+the boolean value is cast to an int
+.RB ( 1
+= true,
+.B 0
+= false).

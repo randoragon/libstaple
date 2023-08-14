@@ -15,22 +15,19 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
 #include "../sp_stack.h"
 #include "../internal.h"
-#include <stdint.h>
-#include <inttypes.h>
 
-_Bool sp_stack_peekb(const struct sp_stack *stack)
+int sp_stack_peekb(const struct sp_stack *stack)
 {
 #ifdef STAPLE_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
 		return 0;
 	}
-	if (stack->elem_size != sizeof(_Bool)) {
+	if (stack->elem_size != SP_SIZEOF_BOOL) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
-					(unsigned long)stack->elem_size, sizeof(_Bool)));
+					(unsigned long)stack->elem_size, SP_SIZEOF_BOOL));
 		return 0;
 	}
 	if (stack->size == 0) {
@@ -38,9 +35,5 @@ _Bool sp_stack_peekb(const struct sp_stack *stack)
 		return 0;
 	}
 #endif
-	return ((_Bool*)stack->data)[stack->size - 1];
+	return sp_boolbuf_get(stack->size - 1, stack->data);
 }
-
-#else
-typedef int prevent_empty_translation_unit;
-#endif

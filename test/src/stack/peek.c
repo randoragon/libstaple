@@ -1,13 +1,13 @@
-#define setup(T, X) \
+#define setup(E, C) \
 	struct sp_stack *s; \
-	ck_assert_ptr_nonnull(s = sp_stack_create(sizeof(T), X));
+	ck_assert_ptr_nonnull(s = sp_stack_create(E, C));
 
 #define teardown(D) \
 	ck_assert_int_eq(0, sp_stack_destroy(s, D));
 
 START_TEST(peek_basic)
 {
-	setup(int, 10);
+	setup(sizeof(int), 10);
 	ck_assert_int_eq(0, sp_stack_pushi(s, 1));
 	ck_assert_int_eq(1, sp_stack_peeki(s));
 	ck_assert_int_eq(1, sp_stack_peeki(s));
@@ -21,10 +21,26 @@ START_TEST(peek_basic)
 }
 END_TEST
 
+START_TEST(peek_bool)
+{
+	setup(SP_SIZEOF_BOOL, 10);
+	ck_assert_int_eq(0, sp_stack_pushb(s, 1));
+	ck_assert(sp_stack_peekb(s));
+	ck_assert(sp_stack_peekb(s));
+	ck_assert_int_eq(0, sp_stack_pushb(s, 0));
+	ck_assert(!sp_stack_peekb(s));
+	ck_assert(!sp_stack_peekb(s));
+	ck_assert_int_eq(0, sp_stack_pushb(s, 1));
+	ck_assert(sp_stack_peekb(s));
+	ck_assert(sp_stack_peekb(s));
+	teardown(NULL);
+}
+END_TEST
+
 START_TEST(peek_object)
 {
 	struct data a, b, c;
-	setup(struct data, 10);
+	setup(sizeof(struct data), 10);
 	data_init(&a);
 	data_init(&b);
 	data_init(&c);
@@ -43,7 +59,7 @@ END_TEST
 
 START_TEST(peek_string)
 {
-	setup(char*, 10);
+	setup(sizeof(char*), 10);
 	ck_assert_int_eq(0, sp_stack_pushstr(s, "first"));
 	ck_assert_str_eq("first", sp_stack_peekstr(s));
 	ck_assert_str_eq("first", sp_stack_peekstr(s));
@@ -113,6 +129,7 @@ void init_peek(Suite *suite, TCase *tc)
 {
 	suite_add_tcase(suite, tc);
 	tcase_add_test(tc, peek_basic);
+	tcase_add_test(tc, peek_bool);
 	tcase_add_test(tc, peek_object);
 	tcase_add_test(tc, peek_string);
 	tcase_add_test(tc, peek_empty);
