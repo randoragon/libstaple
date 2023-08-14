@@ -39,7 +39,9 @@ match the queue's
 .I elem_size
 field, so it is illegal to, for example, create a queue with
 .I elem_size
-equal to 4, and then use it with the
+equal to
+.BR sizeof(int) ,
+and then use it with the
 .BR sp_queue_pushc ()
 function.
 .P
