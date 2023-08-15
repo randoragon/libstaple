@@ -1,0 +1,4 @@
+The function pointed to by
+.I $1$
+must return 0 for success, and anything else for failure. In debug mode, the
+caught error code (if any) is printed on stderr.

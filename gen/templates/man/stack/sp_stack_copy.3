@@ -50,10 +50,7 @@ can be passed, in which case
 .BR memcpy (3)
 shall be used instead.
 .P
-The copy function pointed to by
-.I cpy
-must return 0 for success, and anything else for failure. In debug mode, the
-caught error code (if any) is printed on stderr.
+.\". MAN_CALLBK_MUST_RETURN cpy
 .P
 The copy function can be custom-tailored to do more than just a copy operation.
 For similar purposes, see also

@@ -248,6 +248,13 @@ function shall return the address of the element at \fIidx\fP.
 The suffixed
 .BR sp_queue_get ()
 functions shall return the value of the element at \fIidx\fP.
+In the case of
+.BR sp_queue_getb (),
+the boolean value is cast to an int
+.RB ( 1
+= true,
+.B 0
+= false).
 .SH ERRORS
 .SS Generic Form
 The

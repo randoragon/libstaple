@@ -27,10 +27,7 @@ is the address to the current element, and the second
 is the index of the current element (index 0 corresponds to the top of the
 stack, 1 is the element below it and so on).
 .P
-The function pointed to by
-.I func
-must return 0 for success, and anything else for failure. In debug mode, the
-caught error code (if any) is printed on stderr.
+.\". MAN_CALLBK_MUST_RETURN func
 .SH RETURN VALUE
 .\". MAN_RETVAL_0_OR_CODE sp_stack_map
 .SH ERRORS

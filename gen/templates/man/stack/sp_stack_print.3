@@ -34,10 +34,7 @@ is an optional pointer to a custom print function. The function must be
 implemented in such a way that it accepts the address of
 an element as its argument.
 .P
-The function pointed to by
-.I func
-must return 0 for success, and anything else for failure. In debug mode, the
-caught error code (if any) is printed on stderr.
+.\". MAN_CALLBK_MUST_RETURN func
 .P
 .B NULL
 can be passed as
