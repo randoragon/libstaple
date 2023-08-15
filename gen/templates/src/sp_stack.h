@@ -63,6 +63,7 @@ char   *sp_stack_getstr(const struct sp_stack *stack, size_t idx);
 
 int sp_stack_set(struct sp_stack *stack, size_t idx, void *val);
 int sp_stack_set$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ val);
+int sp_stack_setb(struct sp_stack *stack, size_t idx, int val);
 int sp_stack_setstr(struct sp_stack *stack, size_t idx, const char *val);
 int sp_stack_setstrn(struct sp_stack *stack, size_t idx, const char *val, size_t len);
 

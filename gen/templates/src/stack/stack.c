@@ -904,6 +904,23 @@ int sp_stack_set$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ val)
 
 /*F{*/
 #include "../sp_errcodes.h"
+int sp_stack_setb(struct sp_stack *stack, size_t idx, int val)
+{
+#ifdef STAPLE_DEBUG
+	/*. C_ERR_NULLPTR stack SP_EINVAL */
+	/*. C_ERR_INCOMPAT_ELEM_TYPE stack SP_SIZEOF_BOOL SP_EILLEGAL */
+	if (idx >= stack->size) {
+		/*. C_ERRMSG_INDEX_OUT_OF_RANGE */
+		return SP_EINDEX;
+	}
+#endif
+	sp_boolbuf_set(stack->size - 1 - idx, val, stack->data);
+	return 0;
+}
+/*F}*/
+
+/*F{*/
+#include "../sp_errcodes.h"
 #include <string.h>
 int sp_stack_setstr(struct sp_stack *stack, size_t idx, const char *val)
 {

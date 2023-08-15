@@ -288,6 +288,7 @@ int sp_stack_seti16(struct sp_stack *stack, size_t idx, int16_t val);
 int sp_stack_seti32(struct sp_stack *stack, size_t idx, int32_t val);
 int sp_stack_seti64(struct sp_stack *stack, size_t idx, int64_t val);
 #endif
+int sp_stack_setb(struct sp_stack *stack, size_t idx, int val);
 int sp_stack_setstr(struct sp_stack *stack, size_t idx, const char *val);
 int sp_stack_setstrn(struct sp_stack *stack, size_t idx, const char *val, size_t len);
 

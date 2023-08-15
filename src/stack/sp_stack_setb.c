@@ -15,24 +15,20 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
 #include "../sp_stack.h"
 #include "../internal.h"
 #include "../sp_errcodes.h"
-#include <stdint.h>
-#include <inttypes.h>
 
-int sp_stack_setb(struct sp_stack *stack, size_t idx, _Bool val)
+int sp_stack_setb(struct sp_stack *stack, size_t idx, int val)
 {
-	char *p;
 #ifdef STAPLE_DEBUG
 	if (stack == NULL) {
 		error(("stack is NULL"));
 		return SP_EINVAL;
 	}
-	if (stack->elem_size != sizeof(val)) {
+	if (stack->elem_size != SP_SIZEOF_BOOL) {
 		error(("stack->elem_size is incompatible with elem type (%lu != %lu)",
-					(unsigned long)stack->elem_size, sizeof(val)));
+					(unsigned long)stack->elem_size, SP_SIZEOF_BOOL));
 		return SP_EILLEGAL;
 	}
 	if (idx >= stack->size) {
@@ -40,11 +36,6 @@ int sp_stack_setb(struct sp_stack *stack, size_t idx, _Bool val)
 		return SP_EINDEX;
 	}
 #endif
-	p = (char*)stack->data + (stack->size - 1 - idx) * stack->elem_size;
-	*(_Bool*)p = val;
+	sp_boolbuf_set(stack->size - 1 - idx, val, stack->data);
 	return 0;
 }
-
-#else
-typedef int prevent_empty_translation_unit;
-#endif
