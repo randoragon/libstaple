@@ -74,7 +74,7 @@ int sp_stack_destroy(struct sp_stack *stack, int (*dtor)(void*))
 	/*. C_ERR_BOOL_DTOR stack SP_EILLEGAL */
 #endif
 	if ((error = sp_stack_clear(stack, dtor)))
-		return SP_ECALLBK;
+		return error;
 	free(stack->data);
 	free(stack);
 	return 0;
