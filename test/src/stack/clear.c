@@ -49,6 +49,18 @@ START_TEST(clear_bad_dtor)
 }
 END_TEST
 
+START_TEST(clear_bool_dtor)
+{
+	struct sp_stack *s;
+	ck_assert_ptr_nonnull(s = sp_stack_create(SP_SIZEOF_BOOL, 10));
+	ck_assert_int_eq(0, sp_stack_pushb(s, 1));
+	ck_assert_int_eq(SP_EILLEGAL, sp_stack_clear(s, sp_free));
+	ck_assert_int_eq(SP_EILLEGAL, sp_stack_clear(s, data_dtor));
+	ck_assert_int_eq(0, sp_stack_clear(s, NULL));
+	ck_assert_int_eq(0, sp_stack_destroy(s, NULL));
+}
+END_TEST
+
 
 void init_clear(Suite *suite, TCase *tc)
 {
@@ -57,4 +69,5 @@ void init_clear(Suite *suite, TCase *tc)
 	tcase_add_test(tc, clear_object);
 	tcase_add_test(tc, clear_bad_args);
 	tcase_add_test(tc, clear_bad_dtor);
+	tcase_add_test(tc, clear_bool_dtor);
 }

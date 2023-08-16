@@ -45,6 +45,12 @@ the stack.  This mechanism is useful if individual stack elements own memory
 that should be freed (see EXAMPLES). If no such destructor function is needed,
 .B NULL
 can be passed to skip this functionality.
+Boolean stacks (stacks created with
+.BR SP_SIZEOF_BOOL )
+do not support destructor functions
+.RI ( dtor
+must be
+.BR NULL ).
 .P
 The function pointed to by
 .I dtor
@@ -62,6 +68,13 @@ function shall fail if:
 .IP \fBSP_EINVAL\fP 1.5i
 .I stack
 is a null pointer (debug mode only).
+.IP \fBSP_EILLEGAL\fP 1.5i
+.I stack
+is boolean and
+.I dtor
+is
+.RB non- NULL
+(debug mode only).
 .IP \fBSP_ECALLBK\fP 1.5i
 .I dtor
 returned non-0 for some stack element.

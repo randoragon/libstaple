@@ -1,0 +1,6 @@
+Boolean $1$ ($1$ created with
+.BR SP_SIZEOF_BOOL )
+do not support destructor functions
+.RI ( dtor
+must be
+.BR NULL ).
