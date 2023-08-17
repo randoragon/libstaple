@@ -50,6 +50,7 @@ int sp_queue_copy(struct sp_queue *dest, const struct sp_queue *src, int (*cpy)(
 		sp_ringbuf_decr(&s, src->data, src->capacity, src->elem_size);
 		sp_ringbuf_decr(&dest->tail, dest->data, dest->capacity, dest->elem_size);
 		if (cpy == NULL)
+			/* TODO: optimize this into fewer memcpy calls */
 			while (i != 0) {
 				sp_ringbuf_incr(&s, src->data, src->capacity, src->elem_size);
 				sp_ringbuf_incr(&dest->tail, dest->data, dest->capacity, dest->elem_size);

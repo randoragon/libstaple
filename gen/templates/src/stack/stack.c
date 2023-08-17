@@ -126,14 +126,7 @@ int sp_stack_copy(struct sp_stack *dest, const struct sp_stack *src, int (*cpy)(
 	dest->elem_size = src->elem_size;
 	dest->size      = src->size;
 	if (cpy == NULL) {
-		const void *const src_end = (char*)src->data + src->size * src->elem_size;
-		s = src->data;
-		d = dest->data;
-		while (s != src_end) {
-			memcpy(d, s, src->elem_size);
-			s += src->elem_size;
-			d += dest->elem_size;
-		}
+		memcpy(dest->data, src->data, DATA_SIZE(src));
 	} else {
 		const void *const src_end = (char*)src->data + DATA_SIZE(src);
 		s = src->data;
