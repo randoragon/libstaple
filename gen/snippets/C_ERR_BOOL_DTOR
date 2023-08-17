@@ -1,4 +1,0 @@
-if (dtor != NULL && $1$->elem_size == SP_SIZEOF_BOOL) {
-	error(("destructors cannot be used on boolean elements"));
-	return $2$;
-}

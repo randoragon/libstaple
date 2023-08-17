@@ -1,0 +1,4 @@
+if ($2$ != NULL && $1$->elem_size == SP_SIZEOF_BOOL) {
+	error(("the $2$ argument is not supported for boolean $3$ ($2$ should be NULL)"));
+	return $4$;
+}

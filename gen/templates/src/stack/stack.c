@@ -46,7 +46,7 @@ int sp_stack_clear(struct sp_stack *stack, int (*dtor)(void*))
 {
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
-	/*. C_ERR_BOOL_DTOR stack SP_EILLEGAL */
+	/*. C_ERR_BOOL_CALLBK stack dtor stacks SP_EILLEGAL */
 #endif
 	if (dtor != NULL) {
 		const void *const end = (char*)stack->data + DATA_SIZE(stack);
@@ -71,7 +71,7 @@ int sp_stack_destroy(struct sp_stack *stack, int (*dtor)(void*))
 	int error;
 #ifdef STAPLE_DEBUG
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
-	/*. C_ERR_BOOL_DTOR stack SP_EILLEGAL */
+	/*. C_ERR_BOOL_CALLBK stack dtor stacks SP_EILLEGAL */
 #endif
 	if ((error = sp_stack_clear(stack, dtor)))
 		return error;

@@ -27,7 +27,7 @@ int sp_stack_clear(struct sp_stack *stack, int (*dtor)(void*))
 		return SP_EINVAL;
 	}
 	if (dtor != NULL && stack->elem_size == SP_SIZEOF_BOOL) {
-		error(("destructors cannot be used on boolean elements"));
+		error(("the dtor argument is not supported for boolean stacks (dtor should be NULL)"));
 		return SP_EILLEGAL;
 	}
 #endif
