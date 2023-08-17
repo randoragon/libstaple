@@ -38,6 +38,9 @@
 /* Rounds a number of bits up to the nearest full byte. */
 #define ROUND_UP_TO_BYTE(X) ((X) + ((X) % SP_BYTE_SIZE ? SP_BYTE_SIZE - (X) % SP_BYTE_SIZE : 0))
 
+/* Computes the minimum number of bytes necessary to hold structure X's data. */
+#define DATA_SIZE(S) ((S)->elem_size == SP_SIZEOF_BOOL ? ROUND_UP_TO_BYTE((S)->size) : (S)->size * (S)->elem_size)
+
 /* These macros are only used for printf format strings and casts */
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
 #define SP_SIZE_FMT "%zu"

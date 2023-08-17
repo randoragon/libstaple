@@ -35,7 +35,7 @@ int sp_queue_pushll(struct sp_queue *queue, long long elem)
 		return SP_EILLEGAL;
 	}
 #endif
-	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+	if (sp_size_try_add(DATA_SIZE(queue), queue->elem_size))
 		return SP_ERANGE;
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;

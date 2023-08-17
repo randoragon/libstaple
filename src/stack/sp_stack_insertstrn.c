@@ -43,7 +43,7 @@ int sp_stack_insertstrn(struct sp_stack *stack, size_t idx, const char *elem, si
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;

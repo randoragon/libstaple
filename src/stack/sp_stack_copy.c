@@ -33,13 +33,13 @@ int sp_stack_copy(struct sp_stack *dest, const struct sp_stack *src, int (*cpy)(
 		return SP_EINVAL;
 	}
 #endif
-	if (dest->capacity * dest->elem_size < src->size * src->elem_size) {
-		dest->capacity = src->size;
-		dest->data = realloc(dest->data, dest->capacity * src->elem_size);
+	if (DATA_SIZE(dest) < DATA_SIZE(src)) {
+		dest->data = realloc(dest->data, DATA_SIZE(src));
 		if (dest->data == NULL) {
 			error(("realloc"));
 			return SP_ENOMEM;
 		}
+		dest->capacity = src->size;
 	}
 	dest->elem_size = src->elem_size;
 	dest->size      = src->size;
@@ -53,7 +53,7 @@ int sp_stack_copy(struct sp_stack *dest, const struct sp_stack *src, int (*cpy)(
 			d += dest->elem_size;
 		}
 	} else {
-		const void *const src_end = (char*)src->data + src->size * src->elem_size;
+		const void *const src_end = (char*)src->data + DATA_SIZE(src);
 		s = src->data;
 		d = dest->data;
 		while (s != src_end) {

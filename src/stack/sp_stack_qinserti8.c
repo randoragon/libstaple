@@ -40,12 +40,12 @@ int sp_stack_qinserti8(struct sp_stack *stack, size_t idx, int8_t elem)
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
-	q = (char*)stack->data + stack->size * stack->elem_size;
+	q = (char*)stack->data + DATA_SIZE(stack);
 	*(int8_t*)q = *(int8_t*)p;
 	*(int8_t*)p = elem;
 	++stack->size;

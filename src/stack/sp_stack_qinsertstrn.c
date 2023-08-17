@@ -43,7 +43,7 @@ int sp_stack_qinsertstrn(struct sp_stack *stack, size_t idx, const char *elem, s
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;
@@ -57,7 +57,7 @@ int sp_stack_qinsertstrn(struct sp_stack *stack, size_t idx, const char *elem, s
 	memcpy(buf, elem, len * sizeof(*elem));
 	buf[len] = '\0';
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
-	q = (char*)stack->data + stack->size * stack->elem_size;
+	q = (char*)stack->data + DATA_SIZE(stack);
 	*(char**)q = *(char**)p;
 	*(char**)p = buf;
 	++stack->size;

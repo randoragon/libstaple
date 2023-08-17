@@ -32,7 +32,7 @@ int sp_stack_clear(struct sp_stack *stack, int (*dtor)(void*))
 	}
 #endif
 	if (dtor != NULL) {
-		const void *const end = (char*)stack->data + stack->size * stack->elem_size;
+		const void *const end = (char*)stack->data + DATA_SIZE(stack);
 		char *p = stack->data;
 		while (p != end) {
 			int err;

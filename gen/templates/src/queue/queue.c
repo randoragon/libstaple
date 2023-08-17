@@ -113,13 +113,13 @@ int sp_queue_copy(struct sp_queue *dest, const struct sp_queue *src, int (*cpy)(
 	/*. C_ERR_NULLPTR src SP_EINVAL */
 	/*. C_ERR_NULLPTR dest SP_EINVAL */
 #endif
-	if (dest->capacity * dest->elem_size < src->size * src->elem_size) {
-		dest->capacity = src->size;
-		dest->data = realloc(dest->data, dest->capacity * src->elem_size);
+	if (DATA_SIZE(dest) < DATA_SIZE(src)) {
+		dest->data = realloc(dest->data, DATA_SIZE(src));
 		if (dest->data == NULL) {
 			/*. C_ERRMSG_REALLOC */
 			return SP_ENOMEM;
 		}
+		dest->capacity = src->size;
 	}
 	dest->elem_size = src->elem_size;
 	dest->size      = src->size;
@@ -187,7 +187,7 @@ int sp_queue_push(struct sp_queue *queue, const void *elem)
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
 #endif
-	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+	if (sp_size_try_add(DATA_SIZE(queue), queue->elem_size))
 		return SP_ERANGE;
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;
@@ -207,7 +207,7 @@ int sp_queue_push$SUFFIX$(struct sp_queue *queue, $TYPE$ elem)
 	/*. C_ERR_NULLPTR queue SP_EINVAL */
 	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(elem) SP_EILLEGAL */
 #endif
-	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+	if (sp_size_try_add(DATA_SIZE(queue), queue->elem_size))
 		return SP_ERANGE;
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;
@@ -231,7 +231,7 @@ int sp_queue_pushstr(struct sp_queue *queue, const char *elem)
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
 	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(elem) SP_EILLEGAL */
 #endif
-	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+	if (sp_size_try_add(DATA_SIZE(queue), queue->elem_size))
 		return SP_ERANGE;
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;
@@ -264,7 +264,7 @@ int sp_queue_pushstrn(struct sp_queue *queue, const char *elem, size_t len)
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
 	/*. C_ERR_INCOMPAT_ELEM_TYPE queue sizeof(elem) SP_EILLEGAL */
 #endif
-	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+	if (sp_size_try_add(DATA_SIZE(queue), queue->elem_size))
 		return SP_ERANGE;
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;
@@ -298,7 +298,7 @@ int sp_queue_insert(struct sp_queue *queue, size_t idx, const void *elem)
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+	if (sp_size_try_add(DATA_SIZE(queue), queue->elem_size))
 		return SP_ERANGE;
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;
@@ -320,7 +320,7 @@ int sp_queue_insert$SUFFIX$(struct sp_queue *queue, size_t idx, $TYPE$ elem)
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+	if (sp_size_try_add(DATA_SIZE(queue), queue->elem_size))
 		return SP_ERANGE;
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;
@@ -345,7 +345,7 @@ int sp_queue_insertstr(struct sp_queue *queue, size_t idx, const char *elem)
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+	if (sp_size_try_add(DATA_SIZE(queue), queue->elem_size))
 		return SP_ERANGE;
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;
@@ -379,7 +379,7 @@ int sp_queue_insertstrn(struct sp_queue *queue, size_t idx, const char *elem, si
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+	if (sp_size_try_add(DATA_SIZE(queue), queue->elem_size))
 		return SP_ERANGE;
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;
@@ -412,7 +412,7 @@ int sp_queue_qinsert(struct sp_queue *queue, size_t idx, const void *elem)
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+	if (sp_size_try_add(DATA_SIZE(queue), queue->elem_size))
 		return SP_ERANGE;
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;
@@ -440,7 +440,7 @@ int sp_queue_qinsert$SUFFIX$(struct sp_queue *queue, size_t idx, $TYPE$ elem)
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+	if (sp_size_try_add(DATA_SIZE(queue), queue->elem_size))
 		return SP_ERANGE;
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;
@@ -471,7 +471,7 @@ int sp_queue_qinsertstr(struct sp_queue *queue, size_t idx, const char *elem)
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+	if (sp_size_try_add(DATA_SIZE(queue), queue->elem_size))
 		return SP_ERANGE;
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;
@@ -511,7 +511,7 @@ int sp_queue_qinsertstrn(struct sp_queue *queue, size_t idx, const char *elem, s
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(queue->size * queue->elem_size, queue->elem_size))
+	if (sp_size_try_add(DATA_SIZE(queue), queue->elem_size))
 		return SP_ERANGE;
 	if (sp_ringbuf_fit(&queue->data, queue->size, &queue->capacity, queue->elem_size, &queue->head, &queue->tail))
 		return SP_ENOMEM;

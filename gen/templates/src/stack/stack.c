@@ -49,7 +49,7 @@ int sp_stack_clear(struct sp_stack *stack, int (*dtor)(void*))
 	/*. C_ERR_BOOL_DTOR stack SP_EILLEGAL */
 #endif
 	if (dtor != NULL) {
-		const void *const end = (char*)stack->data + stack->size * stack->elem_size;
+		const void *const end = (char*)stack->data + DATA_SIZE(stack);
 		char *p = stack->data;
 		while (p != end) {
 			int err;
@@ -101,7 +101,7 @@ int sp_stack_eq(const struct sp_stack *stack1, const struct sp_stack *stack2, in
 		}
 		return 1;
 	}
-	return !memcmp(stack1->data, stack2->data, stack1->elem_size * stack1->size);
+	return !memcmp(stack1->data, stack2->data, DATA_SIZE(stack1));
 }
 /*F}*/
 
@@ -115,13 +115,13 @@ int sp_stack_copy(struct sp_stack *dest, const struct sp_stack *src, int (*cpy)(
 	/*. C_ERR_NULLPTR src SP_EINVAL */
 	/*. C_ERR_NULLPTR dest SP_EINVAL */
 #endif
-	if (dest->capacity * dest->elem_size < src->size * src->elem_size) {
-		dest->capacity = src->size;
-		dest->data = realloc(dest->data, dest->capacity * src->elem_size);
+	if (DATA_SIZE(dest) < DATA_SIZE(src)) {
+		dest->data = realloc(dest->data, DATA_SIZE(src));
 		if (dest->data == NULL) {
 			/*. C_ERRMSG_REALLOC */
 			return SP_ENOMEM;
 		}
+		dest->capacity = src->size;
 	}
 	dest->elem_size = src->elem_size;
 	dest->size      = src->size;
@@ -135,7 +135,7 @@ int sp_stack_copy(struct sp_stack *dest, const struct sp_stack *src, int (*cpy)(
 			d += dest->elem_size;
 		}
 	} else {
-		const void *const src_end = (char*)src->data + src->size * src->elem_size;
+		const void *const src_end = (char*)src->data + DATA_SIZE(src);
 		s = src->data;
 		d = dest->data;
 		while (s != src_end) {
@@ -182,7 +182,7 @@ int sp_stack_push(struct sp_stack *stack, const void *elem)
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;
@@ -199,7 +199,7 @@ int sp_stack_push$SUFFIX$(struct sp_stack *stack, $TYPE$ elem)
 	/*. C_ERR_NULLPTR stack SP_EINVAL */
 	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(elem) SP_EILLEGAL */
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;
@@ -240,7 +240,7 @@ int sp_stack_pushstr(struct sp_stack *stack, const char *elem)
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
 	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(elem) SP_EILLEGAL */
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;
@@ -270,7 +270,7 @@ int sp_stack_pushstrn(struct sp_stack *stack, const char *elem, size_t len)
 	/*. C_ERR_NULLPTR elem SP_EINVAL */
 	/*. C_ERR_INCOMPAT_ELEM_TYPE stack sizeof(elem) SP_EILLEGAL */
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;
@@ -303,7 +303,7 @@ int sp_stack_insert(struct sp_stack *stack, size_t idx, const void *elem)
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;
@@ -329,7 +329,7 @@ int sp_stack_insert$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ elem)
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;
@@ -358,7 +358,7 @@ int sp_stack_insertstr(struct sp_stack *stack, size_t idx, const char *elem)
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;
@@ -396,7 +396,7 @@ int sp_stack_insertstrn(struct sp_stack *stack, size_t idx, const char *elem, si
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;
@@ -431,12 +431,12 @@ int sp_stack_qinsert(struct sp_stack *stack, size_t idx, const void *elem)
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
-	q = (char*)stack->data + stack->size * stack->elem_size;
+	q = (char*)stack->data + DATA_SIZE(stack);
 	memcpy(q, p, stack->elem_size);
 	memcpy(p, elem, stack->elem_size);
 	++stack->size;
@@ -457,12 +457,12 @@ int sp_stack_qinsert$SUFFIX$(struct sp_stack *stack, size_t idx, $TYPE$ elem)
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
-	q = (char*)stack->data + stack->size * stack->elem_size;
+	q = (char*)stack->data + DATA_SIZE(stack);
 	*($TYPE$*)q = *($TYPE$*)p;
 	*($TYPE$*)p = elem;
 	++stack->size;
@@ -487,7 +487,7 @@ int sp_stack_qinsertstr(struct sp_stack *stack, size_t idx, const char *elem)
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;
@@ -502,7 +502,7 @@ int sp_stack_qinsertstr(struct sp_stack *stack, size_t idx, const char *elem)
 	memcpy(buf, elem, len * sizeof(*elem));
 	buf[len] = '\0';
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
-	q = (char*)stack->data + stack->size * stack->elem_size;
+	q = (char*)stack->data + DATA_SIZE(stack);
 	*(char**)q = *(char**)p;
 	*(char**)p = buf;
 	++stack->size;
@@ -526,7 +526,7 @@ int sp_stack_qinsertstrn(struct sp_stack *stack, size_t idx, const char *elem, s
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;
@@ -540,7 +540,7 @@ int sp_stack_qinsertstrn(struct sp_stack *stack, size_t idx, const char *elem, s
 	memcpy(buf, elem, len * sizeof(*elem));
 	buf[len] = '\0';
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
-	q = (char*)stack->data + stack->size * stack->elem_size;
+	q = (char*)stack->data + DATA_SIZE(stack);
 	*(char**)q = *(char**)p;
 	*(char**)p = buf;
 	++stack->size;

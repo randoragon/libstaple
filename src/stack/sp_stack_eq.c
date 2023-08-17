@@ -43,5 +43,5 @@ int sp_stack_eq(const struct sp_stack *stack1, const struct sp_stack *stack2, in
 		}
 		return 1;
 	}
-	return !memcmp(stack1->data, stack2->data, stack1->elem_size * stack1->size);
+	return !memcmp(stack1->data, stack2->data, DATA_SIZE(stack1));
 }

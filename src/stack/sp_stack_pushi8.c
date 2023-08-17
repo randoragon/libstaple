@@ -35,7 +35,7 @@ int sp_stack_pushi8(struct sp_stack *stack, int8_t elem)
 		return SP_EILLEGAL;
 	}
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;

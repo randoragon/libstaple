@@ -40,12 +40,12 @@ int sp_stack_qinserti16(struct sp_stack *stack, size_t idx, int16_t elem)
 		return SP_EINDEX;
 	}
 #endif
-	if (sp_size_try_add(stack->size * stack->elem_size, stack->elem_size))
+	if (sp_size_try_add(DATA_SIZE(stack), stack->elem_size))
 		return SP_ERANGE;
 	if (sp_buf_fit(&stack->data, stack->size, &stack->capacity, stack->elem_size))
 		return SP_ENOMEM;
 	p = (char*)stack->data + (stack->size - idx) * stack->elem_size;
-	q = (char*)stack->data + stack->size * stack->elem_size;
+	q = (char*)stack->data + DATA_SIZE(stack);
 	*(int16_t*)q = *(int16_t*)p;
 	*(int16_t*)p = elem;
 	++stack->size;
