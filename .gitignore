@@ -5,3 +5,5 @@ obj
 test/bin
 test/obj
 .ccls-cache
+.envrc
+.direnv/
